@@ -1,19 +1,22 @@
 # kalki-dashboard
 
 ## Prerequisites
-< In this section, discuss any prerequisites which will need to be filled for the code to run.
-For example, OS, environment settings, and network access are all valid prerequisites. If the
-system does not have any requirements that you know of, just write `Not applicable.`. >
+The Kalki Dashboard is run from within a Docker container. Therefore, you will need to have
+Docker installed.
 
 ## Configuration
-< This section should be a walkthrough of the initial setup of a system. If this is documented
-somewhere public (i.e. public github wiki) you can link to it, otherwise you should specify it
-in its entirety here. >
+You can download Docker here: https://www.docker.com/get-docker.
+I do not recommend installing Docker using a package manager.
+For Mac, Docker can be installed using `brew cask install docker`.
 
 ## Usage
-< This section is for how to use the system once it is setup. You may want to detail how to
-restart the system, run it locally, or run it remotely. >
+To build the docker image, run `$ docker build -t [NAME] .` in the directory containing
+`Dockerfile` (it is in the root of the project by default). Note the period after `[NAME]`.
 
-## < Anything else >
-< From here on, the README is not structured. Additional sections can include specific
-configuration settings, licensing, or authors. >
+To run the image in a container, run `$ docker run -i -p [PORT]:9000 [NAME]`.
+The dashboard can then be viewed at `http://localhost:[PORT]`.
+
+For example, `$ docker build -t kalki-dashboard . && docker run -i -p 80:9000 kalki-dashboard`
+will make the dashboard available for viewing at `http://localhost`.
+
+The server (and container) can be stopped by pressing `<C-D>`.
