@@ -4,7 +4,7 @@
 		module="dashboard_2.12"
 		revision="1.0-SNAPSHOT"
 		status="integration"
-		publication="20180604155743"
+		publication="20180606154428"
 	>
 		<description>
 		dashboard
@@ -50,5 +50,7 @@
 		<dependency org="com.typesafe.play" name="play-logback_2.12" rev="2.6.15" conf="compile->default(compile)"/>
 		<dependency org="com.typesafe.play" name="play-akka-http-server_2.12" rev="2.6.15" conf="compile->default(compile)"/>
 		<dependency org="com.typesafe.play" name="play-guice_2.12" rev="2.6.15" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe.play" name="play-java-jdbc_2.12" rev="2.6.15" conf="compile->default(compile)"/>
+		<dependency org="org.postgresql" name="postgresql" rev="42.2.2" conf="compile->default(compile)"/>
 	</dependencies>
 </ivy-module>

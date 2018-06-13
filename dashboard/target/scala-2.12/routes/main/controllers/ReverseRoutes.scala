@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Mon Jun 04 15:57:58 EDT 2018
+// @DATE:Wed Jun 13 16:51:13 EDT 2018
 
 import play.api.mvc.Call
 
@@ -18,22 +18,34 @@ package controllers {
     }
 
   
+    // @LINE:8
+    def clean(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "clean")
+    }
+  
     // @LINE:6
     def index(): Call = {
       
       Call("GET", _prefix)
     }
   
+    // @LINE:7
+    def testDb(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "test")
+    }
+  
   }
 
-  // @LINE:9
+  // @LINE:11
   class ReverseAssets(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:9
+    // @LINE:11
     def versioned(file:Asset): Call = {
       implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
       Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))

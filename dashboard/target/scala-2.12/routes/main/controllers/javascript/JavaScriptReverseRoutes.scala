@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Mon Jun 04 15:57:58 EDT 2018
+// @DATE:Wed Jun 13 16:51:13 EDT 2018
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -19,6 +19,16 @@ package controllers.javascript {
     }
 
   
+    // @LINE:8
+    def clean: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.clean",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "clean"})
+        }
+      """
+    )
+  
     // @LINE:6
     def index: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.HomeController.index",
@@ -29,9 +39,19 @@ package controllers.javascript {
       """
     )
   
+    // @LINE:7
+    def testDb: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.testDb",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "test"})
+        }
+      """
+    )
+  
   }
 
-  // @LINE:9
+  // @LINE:11
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -39,7 +59,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:9
+    // @LINE:11
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

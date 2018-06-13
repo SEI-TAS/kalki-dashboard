@@ -1,5 +1,12 @@
 @()
 
 @main("Dashboard") {
-  <h1>Welcome to the Kalki Dashboard!</h1>
+    <h1>Welcome to the Kalki Dashboard!</h1>
+    <a href="@routes.HomeController.clean()">
+        Drop tables
+    </a>
+    <form method="get" action="@routes.HomeController.testDb">
+        @helper.CSRF.formField
+        <button>Test Database</button>
+    </form>
 }

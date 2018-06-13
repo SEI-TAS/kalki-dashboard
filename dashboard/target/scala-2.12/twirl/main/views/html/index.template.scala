@@ -32,8 +32,15 @@ object index extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.Html
 
 Seq[Any](format.raw/*2.1*/("""
 """),_display_(/*3.2*/main("Dashboard")/*3.19*/ {_display_(Seq[Any](format.raw/*3.21*/("""
-  """),format.raw/*4.3*/("""<h1>Welcome to the Kalki Dashboard!</h1>
-""")))}),format.raw/*5.2*/("""
+    """),format.raw/*4.5*/("""<h1>Welcome to the Kalki Dashboard!</h1>
+    <a href=""""),_display_(/*5.15*/routes/*5.21*/.HomeController.clean()),format.raw/*5.44*/("""">
+        Drop tables
+    </a>
+    <form method="get" action=""""),_display_(/*8.33*/routes/*8.39*/.HomeController.testDb),format.raw/*8.61*/("""">
+        """),_display_(/*9.10*/helper/*9.16*/.CSRF.formField),format.raw/*9.31*/("""
+        """),format.raw/*10.9*/("""<button>Test Database</button>
+    </form>
+""")))}),format.raw/*12.2*/("""
 """))
       }
     }
@@ -50,11 +57,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Mon Jun 04 16:02:47 EDT 2018
+                  DATE: Wed Jun 13 16:51:44 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/index.scala.html
-                  HASH: 1fc70d728b722466b9d6a6323fa5946e7d74e6d2
-                  MATRIX: 941->1|1037->4|1064->6|1089->23|1128->25|1157->28|1228->70
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|36->5
+                  HASH: c146b9dfbdcd16a277a10a80945a187b071311d1
+                  MATRIX: 941->1|1037->4|1064->6|1089->23|1128->25|1159->30|1240->85|1254->91|1297->114|1387->178|1401->184|1443->206|1481->218|1495->224|1530->239|1566->248|1640->292
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|36->5|36->5|36->5|39->8|39->8|39->8|40->9|40->9|40->9|41->10|43->12
                   -- GENERATED --
               */
           

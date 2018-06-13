@@ -67,7 +67,7 @@ Seq[Any](format.raw/*8.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Mon Jun 04 15:57:59 EDT 2018
+                  DATE: Wed Jun 06 11:12:06 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/main.scala.html
                   HASH: 863271db3bc90c425db2fb95e8fb0ff62c83f9b4
                   MATRIX: 1206->260|1330->291|1357->292|1437->397|1473->406|1508->414|1534->419|1623->481|1638->487|1701->528|1789->589|1804->595|1865->634|1927->758|1964->768|1992->775|2029->785|2070->799|2085->805|2146->845
