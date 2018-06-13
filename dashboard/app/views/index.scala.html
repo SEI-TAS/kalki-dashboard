@@ -2,11 +2,19 @@
 
 @main("Dashboard") {
     <h1>Welcome to the Kalki Dashboard!</h1>
-    <a href="@routes.HomeController.clean()">
-        Drop tables
-    </a>
-    <form method="get" action="@routes.HomeController.testDb">
+    <h4>Create new umbox</h4>
+    <form method="post" action="@routes.HomeController.addUmbox">
         @helper.CSRF.formField
-        <button>Test Database</button>
+        Umbox id:<br />
+        <input type="text" name="umboxId" /><br />
+        Umbox name:<br />
+        <input type="text" name="umboxName" /><br />
+        Device:<br />
+        <input type="text" name="device" /><br />
+        Time started:<br />
+        <input type="number" name="startedAt" /><br />
+        <input type="submit" value="Submit" />
     </form>
+    <a href="@routes.HomeController.clean">Drop tables</a>
+    <a href="@routes.HomeController.logUmboxes">Log umboxes</a>
 }

@@ -1,8 +1,9 @@
 package controllers;
 
 import models.ApplicationDatabase;
+import models.Umbox;
+import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
-//import play.mvc.*;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -15,11 +16,13 @@ import java.util.concurrent.CompletionStage;
  */
 public class HomeController extends Controller {
 
+    private final FormFactory formFactory;
     private final ApplicationDatabase db;
     private final HttpExecutionContext ec;
 
     @Inject
-    public HomeController(ApplicationDatabase db, HttpExecutionContext ec) {
+    public HomeController(FormFactory formFactory, ApplicationDatabase db, HttpExecutionContext ec) {
+        this.formFactory = formFactory;
         this.db = db;
         this.ec = ec;
     }
@@ -34,14 +37,21 @@ public class HomeController extends Controller {
         return ok(views.html.index.render());
     }
 
-    public CompletionStage<Result> testDb() {
-        return db.updateSomething().thenApplyAsync(n -> {
+    public CompletionStage<Result> addUmbox() {
+        Umbox umbox = formFactory.form(Umbox.class).bindFromRequest().get();
+        return db.addUmbox(umbox).thenApplyAsync(n -> {
             return redirect(routes.HomeController.index());
         }, ec.current());
     }
 
     public CompletionStage<Result> clean() {
         return db.dropAllTables().thenApplyAsync(n -> {
+            return redirect(routes.HomeController.index());
+        }, ec.current());
+    }
+
+    public CompletionStage<Result> logUmboxes() {
+        return db.logUmboxes().thenApplyAsync(n -> {
             return redirect(routes.HomeController.index());
         }, ec.current());
     }

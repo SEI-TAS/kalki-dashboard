@@ -27,10 +27,9 @@ public class ApplicationDatabase {
         this.ec = ec;
     }
 
-    public CompletionStage<Integer> updateSomething() {
+    public CompletionStage<Integer> addUmbox(Umbox umbox) {
         return CompletableFuture.supplyAsync(() -> {
             return db.withConnection(connection -> {
-                // do whatever you need with the db connection
 
                 Statement st = connection.createStatement();
 
@@ -53,19 +52,14 @@ public class ApplicationDatabase {
                         ");"
                 );
 
-                // https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-                ResultSet rs = st.executeQuery("SELECT * from alert");
-                ResultSetMetaData rsmd = rs.getMetaData();
-                System.out.println("querying SELECT * FROM alert");
-                int columnsNumber = rsmd.getColumnCount();
-                while (rs.next()) {
-                    for (int i = 1; i <= columnsNumber; i++) {
-                        if (i > 1) System.out.print(",  ");
-                        String columnValue = rs.getString(i);
-                        System.out.print(columnValue + " " + rsmd.getColumnName(i));
-                    }
-                    System.out.println("");
-                }
+                // Adds new umbox based on form values
+                st.executeUpdate("INSERT INTO umbox(umbox_id,umbox_name,device,started_at)" +
+                        "VALUES ('" +
+                        umbox.umboxId + "','" +
+                        umbox.umboxName + "','" +
+                        umbox.device + "','" +
+                        umbox.startedAt + "');"
+                );
 
                 return 1;
             });
@@ -76,6 +70,30 @@ public class ApplicationDatabase {
         return CompletableFuture.supplyAsync(() -> {
             return db.withConnection(connection -> {
                 connection.prepareStatement("DROP TABLE IF EXISTS alert,umbox").execute();
+                return 1;
+            });
+        }, ec);
+    }
+
+    public CompletionStage<Integer> logUmboxes() {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+                Statement st = connection.createStatement();
+
+                // https://coderwall.com/p/609ppa/printing-the-result-of-resultset
+                ResultSet rs = st.executeQuery("SELECT * from umbox");
+                ResultSetMetaData rsmd = rs.getMetaData();
+                System.out.println("querying SELECT * FROM umbox");
+                int columnsNumber = rsmd.getColumnCount();
+                while (rs.next()) {
+                    for (int i = 1; i <= columnsNumber; i++) {
+                        if (i > 1) System.out.print(",  ");
+                        String columnValue = rs.getString(i);
+                        System.out.print(columnValue + " " + rsmd.getColumnName(i));
+                    }
+                    System.out.println("");
+                }
+
                 return 1;
             });
         }, ec);

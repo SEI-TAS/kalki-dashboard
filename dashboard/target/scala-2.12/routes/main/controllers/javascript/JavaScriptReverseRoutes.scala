@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Wed Jun 13 16:51:13 EDT 2018
+// @DATE:Wed Jun 13 18:52:55 EDT 2018
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -19,12 +19,32 @@ package controllers.javascript {
     }
 
   
+    // @LINE:9
+    def logUmboxes: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.logUmboxes",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "log"})
+        }
+      """
+    )
+  
     // @LINE:8
     def clean: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.HomeController.clean",
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "clean"})
+        }
+      """
+    )
+  
+    // @LINE:7
+    def addUmbox: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.addUmbox",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add"})
         }
       """
     )
@@ -39,19 +59,9 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:7
-    def testDb: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.HomeController.testDb",
-      """
-        function() {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "test"})
-        }
-      """
-    )
-  
   }
 
-  // @LINE:11
+  // @LINE:12
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -59,7 +69,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:11
+    // @LINE:12
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

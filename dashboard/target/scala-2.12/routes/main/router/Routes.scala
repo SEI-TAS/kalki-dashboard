@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Wed Jun 13 16:51:13 EDT 2018
+// @DATE:Wed Jun 13 18:52:55 EDT 2018
 
 package router
 
@@ -16,7 +16,7 @@ class Routes(
   override val errorHandler: play.api.http.HttpErrorHandler, 
   // @LINE:6
   HomeController_0: controllers.HomeController,
-  // @LINE:11
+  // @LINE:12
   Assets_1: controllers.Assets,
   val prefix: String
 ) extends GeneratedRouter {
@@ -25,7 +25,7 @@ class Routes(
    def this(errorHandler: play.api.http.HttpErrorHandler,
     // @LINE:6
     HomeController_0: controllers.HomeController,
-    // @LINE:11
+    // @LINE:12
     Assets_1: controllers.Assets
   ) = this(errorHandler, HomeController_0, Assets_1, "/")
 
@@ -40,8 +40,9 @@ class Routes(
 
   def documentation = List(
     ("""GET""", this.prefix, """controllers.HomeController.index"""),
-    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """test""", """controllers.HomeController.testDb"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add""", """controllers.HomeController.addUmbox"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """clean""", """controllers.HomeController.clean"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """log""", """controllers.HomeController.logUmboxes"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
@@ -69,18 +70,18 @@ class Routes(
   )
 
   // @LINE:7
-  private[this] lazy val controllers_HomeController_testDb1_route = Route("GET",
-    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("test")))
+  private[this] lazy val controllers_HomeController_addUmbox1_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("add")))
   )
-  private[this] lazy val controllers_HomeController_testDb1_invoker = createInvoker(
-    HomeController_0.testDb,
+  private[this] lazy val controllers_HomeController_addUmbox1_invoker = createInvoker(
+    HomeController_0.addUmbox,
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.HomeController",
-      "testDb",
+      "addUmbox",
       Nil,
-      "GET",
-      this.prefix + """test""",
+      "POST",
+      this.prefix + """add""",
       """""",
       Seq()
     )
@@ -104,11 +105,29 @@ class Routes(
     )
   )
 
-  // @LINE:11
-  private[this] lazy val controllers_Assets_versioned3_route = Route("GET",
+  // @LINE:9
+  private[this] lazy val controllers_HomeController_logUmboxes3_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("log")))
+  )
+  private[this] lazy val controllers_HomeController_logUmboxes3_invoker = createInvoker(
+    HomeController_0.logUmboxes,
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.HomeController",
+      "logUmboxes",
+      Nil,
+      "GET",
+      this.prefix + """log""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:12
+  private[this] lazy val controllers_Assets_versioned4_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("assets/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_versioned3_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_versioned4_invoker = createInvoker(
     Assets_1.versioned(fakeValue[String], fakeValue[Asset]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -132,9 +151,9 @@ class Routes(
       }
   
     // @LINE:7
-    case controllers_HomeController_testDb1_route(params@_) =>
+    case controllers_HomeController_addUmbox1_route(params@_) =>
       call { 
-        controllers_HomeController_testDb1_invoker.call(HomeController_0.testDb)
+        controllers_HomeController_addUmbox1_invoker.call(HomeController_0.addUmbox)
       }
   
     // @LINE:8
@@ -143,10 +162,16 @@ class Routes(
         controllers_HomeController_clean2_invoker.call(HomeController_0.clean)
       }
   
-    // @LINE:11
-    case controllers_Assets_versioned3_route(params@_) =>
+    // @LINE:9
+    case controllers_HomeController_logUmboxes3_route(params@_) =>
+      call { 
+        controllers_HomeController_logUmboxes3_invoker.call(HomeController_0.logUmboxes)
+      }
+  
+    // @LINE:12
+    case controllers_Assets_versioned4_route(params@_) =>
       call(Param[String]("path", Right("/public")), params.fromPath[Asset]("file", None)) { (path, file) =>
-        controllers_Assets_versioned3_invoker.call(Assets_1.versioned(path, file))
+        controllers_Assets_versioned4_invoker.call(Assets_1.versioned(path, file))
       }
   }
 }
