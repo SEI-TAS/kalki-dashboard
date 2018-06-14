@@ -9,7 +9,7 @@ Docker for Mac can be installed using `brew cask install docker`.
 Also, see https://docs.docker.com/docker-for-mac/install/.
 
 ## Usage
-First, create a new docker volume with `docker volume create --name=kalki`.
+First, create a new docker volume with `$ docker volume create --name=kalki`.
 Then, start the database by running `$ ./run_postgres_container.sh` from the project root.
 
 To build the docker image, run `$ docker build -t [NAME] .` in the directory containing
@@ -26,3 +26,5 @@ $ docker run --rm -i -p 80:9000 kalki-dashboard
 will make the dashboard available for viewing at `http://localhost`.
 
 The server (and container) can be stopped by pressing `<C-D>`.
+To stop the database, run `$ docker container stop kalki-postgres`.
+All data is preserved and will be accessable next time `$ ./run-postgres-container.sh` is run.
