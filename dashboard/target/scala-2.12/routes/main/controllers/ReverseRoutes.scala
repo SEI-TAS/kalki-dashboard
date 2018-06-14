@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Wed Jun 13 18:52:55 EDT 2018
+// @DATE:Thu Jun 14 16:37:54 EDT 2018
 
 import play.api.mvc.Call
 
@@ -18,24 +18,6 @@ package controllers {
     }
 
   
-    // @LINE:9
-    def logUmboxes(): Call = {
-      
-      Call("GET", _prefix + { _defaultPrefix } + "log")
-    }
-  
-    // @LINE:8
-    def clean(): Call = {
-      
-      Call("GET", _prefix + { _defaultPrefix } + "clean")
-    }
-  
-    // @LINE:7
-    def addUmbox(): Call = {
-      
-      Call("POST", _prefix + { _defaultPrefix } + "add")
-    }
-  
     // @LINE:6
     def index(): Call = {
       
@@ -44,14 +26,47 @@ package controllers {
   
   }
 
-  // @LINE:12
+  // @LINE:7
+  class ReverseDeviceController(_prefix: => String) {
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:10
+    def logUmboxes(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "log")
+    }
+  
+    // @LINE:7
+    def addDevice(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "add-device")
+    }
+  
+    // @LINE:9
+    def clean(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "clean")
+    }
+  
+    // @LINE:8
+    def submit(): Call = {
+      
+      Call("POST", _prefix + { _defaultPrefix } + "add")
+    }
+  
+  }
+
+  // @LINE:13
   class ReverseAssets(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:12
+    // @LINE:13
     def versioned(file:Asset): Call = {
       implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
       Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))

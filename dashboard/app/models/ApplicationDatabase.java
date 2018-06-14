@@ -27,39 +27,60 @@ public class ApplicationDatabase {
         this.ec = ec;
     }
 
+    private void createTablesIfNotExists(Statement st) throws SQLException {
+
+        // Creates table "alert"
+        st.executeUpdate("CREATE TABLE IF NOT EXISTS alert (" +
+                "id serial PRIMARY KEY," +
+                "umbox_id varchar(255)," +
+                "info varchar(255)," +
+                "stamp bigint" +
+                ");"
+        );
+
+        // Creates table "umbox"
+        st.executeUpdate("CREATE TABLE IF NOT EXISTS umbox (" +
+                "id serial PRIMARY KEY," +
+                "umbox_id varchar(255)," +
+                "umbox_name varchar(255)," +
+                "device varchar(255)," +
+                "started_at bigint" +
+                ");"
+        );
+    }
+
+    // Unused
     public CompletionStage<Integer> addUmbox(Umbox umbox) {
         return CompletableFuture.supplyAsync(() -> {
             return db.withConnection(connection -> {
 
                 Statement st = connection.createStatement();
 
-                // Creates table "alert"
-                st.executeUpdate("CREATE TABLE IF NOT EXISTS alert (" +
-                        "id serial PRIMARY KEY," +
-                        "umbox_id varchar(255)," +
-                        "info varchar(255)," +
-                        "stamp bigint" +
-                        ");"
-                );
-
-                // Creates table "umbox"
-                st.executeUpdate("CREATE TABLE IF NOT EXISTS umbox (" +
-                        "id serial PRIMARY KEY," +
-                        "umbox_id varchar(255)," +
-                        "umbox_name varchar(255)," +
-                        "device varchar(255)," +
-                        "started_at bigint" +
-                        ");"
-                );
+                createTablesIfNotExists(st);
 
                 // Adds new umbox based on form values
                 st.executeUpdate("INSERT INTO umbox(umbox_id,umbox_name,device,started_at)" +
                         "VALUES ('" +
-                        umbox.umboxId + "','" +
-                        umbox.umboxName + "','" +
-                        umbox.device + "','" +
-                        umbox.startedAt + "');"
+                        umbox.getUmboxId() + "','" +
+                        umbox.getUmboxName() + "','" +
+                        umbox.getDevice() + "','" +
+                        umbox.getStartedAt() + "');"
                 );
+
+                return 1;
+            });
+        }, ec);
+    }
+
+    public CompletionStage<Integer> addDevice(Device device) {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+
+                Statement st = connection.createStatement();
+
+                createTablesIfNotExists(st);
+
+                // TODO: Figure out where to store the device
 
                 return 1;
             });
@@ -79,6 +100,8 @@ public class ApplicationDatabase {
         return CompletableFuture.supplyAsync(() -> {
             return db.withConnection(connection -> {
                 Statement st = connection.createStatement();
+
+                createTablesIfNotExists(st);
 
                 // https://coderwall.com/p/609ppa/printing-the-result-of-resultset
                 ResultSet rs = st.executeQuery("SELECT * from umbox");

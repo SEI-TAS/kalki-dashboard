@@ -2,10 +2,10 @@ package models;
 
 public class Umbox {
 
-    public String umboxId;
-    public String umboxName;
-    public String device;
-    public int startedAt;
+    private String umboxId;
+    private String umboxName;
+    private String device;
+    private int startedAt;
 
     public String getUmboxId() {
         return umboxId;

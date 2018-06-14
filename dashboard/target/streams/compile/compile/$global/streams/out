@@ -1,2 +1,4 @@
-[0m[[0m[0minfo[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/models/DatabaseExecutionContext.java: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/models/DatabaseExecutionContext.java uses or overrides a deprecated API.[0m
-[0m[[0m[0minfo[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/models/DatabaseExecutionContext.java: Recompile with -Xlint:deprecation for details.[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/add.scala.html:6:58: value addUmbox is not a member of controllers.ReverseDeviceController[0m
+[0m[[0m[31merror[0m] [0m[0m    <form method="post" action="@routes.DeviceController.addUmbox">[0m
+[0m[[0m[31merror[0m] [0m[0m                                                         ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
