@@ -9,7 +9,7 @@ Docker for Mac can be installed using `brew cask install docker`.
 Also, see https://docs.docker.com/docker-for-mac/install/.
 
 ## Usage
-To start the database, run `$ ./run_postgres_container.sh` in the project root.
+To start the database, run `$ ./run_postgres_container.sh` from the project root.
 
 To build the docker image, run `$ docker build -t [NAME] .` in the directory containing
 `Dockerfile` (it is in the project root by default). Note the period after `[NAME]`.
