@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jun 14 16:37:54 EDT 2018
+// @DATE:Thu Jun 14 18:56:05 EDT 2018
 
 package router
 
@@ -45,7 +45,7 @@ class Routes(
   def documentation = List(
     ("""GET""", this.prefix, """controllers.HomeController.index"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add-device""", """controllers.DeviceController.addDevice"""),
-    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add""", """controllers.DeviceController.submit"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add-device-submit""", """controllers.DeviceController.submit"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """clean""", """controllers.DeviceController.clean"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """log""", """controllers.DeviceController.logUmboxes"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
@@ -94,7 +94,7 @@ class Routes(
 
   // @LINE:8
   private[this] lazy val controllers_DeviceController_submit2_route = Route("POST",
-    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("add")))
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("add-device-submit")))
   )
   private[this] lazy val controllers_DeviceController_submit2_invoker = createInvoker(
     DeviceController_2.submit,
@@ -104,7 +104,7 @@ class Routes(
       "submit",
       Nil,
       "POST",
-      this.prefix + """add""",
+      this.prefix + """add-device-submit""",
       """""",
       Seq()
     )

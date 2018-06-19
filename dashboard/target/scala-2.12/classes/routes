@@ -5,7 +5,7 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
 GET     /add-device                 controllers.DeviceController.addDevice
-POST    /add                        controllers.DeviceController.submit
+POST    /add-device-submit          controllers.DeviceController.submit
 GET     /clean                      controllers.DeviceController.clean
 GET     /log                        controllers.DeviceController.logUmboxes
 

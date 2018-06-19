@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jun 14 16:37:54 EDT 2018
+// @DATE:Thu Jun 14 18:56:05 EDT 2018
 
 import play.api.mvc.Call
 
@@ -54,7 +54,7 @@ package controllers {
     // @LINE:8
     def submit(): Call = {
       
-      Call("POST", _prefix + { _defaultPrefix } + "add")
+      Call("POST", _prefix + { _defaultPrefix } + "add-device-submit")
     }
   
   }

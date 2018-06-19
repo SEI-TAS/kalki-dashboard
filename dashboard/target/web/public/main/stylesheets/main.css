@@ -118,3 +118,11 @@ iframe {
 .hidden {
     display: none;
 }
+
+.form-check > .form-check-input {
+    margin-left: 0px;
+}
+
+.form {
+    margin-bottom: 30px;
+}
