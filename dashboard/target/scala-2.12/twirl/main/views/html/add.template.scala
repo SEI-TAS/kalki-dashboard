@@ -41,13 +41,15 @@ Seq[Any](format.raw/*2.1*/("""
                 <div class="row">
                     <label for="id" class="col-4 col-form-label">ID</label>
                     <div class="col-8">
-                        <input type="text" class="form-control" id="id" placeholder="Enter ID">
+                        <input type="text" class="form-control" id="id" name="deviceId" placeholder="Enter ID">
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-light btn-block col-5">Copy from Existing Device</button>
+                    <button id="copyFromExisting" type="button" class="btn btn-light btn-block col-5">
+                        Copy from Existing Device
+                    </button>
                 </div>
             </div>
         </div>
@@ -56,7 +58,7 @@ Seq[Any](format.raw/*2.1*/("""
                 <div class="row">
                     <label for="name" class="col-4 col-form-label">Name</label>
                     <div class="col-8">
-                        <input type="text" class="form-control" id="name" placeholder="Enter Name">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
                     </div>
                 </div>
             </div>
@@ -64,14 +66,12 @@ Seq[Any](format.raw/*2.1*/("""
                 <div class="row d-flex justify-content-end">
                     <label for="groupId" class="col-2 col-form-label">Group ID</label>
                     <div class="col-6">
-                        <select class="form-control" id="groupId">
-                            <option>Example ID 1</option>
-                            <option>Example ID 2</option>
-                            <option>Example ID 3</option>
-                        </select>
+                        <select class="form-control" id="groupId" name="groupId">
+                            """),format.raw/*39.52*/("""
+                        """),format.raw/*40.25*/("""</select>
                     </div>
                     <div class="col-2">
-                        <button type="button" class="btn btn-light btn-block">New</button>
+                        <button id="newGroupId" type="button" class="btn btn-light btn-block">New</button>
                     </div>
                 </div>
             </div>
@@ -79,35 +79,33 @@ Seq[Any](format.raw/*2.1*/("""
         <div class="form-group row">
             <label for="type" class="col-2 col-form-label">Type</label>
             <div class="col-8">
-                <select class="form-control" id="type">
-                    <option>Example Type 1</option>
-                    <option>Example Type 2</option>
-                    <option>Example Type 3</option>
-                </select>
+                <select class="form-control" id="type" name="type">
+                    """),format.raw/*52.44*/("""
+                """),format.raw/*53.17*/("""</select>
             </div>
             <div class="col-2">
-                <button type="button" class="btn btn-light btn-block">New</button>
+                <button id="newType" type="button" class="btn btn-light btn-block">New</button>
             </div>
         </div>
         <div class="form-group row">
-            <label for="ip" class="col-2 col-form-label">IP Address</label>
+            <label for="ipAddress" class="col-2 col-form-label">IP Address</label>
             <div class="col-8">
-                <input type="text" class="form-control" id="ip" placeholder="Enter IP">
+                <input type="text" class="form-control" id="ipAddress" name="ipAddress" placeholder="Enter IP">
             </div>
             <div class="col-2">
-                <button type="button" class="btn btn-light btn-block">Discover</button>
+                <button id="discoverIp" type="button" class="btn btn-light btn-block">Discover</button>
             </div>
         </div>
         <div class="form-group row">
             <label for="historySize" class="col-2 col-form-label">History Size</label>
             <div class="col-8">
-                <input type="text" class="form-control" id="historySize" placeholder="Enter Size">
+                <input type="text" class="form-control" id="historySize" name="historySize" placeholder="Enter Size">
             </div>
         </div>
         <div class="form-group row">
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (seconds)</label>
             <div class="col-8">
-                <input type="text" class="form-control" id="samplingRate" placeholder="Enter Rate">
+                <input type="text" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate">
             </div>
         </div>
         <div class="row">
@@ -115,23 +113,12 @@ Seq[Any](format.raw/*2.1*/("""
                 <label>Tags</label>
             </div>
             <div class="col-8">
-                <div class="row">
-                    <div class="form-check col-2">
-                        <input class="form-check-input" type="checkbox" id="tag1" value="option1">
-                        <label class="form-check-label" for="tag1">Tag 1</label>
-                    </div>
-                    <div class="form-check col-2">
-                        <input class="form-check-input" type="checkbox" id="tag2" value="option2">
-                        <label class="form-check-label" for="tag2">Tag 2</label>
-                    </div>
-                    <div class="form-check col-2">
-                        <input class="form-check-input" type="checkbox" id="tag3" value="option3">
-                        <label class="form-check-label" for="tag3">Tag 3</label>
-                    </div>
-                </div>
+                <div id="tags" class="row">
+                    """),format.raw/*86.44*/("""
+                """),format.raw/*87.17*/("""</div>
             </div>
             <div class="col-2">
-                <button type="button" class="btn btn-light btn-block">New</button>
+                <button id="newTag" type="button" class="btn btn-light btn-block">New</button>
             </div>
         </div>
         <div class="form-group row">
@@ -146,10 +133,9 @@ Seq[Any](format.raw/*2.1*/("""
             </div>
         </div>
     </form>
-
-    """),format.raw/*119.100*/("""
-    """),format.raw/*120.105*/("""
-""")))}),format.raw/*121.2*/("""
+""")))}/*105.2*/ {_display_(Seq[Any](format.raw/*105.4*/("""
+    """),format.raw/*106.5*/("""<script src=""""),_display_(/*106.19*/routes/*106.25*/.Assets.versioned("javascripts/add.js")),format.raw/*106.64*/("""" type="text/javascript"></script>
+""")))}),format.raw/*107.2*/("""
 """))
       }
     }
@@ -166,11 +152,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Tue Jun 19 16:51:35 EDT 2018
+                  DATE: Tue Jun 26 11:30:08 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/add.scala.html
-                  HASH: 8a0fc2a9b705a257daa45ea9eaf30b8fa0ff78df
-                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1251->98|1265->104|1309->128|1347->140|1361->146|1396->161|1431->170|6381->5185|6416->5290|6449->5292
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|37->6|37->6|37->6|38->7|38->7|38->7|39->8|150->119|151->120|152->121
+                  HASH: f2066a215b624cb5b9fbefcfc324ce2c9f40519f
+                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1251->98|1265->104|1309->128|1347->140|1361->146|1396->161|1431->170|2917->1651|2970->1676|3495->2196|3540->2213|5051->3719|5096->3736|5761->4382|5801->4384|5834->4389|5876->4403|5892->4409|5953->4448|6020->4484
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|37->6|37->6|37->6|38->7|38->7|38->7|39->8|70->39|71->40|83->52|84->53|117->86|118->87|136->105|136->105|137->106|137->106|137->106|137->106|138->107
                   -- GENERATED --
               */
           

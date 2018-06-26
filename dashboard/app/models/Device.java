@@ -1,23 +1,26 @@
 package models;
 
+import java.io.File;
+
+
 public class Device {
 
-    private String id;
+    private String deviceId;
     private String name;
     private String type;
     private String ipAddress;
     private String historySize;
     private String samplingRate;
     private String[] tags;
-    private String policy;
+    private File policy;
     private String groupId;
 
-    public String getId() {
-        return id;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getName() {
@@ -68,11 +71,11 @@ public class Device {
         this.tags = tags;
     }
 
-    public String getPolicy() {
+    public File getPolicy() {
         return policy;
     }
 
-    public void setPolicy(String policy) {
+    public void setPolicy(File policy) {
         this.policy = policy;
     }
 

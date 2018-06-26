@@ -1,12 +1,11 @@
 package controllers;
 
 import models.ApplicationDatabase;
-import models.Device;
+import models.Umbox;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-//import play.libs.Json;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
@@ -17,14 +16,14 @@ import java.util.Scanner;
  * This controller contains an action to handle HTTP requests
  * to the application's home page.
  */
-public class DeviceController extends Controller {
+public class UmboxController extends Controller {
 
     private final FormFactory formFactory;
     private final ApplicationDatabase db;
     private final HttpExecutionContext ec;
 
     @Inject
-    public DeviceController(FormFactory formFactory, ApplicationDatabase db, HttpExecutionContext ec) {
+    public UmboxController(FormFactory formFactory, ApplicationDatabase db, HttpExecutionContext ec) {
         this.formFactory = formFactory;
         this.db = db;
         this.ec = ec;
@@ -36,37 +35,15 @@ public class DeviceController extends Controller {
      * this method will be called when the application receives a
      * <code>GET</code> request with a path of <code>/</code>.
      */
-    public Result addDevice() {
-        return ok(views.html.add.render());
-    }
-
-    public Result deviceInfo(String id) {
-        return ok(views.html.info.render(id));
-    }
-
-    public CompletionStage<Result> submit() {
-        Device device;
-        device = formFactory.form(Device.class).bindFromRequest().get();
-        return db.addDevice(device).thenApplyAsync(n -> {
-            return redirect(routes.HomeController.index());
-        }, ec.current());
-    }
-
     public CompletionStage<Result> clean() {
         return db.dropAllTables().thenApplyAsync(n -> {
             return redirect(routes.HomeController.index());
         }, ec.current());
     }
 
-    public CompletionStage<Result> logDevices() {
-        return db.logDevices().thenApplyAsync(n -> {
-            return redirect(routes.HomeController.index());
-        }, ec.current());
-    }
-
-    public CompletionStage<Result> getDevices() throws Exception {
-        return db.getDevices().thenApplyAsync(json -> {
-            return ok(json);
+    public CompletionStage<Result> logUmboxes() {
+        return db.logUmboxes().thenApplyAsync(n -> {
+            return redirect(routes.DeviceController.addDevice());
         }, ec.current());
     }
 

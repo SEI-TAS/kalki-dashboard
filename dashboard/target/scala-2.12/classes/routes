@@ -7,7 +7,10 @@ GET     /                           controllers.HomeController.index
 GET     /add-device                 controllers.DeviceController.addDevice
 POST    /add-device-submit          controllers.DeviceController.submit
 GET     /clean                      controllers.DeviceController.clean
-GET     /log                        controllers.DeviceController.logUmboxes
+GET     /log-umboxes                controllers.UmboxController.logUmboxes
+GET     /log-devices                controllers.DeviceController.logDevices
+GET     /devices                    controllers.DeviceController.getDevices
+GET     /info                       controllers.DeviceController.deviceInfo(id: String ?= "Fake Device")
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

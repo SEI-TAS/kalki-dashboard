@@ -4,7 +4,7 @@
  * two arguments, a `String` for the title of the page and an `Html`
  * object to insert into the body of the page.
  *@
-@(title: String)(content: Html)
+@(title: String)(content: Html)(scripts: Html)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,5 +28,6 @@
         @partials.footer()
 
         @partials.scripts()
+        @scripts
     </body>
 </html>

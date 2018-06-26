@@ -126,3 +126,9 @@ iframe {
 .form {
     margin-bottom: 30px;
 }
+
+select {
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+    appearance: menulist;
+}
