@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jun 21 17:45:27 EDT 2018
+// @DATE:Wed Jun 27 11:11:15 EDT 2018
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -59,7 +59,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:11
+    // @LINE:12
     def logDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.logDevices",
       """
@@ -75,6 +75,16 @@ package controllers.javascript {
       """
         function() {
           return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add-device-submit"})
+        }
+      """
+    )
+  
+    // @LINE:15
+    def getTypes: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.getTypes",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "types"})
         }
       """
     )
@@ -99,7 +109,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:13
+    // @LINE:11
     def deviceInfo: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.deviceInfo",
       """
@@ -109,7 +119,27 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:12
+    // @LINE:14
+    def getGroupIds: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.getGroupIds",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "group-ids"})
+        }
+      """
+    )
+  
+    // @LINE:16
+    def getTags: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.getTags",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "tags"})
+        }
+      """
+    )
+  
+    // @LINE:13
     def getDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getDevices",
       """
@@ -121,7 +151,7 @@ package controllers.javascript {
   
   }
 
-  // @LINE:16
+  // @LINE:19
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -129,7 +159,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:16
+    // @LINE:19
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

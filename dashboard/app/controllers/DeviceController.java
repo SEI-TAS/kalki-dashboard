@@ -70,4 +70,22 @@ public class DeviceController extends Controller {
         }, ec.current());
     }
 
+    public CompletionStage<Result> getGroupIds() throws Exception {
+        return db.getGroupIds().thenApplyAsync(json -> {
+            return ok(json);
+        }, ec.current());
+    }
+
+    public CompletionStage<Result> getTypes() throws Exception {
+        return db.getTypes().thenApplyAsync(json -> {
+            return ok(json);
+        }, ec.current());
+    }
+
+    public CompletionStage<Result> getTags() throws Exception {
+        return db.getTags().thenApplyAsync(json -> {
+            return ok(json);
+        }, ec.current());
+    }
+
 }

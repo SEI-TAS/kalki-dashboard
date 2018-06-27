@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jun 21 17:45:27 EDT 2018
+// @DATE:Wed Jun 27 11:11:15 EDT 2018
 
 import play.api.mvc.Call
 
@@ -48,7 +48,7 @@ package controllers {
     }
 
   
-    // @LINE:11
+    // @LINE:12
     def logDevices(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "log-devices")
@@ -58,6 +58,12 @@ package controllers {
     def submit(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "add-device-submit")
+    }
+  
+    // @LINE:15
+    def getTypes(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "types")
     }
   
     // @LINE:9
@@ -72,13 +78,25 @@ package controllers {
       Call("GET", _prefix + { _defaultPrefix } + "add-device")
     }
   
-    // @LINE:13
+    // @LINE:11
     def deviceInfo(id:String = "Fake Device"): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "info" + play.core.routing.queryString(List(if(id == "Fake Device") None else Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("id", id)))))
     }
   
-    // @LINE:12
+    // @LINE:14
+    def getGroupIds(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "group-ids")
+    }
+  
+    // @LINE:16
+    def getTags(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "tags")
+    }
+  
+    // @LINE:13
     def getDevices(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "devices")
@@ -86,14 +104,14 @@ package controllers {
   
   }
 
-  // @LINE:16
+  // @LINE:19
   class ReverseAssets(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:16
+    // @LINE:19
     def versioned(file:Asset): Call = {
       implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
       Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))

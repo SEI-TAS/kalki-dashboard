@@ -1,5 +1,5 @@
-jQuery(document).ready(function($) {
-    $.get ("/devices", (devices) => {
+jQuery(document).ready(($) => {
+    $.get("/devices", (devices) => {
         $.each(devices, (index, device) => {
             $("#dashboardTableBody").append("<tr class=\"clickable-row\" data-href=\"/info?id=" + device.device_id + "\">\n" +
                 "    <td>" + device.name + "</td>\n" +

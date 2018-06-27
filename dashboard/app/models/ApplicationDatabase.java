@@ -65,6 +65,33 @@ public class ApplicationDatabase {
                 // Tags and policy file ommitted
                 ");"
         );
+
+        // Creates table "group_id"
+        st.executeUpdate("CREATE TABLE IF NOT EXISTS group_id (" +
+                "id serial PRIMARY KEY," +
+                "info varchar(255)" +
+                ");"
+        );
+
+        // Creates table "type"
+        st.executeUpdate("CREATE TABLE IF NOT EXISTS type (" +
+                "id serial PRIMARY KEY," +
+                "info varchar(255)" +
+                ");"
+        );
+
+        // Creates table "tag"
+        st.executeUpdate("CREATE TABLE IF NOT EXISTS tag (" +
+                "id serial PRIMARY KEY," +
+                "info varchar(255)" +
+                ");"
+        );
+
+        // DELETE THIS
+//        st.executeUpdate("INSERT INTO group_id (info) VALUES ('12345');");
+//        st.executeUpdate("INSERT INTO type (info) VALUES ('A new type');");
+//        st.executeUpdate("INSERT INTO tag (info) VALUES ('a tag');");
+
     }
 
     // Unused
@@ -120,7 +147,7 @@ public class ApplicationDatabase {
     public CompletionStage<Integer> dropAllTables() {
         return CompletableFuture.supplyAsync(() -> {
             return db.withConnection(connection -> {
-                connection.prepareStatement("DROP TABLE IF EXISTS alert,umbox,device").execute();
+                connection.prepareStatement("DROP TABLE IF EXISTS alert,umbox,device,group_id,type,tag").execute();
                 return 1;
             });
         }, ec);
@@ -134,6 +161,57 @@ public class ApplicationDatabase {
                 createTablesIfNotExists(st);
 
                 ResultSet rs = st.executeQuery("SELECT * from device");
+                try {
+                    return Convertor.convertToJson(rs);
+                } catch (Exception e) {
+                    return null;
+                }
+            });
+        }, ec);
+    }
+
+    public CompletionStage<JsonNode> getGroupIds() throws Exception {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+                Statement st = connection.createStatement();
+
+                createTablesIfNotExists(st);
+
+                ResultSet rs = st.executeQuery("SELECT * from group_id");
+                try {
+                    return Convertor.convertToJson(rs);
+                } catch (Exception e) {
+                    return null;
+                }
+            });
+        }, ec);
+    }
+
+    public CompletionStage<JsonNode> getTypes() throws Exception {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+                Statement st = connection.createStatement();
+
+                createTablesIfNotExists(st);
+
+                ResultSet rs = st.executeQuery("SELECT * from type");
+                try {
+                    return Convertor.convertToJson(rs);
+                } catch (Exception e) {
+                    return null;
+                }
+            });
+        }, ec);
+    }
+
+    public CompletionStage<JsonNode> getTags() throws Exception {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+                Statement st = connection.createStatement();
+
+                createTablesIfNotExists(st);
+
+                ResultSet rs = st.executeQuery("SELECT * from tag");
                 try {
                     return Convertor.convertToJson(rs);
                 } catch (Exception e) {
