@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Wed Jun 27 11:11:15 EDT 2018
+// @DATE:Thu Jun 28 15:53:35 EDT 2018
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -11,7 +11,7 @@ import _root_.play.libs.F
 // @LINE:6
 package controllers.javascript {
 
-  // @LINE:10
+  // @LINE:15
   class ReverseUmboxController(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -19,7 +19,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:10
+    // @LINE:15
     def logUmboxes: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.logUmboxes",
       """
@@ -59,7 +59,17 @@ package controllers.javascript {
     }
 
   
-    // @LINE:12
+    // @LINE:11
+    def addGroupId: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.addGroupId",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add-group-id"})
+        }
+      """
+    )
+  
+    // @LINE:16
     def logDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.logDevices",
       """
@@ -69,7 +79,17 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:8
+    // @LINE:13
+    def addTag: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.addTag",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add-tag"})
+        }
+      """
+    )
+  
+    // @LINE:10
     def submit: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.submit",
       """
@@ -79,7 +99,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:15
+    // @LINE:20
     def getTypes: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTypes",
       """
@@ -89,12 +109,12 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:9
+    // @LINE:14
     def clean: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.clean",
       """
         function() {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "clean"})
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "clean"})
         }
       """
     )
@@ -109,7 +129,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:11
+    // @LINE:8
     def deviceInfo: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.deviceInfo",
       """
@@ -119,7 +139,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:14
+    // @LINE:19
     def getGroupIds: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getGroupIds",
       """
@@ -129,7 +149,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:16
+    // @LINE:21
     def getTags: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTags",
       """
@@ -139,7 +159,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:13
+    // @LINE:18
     def getDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getDevices",
       """
@@ -149,9 +169,19 @@ package controllers.javascript {
       """
     )
   
+    // @LINE:12
+    def addType: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.addType",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add-type"})
+        }
+      """
+    )
+  
   }
 
-  // @LINE:19
+  // @LINE:24
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -159,7 +189,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:19
+    // @LINE:24
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

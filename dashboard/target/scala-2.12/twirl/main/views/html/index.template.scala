@@ -41,14 +41,13 @@ Seq[Any](format.raw/*2.1*/("""
                 <th>Latest Alert</th>
             </tr>
         </thead>
-        <tbody id="dashboardTableBody">
-        </tbody>
+        <tbody id="dashboardTableBody"></tbody>
     </table>
-    <a href=""""),_display_(/*16.15*/routes/*16.21*/.DeviceController.clean),format.raw/*16.44*/("""" class="btn btn-info" role="button">Drop Tables</a>
-    <a href=""""),_display_(/*17.15*/routes/*17.21*/.DeviceController.logDevices),format.raw/*17.49*/("""" class="btn btn-info" role="button">Log Devices</a>
-""")))}/*18.2*/ {_display_(Seq[Any](format.raw/*18.4*/("""
-    """),format.raw/*19.5*/("""<script src=""""),_display_(/*19.19*/routes/*19.25*/.Assets.versioned("javascripts/index.js")),format.raw/*19.66*/("""" type="text/javascript"></script>
-""")))}),format.raw/*20.2*/("""
+    <button id="dropAllTables" class="btn btn-info" role="button">Drop Tables</button>
+    <button id="logDevices" class="btn btn-info" role="button">Log Devices</button>
+""")))}/*17.2*/ {_display_(Seq[Any](format.raw/*17.4*/("""
+    """),format.raw/*18.5*/("""<script src=""""),_display_(/*18.19*/routes/*18.25*/.Assets.versioned("javascripts/index.js")),format.raw/*18.66*/("""" type="text/javascript"></script>
+""")))}),format.raw/*19.2*/("""
 """))
       }
     }
@@ -65,11 +64,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Tue Jun 26 11:22:18 EDT 2018
+                  DATE: Thu Jun 28 15:56:29 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/index.scala.html
-                  HASH: 7c04fdefe144be825654193a2d0906950301ea86
-                  MATRIX: 941->1|1037->4|1064->6|1089->23|1128->25|1159->30|1517->361|1532->367|1576->390|1670->457|1685->463|1734->491|1806->545|1845->547|1877->552|1918->566|1933->572|1995->613|2061->649
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|47->16|47->16|47->16|48->17|48->17|48->17|49->18|49->18|50->19|50->19|50->19|50->19|51->20
+                  HASH: 1e061d96d53e2e80a1b6d15a1dd99be07bf82e6d
+                  MATRIX: 941->1|1037->4|1064->6|1089->23|1128->25|1159->30|1657->510|1696->512|1728->517|1769->531|1784->537|1846->578|1912->614
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|48->17|48->17|49->18|49->18|49->18|49->18|50->19
                   -- GENERATED --
               */
           

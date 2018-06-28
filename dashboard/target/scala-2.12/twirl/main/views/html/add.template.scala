@@ -34,18 +34,30 @@ Seq[Any](format.raw/*2.1*/("""
 """),_display_(/*3.2*/main("Add Device")/*3.20*/ {_display_(Seq[Any](format.raw/*3.22*/("""
     """),format.raw/*4.5*/("""<h4>Add Device</h4>
 
-    <form class="form" method="post" action=""""),_display_(/*6.47*/routes/*6.53*/.DeviceController.submit),format.raw/*6.77*/("""">
-        """),_display_(/*7.10*/helper/*7.16*/.CSRF.formField),format.raw/*7.31*/("""
-        """),format.raw/*8.9*/("""<div class="row">
-            <div class="form-group col">
+    <form id="addDeviceForm" class="form" method="post" action=""""),_display_(/*6.66*/routes/*6.72*/.DeviceController.submit()),format.raw/*6.98*/("""">
+        """),format.raw/*7.37*/("""
+
+        """),format.raw/*9.9*/("""<div class="form-group row">
+                <!-- Type -->
+            <div class="col">
                 <div class="row">
-                    <label for="id" class="col-4 col-form-label">ID</label>
-                    <div class="col-8">
-                        <input type="text" class="form-control" id="id" name="deviceId" placeholder="Enter ID">
+                    <label for="type" class="col-4 col-form-label">Type</label>
+                    <div class="col-6">
+                        <select class="form-control" id="type" name="type">
+                            """),format.raw/*16.52*/("""
+                        """),format.raw/*17.25*/("""</select>
+                    </div>
+                        <!-- New Type Button -->
+                    <div class="col-2">
+                        <button id="newType" type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#newTypeModal">
+                            New
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="col">
+
+            <!-- Copy From Existing Device -->
+            <div class="form-group col">
                 <div class="d-flex justify-content-end">
                     <button id="copyFromExisting" type="button" class="btn btn-light btn-block col-5">
                         Copy from Existing Device
@@ -53,8 +65,18 @@ Seq[Any](format.raw/*2.1*/("""
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group col">
+
+            <!-- Enter ID -->
+        <div class="form-group row">
+            <label for="id" class="col-2 col-form-label">ID</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="id" name="deviceId" placeholder="Enter ID">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <!-- Name -->
+            <div class="col">
                 <div class="row">
                     <label for="name" class="col-4 col-form-label">Name</label>
                     <div class="col-8">
@@ -62,80 +84,162 @@ Seq[Any](format.raw/*2.1*/("""
                     </div>
                 </div>
             </div>
-            <div class="form-group col">
+
+            <!-- Group ID -->
+            <div class="col">
                 <div class="row d-flex justify-content-end">
                     <label for="groupId" class="col-2 col-form-label">Group ID</label>
                     <div class="col-6">
                         <select class="form-control" id="groupId" name="groupId">
-                            """),format.raw/*39.52*/("""
-                        """),format.raw/*40.25*/("""</select>
+                            """),format.raw/*63.52*/("""
+                        """),format.raw/*64.25*/("""</select>
                     </div>
+                    <!-- New Group Button -->
                     <div class="col-2">
-                        <button id="newGroupId" type="button" class="btn btn-light btn-block">New</button>
+                        <button id="newGroupIdButton" type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#newGroupIdModal">
+                            New
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="type" class="col-2 col-form-label">Type</label>
-            <div class="col-8">
-                <select class="form-control" id="type" name="type">
-                    """),format.raw/*52.44*/("""
-                """),format.raw/*53.17*/("""</select>
-            </div>
-            <div class="col-2">
-                <button id="newType" type="button" class="btn btn-light btn-block">New</button>
-            </div>
-        </div>
+
+        <!-- IP Address -->
         <div class="form-group row">
             <label for="ipAddress" class="col-2 col-form-label">IP Address</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="ipAddress" name="ipAddress" placeholder="Enter IP">
             </div>
+            <!-- Discover IP-->
             <div class="col-2">
                 <button id="discoverIp" type="button" class="btn btn-light btn-block">Discover</button>
             </div>
         </div>
+
+        <!-- History Size -->
         <div class="form-group row">
             <label for="historySize" class="col-2 col-form-label">History Size</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="historySize" name="historySize" placeholder="Enter Size">
             </div>
         </div>
+
+        <!-- Sampling Rate -->
         <div class="form-group row">
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (seconds)</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate">
             </div>
         </div>
-        <div class="row">
+
+        <!-- Tags -->
+        <div class="form-group row">
             <div class="col-2">
                 <label>Tags</label>
             </div>
             <div class="col-8">
                 <div id="tags" class="row">
-                    """),format.raw/*86.44*/("""
-                """),format.raw/*87.17*/("""</div>
+                    """),format.raw/*111.44*/("""
+                """),format.raw/*112.17*/("""</div>
             </div>
+            <!-- New Tag Button -->
             <div class="col-2">
-                <button id="newTag" type="button" class="btn btn-light btn-block">New</button>
+                <button id="newTag" type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#newTagModal">
+                    New
+                </button>
             </div>
         </div>
+
+        <!-- Policy File -->
         <div class="form-group row">
             <label for="policyFile" class="col-2 col-form-label">Policy File</label>
             <div class="col-8">
                 <input type="file" class="form-control-file" id="policyFile">
             </div>
         </div>
+
+        <!-- Submit -->
         <div class="row">
             <div class="col-2">
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </div>
         </div>
     </form>
-""")))}/*105.2*/ {_display_(Seq[Any](format.raw/*105.4*/("""
-    """),format.raw/*106.5*/("""<script src=""""),_display_(/*106.19*/routes/*106.25*/.Assets.versioned("javascripts/add.js")),format.raw/*106.64*/("""" type="text/javascript"></script>
-""")))}),format.raw/*107.2*/("""
+
+    <!-- New Group Modal -->
+    <div class="modal fade" id="newGroupIdModal" tabindex="-1" role="dialog" aria-labelledby="newGroupIdModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="newGroupIdModalForm" class="form" method="post" action=""""),_display_(/*142.84*/routes/*142.90*/.DeviceController.addGroupId()),format.raw/*142.120*/("""">
+                    """),format.raw/*143.49*/("""
+                    """),format.raw/*144.21*/("""<div class="modal-header">
+                        <h4 class="modal-title" id="newGroupIdModalLabel">New Group ID</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Enter Group ID" name="groupId" id="newGroupIdInput">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveNewGroupId">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Type Modal -->
+    <div class="modal fade" id="newTypeModal" tabindex="-1" role="dialog" aria-labelledby="newTypeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="newTypeModalForm" class="form" method="post" action=""""),_display_(/*166.81*/routes/*166.87*/.DeviceController.addType()),format.raw/*166.114*/("""">
+                    """),format.raw/*167.49*/("""
+                    """),format.raw/*168.21*/("""<div class="modal-header">
+                        <h4 class="modal-title" id="newTypeModalLabel">New Type</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Enter Type" name="type" id="newTypeInput">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveNewType">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Tag Modal -->
+    <div class="modal fade" id="newTagModal" tabindex="-1" role="dialog" aria-labelledby="newTagModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="newTagModalForm" class="form" method="post" action=""""),_display_(/*190.80*/routes/*190.86*/.DeviceController.addTag()),format.raw/*190.112*/("""">
+                    """),format.raw/*191.49*/("""
+                    """),format.raw/*192.21*/("""<div class="modal-header">
+                        <h4 class="modal-title" id="newTagModalLabel">New Tag</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Enter Tag" name="tag" id="newTagInput">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveNewTag">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+""")))}/*209.2*/ {_display_(Seq[Any](format.raw/*209.4*/("""
+    """),format.raw/*210.5*/("""<script src=""""),_display_(/*210.19*/routes/*210.25*/.Assets.versioned("javascripts/add.js")),format.raw/*210.64*/("""" type="text/javascript"></script>
+""")))}),format.raw/*211.2*/("""
 """))
       }
     }
@@ -152,11 +256,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Tue Jun 26 11:30:08 EDT 2018
+                  DATE: Thu Jun 28 16:25:19 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/add.scala.html
-                  HASH: f2066a215b624cb5b9fbefcfc324ce2c9f40519f
-                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1251->98|1265->104|1309->128|1347->140|1361->146|1396->161|1431->170|2917->1651|2970->1676|3495->2196|3540->2213|5051->3719|5096->3736|5761->4382|5801->4384|5834->4389|5876->4403|5892->4409|5953->4448|6020->4484
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|37->6|37->6|37->6|38->7|38->7|38->7|39->8|70->39|71->40|83->52|84->53|117->86|118->87|136->105|136->105|137->106|137->106|137->106|137->106|138->107
+                  HASH: 87aad3bee511e92ef5c6bc864b8d06dee3125693
+                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1270->117|1284->123|1330->149|1368->188|1404->198|1779->568|1832->593|3741->2497|3794->2522|5698->4420|5744->4437|6933->5598|6949->5604|7002->5634|7054->5685|7104->5706|8376->6950|8392->6956|8442->6983|8494->7034|8544->7055|9792->8275|9808->8281|9857->8307|9909->8358|9959->8379|10867->9268|10907->9270|10940->9275|10982->9289|10998->9295|11059->9334|11126->9370
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|37->6|37->6|37->6|38->7|40->9|47->16|48->17|94->63|95->64|142->111|143->112|173->142|173->142|173->142|174->143|175->144|197->166|197->166|197->166|198->167|199->168|221->190|221->190|221->190|222->191|223->192|240->209|240->209|241->210|241->210|241->210|241->210|242->211
                   -- GENERATED --
               */
           

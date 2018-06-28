@@ -10,11 +10,10 @@
                 <th>Latest Alert</th>
             </tr>
         </thead>
-        <tbody id="dashboardTableBody">
-        </tbody>
+        <tbody id="dashboardTableBody"></tbody>
     </table>
-    <a href="@routes.DeviceController.clean" class="btn btn-info" role="button">Drop Tables</a>
-    <a href="@routes.DeviceController.logDevices" class="btn btn-info" role="button">Log Devices</a>
+    <button id="dropAllTables" class="btn btn-info" role="button">Drop Tables</button>
+    <button id="logDevices" class="btn btn-info" role="button">Log Devices</button>
 } {
     <script src="@routes.Assets.versioned("javascripts/index.js")" type="text/javascript"></script>
 }

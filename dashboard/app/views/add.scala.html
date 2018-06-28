@@ -3,18 +3,30 @@
 @main("Add Device") {
     <h4>Add Device</h4>
 
-    <form class="form" method="post" action="@routes.DeviceController.submit">
-        @helper.CSRF.formField
-        <div class="row">
-            <div class="form-group col">
+    <form id="addDeviceForm" class="form" method="post" action="@routes.DeviceController.submit()">
+        @* @helper.CSRF.formField *@
+
+        <div class="form-group row">
+                <!-- Type -->
+            <div class="col">
                 <div class="row">
-                    <label for="id" class="col-4 col-form-label">ID</label>
-                    <div class="col-8">
-                        <input type="text" class="form-control" id="id" name="deviceId" placeholder="Enter ID">
+                    <label for="type" class="col-4 col-form-label">Type</label>
+                    <div class="col-6">
+                        <select class="form-control" id="type" name="type">
+                            @*Populated by add.js*@
+                        </select>
+                    </div>
+                        <!-- New Type Button -->
+                    <div class="col-2">
+                        <button id="newType" type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#newTypeModal">
+                            New
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="col">
+
+            <!-- Copy From Existing Device -->
+            <div class="form-group col">
                 <div class="d-flex justify-content-end">
                     <button id="copyFromExisting" type="button" class="btn btn-light btn-block col-5">
                         Copy from Existing Device
@@ -22,8 +34,18 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group col">
+
+            <!-- Enter ID -->
+        <div class="form-group row">
+            <label for="id" class="col-2 col-form-label">ID</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="id" name="deviceId" placeholder="Enter ID">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <!-- Name -->
+            <div class="col">
                 <div class="row">
                     <label for="name" class="col-4 col-form-label">Name</label>
                     <div class="col-8">
@@ -31,7 +53,9 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col">
+
+            <!-- Group ID -->
+            <div class="col">
                 <div class="row d-flex justify-content-end">
                     <label for="groupId" class="col-2 col-form-label">Group ID</label>
                     <div class="col-6">
@@ -39,45 +63,46 @@
                             @*Populated by add.js*@
                         </select>
                     </div>
+                    <!-- New Group Button -->
                     <div class="col-2">
-                        <button id="newGroupId" type="button" class="btn btn-light btn-block">New</button>
+                        <button id="newGroupIdButton" type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#newGroupIdModal">
+                            New
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="type" class="col-2 col-form-label">Type</label>
-            <div class="col-8">
-                <select class="form-control" id="type" name="type">
-                    @*Populated by add.js*@
-                </select>
-            </div>
-            <div class="col-2">
-                <button id="newType" type="button" class="btn btn-light btn-block">New</button>
-            </div>
-        </div>
+
+        <!-- IP Address -->
         <div class="form-group row">
             <label for="ipAddress" class="col-2 col-form-label">IP Address</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="ipAddress" name="ipAddress" placeholder="Enter IP">
             </div>
+            <!-- Discover IP-->
             <div class="col-2">
                 <button id="discoverIp" type="button" class="btn btn-light btn-block">Discover</button>
             </div>
         </div>
+
+        <!-- History Size -->
         <div class="form-group row">
             <label for="historySize" class="col-2 col-form-label">History Size</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="historySize" name="historySize" placeholder="Enter Size">
             </div>
         </div>
+
+        <!-- Sampling Rate -->
         <div class="form-group row">
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (seconds)</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate">
             </div>
         </div>
-        <div class="row">
+
+        <!-- Tags -->
+        <div class="form-group row">
             <div class="col-2">
                 <label>Tags</label>
             </div>
@@ -86,22 +111,101 @@
                     @*Populated by add.js*@
                 </div>
             </div>
+            <!-- New Tag Button -->
             <div class="col-2">
-                <button id="newTag" type="button" class="btn btn-light btn-block">New</button>
+                <button id="newTag" type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#newTagModal">
+                    New
+                </button>
             </div>
         </div>
+
+        <!-- Policy File -->
         <div class="form-group row">
             <label for="policyFile" class="col-2 col-form-label">Policy File</label>
             <div class="col-8">
                 <input type="file" class="form-control-file" id="policyFile">
             </div>
         </div>
+
+        <!-- Submit -->
         <div class="row">
             <div class="col-2">
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </div>
         </div>
     </form>
+
+    <!-- New Group Modal -->
+    <div class="modal fade" id="newGroupIdModal" tabindex="-1" role="dialog" aria-labelledby="newGroupIdModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="newGroupIdModalForm" class="form" method="post" action="@routes.DeviceController.addGroupId()">
+                    @* @helper.CSRF.formField *@
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="newGroupIdModalLabel">New Group ID</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Enter Group ID" name="groupId" id="newGroupIdInput">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveNewGroupId">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Type Modal -->
+    <div class="modal fade" id="newTypeModal" tabindex="-1" role="dialog" aria-labelledby="newTypeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="newTypeModalForm" class="form" method="post" action="@routes.DeviceController.addType()">
+                    @* @helper.CSRF.formField *@
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="newTypeModalLabel">New Type</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Enter Type" name="type" id="newTypeInput">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveNewType">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Tag Modal -->
+    <div class="modal fade" id="newTagModal" tabindex="-1" role="dialog" aria-labelledby="newTagModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="newTagModalForm" class="form" method="post" action="@routes.DeviceController.addTag()">
+                    @* @helper.CSRF.formField *@
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="newTagModalLabel">New Tag</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Enter Tag" name="tag" id="newTagInput">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveNewTag">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 } {
     <script src="@routes.Assets.versioned("javascripts/add.js")" type="text/javascript"></script>
 }

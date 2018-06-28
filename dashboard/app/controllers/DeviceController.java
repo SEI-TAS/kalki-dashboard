@@ -88,4 +88,25 @@ public class DeviceController extends Controller {
         }, ec.current());
     }
 
+    public CompletionStage<Result> addGroupId() {
+        String groupId = formFactory.form().bindFromRequest().get("groupId");
+        return db.addGroupId(groupId).thenApplyAsync(n -> {
+            return redirect(routes.DeviceController.addDevice());
+        }, ec.current());
+    }
+
+    public CompletionStage<Result> addType() {
+        String type = formFactory.form().bindFromRequest().get("type");
+        return db.addType(type).thenApplyAsync(n -> {
+            return redirect(routes.DeviceController.addDevice());
+        }, ec.current());
+    }
+
+    public CompletionStage<Result> addTag() {
+        String tag = formFactory.form().bindFromRequest().get("tag");
+        return db.addTag(tag).thenApplyAsync(n -> {
+            return redirect(routes.DeviceController.addDevice());
+        }, ec.current());
+    }
+
 }

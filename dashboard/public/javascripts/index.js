@@ -13,4 +13,12 @@ jQuery(document).ready(($) => {
             window.location = $(this).data("href");
         });
     });
+
+    $("#dropAllTables").click(() => {
+        $.post("/clean");
+    });
+
+    $("#logDevices").click(() => {
+        $.get("/log-devices");
+    });
 });

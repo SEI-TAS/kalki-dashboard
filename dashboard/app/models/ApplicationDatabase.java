@@ -87,11 +87,6 @@ public class ApplicationDatabase {
                 ");"
         );
 
-        // DELETE THIS
-//        st.executeUpdate("INSERT INTO group_id (info) VALUES ('12345');");
-//        st.executeUpdate("INSERT INTO type (info) VALUES ('A new type');");
-//        st.executeUpdate("INSERT INTO tag (info) VALUES ('a tag');");
-
     }
 
     // Unused
@@ -125,7 +120,6 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                // TODO: Figure out where to store the device
                 // Adds new device based on form values
                 st.executeUpdate(
                         "INSERT INTO device(device_id,name,group_id,type,ip_address,history_size,sampling_rate)" +
@@ -217,6 +211,45 @@ public class ApplicationDatabase {
                 } catch (Exception e) {
                     return null;
                 }
+            });
+        }, ec);
+    }
+
+    public CompletionStage<Integer> addGroupId(String group_id) {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+                Statement st = connection.createStatement();
+
+                createTablesIfNotExists(st);
+
+                st.executeUpdate("INSERT INTO group_id(info) values ('" + group_id + "');");
+                return 1;
+            });
+        }, ec);
+    }
+
+    public CompletionStage<Integer> addType(String type) {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+                Statement st = connection.createStatement();
+
+                createTablesIfNotExists(st);
+
+                st.executeUpdate("INSERT INTO type(info) values ('" + type + "');");
+                return 1;
+            });
+        }, ec);
+    }
+
+    public CompletionStage<Integer> addTag(String tag) {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+                Statement st = connection.createStatement();
+
+                createTablesIfNotExists(st);
+
+                st.executeUpdate("INSERT INTO tag(info) values ('" + tag + "');");
+                return 1;
             });
         }, ec);
     }
