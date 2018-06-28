@@ -9,8 +9,8 @@ public class Device {
     private String name;
     private String type;
     private String ipAddress;
-    private String historySize;
-    private String samplingRate;
+    private int historySize;
+    private int samplingRate;
     private String[] tags;
     private File policy;
     private String groupId;
@@ -47,19 +47,19 @@ public class Device {
         this.ipAddress = ipAddress;
     }
 
-    public String getHistorySize() {
+    public int getHistorySize() {
         return historySize;
     }
 
-    public void setHistorySize(String historySize) {
+    public void setHistorySize(int historySize) {
         this.historySize = historySize;
     }
 
-    public String getSamplingRate() {
+    public int getSamplingRate() {
         return samplingRate;
     }
 
-    public void setSamplingRate(String samplingRate) {
+    public void setSamplingRate(int samplingRate) {
         this.samplingRate = samplingRate;
     }
 

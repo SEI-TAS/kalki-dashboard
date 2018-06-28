@@ -60,8 +60,8 @@ public class ApplicationDatabase {
                 "type varchar(255)," +
                 "group_id varchar(255)," +
                 "ip_address varchar(255)," +
-                "history_size varchar(255)," +
-                "sampling_rate varchar(255)" +
+                "history_size int," +
+                "sampling_rate int" +
                 // Tags and policy file ommitted
                 ");"
         );
