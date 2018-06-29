@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jun 28 15:53:35 EDT 2018
+// @DATE:Fri Jun 29 16:54:59 EDT 2018
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -11,7 +11,27 @@ import _root_.play.libs.F
 // @LINE:6
 package controllers.javascript {
 
-  // @LINE:15
+  // @LINE:27
+  class ReverseAssets(_prefix: => String) {
+
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:27
+    def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Assets.versioned",
+      """
+        function(file1) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "assets/" + (""" + implicitly[play.api.mvc.PathBindable[Asset]].javascriptUnbind + """)("file", file1)})
+        }
+      """
+    )
+  
+  }
+
+  // @LINE:8
   class ReverseUmboxController(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -19,12 +39,22 @@ package controllers.javascript {
     }
 
   
-    // @LINE:15
+    // @LINE:17
     def logUmboxes: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.logUmboxes",
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "log-umboxes"})
+        }
+      """
+    )
+  
+    // @LINE:8
+    def umboxSetup: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.UmboxController.umboxSetup",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "umbox-setup"})
         }
       """
     )
@@ -38,6 +68,16 @@ package controllers.javascript {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:16
+    def clean: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.clean",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "clean"})
+        }
+      """
+    )
   
     // @LINE:6
     def index: JavaScriptReverseRoute = JavaScriptReverseRoute(
@@ -59,7 +99,17 @@ package controllers.javascript {
     }
 
   
-    // @LINE:11
+    // @LINE:20
+    def getDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.getDevice",
+      """
+        function(id0) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "device" + _qS([(id0 == null ? null : (""" + implicitly[play.api.mvc.QueryStringBindable[Integer]].javascriptUnbind + """)("id", id0))])})
+        }
+      """
+    )
+  
+    // @LINE:13
     def addGroupId: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.addGroupId",
       """
@@ -69,7 +119,17 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:16
+    // @LINE:10
+    def deviceInfo: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.deviceInfo",
+      """
+        function(id0) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "info" + _qS([(id0 == null ? null : (""" + implicitly[play.api.mvc.QueryStringBindable[Integer]].javascriptUnbind + """)("id", id0))])})
+        }
+      """
+    )
+  
+    // @LINE:18
     def logDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.logDevices",
       """
@@ -79,7 +139,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:13
+    // @LINE:15
     def addTag: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.addTag",
       """
@@ -89,7 +149,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:10
+    // @LINE:12
     def submit: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.submit",
       """
@@ -99,22 +159,12 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:20
+    // @LINE:23
     def getTypes: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTypes",
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "types"})
-        }
-      """
-    )
-  
-    // @LINE:14
-    def clean: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.DeviceController.clean",
-      """
-        function() {
-          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "clean"})
         }
       """
     )
@@ -129,17 +179,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:8
-    def deviceInfo: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.DeviceController.deviceInfo",
-      """
-        function(id0) {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "info" + _qS([(id0 == null ? null : (""" + implicitly[play.api.mvc.QueryStringBindable[String]].javascriptUnbind + """)("id", id0))])})
-        }
-      """
-    )
-  
-    // @LINE:19
+    // @LINE:22
     def getGroupIds: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getGroupIds",
       """
@@ -149,7 +189,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:21
+    // @LINE:24
     def getTags: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTags",
       """
@@ -159,7 +199,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:18
+    // @LINE:21
     def getDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getDevices",
       """
@@ -169,7 +209,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:12
+    // @LINE:14
     def addType: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.addType",
       """
@@ -181,20 +221,20 @@ package controllers.javascript {
   
   }
 
-  // @LINE:24
-  class ReverseAssets(_prefix: => String) {
+  // @LINE:9
+  class ReverseFuncyController(_prefix: => String) {
 
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:24
-    def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.Assets.versioned",
+    // @LINE:9
+    def funcyView: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.FuncyController.funcyView",
       """
-        function(file1) {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "assets/" + (""" + implicitly[play.api.mvc.PathBindable[Asset]].javascriptUnbind + """)("file", file1)})
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "funcy-view"})
         }
       """
     )

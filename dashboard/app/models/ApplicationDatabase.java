@@ -147,6 +147,23 @@ public class ApplicationDatabase {
         }, ec);
     }
 
+    public CompletionStage<JsonNode> getDevice(int id) throws Exception {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+                Statement st = connection.createStatement();
+
+                createTablesIfNotExists(st);
+
+                ResultSet rs = st.executeQuery("SELECT * FROM device WHERE id=" + id + ";");
+                try {
+                    return Convertor.convertToJson(rs);
+                } catch (Exception e) {
+                    return null;
+                }
+            });
+        }, ec);
+    }
+
     public CompletionStage<JsonNode> getDevices() throws Exception {
         return CompletableFuture.supplyAsync(() -> {
             return db.withConnection(connection -> {
@@ -154,7 +171,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                ResultSet rs = st.executeQuery("SELECT * from device");
+                ResultSet rs = st.executeQuery("SELECT * FROM device;");
                 try {
                     return Convertor.convertToJson(rs);
                 } catch (Exception e) {
@@ -171,7 +188,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                ResultSet rs = st.executeQuery("SELECT * from group_id");
+                ResultSet rs = st.executeQuery("SELECT * FROM group_id;");
                 try {
                     return Convertor.convertToJson(rs);
                 } catch (Exception e) {
@@ -188,7 +205,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                ResultSet rs = st.executeQuery("SELECT * from type");
+                ResultSet rs = st.executeQuery("SELECT * FROM type;");
                 try {
                     return Convertor.convertToJson(rs);
                 } catch (Exception e) {
@@ -205,7 +222,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                ResultSet rs = st.executeQuery("SELECT * from tag");
+                ResultSet rs = st.executeQuery("SELECT * FROM tag;");
                 try {
                     return Convertor.convertToJson(rs);
                 } catch (Exception e) {
@@ -262,9 +279,9 @@ public class ApplicationDatabase {
                 createTablesIfNotExists(st);
 
                 // https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-                ResultSet rs = st.executeQuery("SELECT * from device");
+                ResultSet rs = st.executeQuery("SELECT * FROM device;");
                 ResultSetMetaData rsmd = rs.getMetaData();
-                System.out.println("querying SELECT * FROM device");
+                System.out.println("querying SELECT * FROM device;");
                 int columnsNumber = rsmd.getColumnCount();
                 while (rs.next()) {
                     for (int i = 1; i <= columnsNumber; i++) {
@@ -288,9 +305,9 @@ public class ApplicationDatabase {
                 createTablesIfNotExists(st);
 
                 // https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-                ResultSet rs = st.executeQuery("SELECT * from umbox");
+                ResultSet rs = st.executeQuery("SELECT * FROM umbox;");
                 ResultSetMetaData rsmd = rs.getMetaData();
-                System.out.println("querying SELECT * FROM umbox");
+                System.out.println("querying SELECT * FROM umbox;");
                 int columnsNumber = rsmd.getColumnCount();
                 while (rs.next()) {
                     for (int i = 1; i <= columnsNumber; i++) {

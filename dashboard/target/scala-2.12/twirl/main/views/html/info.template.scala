@@ -22,10 +22,10 @@ import play.mvc.Http.Context.Implicit._
 import play.data._
 import play.core.j.PlayFormsMagicForJava._
 
-object info extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[String,play.twirl.api.HtmlFormat.Appendable] {
+object info extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[Integer,play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply/*1.2*/(id: String):play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/(id: Integer):play.twirl.api.HtmlFormat.Appendable = {
     _display_ {
       {
 
@@ -33,18 +33,24 @@ object info extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlF
 Seq[Any](format.raw/*2.1*/("""
 """),_display_(/*3.2*/main("Device Info")/*3.21*/ {_display_(Seq[Any](format.raw/*3.23*/("""
     """),format.raw/*4.5*/("""<h4>Device Info</h4>
-    <h6>Device ID: """),_display_(/*5.21*/id),format.raw/*5.23*/("""</h6>
-""")))}/*6.2*/ {_display_(Seq[Any](format.raw/*6.4*/("""
-
-""")))}),format.raw/*8.2*/("""
+    <h6 id="name">Name: </h6>
+    <h6 id="type">Type: </h6>
+    <h6 id="securityState">Security State: </h6>
+    <h6 id="policyFile">Policy File: </h6>
+    <h6 id="alertHistory">Alert History: </h6>
+    <h6 id="variables">Variables: </h6>
+    <h6 id="securityStateFlowgraph">Security State Flowgraph: </h6>
+""")))}/*12.2*/ {_display_(Seq[Any](format.raw/*12.4*/("""
+    """),format.raw/*13.5*/("""<script src=""""),_display_(/*13.19*/routes/*13.25*/.Assets.versioned("javascripts/info.js")),format.raw/*13.65*/("""" type="text/javascript" data-id=""""),_display_(/*13.100*/id),format.raw/*13.102*/(""""></script>
+""")))}),format.raw/*14.2*/("""
 """))
       }
     }
   }
 
-  def render(id:String): play.twirl.api.HtmlFormat.Appendable = apply(id)
+  def render(id:Integer): play.twirl.api.HtmlFormat.Appendable = apply(id)
 
-  def f:((String) => play.twirl.api.HtmlFormat.Appendable) = (id) => apply(id)
+  def f:((Integer) => play.twirl.api.HtmlFormat.Appendable) = (id) => apply(id)
 
   def ref: this.type = this
 
@@ -53,11 +59,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jun 21 13:37:20 EDT 2018
+                  DATE: Fri Jun 29 16:56:24 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/info.scala.html
-                  HASH: 57ad3cd833d6c87f7a5ec761d882911cb4f419e1
-                  MATRIX: 947->1|1053->14|1080->16|1107->35|1146->37|1177->42|1244->83|1266->85|1290->92|1328->94|1360->97
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|36->5|36->5|37->6|37->6|39->8
+                  HASH: f7e0bcf9920381c9a75a697d2581e140bad7af5c
+                  MATRIX: 948->1|1055->15|1082->17|1109->36|1148->38|1179->43|1526->372|1565->374|1597->379|1638->393|1653->399|1714->439|1777->474|1801->476|1844->489
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|43->12|43->12|44->13|44->13|44->13|44->13|44->13|44->13|45->14
                   -- GENERATED --
               */
           

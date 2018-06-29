@@ -1,8 +1,14 @@
-@(id: String)
+@(id: Integer)
 
 @main("Device Info") {
     <h4>Device Info</h4>
-    <h6>Device ID: @id</h6>
+    <h6 id="name">Name: </h6>
+    <h6 id="type">Type: </h6>
+    <h6 id="securityState">Security State: </h6>
+    <h6 id="policyFile">Policy File: </h6>
+    <h6 id="alertHistory">Alert History: </h6>
+    <h6 id="variables">Variables: </h6>
+    <h6 id="securityStateFlowgraph">Security State Flowgraph: </h6>
 } {
-
+    <script src="@routes.Assets.versioned("javascripts/info.js")" type="text/javascript" data-id="@id"></script>
 }

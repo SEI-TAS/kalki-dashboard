@@ -65,6 +65,16 @@ Seq[Any](format.raw/*1.1*/("""<header>
                         <span>Add Device</span>
                     </a>
                 </li>
+                <li class="nav-menu-item">
+                    <a class="nav-link" href="/umbox-setup">
+                        <span>&mu;mbox Setup</span>
+                    </a>
+                </li>
+                <li class="nav-menu-item">
+                    <a class="nav-link" href="/funcy-view">
+                        <span>FUNCy View</span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
@@ -86,9 +96,9 @@ Seq[Any](format.raw/*1.1*/("""<header>
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jun 14 16:16:38 EDT 2018
+                  DATE: Fri Jun 29 11:17:59 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/partials/navbar.scala.html
-                  HASH: dc7093e33c04006278882eb05fdbfed4121f2a8d
+                  HASH: 35cb6a360230eebe47c57386818e0b61dcb601ab
                   MATRIX: 1040->0
                   LINES: 33->1
                   -- GENERATED --

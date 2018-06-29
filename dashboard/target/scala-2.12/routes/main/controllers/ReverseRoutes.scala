@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jun 28 15:53:35 EDT 2018
+// @DATE:Fri Jun 29 16:54:59 EDT 2018
 
 import play.api.mvc.Call
 
@@ -11,17 +11,38 @@ import _root_.play.libs.F
 // @LINE:6
 package controllers {
 
-  // @LINE:15
+  // @LINE:27
+  class ReverseAssets(_prefix: => String) {
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:27
+    def versioned(file:Asset): Call = {
+      implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
+      Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))
+    }
+  
+  }
+
+  // @LINE:8
   class ReverseUmboxController(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:15
+    // @LINE:17
     def logUmboxes(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "log-umboxes")
+    }
+  
+    // @LINE:8
+    def umboxSetup(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "umbox-setup")
     }
   
   }
@@ -32,6 +53,12 @@ package controllers {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:16
+    def clean(): Call = {
+      
+      Call("POST", _prefix + { _defaultPrefix } + "clean")
+    }
   
     // @LINE:6
     def index(): Call = {
@@ -48,40 +75,46 @@ package controllers {
     }
 
   
-    // @LINE:11
+    // @LINE:20
+    def getDevice(id:Integer = -1): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "device" + play.core.routing.queryString(List(if(id == -1) None else Some(implicitly[play.api.mvc.QueryStringBindable[Integer]].unbind("id", id)))))
+    }
+  
+    // @LINE:13
     def addGroupId(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "add-group-id")
     }
   
-    // @LINE:16
+    // @LINE:10
+    def deviceInfo(id:Integer = -1): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "info" + play.core.routing.queryString(List(if(id == -1) None else Some(implicitly[play.api.mvc.QueryStringBindable[Integer]].unbind("id", id)))))
+    }
+  
+    // @LINE:18
     def logDevices(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "log-devices")
     }
   
-    // @LINE:13
+    // @LINE:15
     def addTag(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "add-tag")
     }
   
-    // @LINE:10
+    // @LINE:12
     def submit(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "add-device-submit")
     }
   
-    // @LINE:20
+    // @LINE:23
     def getTypes(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "types")
-    }
-  
-    // @LINE:14
-    def clean(): Call = {
-      
-      Call("POST", _prefix + { _defaultPrefix } + "clean")
     }
   
     // @LINE:7
@@ -90,31 +123,25 @@ package controllers {
       Call("GET", _prefix + { _defaultPrefix } + "add-device")
     }
   
-    // @LINE:8
-    def deviceInfo(id:String = "Fake Device"): Call = {
-      
-      Call("GET", _prefix + { _defaultPrefix } + "info" + play.core.routing.queryString(List(if(id == "Fake Device") None else Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("id", id)))))
-    }
-  
-    // @LINE:19
+    // @LINE:22
     def getGroupIds(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "group-ids")
     }
   
-    // @LINE:21
+    // @LINE:24
     def getTags(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "tags")
     }
   
-    // @LINE:18
+    // @LINE:21
     def getDevices(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "devices")
     }
   
-    // @LINE:12
+    // @LINE:14
     def addType(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "add-type")
@@ -122,17 +149,17 @@ package controllers {
   
   }
 
-  // @LINE:24
-  class ReverseAssets(_prefix: => String) {
+  // @LINE:9
+  class ReverseFuncyController(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:24
-    def versioned(file:Asset): Call = {
-      implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
-      Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))
+    // @LINE:9
+    def funcyView(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "funcy-view")
     }
   
   }

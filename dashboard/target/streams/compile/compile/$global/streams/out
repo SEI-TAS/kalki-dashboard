@@ -1,4 +1,3 @@
-[0m[[0m[31merror[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/models/ApplicationDatabase.java:231:1: cannot find symbol[0m
-[0m[[0m[31merror[0m] [0m[0m  symbol:   method executeStatement(java.lang.String)[0m
-[0m[[0m[31merror[0m] [0m[0m  location: variable st of type java.sql.Statement[0m
-[0m[[0m[31merror[0m] [0m[0m                st.executeStatement("INSERT INTO group_id(info) values ('" + group_id + "');");[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/controllers/DeviceController.java:31:1:  int cannot be converted to java.lang.String[0m
+[0m[[0m[31merror[0m] [0m[0m        return ok(views.html.info.render(id));[0m
+[0m[[0m[0minfo[0m] [0m[0mSome messages have been simplified; recompile with -Xdiags:verbose to get full output[0m

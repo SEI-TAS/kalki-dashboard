@@ -120,7 +120,7 @@ Seq[Any](format.raw/*2.1*/("""
         <div class="form-group row">
             <label for="historySize" class="col-2 col-form-label">History Size</label>
             <div class="col-8">
-                <input type="number" min="0" class="form-control" id="historySize" name="historySize" placeholder="Enter Size">
+                <input type="number" min="0" max="2147483647" class="form-control" id="historySize" name="historySize" placeholder="Enter Size">
             </div>
         </div>
 
@@ -128,7 +128,7 @@ Seq[Any](format.raw/*2.1*/("""
         <div class="form-group row">
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (seconds)</label>
             <div class="col-8">
-                <input type="number" min="0" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate">
+                <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate">
             </div>
         </div>
 
@@ -256,10 +256,10 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jun 28 16:43:59 EDT 2018
+                  DATE: Thu Jun 28 17:00:46 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/add.scala.html
-                  HASH: 3f59e54b8327f8b25c4dc156fd6b54730c98f657
-                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1270->117|1284->123|1330->149|1368->188|1404->198|1779->568|1832->593|3741->2497|3794->2522|5718->4440|5764->4457|6953->5618|6969->5624|7022->5654|7074->5705|7124->5726|8396->6970|8412->6976|8462->7003|8514->7054|8564->7075|9812->8295|9828->8301|9877->8327|9929->8378|9979->8399|10887->9288|10927->9290|10960->9295|11002->9309|11018->9315|11079->9354|11146->9390
+                  HASH: 70c055c1027b649e658b155920df18c1a2897428
+                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1270->117|1284->123|1330->149|1368->188|1404->198|1779->568|1832->593|3741->2497|3794->2522|5752->4474|5798->4491|6987->5652|7003->5658|7056->5688|7108->5739|7158->5760|8430->7004|8446->7010|8496->7037|8548->7088|8598->7109|9846->8329|9862->8335|9911->8361|9963->8412|10013->8433|10921->9322|10961->9324|10994->9329|11036->9343|11052->9349|11113->9388|11180->9424
                   LINES: 28->1|33->2|34->3|34->3|34->3|35->4|37->6|37->6|37->6|38->7|40->9|47->16|48->17|94->63|95->64|142->111|143->112|173->142|173->142|173->142|174->143|175->144|197->166|197->166|197->166|198->167|199->168|221->190|221->190|221->190|222->191|223->192|240->209|240->209|241->210|241->210|241->210|241->210|242->211
                   -- GENERATED --
               */
