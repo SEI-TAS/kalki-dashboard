@@ -38,7 +38,7 @@ public class ApplicationDatabase {
                 "umbox_id varchar(255)," +
                 "info varchar(255)," +
                 "stamp bigint" +
-                ");"
+                ")"
         );
 
         // Creates table "umbox"
@@ -48,7 +48,7 @@ public class ApplicationDatabase {
                 "umbox_name varchar(255)," +
                 "device varchar(255)," +
                 "started_at bigint" +
-                ");"
+                ")"
 
         );
 
@@ -63,28 +63,28 @@ public class ApplicationDatabase {
                 "history_size int," +
                 "sampling_rate int" +
                 // Tags and policy file ommitted
-                ");"
+                ")"
         );
 
         // Creates table "group_id"
         st.executeUpdate("CREATE TABLE IF NOT EXISTS group_id (" +
                 "id serial PRIMARY KEY," +
                 "info varchar(255)" +
-                ");"
+                ")"
         );
 
         // Creates table "type"
         st.executeUpdate("CREATE TABLE IF NOT EXISTS type (" +
                 "id serial PRIMARY KEY," +
                 "info varchar(255)" +
-                ");"
+                ")"
         );
 
         // Creates table "tag"
         st.executeUpdate("CREATE TABLE IF NOT EXISTS tag (" +
                 "id serial PRIMARY KEY," +
                 "info varchar(255)" +
-                ");"
+                ")"
         );
 
     }
@@ -104,7 +104,7 @@ public class ApplicationDatabase {
                         umbox.getUmboxId() + "','" +
                         umbox.getUmboxName() + "','" +
                         umbox.getDevice() + "','" +
-                        umbox.getStartedAt() + "');"
+                        umbox.getStartedAt() + "')"
                 );
 
                 return 1;
@@ -123,15 +123,28 @@ public class ApplicationDatabase {
                 // Adds new device based on form values
                 st.executeUpdate(
                         "INSERT INTO device(device_id,name,group_id,type,ip_address,history_size,sampling_rate)" +
-                        "VALUES ('" +
-                        device.getDeviceId() + "','" +
-                        device.getName() + "','" +
-                        device.getGroupId() + "','" +
-                        device.getType() + "','" +
-                        device.getIpAddress() + "','" +
-                        device.getHistorySize() + "','" +
-                        device.getSamplingRate() + "');"
+                                "VALUES ('" +
+                                device.getDeviceId() + "','" +
+                                device.getName() + "','" +
+                                device.getGroupId() + "','" +
+                                device.getType() + "','" +
+                                device.getIpAddress() + "','" +
+                                device.getHistorySize() + "','" +
+                                device.getSamplingRate() + "')"
                 );
+
+                return 1;
+            });
+        }, ec);
+    }
+
+    public CompletionStage<Integer> deleteDevice(String id) {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(connection -> {
+
+                Statement st = connection.createStatement();
+                createTablesIfNotExists(st);
+                st.executeUpdate("DELETE FROM device WHERE id = " + id);
 
                 return 1;
             });
@@ -154,7 +167,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                ResultSet rs = st.executeQuery("SELECT * FROM device WHERE id=" + id + ";");
+                ResultSet rs = st.executeQuery("SELECT * FROM device WHERE id=" + id);
                 try {
                     return Convertor.convertToJson(rs);
                 } catch (Exception e) {
@@ -171,7 +184,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                ResultSet rs = st.executeQuery("SELECT * FROM device;");
+                ResultSet rs = st.executeQuery("SELECT * FROM device");
                 try {
                     return Convertor.convertToJson(rs);
                 } catch (Exception e) {
@@ -188,7 +201,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                ResultSet rs = st.executeQuery("SELECT * FROM group_id;");
+                ResultSet rs = st.executeQuery("SELECT * FROM group_id");
                 try {
                     return Convertor.convertToJson(rs);
                 } catch (Exception e) {
@@ -222,7 +235,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                ResultSet rs = st.executeQuery("SELECT * FROM tag;");
+                ResultSet rs = st.executeQuery("SELECT * FROM tag");
                 try {
                     return Convertor.convertToJson(rs);
                 } catch (Exception e) {
@@ -239,7 +252,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                st.executeUpdate("INSERT INTO group_id(info) values ('" + group_id + "');");
+                st.executeUpdate("INSERT INTO group_id(info) values ('" + group_id + "')");
                 return 1;
             });
         }, ec);
@@ -252,7 +265,7 @@ public class ApplicationDatabase {
 
                 createTablesIfNotExists(st);
 
-                st.executeUpdate("INSERT INTO type(info) values ('" + type + "');");
+                st.executeUpdate("INSERT INTO type(info) values ('" + type + "')");
                 return 1;
             });
         }, ec);
@@ -279,9 +292,9 @@ public class ApplicationDatabase {
                 createTablesIfNotExists(st);
 
                 // https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-                ResultSet rs = st.executeQuery("SELECT * FROM device;");
+                ResultSet rs = st.executeQuery("SELECT * FROM device");
                 ResultSetMetaData rsmd = rs.getMetaData();
-                System.out.println("querying SELECT * FROM device;");
+                System.out.println("querying SELECT * FROM device");
                 int columnsNumber = rsmd.getColumnCount();
                 while (rs.next()) {
                     for (int i = 1; i <= columnsNumber; i++) {
@@ -305,9 +318,9 @@ public class ApplicationDatabase {
                 createTablesIfNotExists(st);
 
                 // https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-                ResultSet rs = st.executeQuery("SELECT * FROM umbox;");
+                ResultSet rs = st.executeQuery("SELECT * FROM umbox");
                 ResultSetMetaData rsmd = rs.getMetaData();
-                System.out.println("querying SELECT * FROM umbox;");
+                System.out.println("querying SELECT * FROM umbox");
                 int columnsNumber = rsmd.getColumnCount();
                 while (rs.next()) {
                     for (int i = 1; i <= columnsNumber; i++) {

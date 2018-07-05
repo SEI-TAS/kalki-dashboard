@@ -1,3 +1,2 @@
-[0m[[0m[31merror[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/controllers/DeviceController.java:31:1:  int cannot be converted to java.lang.String[0m
-[0m[[0m[31merror[0m] [0m[0m        return ok(views.html.info.render(id));[0m
-[0m[[0m[0minfo[0m] [0m[0mSome messages have been simplified; recompile with -Xdiags:verbose to get full output[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/controllers/DeviceController.java:44:1:  java.lang.String cannot be converted to int[0m
+[0m[[0m[31merror[0m] [0m[0m        id = formFactory.form().bindFromRequest().get("id");[0m

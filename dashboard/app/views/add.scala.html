@@ -3,7 +3,7 @@
 @main("Add Device") {
     <h4>Add Device</h4>
 
-    <form id="addDeviceForm" class="form" method="post" action="@routes.DeviceController.submit()">
+    <form id="addDeviceForm" method="post" action="@routes.DeviceController.addDevice()">
         @* @helper.CSRF.formField *@
 
         <div class="form-group row">
@@ -89,7 +89,10 @@
         <div class="form-group row">
             <label for="historySize" class="col-2 col-form-label">History Size</label>
             <div class="col-8">
-                <input type="number" min="0" max="2147483647" class="form-control" id="historySize" name="historySize" placeholder="Enter Size">
+                <input type="number" min="0" max="2147483647" class="form-control" id="historySize" name="historySize" placeholder="Enter Size" required>
+                <div class="invalid-feedback">
+                    Please enter history size.
+                </div>
             </div>
         </div>
 
@@ -97,7 +100,10 @@
         <div class="form-group row">
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (seconds)</label>
             <div class="col-8">
-                <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate">
+                <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate" required>
+                <div class="invalid-feedback">
+                    Please enter sampling rate.
+                </div>
             </div>
         </div>
 

@@ -23,7 +23,7 @@ public class DeviceController extends Controller {
         this.ec = ec;
     }
 
-    public Result addDevice() {
+    public Result addDevicePage() {
         return ok(views.html.add.render());
     }
 
@@ -31,10 +31,16 @@ public class DeviceController extends Controller {
         return ok(views.html.info.render(id));
     }
 
-    public CompletionStage<Result> submit() {
-        Device device;
-        device = formFactory.form(Device.class).bindFromRequest().get();
+    public CompletionStage<Result> addDevice() {
+        Device device = formFactory.form(Device.class).bindFromRequest().get();
         return db.addDevice(device).thenApplyAsync(n -> {
+            return redirect(routes.HomeController.index());
+        }, ec.current());
+    }
+
+    public CompletionStage<Result> deleteDevice() {
+        String id = formFactory.form().bindFromRequest().get("id");
+        return db.deleteDevice(id).thenApplyAsync(n -> {
             return redirect(routes.HomeController.index());
         }, ec.current());
     }

@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Fri Jun 29 16:54:59 EDT 2018
+// @DATE:Thu Jul 05 13:32:44 EDT 2018
 
 package router
 
@@ -22,7 +22,7 @@ class Routes(
   UmboxController_1: controllers.UmboxController,
   // @LINE:9
   FuncyController_2: controllers.FuncyController,
-  // @LINE:27
+  // @LINE:28
   Assets_3: controllers.Assets,
   val prefix: String
 ) extends GeneratedRouter {
@@ -37,7 +37,7 @@ class Routes(
     UmboxController_1: controllers.UmboxController,
     // @LINE:9
     FuncyController_2: controllers.FuncyController,
-    // @LINE:27
+    // @LINE:28
     Assets_3: controllers.Assets
   ) = this(errorHandler, HomeController_0, DeviceController_4, UmboxController_1, FuncyController_2, Assets_3, "/")
 
@@ -52,14 +52,15 @@ class Routes(
 
   def documentation = List(
     ("""GET""", this.prefix, """controllers.HomeController.index()"""),
-    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add-device""", """controllers.DeviceController.addDevice()"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add-device""", """controllers.DeviceController.addDevicePage()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """umbox-setup""", """controllers.UmboxController.umboxSetup()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """funcy-view""", """controllers.FuncyController.funcyView()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """info""", """controllers.DeviceController.deviceInfo(id:Integer ?= -1)"""),
-    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add-device-submit""", """controllers.DeviceController.submit()"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add-device-submit""", """controllers.DeviceController.addDevice()"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add-group-id""", """controllers.DeviceController.addGroupId()"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add-type""", """controllers.DeviceController.addType()"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """add-tag""", """controllers.DeviceController.addTag()"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """delete-device""", """controllers.DeviceController.deleteDevice()"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """clean""", """controllers.HomeController.clean()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """log-umboxes""", """controllers.UmboxController.logUmboxes()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """log-devices""", """controllers.DeviceController.logDevices()"""),
@@ -95,15 +96,15 @@ class Routes(
   )
 
   // @LINE:7
-  private[this] lazy val controllers_DeviceController_addDevice1_route = Route("GET",
+  private[this] lazy val controllers_DeviceController_addDevicePage1_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("add-device")))
   )
-  private[this] lazy val controllers_DeviceController_addDevice1_invoker = createInvoker(
-    DeviceController_4.addDevice(),
+  private[this] lazy val controllers_DeviceController_addDevicePage1_invoker = createInvoker(
+    DeviceController_4.addDevicePage(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.DeviceController",
-      "addDevice",
+      "addDevicePage",
       Nil,
       "GET",
       this.prefix + """add-device""",
@@ -167,15 +168,15 @@ class Routes(
   )
 
   // @LINE:12
-  private[this] lazy val controllers_DeviceController_submit5_route = Route("POST",
+  private[this] lazy val controllers_DeviceController_addDevice5_route = Route("POST",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("add-device-submit")))
   )
-  private[this] lazy val controllers_DeviceController_submit5_invoker = createInvoker(
-    DeviceController_4.submit(),
+  private[this] lazy val controllers_DeviceController_addDevice5_invoker = createInvoker(
+    DeviceController_4.addDevice(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.DeviceController",
-      "submit",
+      "addDevice",
       Nil,
       "POST",
       this.prefix + """add-device-submit""",
@@ -239,10 +240,28 @@ class Routes(
   )
 
   // @LINE:16
-  private[this] lazy val controllers_HomeController_clean9_route = Route("POST",
+  private[this] lazy val controllers_DeviceController_deleteDevice9_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("delete-device")))
+  )
+  private[this] lazy val controllers_DeviceController_deleteDevice9_invoker = createInvoker(
+    DeviceController_4.deleteDevice(),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.DeviceController",
+      "deleteDevice",
+      Nil,
+      "POST",
+      this.prefix + """delete-device""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:17
+  private[this] lazy val controllers_HomeController_clean10_route = Route("POST",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("clean")))
   )
-  private[this] lazy val controllers_HomeController_clean9_invoker = createInvoker(
+  private[this] lazy val controllers_HomeController_clean10_invoker = createInvoker(
     HomeController_0.clean(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -256,11 +275,11 @@ class Routes(
     )
   )
 
-  // @LINE:17
-  private[this] lazy val controllers_UmboxController_logUmboxes10_route = Route("GET",
+  // @LINE:18
+  private[this] lazy val controllers_UmboxController_logUmboxes11_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("log-umboxes")))
   )
-  private[this] lazy val controllers_UmboxController_logUmboxes10_invoker = createInvoker(
+  private[this] lazy val controllers_UmboxController_logUmboxes11_invoker = createInvoker(
     UmboxController_1.logUmboxes(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -274,11 +293,11 @@ class Routes(
     )
   )
 
-  // @LINE:18
-  private[this] lazy val controllers_DeviceController_logDevices11_route = Route("GET",
+  // @LINE:19
+  private[this] lazy val controllers_DeviceController_logDevices12_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("log-devices")))
   )
-  private[this] lazy val controllers_DeviceController_logDevices11_invoker = createInvoker(
+  private[this] lazy val controllers_DeviceController_logDevices12_invoker = createInvoker(
     DeviceController_4.logDevices(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -292,11 +311,11 @@ class Routes(
     )
   )
 
-  // @LINE:20
-  private[this] lazy val controllers_DeviceController_getDevice12_route = Route("GET",
+  // @LINE:21
+  private[this] lazy val controllers_DeviceController_getDevice13_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("device")))
   )
-  private[this] lazy val controllers_DeviceController_getDevice12_invoker = createInvoker(
+  private[this] lazy val controllers_DeviceController_getDevice13_invoker = createInvoker(
     DeviceController_4.getDevice(fakeValue[Integer]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -310,11 +329,11 @@ class Routes(
     )
   )
 
-  // @LINE:21
-  private[this] lazy val controllers_DeviceController_getDevices13_route = Route("GET",
+  // @LINE:22
+  private[this] lazy val controllers_DeviceController_getDevices14_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("devices")))
   )
-  private[this] lazy val controllers_DeviceController_getDevices13_invoker = createInvoker(
+  private[this] lazy val controllers_DeviceController_getDevices14_invoker = createInvoker(
     DeviceController_4.getDevices(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -328,11 +347,11 @@ class Routes(
     )
   )
 
-  // @LINE:22
-  private[this] lazy val controllers_DeviceController_getGroupIds14_route = Route("GET",
+  // @LINE:23
+  private[this] lazy val controllers_DeviceController_getGroupIds15_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("group-ids")))
   )
-  private[this] lazy val controllers_DeviceController_getGroupIds14_invoker = createInvoker(
+  private[this] lazy val controllers_DeviceController_getGroupIds15_invoker = createInvoker(
     DeviceController_4.getGroupIds(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -346,11 +365,11 @@ class Routes(
     )
   )
 
-  // @LINE:23
-  private[this] lazy val controllers_DeviceController_getTypes15_route = Route("GET",
+  // @LINE:24
+  private[this] lazy val controllers_DeviceController_getTypes16_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("types")))
   )
-  private[this] lazy val controllers_DeviceController_getTypes15_invoker = createInvoker(
+  private[this] lazy val controllers_DeviceController_getTypes16_invoker = createInvoker(
     DeviceController_4.getTypes(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -364,11 +383,11 @@ class Routes(
     )
   )
 
-  // @LINE:24
-  private[this] lazy val controllers_DeviceController_getTags16_route = Route("GET",
+  // @LINE:25
+  private[this] lazy val controllers_DeviceController_getTags17_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("tags")))
   )
-  private[this] lazy val controllers_DeviceController_getTags16_invoker = createInvoker(
+  private[this] lazy val controllers_DeviceController_getTags17_invoker = createInvoker(
     DeviceController_4.getTags(),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -382,11 +401,11 @@ class Routes(
     )
   )
 
-  // @LINE:27
-  private[this] lazy val controllers_Assets_versioned17_route = Route("GET",
+  // @LINE:28
+  private[this] lazy val controllers_Assets_versioned18_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("assets/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_versioned17_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_versioned18_invoker = createInvoker(
     Assets_3.versioned(fakeValue[String], fakeValue[Asset]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -410,9 +429,9 @@ class Routes(
       }
   
     // @LINE:7
-    case controllers_DeviceController_addDevice1_route(params@_) =>
+    case controllers_DeviceController_addDevicePage1_route(params@_) =>
       call { 
-        controllers_DeviceController_addDevice1_invoker.call(DeviceController_4.addDevice())
+        controllers_DeviceController_addDevicePage1_invoker.call(DeviceController_4.addDevicePage())
       }
   
     // @LINE:8
@@ -434,9 +453,9 @@ class Routes(
       }
   
     // @LINE:12
-    case controllers_DeviceController_submit5_route(params@_) =>
+    case controllers_DeviceController_addDevice5_route(params@_) =>
       call { 
-        controllers_DeviceController_submit5_invoker.call(DeviceController_4.submit())
+        controllers_DeviceController_addDevice5_invoker.call(DeviceController_4.addDevice())
       }
   
     // @LINE:13
@@ -458,57 +477,63 @@ class Routes(
       }
   
     // @LINE:16
-    case controllers_HomeController_clean9_route(params@_) =>
+    case controllers_DeviceController_deleteDevice9_route(params@_) =>
       call { 
-        controllers_HomeController_clean9_invoker.call(HomeController_0.clean())
+        controllers_DeviceController_deleteDevice9_invoker.call(DeviceController_4.deleteDevice())
       }
   
     // @LINE:17
-    case controllers_UmboxController_logUmboxes10_route(params@_) =>
+    case controllers_HomeController_clean10_route(params@_) =>
       call { 
-        controllers_UmboxController_logUmboxes10_invoker.call(UmboxController_1.logUmboxes())
+        controllers_HomeController_clean10_invoker.call(HomeController_0.clean())
       }
   
     // @LINE:18
-    case controllers_DeviceController_logDevices11_route(params@_) =>
+    case controllers_UmboxController_logUmboxes11_route(params@_) =>
       call { 
-        controllers_DeviceController_logDevices11_invoker.call(DeviceController_4.logDevices())
+        controllers_UmboxController_logUmboxes11_invoker.call(UmboxController_1.logUmboxes())
       }
   
-    // @LINE:20
-    case controllers_DeviceController_getDevice12_route(params@_) =>
-      call(params.fromQuery[Integer]("id", Some(-1))) { (id) =>
-        controllers_DeviceController_getDevice12_invoker.call(DeviceController_4.getDevice(id))
+    // @LINE:19
+    case controllers_DeviceController_logDevices12_route(params@_) =>
+      call { 
+        controllers_DeviceController_logDevices12_invoker.call(DeviceController_4.logDevices())
       }
   
     // @LINE:21
-    case controllers_DeviceController_getDevices13_route(params@_) =>
-      call { 
-        controllers_DeviceController_getDevices13_invoker.call(DeviceController_4.getDevices())
+    case controllers_DeviceController_getDevice13_route(params@_) =>
+      call(params.fromQuery[Integer]("id", Some(-1))) { (id) =>
+        controllers_DeviceController_getDevice13_invoker.call(DeviceController_4.getDevice(id))
       }
   
     // @LINE:22
-    case controllers_DeviceController_getGroupIds14_route(params@_) =>
+    case controllers_DeviceController_getDevices14_route(params@_) =>
       call { 
-        controllers_DeviceController_getGroupIds14_invoker.call(DeviceController_4.getGroupIds())
+        controllers_DeviceController_getDevices14_invoker.call(DeviceController_4.getDevices())
       }
   
     // @LINE:23
-    case controllers_DeviceController_getTypes15_route(params@_) =>
+    case controllers_DeviceController_getGroupIds15_route(params@_) =>
       call { 
-        controllers_DeviceController_getTypes15_invoker.call(DeviceController_4.getTypes())
+        controllers_DeviceController_getGroupIds15_invoker.call(DeviceController_4.getGroupIds())
       }
   
     // @LINE:24
-    case controllers_DeviceController_getTags16_route(params@_) =>
+    case controllers_DeviceController_getTypes16_route(params@_) =>
       call { 
-        controllers_DeviceController_getTags16_invoker.call(DeviceController_4.getTags())
+        controllers_DeviceController_getTypes16_invoker.call(DeviceController_4.getTypes())
       }
   
-    // @LINE:27
-    case controllers_Assets_versioned17_route(params@_) =>
+    // @LINE:25
+    case controllers_DeviceController_getTags17_route(params@_) =>
+      call { 
+        controllers_DeviceController_getTags17_invoker.call(DeviceController_4.getTags())
+      }
+  
+    // @LINE:28
+    case controllers_Assets_versioned18_route(params@_) =>
       call(Param[String]("path", Right("/public")), params.fromPath[Asset]("file", None)) { (path, file) =>
-        controllers_Assets_versioned17_invoker.call(Assets_3.versioned(path, file))
+        controllers_Assets_versioned18_invoker.call(Assets_3.versioned(path, file))
       }
   }
 }

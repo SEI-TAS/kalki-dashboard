@@ -57,12 +57,7 @@ Seq[Any](format.raw/*1.1*/("""<header>
             <ul class="nav nav-fill">
                 <li class="nav-menu-item">
                     <a class="nav-link" href="/">
-                        <span>Home</span>
-                    </a>
-                </li>
-                <li class="nav-menu-item">
-                    <a class="nav-link" href="/add-device">
-                        <span>Add Device</span>
+                        <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-menu-item">
@@ -96,9 +91,9 @@ Seq[Any](format.raw/*1.1*/("""<header>
 
               /*
                   -- GENERATED --
-                  DATE: Fri Jun 29 11:17:59 EDT 2018
+                  DATE: Thu Jul 05 15:37:03 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/partials/navbar.scala.html
-                  HASH: 35cb6a360230eebe47c57386818e0b61dcb601ab
+                  HASH: 97b60fc9d49e1eed279d89eed144867b446c6892
                   MATRIX: 1040->0
                   LINES: 33->1
                   -- GENERATED --

@@ -34,7 +34,7 @@ Seq[Any](format.raw/*2.1*/("""
 """),_display_(/*3.2*/main("Add Device")/*3.20*/ {_display_(Seq[Any](format.raw/*3.22*/("""
     """),format.raw/*4.5*/("""<h4>Add Device</h4>
 
-    <form id="addDeviceForm" class="form" method="post" action=""""),_display_(/*6.66*/routes/*6.72*/.DeviceController.submit()),format.raw/*6.98*/("""">
+    <form id="addDeviceForm" method="post" action=""""),_display_(/*6.53*/routes/*6.59*/.DeviceController.addDevice()),format.raw/*6.88*/("""">
         """),format.raw/*7.37*/("""
 
         """),format.raw/*9.9*/("""<div class="form-group row">
@@ -120,7 +120,10 @@ Seq[Any](format.raw/*2.1*/("""
         <div class="form-group row">
             <label for="historySize" class="col-2 col-form-label">History Size</label>
             <div class="col-8">
-                <input type="number" min="0" max="2147483647" class="form-control" id="historySize" name="historySize" placeholder="Enter Size">
+                <input type="number" min="0" max="2147483647" class="form-control" id="historySize" name="historySize" placeholder="Enter Size" required>
+                <div class="invalid-feedback">
+                    Please enter history size.
+                </div>
             </div>
         </div>
 
@@ -128,7 +131,10 @@ Seq[Any](format.raw/*2.1*/("""
         <div class="form-group row">
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (seconds)</label>
             <div class="col-8">
-                <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate">
+                <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate" required>
+                <div class="invalid-feedback">
+                    Please enter sampling rate.
+                </div>
             </div>
         </div>
 
@@ -139,8 +145,8 @@ Seq[Any](format.raw/*2.1*/("""
             </div>
             <div class="col-8">
                 <div id="tags" class="row">
-                    """),format.raw/*111.44*/("""
-                """),format.raw/*112.17*/("""</div>
+                    """),format.raw/*117.44*/("""
+                """),format.raw/*118.17*/("""</div>
             </div>
             <!-- New Tag Button -->
             <div class="col-2">
@@ -170,9 +176,9 @@ Seq[Any](format.raw/*2.1*/("""
     <div class="modal fade" id="newGroupIdModal" tabindex="-1" role="dialog" aria-labelledby="newGroupIdModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form id="newGroupIdModalForm" class="form" method="post" action=""""),_display_(/*142.84*/routes/*142.90*/.DeviceController.addGroupId()),format.raw/*142.120*/("""">
-                    """),format.raw/*143.49*/("""
-                    """),format.raw/*144.21*/("""<div class="modal-header">
+                <form id="newGroupIdModalForm" class="form" method="post" action=""""),_display_(/*148.84*/routes/*148.90*/.DeviceController.addGroupId()),format.raw/*148.120*/("""">
+                    """),format.raw/*149.49*/("""
+                    """),format.raw/*150.21*/("""<div class="modal-header">
                         <h4 class="modal-title" id="newGroupIdModalLabel">New Group ID</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -194,9 +200,9 @@ Seq[Any](format.raw/*2.1*/("""
     <div class="modal fade" id="newTypeModal" tabindex="-1" role="dialog" aria-labelledby="newTypeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form id="newTypeModalForm" class="form" method="post" action=""""),_display_(/*166.81*/routes/*166.87*/.DeviceController.addType()),format.raw/*166.114*/("""">
-                    """),format.raw/*167.49*/("""
-                    """),format.raw/*168.21*/("""<div class="modal-header">
+                <form id="newTypeModalForm" class="form" method="post" action=""""),_display_(/*172.81*/routes/*172.87*/.DeviceController.addType()),format.raw/*172.114*/("""">
+                    """),format.raw/*173.49*/("""
+                    """),format.raw/*174.21*/("""<div class="modal-header">
                         <h4 class="modal-title" id="newTypeModalLabel">New Type</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -218,9 +224,9 @@ Seq[Any](format.raw/*2.1*/("""
     <div class="modal fade" id="newTagModal" tabindex="-1" role="dialog" aria-labelledby="newTagModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form id="newTagModalForm" class="form" method="post" action=""""),_display_(/*190.80*/routes/*190.86*/.DeviceController.addTag()),format.raw/*190.112*/("""">
-                    """),format.raw/*191.49*/("""
-                    """),format.raw/*192.21*/("""<div class="modal-header">
+                <form id="newTagModalForm" class="form" method="post" action=""""),_display_(/*196.80*/routes/*196.86*/.DeviceController.addTag()),format.raw/*196.112*/("""">
+                    """),format.raw/*197.49*/("""
+                    """),format.raw/*198.21*/("""<div class="modal-header">
                         <h4 class="modal-title" id="newTagModalLabel">New Tag</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -237,9 +243,9 @@ Seq[Any](format.raw/*2.1*/("""
             </div>
         </div>
     </div>
-""")))}/*209.2*/ {_display_(Seq[Any](format.raw/*209.4*/("""
-    """),format.raw/*210.5*/("""<script src=""""),_display_(/*210.19*/routes/*210.25*/.Assets.versioned("javascripts/add.js")),format.raw/*210.64*/("""" type="text/javascript"></script>
-""")))}),format.raw/*211.2*/("""
+""")))}/*215.2*/ {_display_(Seq[Any](format.raw/*215.4*/("""
+    """),format.raw/*216.5*/("""<script src=""""),_display_(/*216.19*/routes/*216.25*/.Assets.versioned("javascripts/add.js")),format.raw/*216.64*/("""" type="text/javascript"></script>
+""")))}),format.raw/*217.2*/("""
 """))
       }
     }
@@ -256,11 +262,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jun 28 17:00:46 EDT 2018
+                  DATE: Thu Jul 05 15:30:27 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/add.scala.html
-                  HASH: 70c055c1027b649e658b155920df18c1a2897428
-                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1270->117|1284->123|1330->149|1368->188|1404->198|1779->568|1832->593|3741->2497|3794->2522|5752->4474|5798->4491|6987->5652|7003->5658|7056->5688|7108->5739|7158->5760|8430->7004|8446->7010|8496->7037|8548->7088|8598->7109|9846->8329|9862->8335|9911->8361|9963->8412|10013->8433|10921->9322|10961->9324|10994->9329|11036->9343|11052->9349|11113->9388|11180->9424
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|37->6|37->6|37->6|38->7|40->9|47->16|48->17|94->63|95->64|142->111|143->112|173->142|173->142|173->142|174->143|175->144|197->166|197->166|197->166|198->167|199->168|221->190|221->190|221->190|222->191|223->192|240->209|240->209|241->210|241->210|241->210|241->210|242->211
+                  HASH: 6ab383ea8d8f79ea6c98cbdd73f9d13dc378613a
+                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1257->104|1271->110|1320->139|1358->178|1394->188|1769->558|1822->583|3731->2487|3784->2512|5995->4717|6041->4734|7230->5895|7246->5901|7299->5931|7351->5982|7401->6003|8673->7247|8689->7253|8739->7280|8791->7331|8841->7352|10089->8572|10105->8578|10154->8604|10206->8655|10256->8676|11164->9565|11204->9567|11237->9572|11279->9586|11295->9592|11356->9631|11423->9667
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|37->6|37->6|37->6|38->7|40->9|47->16|48->17|94->63|95->64|148->117|149->118|179->148|179->148|179->148|180->149|181->150|203->172|203->172|203->172|204->173|205->174|227->196|227->196|227->196|228->197|229->198|246->215|246->215|247->216|247->216|247->216|247->216|248->217
                   -- GENERATED --
               */
           

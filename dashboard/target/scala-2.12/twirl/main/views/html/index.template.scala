@@ -39,15 +39,18 @@ Seq[Any](format.raw/*2.1*/("""
                 <th>Security State</th>
                 <th>Variables</th>
                 <th>Latest Alert</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody id="dashboardTableBody"></tbody>
     </table>
+    <a href="/add-device" class="btn btn-primary" role="button">Add Device</a>
     <button id="dropAllTables" class="btn btn-info" role="button">Drop Tables</button>
     <button id="logDevices" class="btn btn-info" role="button">Log Devices</button>
-""")))}/*17.2*/ {_display_(Seq[Any](format.raw/*17.4*/("""
-    """),format.raw/*18.5*/("""<script src=""""),_display_(/*18.19*/routes/*18.25*/.Assets.versioned("javascripts/index.js")),format.raw/*18.66*/("""" type="text/javascript"></script>
-""")))}),format.raw/*19.2*/("""
+""")))}/*20.2*/ {_display_(Seq[Any](format.raw/*20.4*/("""
+    """),format.raw/*21.5*/("""<script src=""""),_display_(/*21.19*/routes/*21.25*/.Assets.versioned("javascripts/index.js")),format.raw/*21.66*/("""" type="text/javascript"></script>
+""")))}),format.raw/*22.2*/("""
 """))
       }
     }
@@ -64,11 +67,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jun 28 15:56:29 EDT 2018
+                  DATE: Thu Jul 05 15:36:36 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/index.scala.html
-                  HASH: 1e061d96d53e2e80a1b6d15a1dd99be07bf82e6d
-                  MATRIX: 941->1|1037->4|1064->6|1089->23|1128->25|1159->30|1657->510|1696->512|1728->517|1769->531|1784->537|1846->578|1912->614
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|48->17|48->17|49->18|49->18|49->18|49->18|50->19
+                  HASH: ae82a2cf3f3c78e9e9bc5573ebe32e66ad534549
+                  MATRIX: 941->1|1037->4|1064->6|1089->23|1128->25|1159->30|1788->641|1827->643|1859->648|1900->662|1915->668|1977->709|2043->745
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|51->20|51->20|52->21|52->21|52->21|52->21|53->22
                   -- GENERATED --
               */
           
