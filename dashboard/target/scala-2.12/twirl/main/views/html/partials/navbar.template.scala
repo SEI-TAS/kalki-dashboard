@@ -25,12 +25,13 @@ import play.core.j.PlayFormsMagicForJava._
 object navbar extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template0[play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply():play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/():play.twirl.api.HtmlFormat.Appendable = {
     _display_ {
       {
 
 
-Seq[Any](format.raw/*1.1*/("""<header>
+Seq[Any](format.raw/*2.1*/("""
+"""),format.raw/*3.1*/("""<header>
     <div class="roof">
         <div class="container d-flex flex-wrap justify-content-between">
             <div class="col-12 col-md-6 d-flex justify-content-between">
@@ -91,11 +92,11 @@ Seq[Any](format.raw/*1.1*/("""<header>
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jul 05 15:37:03 EDT 2018
+                  DATE: Thu Jul 05 16:42:51 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/partials/navbar.scala.html
-                  HASH: 97b60fc9d49e1eed279d89eed144867b446c6892
-                  MATRIX: 1040->0
-                  LINES: 33->1
+                  HASH: c80a3fce133beaff887197c24938df90ff465d49
+                  MATRIX: 951->1|1047->4|1074->5
+                  LINES: 28->1|33->2|34->3
                   -- GENERATED --
               */
           

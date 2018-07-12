@@ -1,6 +1,6 @@
 package models;
 
-public class Umbox {
+public class UmboxContainer {
 
     private String umboxId;
     private String umboxName;

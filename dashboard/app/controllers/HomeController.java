@@ -1,7 +1,6 @@
 package controllers;
 
 import models.ApplicationDatabase;
-import models.Umbox;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;

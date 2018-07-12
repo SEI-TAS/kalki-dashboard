@@ -32,7 +32,7 @@ object index extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.Html
 
 Seq[Any](format.raw/*2.1*/("""
 """),_display_(/*3.2*/main("Dashboard")/*3.19*/ {_display_(Seq[Any](format.raw/*3.21*/("""
-    """),format.raw/*4.5*/("""<table class="table table-hover">
+    """),format.raw/*4.5*/("""<table class="table">
         <thead>
             <tr>
                 <th>Device</th>
@@ -46,11 +46,9 @@ Seq[Any](format.raw/*2.1*/("""
         <tbody id="dashboardTableBody"></tbody>
     </table>
     <a href="/add-device" class="btn btn-primary" role="button">Add Device</a>
-    <button id="dropAllTables" class="btn btn-info" role="button">Drop Tables</button>
-    <button id="logDevices" class="btn btn-info" role="button">Log Devices</button>
-""")))}/*20.2*/ {_display_(Seq[Any](format.raw/*20.4*/("""
-    """),format.raw/*21.5*/("""<script src=""""),_display_(/*21.19*/routes/*21.25*/.Assets.versioned("javascripts/index.js")),format.raw/*21.66*/("""" type="text/javascript"></script>
-""")))}),format.raw/*22.2*/("""
+""")))}/*18.2*/ {_display_(Seq[Any](format.raw/*18.4*/("""
+    """),format.raw/*19.5*/("""<script src=""""),_display_(/*19.19*/routes/*19.25*/.Assets.versioned("javascripts/index.js")),format.raw/*19.66*/("""" type="text/javascript"></script>
+""")))}),format.raw/*20.2*/("""
 """))
       }
     }
@@ -67,11 +65,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jul 05 15:36:36 EDT 2018
+                  DATE: Tue Jul 10 11:39:55 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/index.scala.html
-                  HASH: ae82a2cf3f3c78e9e9bc5573ebe32e66ad534549
-                  MATRIX: 941->1|1037->4|1064->6|1089->23|1128->25|1159->30|1788->641|1827->643|1859->648|1900->662|1915->668|1977->709|2043->745
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|51->20|51->20|52->21|52->21|52->21|52->21|53->22
+                  HASH: 1daaf41fb43a40c8bdc2f8845959c91b5196f2f3
+                  MATRIX: 941->1|1037->4|1064->6|1089->23|1128->25|1159->30|1605->458|1644->460|1676->465|1717->479|1732->485|1794->526|1860->562
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|49->18|49->18|50->19|50->19|50->19|50->19|51->20
                   -- GENERATED --
               */
           

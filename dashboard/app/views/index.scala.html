@@ -1,7 +1,7 @@
 @()
 
 @main("Dashboard") {
-    <table class="table table-hover">
+    <table class="table">
         <thead>
             <tr>
                 <th>Device</th>
@@ -15,8 +15,6 @@
         <tbody id="dashboardTableBody"></tbody>
     </table>
     <a href="/add-device" class="btn btn-primary" role="button">Add Device</a>
-    <button id="dropAllTables" class="btn btn-info" role="button">Drop Tables</button>
-    <button id="logDevices" class="btn btn-info" role="button">Log Devices</button>
 } {
     <script src="@routes.Assets.versioned("javascripts/index.js")" type="text/javascript"></script>
 }

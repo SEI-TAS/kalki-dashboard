@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jul 05 13:32:44 EDT 2018
+// @DATE:Thu Jul 12 15:45:55 EDT 2018
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -11,7 +11,7 @@ import _root_.play.libs.F
 // @LINE:6
 package controllers.javascript {
 
-  // @LINE:28
+  // @LINE:32
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -19,7 +19,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:28
+    // @LINE:32
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """
@@ -31,7 +31,7 @@ package controllers.javascript {
   
   }
 
-  // @LINE:8
+  // @LINE:9
   class ReverseUmboxController(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -39,22 +39,52 @@ package controllers.javascript {
     }
 
   
-    // @LINE:18
-    def logUmboxes: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.UmboxController.logUmboxes",
+    // @LINE:19
+    def editUmboxImage: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.UmboxController.editUmboxImage",
       """
         function() {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "log-umboxes"})
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "edit-umbox-submit"})
         }
       """
     )
   
-    // @LINE:8
+    // @LINE:9
     def umboxSetup: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.umboxSetup",
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "umbox-setup"})
+        }
+      """
+    )
+  
+    // @LINE:29
+    def getUmboxImages: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.UmboxController.getUmboxImages",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "umbox-images"})
+        }
+      """
+    )
+  
+    // @LINE:18
+    def addUmboxImage: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.UmboxController.addUmboxImage",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add-umbox-submit"})
+        }
+      """
+    )
+  
+    // @LINE:21
+    def deleteUmboxImage: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.UmboxController.deleteUmboxImage",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "delete-umbox-image"})
         }
       """
     )
@@ -69,7 +99,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:17
+    // @LINE:22
     def clean: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.HomeController.clean",
       """
@@ -99,17 +129,27 @@ package controllers.javascript {
     }
 
   
-    // @LINE:21
-    def getDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.DeviceController.getDevice",
+    // @LINE:8
+    def editDevicePage: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.editDevicePage",
       """
         function(id0) {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "device" + _qS([(id0 == null ? null : (""" + implicitly[play.api.mvc.QueryStringBindable[Integer]].javascriptUnbind + """)("id", id0))])})
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "edit-device" + _qS([(id0 == null ? null : (""" + implicitly[play.api.mvc.QueryStringBindable[String]].javascriptUnbind + """)("id", id0))])})
         }
       """
     )
   
-    // @LINE:13
+    // @LINE:24
+    def getDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.getDevice",
+      """
+        function(id0) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "device" + _qS([(id0 == null ? null : (""" + implicitly[play.api.mvc.QueryStringBindable[String]].javascriptUnbind + """)("id", id0))])})
+        }
+      """
+    )
+  
+    // @LINE:15
     def addGroupId: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.addGroupId",
       """
@@ -119,27 +159,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:10
-    def deviceInfo: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.DeviceController.deviceInfo",
-      """
-        function(id0) {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "info" + _qS([(id0 == null ? null : (""" + implicitly[play.api.mvc.QueryStringBindable[Integer]].javascriptUnbind + """)("id", id0))])})
-        }
-      """
-    )
-  
-    // @LINE:19
-    def logDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.DeviceController.logDevices",
-      """
-        function() {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "log-devices"})
-        }
-      """
-    )
-  
-    // @LINE:15
+    // @LINE:17
     def addTag: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.addTag",
       """
@@ -149,7 +169,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:24
+    // @LINE:27
     def getTypes: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTypes",
       """
@@ -159,7 +179,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:16
+    // @LINE:20
     def deleteDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.deleteDevice",
       """
@@ -179,7 +199,17 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:12
+    // @LINE:14
+    def editDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.editDevice",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "edit-device-submit"})
+        }
+      """
+    )
+  
+    // @LINE:13
     def addDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.addDevice",
       """
@@ -189,7 +219,17 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:23
+    // @LINE:11
+    def deviceInfo: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.deviceInfo",
+      """
+        function(id0) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "info" + _qS([(id0 == null ? null : (""" + implicitly[play.api.mvc.QueryStringBindable[String]].javascriptUnbind + """)("id", id0))])})
+        }
+      """
+    )
+  
+    // @LINE:26
     def getGroupIds: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getGroupIds",
       """
@@ -199,7 +239,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:25
+    // @LINE:28
     def getTags: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTags",
       """
@@ -209,7 +249,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:22
+    // @LINE:25
     def getDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getDevices",
       """
@@ -219,7 +259,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:14
+    // @LINE:16
     def addType: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.addType",
       """
@@ -231,7 +271,7 @@ package controllers.javascript {
   
   }
 
-  // @LINE:9
+  // @LINE:10
   class ReverseFuncyController(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -239,7 +279,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:9
+    // @LINE:10
     def funcyView: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.FuncyController.funcyView",
       """

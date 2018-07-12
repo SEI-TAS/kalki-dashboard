@@ -22,10 +22,10 @@ import play.mvc.Http.Context.Implicit._
 import play.data._
 import play.core.j.PlayFormsMagicForJava._
 
-object info extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[Integer,play.twirl.api.HtmlFormat.Appendable] {
+object info extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[String,play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply/*1.2*/(id: Integer):play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/(id: String):play.twirl.api.HtmlFormat.Appendable = {
     _display_ {
       {
 
@@ -48,9 +48,9 @@ Seq[Any](format.raw/*2.1*/("""
     }
   }
 
-  def render(id:Integer): play.twirl.api.HtmlFormat.Appendable = apply(id)
+  def render(id:String): play.twirl.api.HtmlFormat.Appendable = apply(id)
 
-  def f:((Integer) => play.twirl.api.HtmlFormat.Appendable) = (id) => apply(id)
+  def f:((String) => play.twirl.api.HtmlFormat.Appendable) = (id) => apply(id)
 
   def ref: this.type = this
 
@@ -59,10 +59,10 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Fri Jun 29 16:56:24 EDT 2018
+                  DATE: Thu Jul 05 16:49:59 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/info.scala.html
-                  HASH: f7e0bcf9920381c9a75a697d2581e140bad7af5c
-                  MATRIX: 948->1|1055->15|1082->17|1109->36|1148->38|1179->43|1526->372|1565->374|1597->379|1638->393|1653->399|1714->439|1777->474|1801->476|1844->489
+                  HASH: 1292196d7b3d7f5a875532b203eea275c477aa95
+                  MATRIX: 947->1|1053->14|1080->16|1107->35|1146->37|1177->42|1524->371|1563->373|1595->378|1636->392|1651->398|1712->438|1775->473|1799->475|1842->488
                   LINES: 28->1|33->2|34->3|34->3|34->3|35->4|43->12|43->12|44->13|44->13|44->13|44->13|44->13|44->13|45->14
                   -- GENERATED --
               */

@@ -25,12 +25,13 @@ import play.core.j.PlayFormsMagicForJava._
 object footer extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template0[play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply():play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/():play.twirl.api.HtmlFormat.Appendable = {
     _display_ {
       {
 
 
-Seq[Any](format.raw/*1.1*/("""<footer class="main-footer">
+Seq[Any](format.raw/*2.1*/("""
+"""),format.raw/*3.1*/("""<footer class="main-footer">
     <div class="container">
         <div class="row">
             <div class="col-12 col-md footer-info">
@@ -87,11 +88,11 @@ Seq[Any](format.raw/*1.1*/("""<footer class="main-footer">
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jun 14 15:09:31 EDT 2018
+                  DATE: Thu Jul 05 16:42:51 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/partials/footer.scala.html
-                  HASH: 8d22c95a70fe484fcad533fbaa0758332c1896bf
-                  MATRIX: 1040->0
-                  LINES: 33->1
+                  HASH: 39254a3a86a866ad9269ca6ff45c391a5aed7f44
+                  MATRIX: 951->1|1047->4|1074->5
+                  LINES: 28->1|33->2|34->3
                   -- GENERATED --
               */
           

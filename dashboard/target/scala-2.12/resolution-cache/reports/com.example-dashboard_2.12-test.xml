@@ -7,15 +7,15 @@
 		revision="1.0-SNAPSHOT"
 		conf="test"
 		confs="compile, runtime, test, provided, optional, universal, universal-docs, universal-src, windows, docker, linux, rpm, debian, compile-internal, runtime-internal, test-internal, plugin, pom, scala-tool, docs"
-		date="20180606154428"/>
+		date="20180712152619"/>
 	<dependencies>
 		<module organisation="org.postgresql" name="postgresql">
-			<revision name="42.2.2" status="release" pubdate="20180315121720" resolver="public" artresolver="public" homepage="https://github.com/pgjdbc/pgjdbc" downloaded="true" searched="true" default="false" conf="default, compile, runtime, default(compile), master" position="70">
+			<revision name="42.2.2" status="release" pubdate="20180315121720" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://github.com/pgjdbc/pgjdbc" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="70">
 				<license name="BSD-2-Clause" url="https://jdbc.postgresql.org/about/license.html"/>
-				<metadata-artifact status="successful" details="" size="11628" time="82" location="/Users/crmowry/.ivy2/cache/org.postgresql/postgresql/ivy-42.2.2.xml" searched="true" original-local-location="/Users/crmowry/.ivy2/cache/org.postgresql/postgresql/ivy-42.2.2.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.2/postgresql-42.2.2.pom"/>
+				<metadata-artifact status="no" details="" size="6499" time="0" location="/Users/crmowry/.ivy2/cache/org.postgresql/postgresql/ivy-42.2.2.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.2/postgresql-42.2.2.pom"/>
 				<caller organisation="com.example" name="dashboard_2.12" conf="test, compile, runtime" rev="42.2.2" rev-constraint-default="42.2.2" rev-constraint-dynamic="42.2.2" callerrev="1.0-SNAPSHOT"/>
 				<artifacts>
-					<artifact name="postgresql" type="bundle" ext="jar" status="successful" details="" size="790405" time="402" location="/Users/crmowry/.ivy2/cache/org.postgresql/postgresql/bundles/postgresql-42.2.2.jar">
+					<artifact name="postgresql" type="bundle" ext="jar" status="no" details="" size="790405" time="0" location="/Users/crmowry/.ivy2/cache/org.postgresql/postgresql/bundles/postgresql-42.2.2.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.2/postgresql-42.2.2.jar"/>
 					</artifact>
 				</artifacts>

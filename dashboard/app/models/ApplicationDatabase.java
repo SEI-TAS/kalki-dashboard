@@ -30,83 +30,143 @@ public class ApplicationDatabase {
         this.ec = ec;
     }
 
-    private void createTablesIfNotExists(Statement st) throws SQLException {
+    private void createTablesIfNotExists(Connection conn) throws SQLException {
+
+        // DELETE THIS
+//        dropAllTables();
 
         // Creates table "alert"
-        st.executeUpdate("CREATE TABLE IF NOT EXISTS alert (" +
+        String query = "CREATE TABLE IF NOT EXISTS alert (" +
                 "id serial PRIMARY KEY," +
                 "umbox_id varchar(255)," +
                 "info varchar(255)," +
                 "stamp bigint" +
-                ")"
-        );
+                ");";
 
         // Creates table "umbox"
-        st.executeUpdate("CREATE TABLE IF NOT EXISTS umbox (" +
+        query += "CREATE TABLE IF NOT EXISTS umbox (" +
                 "id serial PRIMARY KEY," +
                 "umbox_id varchar(255)," +
                 "umbox_name varchar(255)," +
                 "device varchar(255)," +
                 "started_at bigint" +
-                ")"
+                ");";
 
-        );
+        // Creates table "umbox_image"
+        query += "CREATE TABLE IF NOT EXISTS umbox_image (" +
+                "id serial PRIMARY KEY," +
+                "name varchar(255)," +
+                "path varchar(255)" +
+                ");";
 
         // Creates table "device"
-        st.executeUpdate("CREATE TABLE IF NOT EXISTS device (" +
+        query += "CREATE TABLE IF NOT EXISTS device (" +
                 "id serial PRIMARY KEY," +
-                "device_id varchar(255)," +
                 "name varchar(255)," +
+                "description varchar(255)," +
                 "type varchar(255)," +
                 "group_id varchar(255)," +
                 "ip_address varchar(255)," +
                 "history_size int," +
-                "sampling_rate int" +
-                // Tags and policy file ommitted
-                ")"
-        );
+                "sampling_rate int," +
+                "policy_file bytea" +
+                ");";
+
+        // Creates table "device_history"
+        query+= "CREATE TABLE IF NOT EXISTS device_history (" +
+                "id serial PRIMARY KEY," +
+                "attributes json," +
+                "device_id int," +
+                "timestamp timestamp" +
+                ");";
 
         // Creates table "group_id"
-        st.executeUpdate("CREATE TABLE IF NOT EXISTS group_id (" +
+        query += "CREATE TABLE IF NOT EXISTS group_id (" +
                 "id serial PRIMARY KEY," +
-                "info varchar(255)" +
-                ")"
-        );
+                "name varchar(255)" +
+                ");";
 
         // Creates table "type"
-        st.executeUpdate("CREATE TABLE IF NOT EXISTS type (" +
+        query += "CREATE TABLE IF NOT EXISTS type (" +
                 "id serial PRIMARY KEY," +
-                "info varchar(255)" +
-                ")"
-        );
+                "name varchar(255)" +
+                ");";
 
         // Creates table "tag"
-        st.executeUpdate("CREATE TABLE IF NOT EXISTS tag (" +
+        query += "CREATE TABLE IF NOT EXISTS tag (" +
                 "id serial PRIMARY KEY," +
-                "info varchar(255)" +
-                ")"
-        );
+                "name varchar(255)" +
+                ")";
+
+        conn.prepareStatement(query).executeUpdate();
 
     }
 
     // Unused
-    public CompletionStage<Integer> addUmbox(Umbox umbox) {
+    public CompletionStage<Integer> addUmboxContainer(UmboxContainer umbox) {
         return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
+                try {
+                    createTablesIfNotExists(conn);
+                    st = conn.prepareStatement("INSERT INTO umbox (umbox_id, umbox_name, device, started_at) VALUES (?, ?, ?, ?)");
+                    st.setString(1, umbox.getUmboxId());
+                    st.setString(2, umbox.getUmboxName());
+                    st.setString(3, umbox.getDevice());
+                    st.setInt(4, umbox.getStartedAt());
+                    st.executeUpdate();
+                }
+                catch (SQLException e) {}
+                finally {
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
+                }
+                return 1;
+            });
+        }, ec);
+    }
 
-                Statement st = connection.createStatement();
+    public CompletionStage<Integer> addUmboxImage(UmboxImage u) {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
+                try {
+                    createTablesIfNotExists(conn);
+                    st = conn.prepareStatement("INSERT INTO umbox_image (name, path) VALUES (?, ?)");
+                    st.setString(1, u.getName());
+                    st.setString(2, u.getPath());
+                    st.executeUpdate();
+                }
+                catch (SQLException e) {}
+                finally {
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
+                }
+                return 1;
+            });
+        }, ec);
+    }
 
-                createTablesIfNotExists(st);
-
-                // Adds new umbox based on form values
-                st.executeUpdate("INSERT INTO umbox(umbox_id,umbox_name,device,started_at)" +
-                        "VALUES ('" +
-                        umbox.getUmboxId() + "','" +
-                        umbox.getUmboxName() + "','" +
-                        umbox.getDevice() + "','" +
-                        umbox.getStartedAt() + "')"
-                );
-
+    public CompletionStage<Integer> editUmboxImage(UmboxImage u, String id) {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
+                try {
+                    createTablesIfNotExists(conn);
+                    st = conn.prepareStatement("UPDATE umbox_image " +
+                            "SET name = ?, path = ? " +
+                            "WHERE id = ?");
+                    st.setString(1, u.getName());
+                    st.setString(2, u.getPath());
+                    st.setInt(3, Integer.parseInt(id));
+                    st.executeUpdate();
+                }
+                catch (SQLException e) {}
+                catch (NumberFormatException e) {}
+                finally {
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
+                }
                 return 1;
             });
         }, ec);
@@ -114,38 +174,80 @@ public class ApplicationDatabase {
 
     public CompletionStage<Integer> addDevice(Device device) {
         return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                // Adds new device based on form values
-                st.executeUpdate(
-                        "INSERT INTO device(device_id,name,group_id,type,ip_address,history_size,sampling_rate)" +
-                                "VALUES ('" +
-                                device.getDeviceId() + "','" +
-                                device.getName() + "','" +
-                                device.getGroupId() + "','" +
-                                device.getType() + "','" +
-                                device.getIpAddress() + "','" +
-                                device.getHistorySize() + "','" +
-                                device.getSamplingRate() + "')"
-                );
-
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
+                try {
+                    createTablesIfNotExists(conn);
+                    // Adds new device based on form values
+                    st = conn.prepareStatement("INSERT INTO device (name, description, group_id, type, ip_address, history_size, sampling_rate, policy_file) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                    st.setString(1, device.getName());
+                    st.setString(2, device.getDescription());
+                    st.setString(3, device.getGroupId());
+                    st.setString(4, device.getType());
+                    st.setString(5, device.getIpAddress());
+                    st.setInt(6, device.getHistorySize());
+                    st.setInt(7, device.getSamplingRate());
+                    st.setBytes(8, device.getPolicyFile());
+                    st.executeUpdate();
+                }
+                catch (SQLException e) {}
+                finally {
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
+                }
                 return 1;
             });
         }, ec);
     }
 
-    public CompletionStage<Integer> deleteDevice(String id) {
+    public CompletionStage<Integer> editDevice(Device device, String id) {
         return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
+                try {
+                    createTablesIfNotExists(conn);
+                    st = conn.prepareStatement("UPDATE device " +
+                            "SET name = ?, description = ?, group_id = ?, type = ?, ip_address = ?, history_size = ?, sampling_rate = ?, policy_file = ? " +
+                            "WHERE id = ?");
+                    st.setString(1, device.getName());
+                    st.setString(2, device.getDescription());
+                    st.setString(3, device.getGroupId());
+                    st.setString(4, device.getType());
+                    st.setString(5, device.getIpAddress());
+                    st.setInt(6, device.getHistorySize());
+                    st.setInt(7, device.getSamplingRate());
+                    st.setBytes(8, device.getPolicyFile());
+                    st.setInt(9, Integer.parseInt(id));
+                    st.executeUpdate();
+                }
+                catch (SQLException e) {}
+                catch (NumberFormatException e) {}
+                finally {
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
+                }
+                return 1;
+            });
+        }, ec);
+    }
 
-                Statement st = connection.createStatement();
-                createTablesIfNotExists(st);
-                st.executeUpdate("DELETE FROM device WHERE id = " + id);
-
+    public CompletionStage<Integer> deleteById(String table, String id) {
+        return CompletableFuture.supplyAsync(() -> {
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
+                try {
+                    createTablesIfNotExists(conn);
+                    st = conn.prepareStatement(String.format("DELETE FROM %s WHERE id = ?", table));
+                    st.setInt(1, Integer.parseInt(id));
+                    st.executeUpdate();
+                }
+                catch (SQLException e) {}
+                catch (NumberFormatException e) {}
+                finally {
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
+                }
                 return 1;
             });
         }, ec);
@@ -153,186 +255,90 @@ public class ApplicationDatabase {
 
     public CompletionStage<Integer> dropAllTables() {
         return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                connection.prepareStatement("DROP TABLE IF EXISTS alert,umbox,device,group_id,type,tag").execute();
-                return 1;
-            });
-        }, ec);
-    }
-
-    public CompletionStage<JsonNode> getDevice(int id) throws Exception {
-        return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                ResultSet rs = st.executeQuery("SELECT * FROM device WHERE id=" + id);
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
                 try {
-                    return Convertor.convertToJson(rs);
-                } catch (Exception e) {
-                    return null;
+                    st = conn.prepareStatement("DROP TABLE IF EXISTS alert, umbox, umbox_image device, device_history, group_id, type, tag");
+                    st.executeUpdate();
                 }
+                catch (SQLException e) {}
+                finally {
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
+                }
+                return 1;
             });
         }, ec);
     }
 
-    public CompletionStage<JsonNode> getDevices() throws Exception {
+    public CompletionStage<JsonNode> getById(String table, String id) throws Exception {
         return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                ResultSet rs = st.executeQuery("SELECT * FROM device");
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
+                ResultSet rs = null;
+                JsonNode jn = null;
                 try {
-                    return Convertor.convertToJson(rs);
-                } catch (Exception e) {
-                    return null;
+                    createTablesIfNotExists(conn);
+                    st = conn.prepareStatement(String.format("SELECT * FROM %s WHERE id = ?", table));
+                    st.setInt(1, Integer.parseInt(id));
+                    rs = st.executeQuery();
+                    jn = Convertor.convertToJson(rs).get(0);
                 }
+                catch (SQLException e) {}
+                catch (NumberFormatException e) {}
+                catch (Exception e) {}
+                finally {
+                    try { if(rs != null) rs.close(); } catch (Exception e) {}
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
+                }
+                return jn;
             });
         }, ec);
     }
 
-    public CompletionStage<JsonNode> getGroupIds() throws Exception {
+    public CompletionStage<JsonNode> getAllFromTable(String table) {
         return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                ResultSet rs = st.executeQuery("SELECT * FROM group_id");
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
+                ResultSet rs = null;
+                JsonNode jn = null;
                 try {
-                    return Convertor.convertToJson(rs);
-                } catch (Exception e) {
-                    return null;
+                    createTablesIfNotExists(conn);
+                    st = conn.prepareStatement(String.format("SELECT * FROM %s", table));
+                    rs = st.executeQuery();
+                    jn = Convertor.convertToJson(rs);
                 }
+                catch (SQLException e) {}
+                catch (Exception e) {}
+                finally {
+                    try { if(rs != null) rs.close(); } catch (Exception e) {}
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
+                }
+                return jn;
             });
         }, ec);
     }
 
-    public CompletionStage<JsonNode> getTypes() throws Exception {
+    public CompletionStage<Integer> addRowToTable(String table, String name) {
         return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                ResultSet rs = st.executeQuery("SELECT * FROM type;");
+            return db.withConnection(conn -> {
+                PreparedStatement st = null;
                 try {
-                    return Convertor.convertToJson(rs);
-                } catch (Exception e) {
-                    return null;
+                    createTablesIfNotExists(conn);
+                    st = conn.prepareStatement(String.format("INSERT INTO %s (name) VALUES (?)", table));
+                    st.setString(1, name);
+                    st.executeUpdate();
                 }
-            });
-        }, ec);
-    }
-
-    public CompletionStage<JsonNode> getTags() throws Exception {
-        return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                ResultSet rs = st.executeQuery("SELECT * FROM tag");
-                try {
-                    return Convertor.convertToJson(rs);
-                } catch (Exception e) {
-                    return null;
+                catch (SQLException e) {}
+                finally {
+                    try { if(st != null) st.close(); } catch (Exception e) {}
+                    try { if(conn != null) conn.close(); } catch (Exception e) {}
                 }
-            });
-        }, ec);
-    }
-
-    public CompletionStage<Integer> addGroupId(String group_id) {
-        return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                st.executeUpdate("INSERT INTO group_id(info) values ('" + group_id + "')");
                 return 1;
             });
         }, ec);
     }
 
-    public CompletionStage<Integer> addType(String type) {
-        return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                st.executeUpdate("INSERT INTO type(info) values ('" + type + "')");
-                return 1;
-            });
-        }, ec);
-    }
-
-    public CompletionStage<Integer> addTag(String tag) {
-        return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                st.executeUpdate("INSERT INTO tag(info) values ('" + tag + "');");
-                return 1;
-            });
-        }, ec);
-    }
-
-    public CompletionStage<Integer> logDevices() {
-        return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                // https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-                ResultSet rs = st.executeQuery("SELECT * FROM device");
-                ResultSetMetaData rsmd = rs.getMetaData();
-                System.out.println("querying SELECT * FROM device");
-                int columnsNumber = rsmd.getColumnCount();
-                while (rs.next()) {
-                    for (int i = 1; i <= columnsNumber; i++) {
-                        if (i > 1) System.out.print(",  ");
-                        String columnValue = rs.getString(i);
-                        System.out.print(columnValue + " " + rsmd.getColumnName(i));
-                    }
-                    System.out.println("");
-                }
-
-                return 1;
-            });
-        }, ec);
-    }
-
-    public CompletionStage<Integer> logUmboxes() {
-        return CompletableFuture.supplyAsync(() -> {
-            return db.withConnection(connection -> {
-                Statement st = connection.createStatement();
-
-                createTablesIfNotExists(st);
-
-                // https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-                ResultSet rs = st.executeQuery("SELECT * FROM umbox");
-                ResultSetMetaData rsmd = rs.getMetaData();
-                System.out.println("querying SELECT * FROM umbox");
-                int columnsNumber = rsmd.getColumnCount();
-                while (rs.next()) {
-                    for (int i = 1; i <= columnsNumber; i++) {
-                        if (i > 1) System.out.print(",  ");
-                        String columnValue = rs.getString(i);
-                        System.out.print(columnValue + " " + rsmd.getColumnName(i));
-                    }
-                    System.out.println("");
-                }
-
-                return 1;
-            });
-        }, ec);
-    }
 }

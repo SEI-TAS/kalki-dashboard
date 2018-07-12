@@ -10,6 +10,8 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
+import java.util.Scanner;
+
 public class DeviceController extends Controller {
 
     private final FormFactory formFactory;
@@ -27,7 +29,11 @@ public class DeviceController extends Controller {
         return ok(views.html.add.render());
     }
 
-    public Result deviceInfo(int id) {
+    public Result editDevicePage(String id) {
+        return ok(views.html.edit.render(id));
+    }
+
+    public Result deviceInfo(String id) {
         return ok(views.html.info.render(id));
     }
 
@@ -38,10 +44,18 @@ public class DeviceController extends Controller {
         }, ec.current());
     }
 
+    public CompletionStage<Result> editDevice() {
+        Device device = formFactory.form(Device.class).bindFromRequest().get();
+        String id = formFactory.form().bindFromRequest().get("id");
+        return db.editDevice(device, id).thenApplyAsync(n -> {
+            return redirect(routes.HomeController.index());
+        }, ec.current());
+    }
+
     public CompletionStage<Result> deleteDevice() {
         String id = formFactory.form().bindFromRequest().get("id");
-        return db.deleteDevice(id).thenApplyAsync(n -> {
-            return redirect(routes.HomeController.index());
+        return db.deleteById("device", id).thenApplyAsync(n -> {
+            return ok();
         }, ec.current());
     }
 
@@ -51,60 +65,51 @@ public class DeviceController extends Controller {
         }, ec.current());
     }
 
-    public CompletionStage<Result> logDevices() {
-        return db.logDevices().thenApplyAsync(n -> {
-            return redirect(routes.HomeController.index());
+    public CompletionStage<Result> getDevice(String id) throws Exception {
+        return db.getById("device", id).thenApplyAsync(json -> {
+            return ok(json);
         }, ec.current());
     }
 
-    public CompletionStage<Result> getDevice(int id) throws Exception {
-        return db.getDevice(id).thenApplyAsync(json -> {
+    public CompletionStage<Result> getAll(String table) {
+        return db.getAllFromTable(table).thenApplyAsync(json -> {
             return ok(json);
         }, ec.current());
     }
+
     public CompletionStage<Result> getDevices() throws Exception {
-        return db.getDevices().thenApplyAsync(json -> {
-            return ok(json);
-        }, ec.current());
+        return getAll("device");
     }
 
     public CompletionStage<Result> getGroupIds() throws Exception {
-        return db.getGroupIds().thenApplyAsync(json -> {
-            return ok(json);
-        }, ec.current());
+        return getAll("group_id");
     }
 
     public CompletionStage<Result> getTypes() throws Exception {
-        return db.getTypes().thenApplyAsync(json -> {
-            return ok(json);
-        }, ec.current());
+        return getAll("type");
     }
 
     public CompletionStage<Result> getTags() throws Exception {
-        return db.getTags().thenApplyAsync(json -> {
-            return ok(json);
+        return getAll("tag");
+    }
+
+    public CompletionStage<Result> add(String table, String name) {
+        String s = formFactory.form().bindFromRequest().get(name);
+        return db.addRowToTable(table, s).thenApplyAsync(n -> {
+            return redirect(routes.DeviceController.addDevicePage());
         }, ec.current());
     }
 
     public CompletionStage<Result> addGroupId() {
-        String groupId = formFactory.form().bindFromRequest().get("groupId");
-        return db.addGroupId(groupId).thenApplyAsync(n -> {
-            return redirect(routes.DeviceController.addDevice());
-        }, ec.current());
+        return add("group_id", "groupId");
     }
 
     public CompletionStage<Result> addType() {
-        String type = formFactory.form().bindFromRequest().get("type");
-        return db.addType(type).thenApplyAsync(n -> {
-            return redirect(routes.DeviceController.addDevice());
-        }, ec.current());
+        return add("type", "type");
     }
 
     public CompletionStage<Result> addTag() {
-        String tag = formFactory.form().bindFromRequest().get("tag");
-        return db.addTag(tag).thenApplyAsync(n -> {
-            return redirect(routes.DeviceController.addDevice());
-        }, ec.current());
+        return add("tag", "tag");
     }
 
 }
