@@ -154,3 +154,12 @@ $RECYCLE.BIN/
 
 
 # End of https://www.gitignore.io/api/osx,linux,windows,intellij,java
+
+# Play specific things
+dashboard/logs
+dashboard/project/project
+dashboard/project/target
+dashboard/target
+dashboard/tmp
+dashboard/dist
+dashboard/.cache
