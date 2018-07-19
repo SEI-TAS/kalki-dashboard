@@ -7,12 +7,24 @@
 		revision="1.0-SNAPSHOT"
 		conf="runtime-internal"
 		confs="compile, runtime, test, provided, optional, universal, universal-docs, universal-src, windows, docker, linux, rpm, debian, compile-internal, runtime-internal, test-internal, plugin, pom, scala-tool, docs"
-		date="20180712152619"/>
+		date="20180719115643"/>
 	<dependencies>
+		<module organisation="edu.cmu.sei.ttg" name="kalki-db">
+			<revision name="0.0.1-SNAPSHOT" status="integration" pubdate="20180719115638" resolver="Maven2 Local" artresolver="Maven2 Local" homepage="" downloaded="false" searched="true" default="false" conf="default, compile, runtime, default(compile), master" position="72">
+				<metadata-artifact status="no" details="" size="618" time="0" location="/Users/crmowry/.ivy2/cache/edu.cmu.sei.ttg/kalki-db/ivy-0.0.1-SNAPSHOT.xml" searched="true" original-local-location="/Users/crmowry/.m2/repository/edu/cmu/sei/ttg/kalki-db/0.0.1-SNAPSHOT/kalki-db-0.0.1-SNAPSHOT.pom" origin-is-local="true" origin-location="/Users/crmowry/.m2/repository/edu/cmu/sei/ttg/kalki-db/0.0.1-SNAPSHOT/kalki-db-0.0.1-SNAPSHOT.pom"/>
+				<caller organisation="com.example" name="dashboard_2.12" conf="compile, runtime-internal, runtime, optional" rev="0.0.1-SNAPSHOT" rev-constraint-default="0.0.1-SNAPSHOT" rev-constraint-dynamic="0.0.1-SNAPSHOT" callerrev="1.0-SNAPSHOT"/>
+				<artifacts>
+					<artifact name="kalki-db" type="jar" ext="jar" status="no" details="" size="17308" time="0" location="/Users/crmowry/.m2/repository/edu/cmu/sei/ttg/kalki-db/0.0.1-SNAPSHOT/kalki-db-0.0.1-SNAPSHOT.jar">
+						<origin-location is-local="true" location="/Users/crmowry/.m2/repository/edu/cmu/sei/ttg/kalki-db/0.0.1-SNAPSHOT/kalki-db-0.0.1-SNAPSHOT.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
 		<module organisation="org.postgresql" name="postgresql">
-			<revision name="42.2.2" status="release" pubdate="20180315121720" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://github.com/pgjdbc/pgjdbc" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="71">
+			<revision name="42.2.2" status="release" pubdate="20180315121720" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://github.com/pgjdbc/pgjdbc" downloaded="false" searched="false" default="false" conf="default, compile, runtime(*), master(compile), runtime, default(compile), compile(*), master" position="71">
 				<license name="BSD-2-Clause" url="https://jdbc.postgresql.org/about/license.html"/>
 				<metadata-artifact status="no" details="" size="6499" time="0" location="/Users/crmowry/.ivy2/cache/org.postgresql/postgresql/ivy-42.2.2.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.2/postgresql-42.2.2.pom"/>
+				<caller organisation="edu.cmu.sei.ttg" name="kalki-db" conf="default, compile, runtime, master" rev="42.2.2" rev-constraint-default="42.2.2" rev-constraint-dynamic="42.2.2" callerrev="0.0.1-SNAPSHOT"/>
 				<caller organisation="com.example" name="dashboard_2.12" conf="compile, runtime-internal, runtime, optional" rev="42.2.2" rev-constraint-default="42.2.2" rev-constraint-dynamic="42.2.2" callerrev="1.0-SNAPSHOT"/>
 				<artifacts>
 					<artifact name="postgresql" type="bundle" ext="jar" status="no" details="" size="790405" time="0" location="/Users/crmowry/.ivy2/cache/org.postgresql/postgresql/bundles/postgresql-42.2.2.jar">

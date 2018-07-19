@@ -1,3 +1,4 @@
-[0m[[0m[31merror[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/models/ApplicationDatabase.java:285:1:  boolean cannot be converted to java.sql.ResultSet[0m
-[0m[[0m[31merror[0m] [0m[0m                    jn = Convertor.convertToJson(rs.next());[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/controllers/DeviceController.java:46:1:  bad return type in lambda expression[0m
+[0m[[0m[31merror[0m] [0m[0m    unexpected return value[0m
+[0m[[0m[31merror[0m] [0m[0m            return redirect(routes.HomeController.index());[0m
 [0m[[0m[0minfo[0m] [0m[0mSome messages have been simplified; recompile with -Xdiags:verbose to get full output[0m

@@ -35,8 +35,9 @@ Seq[Any](format.raw/*2.1*/("""
     """),format.raw/*4.5*/("""<h4>Edit Device</h4>
     """),_display_(/*5.6*/deviceForm/*5.16*/.render("/edit-device-submit", id)),format.raw/*5.50*/("""
 """)))}/*6.2*/ {_display_(Seq[Any](format.raw/*6.4*/("""
-    """),format.raw/*7.5*/("""<script src=""""),_display_(/*7.19*/routes/*7.25*/.Assets.versioned("javascripts/edit.js")),format.raw/*7.65*/("""" type="text/javascript" data-id=""""),_display_(/*7.100*/id),format.raw/*7.102*/(""""></script>
-""")))}),format.raw/*8.2*/("""
+    """),format.raw/*7.5*/("""<script src=""""),_display_(/*7.19*/routes/*7.25*/.Assets.versioned("javascripts/deviceForm.js")),format.raw/*7.71*/("""" type="text/javascript"></script>
+    <script src=""""),_display_(/*8.19*/routes/*8.25*/.Assets.versioned("javascripts/edit.js")),format.raw/*8.65*/("""" type="text/javascript" data-id=""""),_display_(/*8.100*/id),format.raw/*8.102*/(""""></script>
+""")))}),format.raw/*9.2*/("""
 """))
       }
     }
@@ -53,11 +54,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jul 12 17:13:40 EDT 2018
+                  DATE: Tue Jul 17 16:54:31 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/edit.scala.html
-                  HASH: 799ca2e306876a0a2b4f3ad25c787ca3ea25901e
-                  MATRIX: 947->1|1053->14|1080->16|1107->35|1146->37|1177->42|1228->68|1246->78|1300->112|1319->114|1357->116|1388->121|1428->135|1442->141|1502->181|1564->216|1587->218|1629->231
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|36->5|36->5|36->5|37->6|37->6|38->7|38->7|38->7|38->7|38->7|38->7|39->8
+                  HASH: f6c810b4c235e3c13b7a1d44f9aba1851669fd74
+                  MATRIX: 947->1|1053->14|1080->16|1107->35|1146->37|1177->42|1228->68|1246->78|1300->112|1319->114|1357->116|1388->121|1428->135|1442->141|1508->187|1587->240|1601->246|1661->286|1723->321|1746->323|1788->336
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|36->5|36->5|36->5|37->6|37->6|38->7|38->7|38->7|38->7|39->8|39->8|39->8|39->8|39->8|40->9
                   -- GENERATED --
               */
           

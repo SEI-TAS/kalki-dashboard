@@ -1,28 +1,31 @@
 package controllers;
 
-import models.ApplicationDatabase;
-import models.Device;
-import play.data.FormFactory;
+import kalkidb.models.Device;
+import kalkidb.database.Postgres;
+//import play.data.FormFactory;
+import play.data.*;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Scanner;
 
 public class DeviceController extends Controller {
 
     private final FormFactory formFactory;
-    private final ApplicationDatabase db;
     private final HttpExecutionContext ec;
+    private final ObjectWriter ow;
 
     @Inject
-    public DeviceController(FormFactory formFactory, ApplicationDatabase db, HttpExecutionContext ec) {
+    public DeviceController(FormFactory formFactory, HttpExecutionContext ec) {
         this.formFactory = formFactory;
-        this.db = db;
         this.ec = ec;
+        this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        Postgres.initialize("127.0.0.1", "5432", "kalki", "kalki", "kalki");
     }
 
     public Result addDevicePage() {
@@ -37,71 +40,95 @@ public class DeviceController extends Controller {
         return ok(views.html.info.render(id));
     }
 
-    public CompletionStage<Result> addDevice() {
+    public CompletionStage<Result> addOrEditDevice() {
         Device device = formFactory.form(Device.class).bindFromRequest().get();
-        return db.addDevice(device).thenApplyAsync(n -> {
-            return redirect(routes.HomeController.index());
-        }, ec.current());
-    }
-
-    public CompletionStage<Result> editDevice() {
-        Device device = formFactory.form(Device.class).bindFromRequest().get();
-        String id = formFactory.form().bindFromRequest().get("id");
-        return db.editDevice(device, id).thenApplyAsync(n -> {
+        return device.insertOrUpdate().thenApplyAsync(n -> {
             return redirect(routes.HomeController.index());
         }, ec.current());
     }
 
     public CompletionStage<Result> deleteDevice() {
         String id = formFactory.form().bindFromRequest().get("id");
-        return db.deleteById("device", id).thenApplyAsync(n -> {
+        return Postgres.deleteById("device", id).thenApplyAsync(n -> {
             return ok();
         }, ec.current());
     }
 
-    public CompletionStage<Result> clean() {
-        return db.dropAllTables().thenApplyAsync(n -> {
-            return redirect(routes.HomeController.index());
+    public CompletionStage<Result> getDevice(String id) {
+        int idToInt;
+        try {
+            idToInt = Integer.parseInt(id);
+        }
+        catch (NumberFormatException e) {
+            idToInt = -1;
+        }
+        System.out.printf("ID: %d\n",idToInt);
+        return Postgres.findDevice(idToInt).thenApplyAsync(device -> {
+            try {
+                return ok(ow.writeValueAsString(device));
+            }
+            catch (JsonProcessingException e) {}
+            return ok();
         }, ec.current());
     }
 
-    public CompletionStage<Result> getDevice(String id) throws Exception {
-        return db.getById("device", id).thenApplyAsync(json -> {
-            return ok(json);
+    public CompletionStage<Result> getDevices() {
+        return Postgres.getAllDevices().thenApplyAsync(devices -> {
+            try {
+                return ok(ow.writeValueAsString(devices));
+            }
+            catch(JsonProcessingException e) {
+
+            }
+            return ok();
         }, ec.current());
     }
 
-    public CompletionStage<Result> getAll(String table) {
-        return db.getAllFromTable(table).thenApplyAsync(json -> {
-            return ok(json);
+    public CompletionStage<Result> getGroups() {
+        return Postgres.getAllGroups().thenApplyAsync(groups -> {
+            try {
+                return ok(ow.writeValueAsString(groups));
+            }
+            catch(JsonProcessingException e) {
+
+            }
+            return ok();
         }, ec.current());
     }
 
-    public CompletionStage<Result> getDevices() throws Exception {
-        return getAll("device");
+    public CompletionStage<Result> getTypes() {
+        return Postgres.getAllTypes().thenApplyAsync(types -> {
+            try {
+                return ok(ow.writeValueAsString(types));
+            }
+            catch(JsonProcessingException e) {
+
+            }
+            return ok();
+        }, ec.current());
     }
 
-    public CompletionStage<Result> getGroupIds() throws Exception {
-        return getAll("group_id");
-    }
+    public CompletionStage<Result> getTags() {
+        return Postgres.getAllTags().thenApplyAsync(tags -> {
+            try {
+                return ok(ow.writeValueAsString(tags));
+            }
+            catch(JsonProcessingException e) {
 
-    public CompletionStage<Result> getTypes() throws Exception {
-        return getAll("type");
-    }
-
-    public CompletionStage<Result> getTags() throws Exception {
-        return getAll("tag");
+            }
+            return ok();
+        }, ec.current());
     }
 
     public CompletionStage<Result> add(String table, String name) {
         String s = formFactory.form().bindFromRequest().get(name);
-        return db.addRowToTable(table, s).thenApplyAsync(n -> {
+        return Postgres.addRowToTable(table, s).thenApplyAsync(n -> {
             return redirect(routes.DeviceController.addDevicePage());
         }, ec.current());
     }
 
-    public CompletionStage<Result> addGroupId() {
-        return add("group_id", "groupId");
+    public CompletionStage<Result> addGroup() {
+        return add("device_group", "group");
     }
 
     public CompletionStage<Result> addType() {

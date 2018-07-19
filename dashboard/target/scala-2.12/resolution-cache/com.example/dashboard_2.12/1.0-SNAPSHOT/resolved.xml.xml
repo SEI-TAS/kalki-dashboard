@@ -4,7 +4,7 @@
 		module="dashboard_2.12"
 		revision="1.0-SNAPSHOT"
 		status="integration"
-		publication="20180712152619"
+		publication="20180719115643"
 	>
 		<description>
 		dashboard
@@ -52,5 +52,6 @@
 		<dependency org="com.typesafe.play" name="play-guice_2.12" rev="2.6.15" conf="compile->default(compile)"/>
 		<dependency org="com.typesafe.play" name="play-java-jdbc_2.12" rev="2.6.15" conf="compile->default(compile)"/>
 		<dependency org="org.postgresql" name="postgresql" rev="42.2.2" conf="compile->default(compile)"/>
+		<dependency org="edu.cmu.sei.ttg" name="kalki-db" rev="0.0.1-SNAPSHOT" conf="compile->default(compile)"/>
 	</dependencies>
 </ivy-module>

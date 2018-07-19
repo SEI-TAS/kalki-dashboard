@@ -1,22 +1,20 @@
 package controllers;
 
-import models.ApplicationDatabase;
+import kalkidb.database.Postgres;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 public class HomeController extends Controller {
 
-    private final ApplicationDatabase db;
     private final HttpExecutionContext ec;
 
     @Inject
-    public HomeController(ApplicationDatabase db, HttpExecutionContext ec) {
-        this.db = db;
+    public HomeController(HttpExecutionContext ec) {
+        Postgres.initialize("127.0.0.1", "5432", "kalki", "kalki", "kalki");
         this.ec = ec;
     }
 
@@ -25,7 +23,7 @@ public class HomeController extends Controller {
     }
 
     public CompletionStage<Result> clean() {
-        return db.dropAllTables().thenApplyAsync(n -> {
+        return Postgres.dropTables().thenApplyAsync(n -> {
             return redirect(routes.HomeController.index());
         }, ec.current());
     }

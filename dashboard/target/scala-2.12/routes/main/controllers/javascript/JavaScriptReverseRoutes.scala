@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jul 12 15:45:55 EDT 2018
+// @DATE:Thu Jul 19 11:54:19 EDT 2018
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -11,7 +11,7 @@ import _root_.play.libs.F
 // @LINE:6
 package controllers.javascript {
 
-  // @LINE:32
+  // @LINE:31
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -19,7 +19,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:32
+    // @LINE:31
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """
@@ -39,7 +39,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:19
+    // @LINE:18
     def editUmboxImage: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.editUmboxImage",
       """
@@ -59,7 +59,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:29
+    // @LINE:28
     def getUmboxImages: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.getUmboxImages",
       """
@@ -69,7 +69,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:18
+    // @LINE:17
     def addUmboxImage: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.addUmboxImage",
       """
@@ -79,7 +79,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:21
+    // @LINE:20
     def deleteUmboxImage: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.deleteUmboxImage",
       """
@@ -99,7 +99,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:22
+    // @LINE:21
     def clean: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.HomeController.clean",
       """
@@ -129,6 +129,16 @@ package controllers.javascript {
     }
 
   
+    // @LINE:14
+    def addGroup: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.addGroup",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add-group"})
+        }
+      """
+    )
+  
     // @LINE:8
     def editDevicePage: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.editDevicePage",
@@ -139,7 +149,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:24
+    // @LINE:23
     def getDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getDevice",
       """
@@ -149,17 +159,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:15
-    def addGroupId: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.DeviceController.addGroupId",
-      """
-        function() {
-          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add-group-id"})
-        }
-      """
-    )
-  
-    // @LINE:17
+    // @LINE:16
     def addTag: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.addTag",
       """
@@ -169,7 +169,17 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:27
+    // @LINE:25
+    def getGroups: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.getGroups",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "groups"})
+        }
+      """
+    )
+  
+    // @LINE:26
     def getTypes: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTypes",
       """
@@ -179,7 +189,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:20
+    // @LINE:19
     def deleteDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.deleteDevice",
       """
@@ -199,26 +209,6 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:14
-    def editDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.DeviceController.editDevice",
-      """
-        function() {
-          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "edit-device-submit"})
-        }
-      """
-    )
-  
-    // @LINE:13
-    def addDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.DeviceController.addDevice",
-      """
-        function() {
-          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add-device-submit"})
-        }
-      """
-    )
-  
     // @LINE:11
     def deviceInfo: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.deviceInfo",
@@ -229,17 +219,17 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:26
-    def getGroupIds: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.DeviceController.getGroupIds",
+    // @LINE:13
+    def addOrEditDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.DeviceController.addOrEditDevice",
       """
         function() {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "group-ids"})
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "add-or-edit-device"})
         }
       """
     )
   
-    // @LINE:28
+    // @LINE:27
     def getTags: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTags",
       """
@@ -249,7 +239,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:25
+    // @LINE:24
     def getDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getDevices",
       """
@@ -259,7 +249,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:16
+    // @LINE:15
     def addType: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.addType",
       """

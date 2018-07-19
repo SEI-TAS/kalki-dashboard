@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jul 12 15:45:55 EDT 2018
+// @DATE:Thu Jul 19 11:54:19 EDT 2018
 
 package controllers;
 

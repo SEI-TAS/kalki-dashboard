@@ -1,6 +1,6 @@
 jQuery(document).ready(($) => {
     $.get("/devices", (devices) => {
-        $.each(devices, (index, device) => {
+        $.each(JSON.parse(devices), (index, device) => {
             $("#dashboardTableBody").append("<tr>\n" +
                 "    <td><a href='/info?id=" + device.id + "' class='btn'>" + device.name + "</a></td>\n" +
                 "    <td>State</td>\n" +

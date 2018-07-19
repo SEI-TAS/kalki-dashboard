@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jul 12 15:45:55 EDT 2018
+// @DATE:Thu Jul 19 11:54:19 EDT 2018
 
 import play.api.mvc.Call
 
@@ -11,14 +11,14 @@ import _root_.play.libs.F
 // @LINE:6
 package controllers {
 
-  // @LINE:32
+  // @LINE:31
   class ReverseAssets(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:32
+    // @LINE:31
     def versioned(file:Asset): Call = {
       implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
       Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))
@@ -33,7 +33,7 @@ package controllers {
     }
 
   
-    // @LINE:19
+    // @LINE:18
     def editUmboxImage(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "edit-umbox-submit")
@@ -45,19 +45,19 @@ package controllers {
       Call("GET", _prefix + { _defaultPrefix } + "umbox-setup")
     }
   
-    // @LINE:29
+    // @LINE:28
     def getUmboxImages(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "umbox-images")
     }
   
-    // @LINE:18
+    // @LINE:17
     def addUmboxImage(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "add-umbox-submit")
     }
   
-    // @LINE:21
+    // @LINE:20
     def deleteUmboxImage(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "delete-umbox-image")
@@ -72,7 +72,7 @@ package controllers {
     }
 
   
-    // @LINE:22
+    // @LINE:21
     def clean(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "clean")
@@ -93,37 +93,43 @@ package controllers {
     }
 
   
+    // @LINE:14
+    def addGroup(): Call = {
+      
+      Call("POST", _prefix + { _defaultPrefix } + "add-group")
+    }
+  
     // @LINE:8
     def editDevicePage(id:String = ""): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "edit-device" + play.core.routing.queryString(List(if(id == "") None else Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("id", id)))))
     }
   
-    // @LINE:24
+    // @LINE:23
     def getDevice(id:String = ""): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "device" + play.core.routing.queryString(List(if(id == "") None else Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("id", id)))))
     }
   
-    // @LINE:15
-    def addGroupId(): Call = {
-      
-      Call("POST", _prefix + { _defaultPrefix } + "add-group-id")
-    }
-  
-    // @LINE:17
+    // @LINE:16
     def addTag(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "add-tag")
     }
   
-    // @LINE:27
+    // @LINE:25
+    def getGroups(): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "groups")
+    }
+  
+    // @LINE:26
     def getTypes(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "types")
     }
   
-    // @LINE:20
+    // @LINE:19
     def deleteDevice(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "delete-device")
@@ -135,43 +141,31 @@ package controllers {
       Call("GET", _prefix + { _defaultPrefix } + "add-device")
     }
   
-    // @LINE:14
-    def editDevice(): Call = {
-      
-      Call("POST", _prefix + { _defaultPrefix } + "edit-device-submit")
-    }
-  
-    // @LINE:13
-    def addDevice(): Call = {
-      
-      Call("POST", _prefix + { _defaultPrefix } + "add-device-submit")
-    }
-  
     // @LINE:11
     def deviceInfo(id:String = ""): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "info" + play.core.routing.queryString(List(if(id == "") None else Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("id", id)))))
     }
   
-    // @LINE:26
-    def getGroupIds(): Call = {
+    // @LINE:13
+    def addOrEditDevice(): Call = {
       
-      Call("GET", _prefix + { _defaultPrefix } + "group-ids")
+      Call("POST", _prefix + { _defaultPrefix } + "add-or-edit-device")
     }
   
-    // @LINE:28
+    // @LINE:27
     def getTags(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "tags")
     }
   
-    // @LINE:25
+    // @LINE:24
     def getDevices(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "devices")
     }
   
-    // @LINE:16
+    // @LINE:15
     def addType(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "add-type")
