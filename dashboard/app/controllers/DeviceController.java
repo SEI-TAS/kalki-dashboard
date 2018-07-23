@@ -25,7 +25,7 @@ public class DeviceController extends Controller {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        Postgres.initialize("127.0.0.1", "5432", "kalki", "kalki", "kalki");
+//        Postgres.initialize("localhost", "5432", "kalki", "kalki", "kalki");
     }
 
     public Result addDevicePage() {
@@ -49,8 +49,19 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> deleteDevice() {
         String id = formFactory.form().bindFromRequest().get("id");
-        return Postgres.deleteById("device", id).thenApplyAsync(n -> {
-            return ok();
+        int idToInt;
+        try {
+            idToInt = Integer.parseInt(id);
+        }
+        catch (NumberFormatException e) {
+            idToInt = -1;
+        }
+        return Postgres.deleteById("device", idToInt).thenApplyAsync(isSuccess -> {
+            if(isSuccess) {
+                return ok();
+            } else {
+                return internalServerError();
+            }
         }, ec.current());
     }
 
@@ -62,7 +73,6 @@ public class DeviceController extends Controller {
         catch (NumberFormatException e) {
             idToInt = -1;
         }
-        System.out.printf("ID: %d\n",idToInt);
         return Postgres.findDevice(idToInt).thenApplyAsync(device -> {
             try {
                 return ok(ow.writeValueAsString(device));

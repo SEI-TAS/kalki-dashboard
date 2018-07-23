@@ -7,14 +7,14 @@
 		revision="1.0-SNAPSHOT"
 		conf="compile"
 		confs="compile, runtime, test, provided, optional, universal, universal-docs, universal-src, windows, docker, linux, rpm, debian, compile-internal, runtime-internal, test-internal, plugin, pom, scala-tool, docs"
-		date="20180719115643"/>
+		date="20180723174306"/>
 	<dependencies>
 		<module organisation="edu.cmu.sei.ttg" name="kalki-db">
-			<revision name="0.0.1-SNAPSHOT" status="integration" pubdate="20180719115638" resolver="Maven2 Local" artresolver="Maven2 Local" homepage="" downloaded="false" searched="true" default="false" conf="default, compile, runtime, default(compile), master" position="72">
+			<revision name="0.0.1-SNAPSHOT" status="integration" pubdate="20180723174248" resolver="Maven2 Local" artresolver="Maven2 Local" homepage="" downloaded="false" searched="true" default="false" conf="default, compile, runtime, default(compile), master" position="72">
 				<metadata-artifact status="no" details="" size="618" time="0" location="/Users/crmowry/.ivy2/cache/edu.cmu.sei.ttg/kalki-db/ivy-0.0.1-SNAPSHOT.xml" searched="true" original-local-location="/Users/crmowry/.m2/repository/edu/cmu/sei/ttg/kalki-db/0.0.1-SNAPSHOT/kalki-db-0.0.1-SNAPSHOT.pom" origin-is-local="true" origin-location="/Users/crmowry/.m2/repository/edu/cmu/sei/ttg/kalki-db/0.0.1-SNAPSHOT/kalki-db-0.0.1-SNAPSHOT.pom"/>
 				<caller organisation="com.example" name="dashboard_2.12" conf="compile" rev="0.0.1-SNAPSHOT" rev-constraint-default="0.0.1-SNAPSHOT" rev-constraint-dynamic="0.0.1-SNAPSHOT" callerrev="1.0-SNAPSHOT"/>
 				<artifacts>
-					<artifact name="kalki-db" type="jar" ext="jar" status="no" details="" size="17308" time="0" location="/Users/crmowry/.m2/repository/edu/cmu/sei/ttg/kalki-db/0.0.1-SNAPSHOT/kalki-db-0.0.1-SNAPSHOT.jar">
+					<artifact name="kalki-db" type="jar" ext="jar" status="no" details="" size="18355" time="0" location="/Users/crmowry/.m2/repository/edu/cmu/sei/ttg/kalki-db/0.0.1-SNAPSHOT/kalki-db-0.0.1-SNAPSHOT.jar">
 						<origin-location is-local="true" location="/Users/crmowry/.m2/repository/edu/cmu/sei/ttg/kalki-db/0.0.1-SNAPSHOT/kalki-db-0.0.1-SNAPSHOT.jar"/>
 					</artifact>
 				</artifacts>

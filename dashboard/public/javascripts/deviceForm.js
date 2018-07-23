@@ -5,11 +5,6 @@ jQuery(document).ready(($)  => {
         });
     });
 
-    // Default types
-    ["Hue Light", "Dlink Camera", "WeMo Insight", "Udoo Neo"].forEach(type => {
-        $("#type").append("<option>" + type + "</option>");
-    });
-
     $.get("/types", (types) => {
         $.each(JSON.parse(types), (id,type) => {
             $("#type").append("<option>" + type.name + "</option>");

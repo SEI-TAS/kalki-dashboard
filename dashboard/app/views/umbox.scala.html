@@ -20,6 +20,7 @@
             <div class="modal-content">
                 <form id="addUmboxImageModalForm" class="form" method="post" action="@routes.UmboxController.addUmboxImage()">
                     @* @helper.CSRF.formField *@
+                    <input type="hidden" id="addUmboxImageId" name="id" value="-1" />
                     <div class="modal-header">
                         <h4 class="modal-title" id="addUmboxImageModalLabel">Add &mu;mbox image</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

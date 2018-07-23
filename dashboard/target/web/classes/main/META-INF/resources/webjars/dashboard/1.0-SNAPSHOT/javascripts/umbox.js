@@ -1,7 +1,7 @@
 jQuery(document).ready(($) => {
     $.get("/umbox-images", (images) => {
-        $.each(images, (index, image) => {
-            $("#umboxImageTableBody").append("<tr>\n" +
+        $.each(JSON.parse(images), (index, image) => {
+            $("#umboxImageTableBody").append("<tr id='tableRow" + image.id + "'>\n" +
                 "    <td>" + image.name + "</td>\n" +
                 "    <td>" + image.path + "</td>\n" +
                 "    <td><button type='button' class='btn btn-secondary' id='editButton" + image.id + "' data-toggle='modal' data-target='#editUmboxImageModal'>Edit</button></td>\n" +
@@ -15,8 +15,9 @@ jQuery(document).ready(($) => {
             });
 
             $("#deleteButton" + image.id).click(function() {
-                $.post("/delete-umbox-image", { id: image.id });
-                $(location).prop("href","/umbox-setup");
+                $.post("/delete-umbox-image", { id: image.id }, function(data, success) {
+                    $("#tableRow" + image.id).remove();
+                });
             });
         });
     });

@@ -23,7 +23,7 @@ public class UmboxController extends Controller {
     public UmboxController(FormFactory formFactory, HttpExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
-        Postgres.initialize("127.0.0.1", "5432", "kalki", "kalki", "kalki");
+//        Postgres.initialize("127.0.0.1", "5432", "kalki", "kalki", "kalki");
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     }
 
@@ -40,16 +40,27 @@ public class UmboxController extends Controller {
 
     public CompletionStage<Result> editUmboxImage() {
         UmboxImage u = formFactory.form(UmboxImage.class).bindFromRequest().get();
-        String id = formFactory.form().bindFromRequest().get("id");
-        return Postgres.editUmboxImage(u, id).thenApplyAsync(n -> {
+//        String id = formFactory.form().bindFromRequest().get("id");
+        return Postgres.editUmboxImage(u).thenApplyAsync(n -> {
             return redirect(routes.UmboxController.umboxSetup());
         }, ec.current());
     }
 
     public CompletionStage<Result> deleteUmboxImage() {
         String id = formFactory.form().bindFromRequest().get("id");
-        return Postgres.deleteById("umbox_image", id).thenApplyAsync(n -> {
-            return ok();
+        int idToInt;
+        try {
+            idToInt = Integer.parseInt(id);
+        }
+        catch (NumberFormatException e) {
+            idToInt = -1;
+        }
+        return Postgres.deleteById("umbox_image", idToInt).thenApplyAsync(isSuccess -> {
+            if(isSuccess) {
+                return ok();
+            } else {
+                return internalServerError();
+            }
         }, ec.current());
     }
 

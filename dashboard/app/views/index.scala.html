@@ -14,7 +14,11 @@
         </thead>
         <tbody id="dashboardTableBody"></tbody>
     </table>
-    <a href="/add-device" class="btn btn-primary" role="button">Add Device</a>
+    <a href="@routes.DeviceController.addDevicePage()" class="btn btn-primary" role="button">Add Device</a>
+    <button class="btn btn-info" id="initializeButton">Initialize Database</button>
+    <button class="btn btn-info" id="setupDatabaseButton">Setup Database</button>
+    <button class="btn btn-info" id="resetDatabaseButton">Reset Database</button>
+    <button class="btn btn-info" id="listDatabasesButton">List All Databases</button>
 } {
     <script src="@routes.Assets.versioned("javascripts/index.js")" type="text/javascript"></script>
 }

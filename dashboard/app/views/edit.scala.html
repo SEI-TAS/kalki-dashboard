@@ -2,7 +2,7 @@
 
 @main("Edit Device") {
     <h4>Edit Device</h4>
-    @deviceForm.render("/edit-device-submit", id)
+    @deviceForm.render(id)
 } {
     <script src="@routes.Assets.versioned("javascripts/deviceForm.js")" type="text/javascript"></script>
     <script src="@routes.Assets.versioned("javascripts/edit.js")" type="text/javascript" data-id="@id"></script>

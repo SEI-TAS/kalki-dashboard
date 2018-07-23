@@ -22,10 +22,10 @@ import play.mvc.Http.Context.Implicit._
 import play.data._
 import play.core.j.PlayFormsMagicForJava._
 
-object deviceForm extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template2[String,String,play.twirl.api.HtmlFormat.Appendable] {
+object deviceForm extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[String,play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply/*1.2*/(action: String)(id: String):play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/(id: String):play.twirl.api.HtmlFormat.Appendable = {
     _display_ {
       {
 
@@ -246,9 +246,9 @@ Seq[Any](format.raw/*2.1*/("""
     }
   }
 
-  def render(action:String,id:String): play.twirl.api.HtmlFormat.Appendable = apply(action)(id)
+  def render(id:String): play.twirl.api.HtmlFormat.Appendable = apply(id)
 
-  def f:((String) => (String) => play.twirl.api.HtmlFormat.Appendable) = (action) => (id) => apply(action)(id)
+  def f:((String) => play.twirl.api.HtmlFormat.Appendable) = (id) => apply(id)
 
   def ref: this.type = this
 
@@ -257,10 +257,10 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jul 19 11:54:20 EDT 2018
+                  DATE: Thu Jul 19 16:19:57 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/deviceForm.scala.html
-                  HASH: ea8005f13409e1c5347e82c004c25718fba0859d
-                  MATRIX: 960->1|1082->30|1109->31|1183->79|1197->85|1252->120|1286->155|1318->161|1383->200|1405->202|1483->263|1519->272|1807->555|1856->576|1937->650|1982->667|2298->986|2334->995|2673->1316|2705->1321|3030->1635|3066->1644|3467->2028|3503->2037|3822->2351|3871->2372|3952->2447|3997->2464|4330->2785|4362->2790|4654->3070|4690->3079|4873->3252|4905->3257|5367->3710|5399->3715|5882->4179|5915->4184|6136->4399|6178->4412|6241->4466|6278->4475|6534->4719|6567->4724|6861->5001|6894->5006|7092->5196|7121->5197|7437->5485|7453->5491|7504->5519|7552->5566|7598->5583|8468->6444|8497->6445|8810->6730|8826->6736|8876->6763|8924->6810|8970->6827|9834->7681|9863->7682|10173->7964|10189->7970|10238->7996|10286->8043|10332->8060
+                  HASH: 41c2e28ccb0d583eef8a2a4dab567ab50f2928eb
+                  MATRIX: 953->1|1059->14|1086->15|1160->63|1174->69|1229->104|1263->139|1295->145|1360->184|1382->186|1460->247|1496->256|1784->539|1833->560|1914->634|1959->651|2275->970|2311->979|2650->1300|2682->1305|3007->1619|3043->1628|3444->2012|3480->2021|3799->2335|3848->2356|3929->2431|3974->2448|4307->2769|4339->2774|4631->3054|4667->3063|4850->3236|4882->3241|5344->3694|5376->3699|5859->4163|5892->4168|6113->4383|6155->4396|6218->4450|6255->4459|6511->4703|6544->4708|6838->4985|6871->4990|7069->5180|7098->5181|7414->5469|7430->5475|7481->5503|7529->5550|7575->5567|8445->6428|8474->6429|8787->6714|8803->6720|8853->6747|8901->6794|8947->6811|9811->7665|9840->7666|10150->7948|10166->7954|10215->7980|10263->8027|10309->8044
                   LINES: 28->1|33->2|34->3|34->3|34->3|34->3|35->4|37->6|37->6|37->6|40->9|41->10|46->15|47->16|49->18|50->19|58->27|59->28|68->37|69->38|77->46|78->47|87->56|88->57|93->62|94->63|96->65|97->66|106->75|107->76|112->81|113->82|118->87|119->88|129->98|130->99|140->109|141->110|147->116|148->117|150->119|151->120|158->127|159->128|166->135|167->136|174->143|175->144|178->147|178->147|178->147|179->148|180->149|198->167|199->168|202->171|202->171|202->171|203->172|204->173|222->191|223->192|226->195|226->195|226->195|227->196|228->197
                   -- GENERATED --
               */

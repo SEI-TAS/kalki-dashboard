@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jul 19 11:54:19 EDT 2018
+// @DATE:Fri Jul 20 15:14:35 EDT 2018
 
 import play.api.mvc.Call
 
@@ -11,14 +11,14 @@ import _root_.play.libs.F
 // @LINE:6
 package controllers {
 
-  // @LINE:31
+  // @LINE:34
   class ReverseAssets(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:31
+    // @LINE:34
     def versioned(file:Asset): Call = {
       implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
       Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))
@@ -33,7 +33,7 @@ package controllers {
     }
 
   
-    // @LINE:18
+    // @LINE:19
     def editUmboxImage(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "edit-umbox-submit")
@@ -45,13 +45,13 @@ package controllers {
       Call("GET", _prefix + { _defaultPrefix } + "umbox-setup")
     }
   
-    // @LINE:28
+    // @LINE:31
     def getUmboxImages(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "umbox-images")
     }
   
-    // @LINE:17
+    // @LINE:18
     def addUmboxImage(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "add-umbox-submit")
@@ -73,9 +73,27 @@ package controllers {
 
   
     // @LINE:21
-    def clean(): Call = {
+    def setupDatabase(): Call = {
       
-      Call("POST", _prefix + { _defaultPrefix } + "clean")
+      Call("POST", _prefix + { _defaultPrefix } + "setup-database")
+    }
+  
+    // @LINE:23
+    def listAllDatabases(): Call = {
+      
+      Call("POST", _prefix + { _defaultPrefix } + "list-all-databases")
+    }
+  
+    // @LINE:24
+    def initialize(): Call = {
+      
+      Call("POST", _prefix + { _defaultPrefix } + "initialize")
+    }
+  
+    // @LINE:22
+    def resetDatabase(): Call = {
+      
+      Call("POST", _prefix + { _defaultPrefix } + "reset-database")
     }
   
     // @LINE:6
@@ -105,7 +123,7 @@ package controllers {
       Call("GET", _prefix + { _defaultPrefix } + "edit-device" + play.core.routing.queryString(List(if(id == "") None else Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("id", id)))))
     }
   
-    // @LINE:23
+    // @LINE:26
     def getDevice(id:String = ""): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "device" + play.core.routing.queryString(List(if(id == "") None else Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("id", id)))))
@@ -117,19 +135,19 @@ package controllers {
       Call("POST", _prefix + { _defaultPrefix } + "add-tag")
     }
   
-    // @LINE:25
+    // @LINE:28
     def getGroups(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "groups")
     }
   
-    // @LINE:26
+    // @LINE:29
     def getTypes(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "types")
     }
   
-    // @LINE:19
+    // @LINE:17
     def deleteDevice(): Call = {
       
       Call("POST", _prefix + { _defaultPrefix } + "delete-device")
@@ -153,13 +171,13 @@ package controllers {
       Call("POST", _prefix + { _defaultPrefix } + "add-or-edit-device")
     }
   
-    // @LINE:27
+    // @LINE:30
     def getTags(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "tags")
     }
   
-    // @LINE:24
+    // @LINE:27
     def getDevices(): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "devices")

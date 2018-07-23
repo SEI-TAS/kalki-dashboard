@@ -33,7 +33,7 @@ object add extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFo
 Seq[Any](format.raw/*2.1*/("""
 """),_display_(/*3.2*/main("Add Device")/*3.20*/ {_display_(Seq[Any](format.raw/*3.22*/("""
     """),format.raw/*4.5*/("""<h4>Add Device</h4>
-    """),_display_(/*5.6*/deviceForm/*5.16*/.render("/add-device-submit", "-1")),format.raw/*5.51*/("""
+    """),_display_(/*5.6*/deviceForm/*5.16*/.render("-1")),format.raw/*5.29*/("""
 """)))}/*6.2*/ {_display_(Seq[Any](format.raw/*6.4*/("""
     """),format.raw/*7.5*/("""<script src=""""),_display_(/*7.19*/routes/*7.25*/.Assets.versioned("javascripts/deviceForm.js")),format.raw/*7.71*/("""" type="text/javascript"></script>
     <script src=""""),_display_(/*8.19*/routes/*8.25*/.Assets.versioned("javascripts/add.js")),format.raw/*8.64*/("""" type="text/javascript"></script>
@@ -54,10 +54,10 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Wed Jul 18 14:39:08 EDT 2018
+                  DATE: Thu Jul 19 16:19:57 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/add.scala.html
-                  HASH: d6fd60d850e16d26520885902a6d0a5456d0f010
-                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1208->56|1226->66|1281->101|1300->103|1338->105|1369->110|1409->124|1423->130|1489->176|1568->229|1582->235|1641->274|1706->310
+                  HASH: b24f0fe6f403b754f144042f03de985e24bd3fe9
+                  MATRIX: 939->1|1035->4|1062->6|1088->24|1127->26|1158->31|1208->56|1226->66|1259->79|1278->81|1316->83|1347->88|1387->102|1401->108|1467->154|1546->207|1560->213|1619->252|1684->288
                   LINES: 28->1|33->2|34->3|34->3|34->3|35->4|36->5|36->5|36->5|37->6|37->6|38->7|38->7|38->7|38->7|39->8|39->8|39->8|40->9
                   -- GENERATED --
               */

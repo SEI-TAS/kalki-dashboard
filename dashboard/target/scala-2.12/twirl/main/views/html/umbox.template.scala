@@ -51,7 +51,8 @@ Seq[Any](format.raw/*2.1*/("""
             <div class="modal-content">
                 <form id="addUmboxImageModalForm" class="form" method="post" action=""""),_display_(/*21.87*/routes/*21.93*/.UmboxController.addUmboxImage()),format.raw/*21.125*/("""">
                     """),format.raw/*22.49*/("""
-                    """),format.raw/*23.21*/("""<div class="modal-header">
+                    """),format.raw/*23.21*/("""<input type="hidden" id="addUmboxImageId" name="id" value="-1" />
+                    <div class="modal-header">
                         <h4 class="modal-title" id="addUmboxImageModalLabel">Add &mu;mbox image</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -88,9 +89,9 @@ Seq[Any](format.raw/*2.1*/("""
     <div class="modal fade" id="editUmboxImageModal" tabindex="-1" role="dialog" aria-labelledby="editUmboxImageModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form id="editUmboxImageModalForm" class="form" method="post" action=""""),_display_(/*60.88*/routes/*60.94*/.UmboxController.editUmboxImage()),format.raw/*60.127*/("""">
-                    """),format.raw/*61.49*/("""
-                    """),format.raw/*62.21*/("""<input type="hidden" id="editUmboxImageId" name="id" />
+                <form id="editUmboxImageModalForm" class="form" method="post" action=""""),_display_(/*61.88*/routes/*61.94*/.UmboxController.editUmboxImage()),format.raw/*61.127*/("""">
+                    """),format.raw/*62.49*/("""
+                    """),format.raw/*63.21*/("""<input type="hidden" id="editUmboxImageId" name="id" />
                     <div class="modal-header">
                         <h4 class="modal-title" id="editUmboxImageModalLabel">Edit &mu;mbox image</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -123,9 +124,9 @@ Seq[Any](format.raw/*2.1*/("""
             </div>
         </div>
     </div>
-""")))}/*95.2*/ {_display_(Seq[Any](format.raw/*95.4*/("""
-    """),format.raw/*96.5*/("""<script src=""""),_display_(/*96.19*/routes/*96.25*/.Assets.versioned("javascripts/umbox.js")),format.raw/*96.66*/("""" type="text/javascript"></script>
-""")))}),format.raw/*97.2*/("""
+""")))}/*96.2*/ {_display_(Seq[Any](format.raw/*96.4*/("""
+    """),format.raw/*97.5*/("""<script src=""""),_display_(/*97.19*/routes/*97.25*/.Assets.versioned("javascripts/umbox.js")),format.raw/*97.66*/("""" type="text/javascript"></script>
+""")))}),format.raw/*98.2*/("""
 """))
       }
     }
@@ -142,11 +143,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Thu Jul 12 17:06:25 EDT 2018
+                  DATE: Mon Jul 23 14:34:19 EDT 2018
                   SOURCE: /Users/crmowry/Projects/kalki-dashboard/dashboard/app/views/umbox.scala.html
-                  HASH: 8c198261c5825496d5f0307c7fd52c8c6c301310
-                  MATRIX: 941->1|1037->4|1064->6|1091->25|1130->27|1161->32|1955->799|1970->805|2024->837|2075->888|2124->909|4187->2945|4202->2951|4257->2984|4308->3035|4357->3056|6131->4812|6170->4814|6202->4819|6243->4833|6258->4839|6320->4880|6386->4916
-                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|52->21|52->21|52->21|53->22|54->23|91->60|91->60|91->60|92->61|93->62|126->95|126->95|127->96|127->96|127->96|127->96|128->97
+                  HASH: a75bcaf87a65eccf0cb3fa466c5d2715c52de70f
+                  MATRIX: 941->1|1037->4|1064->6|1091->25|1130->27|1161->32|1955->799|1970->805|2024->837|2075->888|2124->909|4273->3031|4288->3037|4343->3070|4394->3121|4443->3142|6217->4898|6256->4900|6288->4905|6329->4919|6344->4925|6406->4966|6472->5002
+                  LINES: 28->1|33->2|34->3|34->3|34->3|35->4|52->21|52->21|52->21|53->22|54->23|92->61|92->61|92->61|93->62|94->63|127->96|127->96|128->97|128->97|128->97|128->97|129->98
                   -- GENERATED --
               */
           

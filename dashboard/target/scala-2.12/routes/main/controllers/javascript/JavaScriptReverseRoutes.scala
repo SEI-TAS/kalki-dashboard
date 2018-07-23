@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/crmowry/Projects/kalki-dashboard/dashboard/conf/routes
-// @DATE:Thu Jul 19 11:54:19 EDT 2018
+// @DATE:Fri Jul 20 15:14:35 EDT 2018
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -11,7 +11,7 @@ import _root_.play.libs.F
 // @LINE:6
 package controllers.javascript {
 
-  // @LINE:31
+  // @LINE:34
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -19,7 +19,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:31
+    // @LINE:34
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """
@@ -39,7 +39,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:18
+    // @LINE:19
     def editUmboxImage: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.editUmboxImage",
       """
@@ -59,7 +59,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:28
+    // @LINE:31
     def getUmboxImages: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.getUmboxImages",
       """
@@ -69,7 +69,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:17
+    // @LINE:18
     def addUmboxImage: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UmboxController.addUmboxImage",
       """
@@ -100,11 +100,41 @@ package controllers.javascript {
 
   
     // @LINE:21
-    def clean: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.HomeController.clean",
+    def setupDatabase: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.setupDatabase",
       """
         function() {
-          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "clean"})
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "setup-database"})
+        }
+      """
+    )
+  
+    // @LINE:23
+    def listAllDatabases: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.listAllDatabases",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "list-all-databases"})
+        }
+      """
+    )
+  
+    // @LINE:24
+    def initialize: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.initialize",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "initialize"})
+        }
+      """
+    )
+  
+    // @LINE:22
+    def resetDatabase: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.resetDatabase",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "reset-database"})
         }
       """
     )
@@ -149,7 +179,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:23
+    // @LINE:26
     def getDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getDevice",
       """
@@ -169,7 +199,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:25
+    // @LINE:28
     def getGroups: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getGroups",
       """
@@ -179,7 +209,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:26
+    // @LINE:29
     def getTypes: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTypes",
       """
@@ -189,7 +219,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:19
+    // @LINE:17
     def deleteDevice: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.deleteDevice",
       """
@@ -229,7 +259,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:27
+    // @LINE:30
     def getTags: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getTags",
       """
@@ -239,7 +269,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:24
+    // @LINE:27
     def getDevices: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.DeviceController.getDevices",
       """
