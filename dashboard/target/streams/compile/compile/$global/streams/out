@@ -1,3 +1,0 @@
-[0m[[0m[31merror[0m] [0m[0m/Users/crmowry/Projects/kalki-dashboard/dashboard/app/controllers/UmboxController.java:51:1:  java.lang.String cannot be converted to int[0m
-[0m[[0m[31merror[0m] [0m[0m        return Postgres.deleteById("umbox_image", id).thenApplyAsync(n -> {[0m
-[0m[[0m[0minfo[0m] [0m[0mSome messages have been simplified; recompile with -Xdiags:verbose to get full output[0m
