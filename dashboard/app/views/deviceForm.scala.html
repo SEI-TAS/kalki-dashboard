@@ -11,7 +11,7 @@
             <div class="row">
                 <label for="type" class="col-4 col-form-label">Type</label>
                 <div class="col-6">
-                    <select class="form-control" id="type" name="type">
+                    <select class="form-control" id="type" name="typeId">
                             @*Populated by add.js*@
                     </select>
                 </div>
@@ -58,7 +58,7 @@
             <div class="row d-flex justify-content-end">
                 <label for="group" class="col-2 col-form-label">Group</label>
                 <div class="col-6">
-                    <select class="form-control" id="group" name="group">
+                    <select class="form-control" id="group" name="groupId">
                             @*Populated by add.js*@
                     </select>
                 </div>
@@ -140,35 +140,11 @@
     </div>
 </form>
 
-    @* New Group Modal *@
-<div class="modal fade" id="newGroupModal" tabindex="-1" role="dialog" aria-labelledby="newGroupModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="newGroupModalForm" class="form" method="post" action="@routes.DeviceController.addGroup()">
-                @* @helper.CSRF.formField *@
-                <div class="modal-header">
-                    <h4 class="modal-title" id="newGroupModalLabel">New Group</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" class="form-control" placeholder="Enter Group" name="group" id="newGroupInput">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="saveNewGroup">Save changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
     @* New Type Modal *@
 <div class="modal fade" id="newTypeModal" tabindex="-1" role="dialog" aria-labelledby="newTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="newTypeModalForm" class="form" method="post" action="@routes.DeviceController.addType()">
+            <form id="newTypeModalForm" class="form">
                 @* @helper.CSRF.formField *@
                 <div class="modal-header">
                     <h4 class="modal-title" id="newTypeModalLabel">New Type</h4>
@@ -188,11 +164,35 @@
     </div>
 </div>
 
+@* New Group Modal *@
+<div class="modal fade" id="newGroupModal" tabindex="-1" role="dialog" aria-labelledby="newGroupModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="newGroupModalForm" class="form">
+                @* @helper.CSRF.formField *@
+                <div class="modal-header">
+                    <h4 class="modal-title" id="newGroupModalLabel">New Group</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" placeholder="Enter Group" name="group" id="newGroupInput">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="saveNewGroup">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     @* New Tag Modal *@
 <div class="modal fade" id="newTagModal" tabindex="-1" role="dialog" aria-labelledby="newTagModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="newTagModalForm" class="form" method="post" action="@routes.DeviceController.addTag()">
+            <form id="newTagModalForm" class="form">
                 @* @helper.CSRF.formField *@
                 <div class="modal-header">
                     <h4 class="modal-title" id="newTagModalLabel">New Tag</h4>

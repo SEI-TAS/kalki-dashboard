@@ -12,9 +12,9 @@ jQuery(document).ready(($)  => {
             document.getElementById("ipAddress").value = device.ip;
             document.getElementById("historySize").value = device.historySize;
             document.getElementById("samplingRate").value = device.samplingRate;
-            document.getElementById("typeOption" + device.type).selected = true;
-            if(device.group !== -1) {
-                document.getElementById("groupOption" + device.group).selected = true;
+            document.getElementById("typeOption" + device.typeId).selected = true;
+            if(device.groupId !== -1) {
+                document.getElementById("groupOption" + device.groupId).selected = true;
             }
         }
     });

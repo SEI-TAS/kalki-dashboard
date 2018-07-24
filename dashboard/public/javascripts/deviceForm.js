@@ -21,6 +21,39 @@ jQuery(document).ready(($)  => {
         });
     });
 
+    $("#newTypeModalForm").submit(function(e) {
+        e.preventDefault();
+        let typeName = document.getElementById("newTypeInput").value;
+        $.post("/add-type", { type: typeName }, function(typeId) {
+            $("#newTypeModal").modal('hide');
+            $("#type").append("<option id='typeOption" + typeId + "' value='" + typeId + "' selected>" + typeName + "</option>");
+            document.getElementById("newTypeInput").value = "";
+        });
+    });
+
+    $("#newGroupModalForm").submit(function(e) {
+        e.preventDefault();
+        let groupName = document.getElementById("newGroupInput").value;
+        $.post("/add-group", { group: groupName }, function(groupId) {
+            $("#newGroupModal").modal('hide');
+            $("#group").append("<option id='groupOption" + groupId + "' value='" + groupId + "' selected>" + groupName + "</option>");
+            document.getElementById("newGroupInput").value = "";
+        });
+    });
+
+    $("#newTagModalForm").submit(function(e) {
+        e.preventDefault();
+        let tagName = document.getElementById("newTagInput").value;
+        $.post("/add-tag", { tag: tagName }, function(tagId) {
+            $("#newTagModal").modal('hide');
+            $("#tags").append("<div class='form-check col-2'>\n" +
+                "    <input class='form-check-input' type='checkbox' id='tagCheckBox" + tagId + "' value='" + tagId + "' checked>\n" +
+                "    <label class='form-check-label' for='tagCheckBox" + tagId + "'>" + tagName + "</label>\n" +
+                "</div>");
+            document.getElementById("newTagInput").value = "";
+        });
+    });
+
     $("#copyFromExisting").click(() => {
         console.log("Copy from Existing Device")
     });
