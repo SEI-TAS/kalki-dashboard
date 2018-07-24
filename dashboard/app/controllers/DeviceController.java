@@ -25,7 +25,6 @@ public class DeviceController extends Controller {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-//        Postgres.initialize("localhost", "5432", "kalki", "kalki", "kalki");
     }
 
     public Result addDevicePage() {

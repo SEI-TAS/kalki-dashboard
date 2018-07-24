@@ -23,7 +23,6 @@ public class UmboxController extends Controller {
     public UmboxController(FormFactory formFactory, HttpExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
-//        Postgres.initialize("127.0.0.1", "5432", "kalki", "kalki", "kalki");
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     }
 

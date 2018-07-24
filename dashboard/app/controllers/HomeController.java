@@ -17,7 +17,6 @@ public class HomeController extends Controller {
     @Inject
     public HomeController(HttpExecutionContext ec) {
         this.ec = ec;
-//        Postgres.initialize("localhost", "5432", "kalki", "kalki", "kalki");
     }
 
     public Result index() {
@@ -25,7 +24,8 @@ public class HomeController extends Controller {
     }
 
     public Result initialize() {
-        Postgres.initialize("localhost", "5432", "kalki", "kalki", "kalki");
+        Postgres.initialize("localhost", "5432", "kalki-db", "kalki-user", "kalki-pass");
+//        Postgres.initialize("host.docker.internal", "5432", "kalki-db", "kalki-user", "kalki-pass");
         return ok();
     }
 
