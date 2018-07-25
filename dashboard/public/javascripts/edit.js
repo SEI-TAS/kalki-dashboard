@@ -4,7 +4,10 @@ jQuery(document).ready(($)  => {
     $.get("/device", { id: deviceId }, (deviceString) => {
         let device = JSON.parse(deviceString);
         if(device === null) {
-            console.log("Invalid ID");
+            // Prevents form from being submitted if the device id is bad
+            $("#deviceForm").submit(function(e) {
+                e.preventDefault();
+            });
         }
         else {
             document.getElementById("name").value = device.name;
@@ -16,6 +19,9 @@ jQuery(document).ready(($)  => {
             if(device.groupId !== -1) {
                 document.getElementById("groupOption" + device.groupId).selected = true;
             }
+            device.tagIds.forEach(tagId => {
+                document.getElementById("tagCheckbox" + tagId).checked = true;
+            });
         }
     });
 });

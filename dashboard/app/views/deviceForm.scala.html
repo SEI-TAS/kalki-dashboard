@@ -1,6 +1,6 @@
 @(id: String)
 
-<form id="addDeviceForm" method="post" action="@routes.DeviceController.addOrEditDevice()">
+<form id="deviceForm" method="post" action="@routes.DeviceController.addOrEditDevice()">
     @* @helper.CSRF.formField *@
 
     <input type="hidden" name="id" value="@id" />

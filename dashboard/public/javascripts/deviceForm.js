@@ -15,7 +15,7 @@ jQuery(document).ready(($)  => {
     $.get("/tags", (tags) => {
         $.each(JSON.parse(tags), (id,tag) => {
             $("#tags").append("<div class='form-check col-2'>\n" +
-                "    <input class='form-check-input' type='checkbox' id='tagCheckBox" + tag.id + "' value='" + tag.id + "'>\n" +
+                "    <input class='form-check-input' type='checkbox' id='tagCheckbox" + tag.id + "' name='tagIds[]' value='" + tag.id + "'>\n" +
                 "    <label class='form-check-label' for='tagCheckBox" + tag.id + "'>" + tag.name + "</label>\n" +
                 "</div>");
         });

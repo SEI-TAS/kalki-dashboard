@@ -55,7 +55,7 @@ public class DeviceController extends Controller {
         catch (NumberFormatException e) {
             idToInt = -1;
         }
-        return Postgres.deleteById("device", idToInt).thenApplyAsync(isSuccess -> {
+        return Postgres.deleteDevice(idToInt).thenApplyAsync(isSuccess -> {
             if(isSuccess) {
                 return ok();
             } else {
