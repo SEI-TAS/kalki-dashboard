@@ -8,7 +8,7 @@ jQuery(document).ready(($) => {
         }
         else {
             $("#name").append(device.name);
-            $("#type").append(device.type);
+            $("#type").append(device.typeId);
         }
     })
 });

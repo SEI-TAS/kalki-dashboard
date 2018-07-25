@@ -132,7 +132,6 @@ public class DeviceController extends Controller {
     public CompletionStage<Result> add(String table, String name) {
         String s = formFactory.form().bindFromRequest().get(name);
         return Postgres.addRowToTable(table, s).thenApplyAsync(n -> {
-//            return redirect(routes.DeviceController.addDevicePage());
             return ok(Integer.toString(n));
         }, ec.current());
     }

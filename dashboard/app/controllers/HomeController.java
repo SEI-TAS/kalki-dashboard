@@ -23,12 +23,6 @@ public class HomeController extends Controller {
         return ok(views.html.index.render());
     }
 
-    public Result initialize() {
-        Postgres.initialize("localhost", "5432", "kalki-db", "kalki-user", "kalki-pass");
-//        Postgres.initialize("host.docker.internal", "5432", "kalki-db", "kalki-user", "kalki-pass");
-        return ok();
-    }
-
     public CompletionStage<Result> setupDatabase() {
         return Postgres.setupDatabase().thenApplyAsync(n -> {
             return ok();

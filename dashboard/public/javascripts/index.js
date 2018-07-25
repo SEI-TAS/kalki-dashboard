@@ -15,15 +15,11 @@ jQuery(document).ready(($) => {
             });
 
             $("#deleteButton" + device.id).click(function() {
-                $.post("/delete-device", { id: device.id }, function(data, success) {
+                $.post("/delete-device", { id: device.id }, function() {
                     $("#tableRow" + device.id).remove();
                 });
             });
         });
-    });
-
-    $("#initializeButton").click(function() {
-        $.post("/initialize");
     });
 
     $("#setupDatabaseButton").click(function() {

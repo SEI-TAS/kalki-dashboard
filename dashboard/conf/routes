@@ -21,7 +21,6 @@ POST    /delete-umbox-image         controllers.UmboxController.deleteUmboxImage
 POST    /setup-database             controllers.HomeController.setupDatabase()
 POST    /reset-database             controllers.HomeController.resetDatabase()
 POST    /list-all-databases         controllers.HomeController.listAllDatabases()
-POST    /initialize                 controllers.HomeController.initialize()
 
 GET     /device                     controllers.DeviceController.getDevice(id: String ?= "")
 GET     /devices                    controllers.DeviceController.getDevices()
