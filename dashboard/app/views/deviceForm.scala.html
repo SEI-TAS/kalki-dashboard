@@ -1,6 +1,6 @@
 @(id: String)
 
-<form id="deviceForm" method="post" action="@routes.DeviceController.addOrEditDevice()">
+@helper.form(action = routes.DeviceController.addOrEditDevice(), 'enctype -> "multipart/form-data") {
     @* @helper.CSRF.formField *@
 
     <input type="hidden" name="id" value="@id" />
@@ -138,7 +138,7 @@
             <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </div>
     </div>
-</form>
+}
 
     @* New Type Modal *@
 <div class="modal fade" id="newTypeModal" tabindex="-1" role="dialog" aria-labelledby="newTypeModalLabel" aria-hidden="true">

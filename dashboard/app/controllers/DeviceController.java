@@ -2,13 +2,20 @@ package controllers;
 
 import kalkidb.models.Device;
 import kalkidb.database.Postgres;
-//import play.data.FormFactory;
+import java.lang.OutOfMemoryError;
+import java.lang.SecurityException;
+import java.io.IOException;
+import java.io.File;
+import java.nio.file.Files;
 import play.data.*;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.CompletableFuture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -39,11 +46,34 @@ public class DeviceController extends Controller {
         return ok(views.html.info.render(id));
     }
 
-    public CompletionStage<Result> addOrEditDevice() {
-        Device device = formFactory.form(Device.class).bindFromRequest().get();
-        return device.insertOrUpdate().thenApplyAsync(n -> {
-            return redirect(routes.HomeController.index());
-        }, ec.current());
+    public CompletionStage<Result> addOrEditDevice() throws Exception {
+        Form<Device> deviceForm = formFactory.form(Device.class);
+        Form<Device> filledForm = deviceForm.bindFromRequest();
+        if(filledForm.hasErrors()) {
+            return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
+        } else {
+            Device device = filledForm.get();
+            MultipartFormData<File> body = request().body().asMultipartFormData();
+            FilePart<File> policy = body.getFile("policyFile");
+            if(policy != null) {
+                String policyName = policy.getFilename();
+                String contentType = policy.getContentType();
+                File policyFile = policy.getFile();
+                byte[] policyFileBytes = null;
+                try {
+                    policyFileBytes = Files.readAllBytes(policyFile.toPath());
+                }
+                catch (IOException e) {}
+                catch (OutOfMemoryError e) {}
+                catch (SecurityException e) {}
+
+                device.setPolicyFileName(policyName);
+                device.setPolicyFile(policyFileBytes);
+            }
+            return device.insertOrUpdate().thenApplyAsync(n -> {
+                return redirect(routes.HomeController.index());
+            }, ec.current());
+        }
     }
 
     public CompletionStage<Result> deleteDevice() {
