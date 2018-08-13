@@ -47,7 +47,7 @@ jQuery(document).ready(($)  => {
         $.post("/add-tag", { tag: tagName }, function(tagId) {
             $("#newTagModal").modal('hide');
             $("#tags").append("<div class='form-check col-2'>\n" +
-                "    <input class='form-check-input' type='checkbox' id='tagCheckBox" + tagId + "' value='" + tagId + "' checked>\n" +
+                "    <input class='form-check-input' type='checkbox' id='tagCheckBox" + tagId + "' name='tagIds[]' value='" + tagId + "' checked>\n" +
                 "    <label class='form-check-label' for='tagCheckBox" + tagId + "'>" + tagName + "</label>\n" +
                 "</div>");
             document.getElementById("newTagInput").value = "";
