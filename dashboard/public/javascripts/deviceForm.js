@@ -62,4 +62,8 @@ jQuery(document).ready(($)  => {
         console.log("Discover IP")
     });
 
+    $("#policyFile").change(function () {
+        document.getElementById("policyFileLabel").innerHTML = this.value.replace(/C:\\fakepath\\/i, '');
+    });
+
 });

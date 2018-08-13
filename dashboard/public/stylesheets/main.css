@@ -132,3 +132,7 @@ select {
     -moz-appearance: menulist;
     appearance: menulist;
 }
+
+select.form-control:not([size]):not([multiple]) {
+    color: #020202;
+}
