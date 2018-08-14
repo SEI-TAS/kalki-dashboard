@@ -22,7 +22,9 @@ jQuery(document).ready(($)  => {
             device.tagIds.forEach(tagId => {
                 document.getElementById("tagCheckbox" + tagId).checked = true;
             });
-            document.getElementById("policyFileLabel").innerHTML = device.policyFileName;
+            if(device.policyFileName !== "") {
+                document.getElementById("policyFileLabel").innerHTML = device.policyFileName;
+            }
         }
     });
 });

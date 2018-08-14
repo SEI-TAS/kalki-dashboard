@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class DeviceController extends Controller {
 
@@ -67,8 +68,22 @@ public class DeviceController extends Controller {
                 catch (OutOfMemoryError e) {}
                 catch (SecurityException e) {}
 
-                device.setPolicyFileName(policyName);
-                device.setPolicyFile(policyFileBytes);
+                // Sets the policyName and policyFileBytes to be the previous values
+                // when editing a device and a new policy file is not selected.
+                // Ideally, this would not require another database query.
+                if(device.getId() != -1 && policyName.equals("")) {
+                    return Postgres.findDevice(device.getId()).thenApplyAsync(oldDevice -> {
+                        device.setPolicyFileName(oldDevice.getPolicyFileName());
+                        device.setPolicyFile(oldDevice.getPolicyFile());
+                        // Device inserts here to ensure that the insertion occurs after the policyFile and
+                        // policyFileName have been updated.
+                        device.insertOrUpdate();
+                        return redirect(routes.HomeController.index());
+                    }, ec.current());
+                } else {
+                    device.setPolicyFileName(policyName);
+                    device.setPolicyFile(policyFileBytes);
+                }
             }
             return device.insertOrUpdate().thenApplyAsync(n -> {
                 return redirect(routes.HomeController.index());
