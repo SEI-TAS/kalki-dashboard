@@ -14,4 +14,4 @@ libraryDependencies += guice
 libraryDependencies += javaJdbc
 // https://mvnrepository.com/artifact/org.postgresql/postgresql
 libraryDependencies += "org.postgresql" % "postgresql" % "42.2.2"
-libraryDependencies += "edu.cmu.sei.ttg" % "kalki-db" % "0.0.1-SNAPSHOT"
+libraryDependencies += "edu.cmu.sei.ttg" % "kalki-db" % "0.0.2-SNAPSHOT"
