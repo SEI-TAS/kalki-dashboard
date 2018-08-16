@@ -131,9 +131,7 @@ public class DeviceController extends Controller {
             try {
                 return ok(ow.writeValueAsString(devices));
             }
-            catch(JsonProcessingException e) {
-
-            }
+            catch(JsonProcessingException e) {}
             return ok();
         }, ec.current());
     }
@@ -143,9 +141,7 @@ public class DeviceController extends Controller {
             try {
                 return ok(ow.writeValueAsString(groups));
             }
-            catch(JsonProcessingException e) {
-
-            }
+            catch(JsonProcessingException e) {}
             return ok();
         }, ec.current());
     }
@@ -155,9 +151,7 @@ public class DeviceController extends Controller {
             try {
                 return ok(ow.writeValueAsString(types));
             }
-            catch(JsonProcessingException e) {
-
-            }
+            catch(JsonProcessingException e) {}
             return ok();
         }, ec.current());
     }
@@ -167,11 +161,33 @@ public class DeviceController extends Controller {
             try {
                 return ok(ow.writeValueAsString(tags));
             }
-            catch(JsonProcessingException e) {
-
-            }
+            catch(JsonProcessingException e) {}
             return ok();
         }, ec.current());
+    }
+
+    public CompletionStage<Result> getDeviceHistory(int deviceId) {
+        return Postgres.getDeviceHistory(deviceId).thenApplyAsync(deviceHistory -> {
+            try {
+                return ok(ow.writeValueAsString(deviceHistory));
+            }
+            catch(JsonProcessingException e) {}
+            return ok();
+        }, ec.current());
+    }
+
+    public CompletionStage<Result> getStateHistory(int deviceId) {
+        return Postgres.getStateHistory(deviceId).thenApplyAsync(stateHistory -> {
+            try {
+                return ok(ow.writeValueAsString(stateHistory));
+            }
+            catch(JsonProcessingException e) {}
+            return ok();
+        }, ec.current());
+    }
+
+    public Result getAlertHistory(int deviceId) {
+        return ok("[]");
     }
 
     public CompletionStage<Result> add(String table, String name) {

@@ -28,6 +28,9 @@ GET     /groups                     controllers.DeviceController.getGroups()
 GET     /types                      controllers.DeviceController.getTypes()
 GET     /tags                       controllers.DeviceController.getTags()
 GET     /umbox-images               controllers.UmboxController.getUmboxImages()
+GET     /state-history              controllers.DeviceController.getStateHistory(id: Integer ?= -1)
+GET     /device-history              controllers.DeviceController.getDeviceHistory(id: Integer ?= -1)
+GET     /alert-history              controllers.DeviceController.getAlertHistory(id: Integer ?= -1)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
