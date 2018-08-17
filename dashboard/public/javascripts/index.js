@@ -12,22 +12,28 @@ jQuery(document).ready(($) => {
 
             $.get("/state-history", { id: device.id }, function(stateHistory) {
                 let arr = JSON.parse(stateHistory);
-                if(arr.length !== 0) {
-                    document.getElementById("stateHistory" + device.id).innerHTML = JSON.stringify(arr[0]);
+                if(arr !== null && arr.length !== 0) {
+                    // This sorts the array in reverse order by timestamp
+                    arr.sort(function(a,b){ return b.timestamp - a.timestamp });
+                    document.getElementById("stateHistory" + device.id).innerHTML = arr[0].state;
                 }
             });
 
             $.get("/device-history", { id: device.id }, function(deviceHistory) {
                 let arr = JSON.parse(deviceHistory);
-                if(arr.length !== 0) {
-                    // Probably won't work
-                    document.getElementById("deviceHistory" + device.id).innerHTML = JSON.stringify(arr[0]);
+                if(arr !== null && arr.length !== 0) {
+                    // This sorts the array in reverse order by timestamp
+                    arr.sort(function(a,b){ return b.timestamp - a.timestamp });
+                    document.getElementById("deviceHistory" + device.id).innerHTML = JSON.stringify(arr[0].attributes);
                 }
             });
+
             $.get("/alert-history", { id: device.id }, function(alertHistory) {
                 let arr = JSON.parse(alertHistory);
-                if(arr.length !== 0) {
-                    document.getElementById("alertHistory" + device.id).innerHTML = JSON.stringify(arr[0]);
+                if(arr !== null && arr.length !== 0) {
+                    // This sorts the array in reverse order by timestamp
+                    arr.sort(function(a,b){ return b.timestamp - a.timestamp });
+                    document.getElementById("alertHistory" + device.id).innerHTML = arr[0].name;
                 }
             });
 

@@ -1,10 +1,10 @@
 @(id: String)
 
 @main("Device Info") {
-    <h3 id="name">Device Name: </h3>
+    <h4 id="name">Device Name: </h4>
     <h4 id="type">Type: </h4>
-    <h6 id="securityState">Security State: </h6>
-    <h6 id="policyFile">Policy File: </h6>
+    <h4 id="securityState">Security State: </h4>
+    <h4 id="policyFile">Policy File: </h4>
     <h4 id="alertHistory">Alert History: </h4>
     <table class="table">
         <thead>
@@ -14,13 +14,7 @@
                 <th>Name</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-            </tr>
-        </tbody>
+        <tbody id="alertHistoryTableBody"></tbody>
     </table>
     <h4 id="variables">Variables: </h4>
     <table class="table">
@@ -30,14 +24,9 @@
                 <th>Value</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>None</td>
-                <td>None</td>
-            </tr>
-        </tbody>
+        <tbody id="variablesTableBody"></tbody>
     </table>
-    <h6 id="securityStateFlowgraph">Security State Flowgraph: </h6>
+    @*<h4 id="securityStateFlowgraph">Security State Flowgraph: </h4>*@
 } {
     <script src="@routes.Assets.versioned("javascripts/info.js")" type="text/javascript" data-id="@id"></script>
 }
