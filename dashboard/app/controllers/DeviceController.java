@@ -1,6 +1,8 @@
 package controllers;
 
 import kalkidb.models.Device;
+import kalkidb.models.UmboxInstance;
+import kalkidb.models.AlertHistory;
 import kalkidb.database.Postgres;
 import java.lang.OutOfMemoryError;
 import java.lang.SecurityException;
@@ -19,8 +21,8 @@ import java.util.concurrent.CompletableFuture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.util.Scanner;
-import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 public class DeviceController extends Controller {
 
@@ -186,8 +188,21 @@ public class DeviceController extends Controller {
         }, ec.current());
     }
 
-    public Result getAlertHistory(int deviceId) {
-        return ok("[]");
+    public CompletionStage<Result> getAlertHistory(int deviceId) {
+        return Postgres.getUmboxInstances(deviceId).thenApplyAsync(umboxInstances -> {
+            List<String> umboxExternalIds = new ArrayList<String>();
+            for (UmboxInstance u : umboxInstances) {
+                umboxExternalIds.add(u.getUmboxExternalId());
+            }
+            // getAlertHistory is not async because Play dones't like when the return type of this method is
+            // CompletionStage<CompletionStage<Result>> apparently.
+            List<AlertHistory> alertHistory = Postgres.getAlertHistory(umboxExternalIds);
+            try {
+                return ok(ow.writeValueAsString(alertHistory));
+            }
+            catch(JsonProcessingException e) {}
+            return ok();
+        }, ec.current());
     }
 
     public CompletionStage<Result> add(String table, String name) {
