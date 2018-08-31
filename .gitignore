@@ -163,3 +163,5 @@ dashboard/target
 dashboard/tmp
 dashboard/dist
 dashboard/.cache
+dashboard/.gradle
+.idea/
