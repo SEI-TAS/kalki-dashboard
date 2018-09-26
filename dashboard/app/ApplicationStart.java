@@ -22,6 +22,8 @@ public class ApplicationStart {
 
         // Initializes the database
         Postgres.initialize("localhost", "5432", "kalkidb", "kalkiuser", "kalkipass");
-//        Postgres.initialize("host.docker.internal", "5432", "kalki-db", "kalki-user", "kalki-pass");
+        Postgres.resetDatabase();
+//        Postgres.setupDatabase();
+        //        Postgres.initialize("host.docker.internal", "5432", "kalki-db", "kalki-user", "kalki-pass");
     }
 }

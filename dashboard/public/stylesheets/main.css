@@ -136,3 +136,27 @@ select {
 select.form-control:not([size]):not([multiple]) {
     color: #020202;
 }
+
+.funcyView {
+    min-height: 400px;
+}
+
+#outputContainer {
+    border: 2px solid black;
+    height: 200px;
+    overflow: scroll;
+    background-color: #d9dbdd;
+}
+
+.outputItem {
+    display: block;
+    color: black;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+#port, #baud {
+    text-align: left;
+}

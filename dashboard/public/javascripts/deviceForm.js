@@ -21,6 +21,37 @@ jQuery(document).ready(($)  => {
         });
     });
 
+    $("#type").change(function() {
+        let typeId = document.getElementById("type").value;
+        if(typeId == 3) { //WeMo Insight selected
+            //change name to label
+            $("#name-label").text("Label");
+            $("#name").attr("placeholder", "Device Label");
+
+            //change Description to Device name
+            $("#description-label").text("Device Name");
+            $("#description").attr("placeholder", "Enter Device Name");
+
+            //disable IP field
+            $("#ipAddress").attr("disabled", true);
+            $("#ipAddress").attr("required", false);
+
+        } else {
+            //set name
+            $("#name-label").text("Name");
+            $("#name").attr("placeholder", "Name");
+
+            //set description
+            $("#description-label").text("Description");
+            $("#description").attr("placeholder", "Enter Description");
+
+            //enable IP field
+            $("#ipAddress").attr("disabled", false);
+            $("#ipAddress").attr("required", true);
+        }
+       console.log("type has changed");
+    });
+
     $("#newTypeModalForm").submit(function(e) {
         e.preventDefault();
         let typeName = document.getElementById("newTypeInput").value;
