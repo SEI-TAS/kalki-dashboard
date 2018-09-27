@@ -4,8 +4,11 @@ organization := "com.example"
 version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
+enablePlugins(DockerPlugin)
 
 scalaVersion := "2.12.4"
+
+//dockerExposedPorts in Docker := Seq(5432,9000,9443)
 
 // Allows kalki-db dependency to be found
 resolvers += Resolver.mavenLocal

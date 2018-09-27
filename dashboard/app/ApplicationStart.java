@@ -6,6 +6,7 @@ import play.Environment;
 import java.util.concurrent.CompletableFuture;
 
 import java.util.Scanner;
+import com.typesafe.config.Config;
 import kalkidb.database.Postgres;
 
 // This creates an `ApplicationStart` object once at start-up.
@@ -14,16 +15,15 @@ public class ApplicationStart {
 
     // Inject the application's Environment upon start-up and register hook(s) for shut-down.
     @Inject
-    public ApplicationStart(ApplicationLifecycle lifecycle, Environment environment) {
+    public ApplicationStart(ApplicationLifecycle lifecycle, Environment environment, Config config) {
         // Shut-down hook
         lifecycle.addStopHook( () -> {
             return CompletableFuture.completedFuture(null);
         } );
 
         // Initializes the database
-        Postgres.initialize("localhost", "5432", "kalkidb", "kalkiuser", "kalkipass");
+        Postgres.initialize(config.getString("db_host"), "5432", "kalkidb", "kalkiuser", "kalkipass");
         Postgres.resetDatabase();
 //        Postgres.setupDatabase();
-        //        Postgres.initialize("host.docker.internal", "5432", "kalki-db", "kalki-user", "kalki-pass");
     }
 }
