@@ -1,15 +1,5 @@
 # kalki-dashboard
 
-## IMPORTANT
-This project is temporarily not setup to work with docker. This will be fixed soon. The run, install `sbt` and then do
-the following:
-```
-$ ./run_postgres_container.sh
-$ cd dashboard
-$ sbt run
-```
-The project can then be viewed at `http://localhost:9000`.
-
 ## Prerequisites
 The Kalki Dashboard must be run using Docker for Mac.
 It will not run on other Docker distributions.
