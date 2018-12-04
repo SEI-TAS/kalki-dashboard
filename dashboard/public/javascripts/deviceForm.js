@@ -52,15 +52,6 @@ jQuery(document).ready(($)  => {
        console.log("type has changed");
     });
 
-    $("#newTypeModalForm").submit(function(e) {
-        e.preventDefault();
-        let typeName = document.getElementById("newTypeInput").value;
-        $.post("/add-type", { type: typeName }, function(typeId) {
-            $("#newTypeModal").modal('hide');
-            $("#type").append("<option id='typeOption" + typeId + "' value='" + typeId + "' selected>" + typeName + "</option>");
-            document.getElementById("newTypeInput").value = "";
-        });
-    });
 
     $("#newGroupModalForm").submit(function(e) {
         e.preventDefault();

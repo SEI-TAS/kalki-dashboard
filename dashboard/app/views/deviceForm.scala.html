@@ -124,15 +124,6 @@
         </div>
     </div>
 
-        @* Policy File *@
-    <div class="form-group row">
-        <label for="policyFile" class="col-2 col-form-label">Policy File</label>
-        <div class="col-2">
-            <input type="file" class="form-control-file hidden" name="policyFile" id="policyFile">
-            <label class="btn btn-light" for="policyFile" id="policyFileLabel">Select File</label>
-        </div>
-    </div>
-
         @* Submit *@
     <div class="row">
         <div class="col-2">
@@ -141,11 +132,13 @@
     </div>
 }
 
+
     @* New Type Modal *@
 <div class="modal fade" id="newTypeModal" tabindex="-1" role="dialog" aria-labelledby="newTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="newTypeModalForm" class="form">
+            @helper.form(action = routes.DeviceController.addType(), 'enctype -> "multipart/form-data") {
+            <!--<form id="newTypeModalForm" class="form">-->
                 @* @helper.CSRF.formField *@
                 <div class="modal-header">
                     <h4 class="modal-title" id="newTypeModalLabel">New Type</h4>
@@ -155,12 +148,23 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" class="form-control" placeholder="Enter Type" name="type" id="newTypeInput">
+                    @* Policy File *@
+                    <div class="form-group row">
+                        <label for="policyFile" class="col-3 col-form-label">Policy File</label>
+                        <div class="col-2">
+                            <label class="btn btn-light" for="policyFile" id="policyFileLabel">Select File</label>
+                            <input type="file" class="form-control-file hidden" name="policyFile" id="policyFile">
+                        </div>
+                    </div>
                 </div>
+
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" id="saveNewType">Save changes</button>
                 </div>
-            </form>
+            <!--</form>-->
+            }
         </div>
     </div>
 </div>

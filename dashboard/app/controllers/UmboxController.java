@@ -32,7 +32,7 @@ public class UmboxController extends Controller {
 
     public CompletionStage<Result> addUmboxImage() {
         UmboxImage u = formFactory.form(UmboxImage.class).bindFromRequest().get();
-        return Postgres.addUmboxImage(u).thenApplyAsync(n -> {
+        return Postgres.insertUmboxImage(u).thenApplyAsync(n -> {
             return redirect(routes.UmboxController.umboxSetup());
         }, ec.current());
     }
@@ -40,7 +40,7 @@ public class UmboxController extends Controller {
     public CompletionStage<Result> editUmboxImage() {
         UmboxImage u = formFactory.form(UmboxImage.class).bindFromRequest().get();
 //        String id = formFactory.form().bindFromRequest().get("id");
-        return Postgres.editUmboxImage(u).thenApplyAsync(n -> {
+        return Postgres.updateUmboxImage(u).thenApplyAsync(n -> {
             return redirect(routes.UmboxController.umboxSetup());
         }, ec.current());
     }
@@ -64,7 +64,7 @@ public class UmboxController extends Controller {
     }
 
     public CompletionStage<Result> getUmboxImages() throws Exception {
-        return Postgres.getAllUmboxImages().thenApplyAsync(list -> {
+        return Postgres.findAllUmboxImages().thenApplyAsync(list -> {
             try {
                 return ok(ow.writeValueAsString(list));
             }
