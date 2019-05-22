@@ -1,7 +1,7 @@
 package controllers;
 
 import kalkidb.models.UmboxImage;
-import kalkidb.models.UmboxContainer;
+import kalkidb.models.UmboxInstance;
 import kalkidb.database.Postgres;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;

@@ -1,13 +1,12 @@
 package controllers;
 
-import kalkidb.models.Device;
-import kalkidb.models.UmboxInstance;
-import kalkidb.models.AlertHistory;
-import kalkidb.models.Type;
+import kalkidb.models.*;
 import kalkidb.database.Postgres;
+
 import java.lang.OutOfMemoryError;
 import java.lang.SecurityException;
 import java.lang.InterruptedException;
+
 import java.io.IOException;
 import java.io.File;
 import java.nio.file.Files;
@@ -22,6 +21,8 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,9 +68,11 @@ public class DeviceController extends Controller {
         if(filledForm.hasErrors()) {
             return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
         } else {
-            Device device = filledForm.get();
-            MultipartFormData<File> body = request().body().asMultipartFormData();
-            return device.insertOrUpdate().thenApplyAsync(n -> {
+            Device d = filledForm.get();
+            // filledForm.get is not handling typeId and groupId correctly
+            // may have to map the form to the correct Device constructor that accepts the id's
+            d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate());
+            return d.insertOrUpdate().thenApplyAsync(n -> {
                 return redirect(routes.HomeController.index());
             }, ec.current());
         }
@@ -131,7 +134,7 @@ public class DeviceController extends Controller {
     }
 
     public CompletionStage<Result> getTypes() {
-        return Postgres.findAllTypes().thenApplyAsync(types -> {
+        return Postgres.findAllDeviceTypes().thenApplyAsync(types -> {
             try {
                 return ok(ow.writeValueAsString(types));
             }
@@ -151,7 +154,7 @@ public class DeviceController extends Controller {
     }
 
     public CompletionStage<Result> getDeviceHistory(int deviceId) {
-        return Postgres.findDeviceHistories(deviceId).thenApplyAsync(deviceHistory -> {
+        return Postgres.findDeviceStatuses(deviceId).thenApplyAsync(deviceHistory -> {
             try {
                 return ok(ow.writeValueAsString(deviceHistory));
             }
@@ -161,13 +164,14 @@ public class DeviceController extends Controller {
     }
 
     public CompletionStage<Result> getStateHistory(int deviceId) {
-        return Postgres.findStateHistories(deviceId).thenApplyAsync(stateHistory -> {
+        return CompletableFuture.supplyAsync(() -> {
+            DeviceSecurityState state = Postgres.findDeviceSecurityStateByDevice(deviceId);
             try {
-                return ok(ow.writeValueAsString(stateHistory));
+                return ok(ow.writeValueAsString(state));
+            } catch (JsonProcessingException e) {
             }
-            catch(JsonProcessingException e) {}
             return ok();
-        }, ec.current());
+        });
     }
 
     public CompletionStage<Result> getAlertHistory(int deviceId) {
@@ -179,7 +183,7 @@ public class DeviceController extends Controller {
             // getAlertHistory is not async because Play dones't like when the return type of this method is
             // CompletionStage<CompletionStage<Result>> apparently.
             try{
-                List<AlertHistory> alertHistory = Postgres.findAlertHistories(umboxAlerterIds).thenApplyAsync(histories ->{
+                List<Alert> alertHistory = Postgres.findAlerts(umboxAlerterIds).thenApplyAsync(histories ->{
                     return histories;
                 }).toCompletableFuture().get();
                 return ok(ow.writeValueAsString(alertHistory));
@@ -200,12 +204,25 @@ public class DeviceController extends Controller {
     }
 
     public CompletionStage<Result> addGroup() {
-        return add("device_group", "group");
+        DynamicForm filledForm = formFactory.form().bindFromRequest();
+        Group group = new Group(filledForm.get("group"));
+
+        if(filledForm.hasErrors() || group == null) {
+            return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
+        } else {
+            group.insert();
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch(Exception e) { }
+            System.out.println("GROUP ID: "+group.getId());
+            System.out.println("GROUP NAME: "+group.getName());
+            return CompletableFuture.supplyAsync(() -> { return ok(Integer.toString(group.getId())); }, ec.current());
+        }
     }
 
     public CompletionStage<Result> addType() {
         DynamicForm filledForm = formFactory.form().bindFromRequest();
-        Type type = new Type(-1, filledForm.get("type"));
+        DeviceType type = new DeviceType(-1, filledForm.get("type"));
 
         MultipartFormData<File> body = request().body().asMultipartFormData();
         FilePart<File> policy = body.getFile("policyFile");
