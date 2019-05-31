@@ -1,7 +1,7 @@
 package controllers;
 
-import kalkidb.models.*;
-import kalkidb.database.Postgres;
+import edu.cmu.sei.ttg.kalki.models.*;
+import edu.cmu.sei.ttg.kalki.database.Postgres;
 
 import java.lang.OutOfMemoryError;
 import java.lang.SecurityException;

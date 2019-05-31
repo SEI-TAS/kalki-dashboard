@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture;
 
 import java.util.Scanner;
 import com.typesafe.config.Config;
-import kalkidb.database.Postgres;
+import edu.cmu.sei.ttg.kalki.database.Postgres;
 
 // This creates an `ApplicationStart` object once at start-up.
 @Singleton

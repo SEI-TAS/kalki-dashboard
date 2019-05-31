@@ -3,7 +3,7 @@ jQuery(document).ready(($) => {
         $.each(JSON.parse(devices), (index, device) => {
             $("#dashboardTableBody").append("<tr id='tableRow" + device.id + "'>\n" +
                 "    <td><a href='/info?id=" + device.id + "' class='btn'>" + device.name + "</a></td>\n" +
-                "    <td id='stateHistory" + device.id  + "'>No State History</tdstate>\n" +
+                "    <td id='stateHistory" + device.id  + "'>No State History</td>\n" +
                 "    <td id='deviceHistory" + device.id  + "'>No Device History</td>\n" +
                 "    <td id='alertHistory" + device.id  + "'>No Alert History</td>\n" +
                 "    <td><button type='button' class='btn btn-secondary' id='editButton" + device.id + "'>Edit</button></td>\n" +

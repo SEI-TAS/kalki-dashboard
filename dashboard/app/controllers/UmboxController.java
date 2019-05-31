@@ -1,8 +1,8 @@
 package controllers;
 
-import kalkidb.models.UmboxImage;
-import kalkidb.models.UmboxInstance;
-import kalkidb.database.Postgres;
+import edu.cmu.sei.ttg.kalki.models.UmboxImage;
+import edu.cmu.sei.ttg.kalki.models.UmboxInstance;
+import edu.cmu.sei.ttg.kalki.database.Postgres;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
