@@ -8,6 +8,7 @@ GET     /add-device                 controllers.DeviceController.addDevicePage()
 GET     /edit-device                controllers.DeviceController.editDevicePage(id: String ?= "")
 GET     /umbox-setup                controllers.UmboxController.umboxSetup()
 GET     /funcy-view                 controllers.FuncyController.funcyView()
+GET     /db-management              controllers.DBManagementController.dbManagementView()
 GET     /info                       controllers.DeviceController.deviceInfo(id: String ?= "")
 
 POST    /add-or-edit-device         controllers.DeviceController.addOrEditDevice()
@@ -37,6 +38,11 @@ GET     /funcy-output               controllers.FuncyController.socket()
 GET     /state-history              controllers.DeviceController.getStateHistory(id: Integer ?= -1)
 GET     /device-history             controllers.DeviceController.getDeviceHistory(id: Integer ?= -1)
 GET     /alert-history              controllers.DeviceController.getAlertHistory(id: Integer ?= -1)
+
+GET     /alert-types                controllers.DBManagementController.getAlertTypes()
+GET     /edit-alert-type            controllers.DBManagementController.editAlertType(id: Integer ?= -1)
+POST    /add-or-update-alert-type   controllers.DBManagementController.addOrUpdateAlertType()
+POST    /delete-alert-type          controllers.DBManagementController.deleteAlertType()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

@@ -1,0 +1,52 @@
+@()
+@*Column holds the form and table displayed vertically*@
+<div class="col">
+    @helper.form(action = routes.DeviceController.addOrEditDevice()) {
+        @* Name *@
+        <div class="form-group row">
+            <label for="name" class="col-2 col-form-label">Name</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+            </div>
+        </div>
+        @* Description *@
+        <div class="form-group row">
+            <label for="description" class="col-2 col-form-label">Description</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="description"
+                name="description" placeholder="Enter Description">
+            </div>
+        </div>
+        @* Source *@
+        <div class="form-group row">
+            <label for="source" class="col-2 col-form-label">Source</label>
+            <div class="col-4">
+                <select class="form-control" id="type" name="typeId">
+                    <option id="alertTypeOption1" value="1">IoT Interface</option>
+                    <option id="alertTypeOption2" value="2">Data Node</option>
+                </select>
+            </div>
+        </div>
+        @* Submit *@
+        <div class="row">
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </div>
+        </div>
+    }
+<div class="container row" id="alertTypeTableContainer">
+    <h2>AlertType Table</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>actions</th>
+                <th>id</th>
+                <th>name</th>
+                <th>description</th>
+                <th>source</th>
+            </tr>
+        </thead>
+    <tbody id="alertTypeTableBody"></tbody>
+    </table>
+</div>
+</div>

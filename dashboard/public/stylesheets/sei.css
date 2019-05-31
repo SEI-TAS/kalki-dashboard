@@ -1008,6 +1008,7 @@ select,
     border-right: 1px solid rgba(0, 0, 0, 0.2);
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     margin: 0.5em auto 0; }
+
 .nav-item:first-child {
     border-left: 1px solid rgba(0, 0, 0, 0.2); }
 .nav-item a {
