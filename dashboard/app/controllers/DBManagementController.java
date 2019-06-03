@@ -47,7 +47,6 @@ public class DBManagementController extends Controller {
     public CompletionStage<Result> getAlertTypes() {
         return CompletableFuture.supplyAsync(() -> {
             List<AlertType> alertTypes = Postgres.findAllAlertTypes();
-            System.out.println("***********" +alertTypes.size());
             try {
                 return ok(ow.writeValueAsString(alertTypes));
             } catch (JsonProcessingException e) {
@@ -56,15 +55,36 @@ public class DBManagementController extends Controller {
         });
     }
 
-    public Result editAlertType(int id) {
+    public Result editAlertType() {
+        String id = formFactory.form().bindFromRequest().get("id");
+        int idToInt;
+        try {
+            idToInt = Integer.parseInt(id);
+        }
+        catch (NumberFormatException e) {
+            idToInt = -1;
+        }
+        this.updatingId = idToInt;
+        System.out.println("editing ID: " +idToInt);
         return ok();
-        //TODO: populate the form with the correct values and set the updating ID to the editing type
     }
 
-    public Result addOrUpdateAlertType() {
-        return ok();
-        //TODO: either create a new alertType in the db, or update an existing one based on if
-        //editAlertType had been called first
+    //TODO: make sure this works
+    public CompletionStage<Result> addOrUpdateAlertType() {
+        Form<AlertType> alertTypeForm = formFactory.form(AlertType.class);
+        Form<AlertType> filledForm = alertTypeForm.bindFromRequest();
+        if(filledForm.hasErrors()) {
+            return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
+        } else {
+            AlertType at = filledForm.get();
+            at.setId(this.updatingId);
+            this.updatingId = -1;
+            System.out.println(at.toString());
+
+            return at.insertOrUpdate().thenApplyAsync(n -> {
+                return redirect(routes.DBManagementController.dbManagementView());
+            }, ec.current());
+        }
     }
 
     public CompletionStage<Result> deleteAlertType() {
@@ -83,5 +103,11 @@ public class DBManagementController extends Controller {
                 return internalServerError();
             }
         }, ec.current());
+    }
+
+    public Result clearAlertForm() {
+        System.out.println("clearing alert form");
+        this.updatingId = -1;
+        return ok();
     }
 }

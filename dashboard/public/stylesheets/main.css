@@ -160,3 +160,32 @@ select.form-control:not([size]):not([multiple]) {
 #port, #baud {
     text-align: left;
 }
+
+
+/* -------DBManagement page styling-------- */
+
+.dbManagementView .nav-item.tab:hover {     /* give active dbManagement tabs background color */
+    background-color: transparent;
+}
+
+.dbManagementView  .nav-tabs .nav-link {    /* get rid of unwanted border on nav-tabs */
+    border: none;
+    background-color: transparent;
+}
+
+.dbManagementView  .nav-tabs .nav-link.active {     /* get rid of unwanted border on active nav-tabs */
+    color: #bb0000;     /* make selected tab text redish */
+    border: none;
+    background-color: transparent;
+}
+
+.container #alertTypeTableContainer {
+    margin-top: 20px;
+}
+
+.dbManagementView form {
+    padding: 10px;
+    border-style: outset;
+    border-width: 3px;
+    border-spacing: 15px 50px;
+}

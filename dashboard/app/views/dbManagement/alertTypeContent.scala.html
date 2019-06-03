@@ -1,7 +1,7 @@
 @()
 @*Column holds the form and table displayed vertically*@
-<div class="col">
-    @helper.form(action = routes.DeviceController.addOrEditDevice()) {
+<div class="col" id="alertTypeContent">
+    @helper.form(action = routes.DBManagementController.addOrUpdateAlertType()) {
         @* Name *@
         <div class="form-group row">
             <label for="name" class="col-2 col-form-label">Name</label>
@@ -21,9 +21,11 @@
         <div class="form-group row">
             <label for="source" class="col-2 col-form-label">Source</label>
             <div class="col-4">
-                <select class="form-control" id="type" name="typeId">
-                    <option id="alertTypeOption1" value="1">IoT Interface</option>
-                    <option id="alertTypeOption2" value="2">Data Node</option>
+                <select class="form-control" id="source" name="source">
+                    <option value="IoT Monitor">IoT Monitor</option>
+                    <option value="Data Node">Data Node</option>
+                    <option value="umbox">umbox</option>
+                    <option value="Dashboard">Dashboard</option>
                 </select>
             </div>
         </div>
@@ -32,10 +34,12 @@
             <div class="col-2">
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
         </div>
     }
-<div class="container row" id="alertTypeTableContainer">
-    <h2>AlertType Table</h2>
+<div class="container row justify-content-center" id="alertTypeTableContainer">
     <table class="table table-bordered">
         <thead>
             <tr>

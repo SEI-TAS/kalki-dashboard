@@ -6,14 +6,14 @@
     @*The tabs of the db management screen*@
     <h4>Database Management</h4>
     <ul class="nav nav-tabs">
-        <li class="active nav-item tab"><a class="nav-link" data-toggle="tab" href="#AlertTypeContent">AlertType</a></li>
+        <li class="nav-item tab"><a class="nav-link active" data-toggle="tab" href="#AlertTypeContent">AlertType</a></li>
         <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#DeviceGroupContent">DeviceGroup</a></li>
         <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#SecurityStateContent">SecurityState</a></li>
     </ul>
 
     @*The content in the db management tabs*@
     <div class="tab-content">
-        <div id="AlertTypeContent" class="tab-pane fade in active">
+        <div id="AlertTypeContent" class="tab-pane fade show active">
             @dbManagement.alertTypeContent()
         </div>
         <div id="DeviceGroupContent" class="tab-pane fade">
