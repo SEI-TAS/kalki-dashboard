@@ -16,7 +16,7 @@ jQuery(document).ready(($) => {
 
             $("#editButton" + alertType.id).click(function () {
                 $.post("/edit-alert-type", {id: alertType.id}, function () {
-                    $(window).scrollTop(0);
+                    $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
                     $("#clearFormButton").html("Cancel Edit");
                     $("#alertTypeContent .form-group #name").val($("#alertTypeTableBody #name" +alertType.id).html());
                     $("#alertTypeContent .form-group #description").val($("#alertTypeTableBody #description" +alertType.id).html());
@@ -39,5 +39,5 @@ jQuery(document).ready(($) => {
             $("#alertTypeContent .form-group #description").val("");
             $("#alertTypeContent .form-control#source").val("IoT Monitor");
         });
-    })
+    });
 });

@@ -43,7 +43,8 @@ public class DBManagementController extends Controller {
     }
 
 
-    //  AlertType methods
+    //  ===============AlertType methods===============
+
     public CompletionStage<Result> getAlertTypes() {
         return CompletableFuture.supplyAsync(() -> {
             List<AlertType> alertTypes = Postgres.findAllAlertTypes();
@@ -65,7 +66,6 @@ public class DBManagementController extends Controller {
             idToInt = -1;
         }
         this.updatingId = idToInt;
-        System.out.println("editing ID: " +idToInt);
         return ok();
     }
 
