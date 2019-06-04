@@ -1,7 +1,7 @@
 @()
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="alertTypeContent">
-    @helper.form(action = routes.DBManagementController.addOrUpdateAlertType()) {
+    @helper.form(action = routes.AlertTypeController.addOrUpdateAlertType()) {
         @* Name *@
         <div class="form-group row">
             <label for="name" class="col-2 col-form-label">Name</label>
@@ -30,9 +30,9 @@
             </div>
         </div>
         @* Submit *@
-        <div class="row">
+        <div class="row justify-content-end">
             <div class="col-2">
-                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
             </div>
             <div class="col-2">
                 <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
@@ -43,7 +43,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>actions</th>
+                <th class="fit">actions</th>
                 <th>id</th>
                 <th>name</th>
                 <th>description</th>

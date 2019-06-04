@@ -39,11 +39,17 @@ GET     /state-history              controllers.DeviceController.getStateHistory
 GET     /device-history             controllers.DeviceController.getDeviceHistory(id: Integer ?= -1)
 GET     /alert-history              controllers.DeviceController.getAlertHistory(id: Integer ?= -1)
 
-GET     /alert-types                controllers.DBManagementController.getAlertTypes()
-POST    /edit-alert-type            controllers.DBManagementController.editAlertType()
-POST    /add-or-update-alert-type   controllers.DBManagementController.addOrUpdateAlertType()
-POST    /delete-alert-type          controllers.DBManagementController.deleteAlertType()
-POST    /clear-alert-form           controllers.DBManagementController.clearAlertForm()
+GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
+POST    /edit-alert-type            controllers.AlertTypeController.editAlertType()
+POST    /add-or-update-alert-type   controllers.AlertTypeController.addOrUpdateAlertType()
+POST    /delete-alert-type          controllers.AlertTypeController.deleteAlertType()
+POST    /clear-alert-type-form      controllers.AlertTypeController.clearAlertTypeForm()
+
+GET     /device-types               controllers.DeviceTypeController.getDeviceTypes()
+POST    /edit-device-type           controllers.DeviceTypeController.editDeviceType()
+POST    /add-or-update-device-type  controllers.DeviceTypeController.addOrUpdateDeviceType()
+POST    /delete-device-type         controllers.DeviceTypeController.deleteDeviceType()
+POST    /clear-device-type-form     controllers.DeviceTypeController.clearDeviceTypeForm()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

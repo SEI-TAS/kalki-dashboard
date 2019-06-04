@@ -179,13 +179,31 @@ select.form-control:not([size]):not([multiple]) {
     background-color: transparent;
 }
 
-.container #alertTypeTableContainer {
+.dbManagementView .container {
     margin-top: 20px;
 }
 
-.dbManagementView form {
+.dbManagementView form {    /*gives some padding for the form from its border*/
     padding: 10px;
     border-style: outset;
     border-width: 3px;
     border-spacing: 15px 50px;
 }
+
+.dbManagementView table td.fit,
+.dbManagementView .table th.fit {   /*Adds the ability to have an item fit exactly into a table column */
+    white-space: nowrap;
+    width: 1%;
+}
+
+.dbManagementView .editDeleteContainer {        /* alligns the edit and delete buttons in a row */
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.dbManagementView .editDeleteContainer .btn-primary{     /* creates space between all edit and delete buttons*/
+    margin-right: 10px;
+}
+
