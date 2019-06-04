@@ -1,16 +1,25 @@
 jQuery(document).ready(($) => {
+    let deviceTypeTable = $('#deviceTypeTable').DataTable({
+        order: [[1, 'asc']],
+        columnDefs: [
+            {"orderable": false, "targets": 0}
+        ]
+    });
+
+
     $.get("/device-types", (deviceTypes) => {
         $.each(JSON.parse(deviceTypes), (index, deviceType) => {
-            $("#deviceTypeTableBody").append("<tr id='tableRow" + deviceType.id + "'>\n" +
-                "    <td class='fit'>" +
-                "        <div class='editDeleteContainer'>" +
-                "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + deviceType.id + "'>Edit</button>" +
-                "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + deviceType.id + "'>Delete</button>" +
-                "        </div>" +
-                "    </td>\n" +
-                "    <td id='id" + deviceType.id + "'>" + deviceType.id + "</td>\n" +
-                "    <td id='name" + deviceType.id + "'>" + deviceType.name + "</td>\n" +
-                "</tr>");
+            let newRow = "<tr id='tableRow" + deviceType.id + "'>\n" +
+                         "    <td class='fit'>" +
+                         "        <div class='editDeleteContainer'>" +
+                         "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + deviceType.id + "'>Edit</button>" +
+                         "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + deviceType.id + "'>Delete</button>" +
+                         "        </div>" +
+                         "    </td>\n" +
+                         "    <td class='fit' id='id" + deviceType.id + "'>" + deviceType.id + "</td>\n" +
+                         "    <td id='name" + deviceType.id + "'>" + deviceType.name + "</td>\n" +
+                         "</tr>";
+            deviceTypeTable.row.add($(newRow)).draw();
 
             $("#deviceTypeTableBody #editButton" + deviceType.id).click(function () {
                 $.post("/edit-device-type", {id: deviceType.id}, function () {
@@ -24,7 +33,7 @@ jQuery(document).ready(($) => {
             $("#deviceTypeTableBody #deleteButton" + deviceType.id).click(function () {
                 $.post("/delete-device-type", {id: deviceType.id}, function (isSuccess) {
                     if(isSuccess == "true") {
-                        $("#deviceTypeTableBody #tableRow" + deviceType.id).remove();
+                        deviceTypeTable.row("#tableRow" + deviceType.id).remove().draw();
                     }
                     else {
                         alert("delete was unsuccessful");
