@@ -57,6 +57,18 @@ POST    /add-or-update-group        controllers.GroupController.addOrUpdateGroup
 POST    /delete-group               controllers.GroupController.deleteGroup()
 POST    /clear-group-form           controllers.GroupController.clearGroupForm()
 
+GET     /security-states                controllers.SecurityStateController.getSecurityStates()
+POST    /edit-security-state            controllers.SecurityStateController.editSecurityState()
+POST    /add-or-update-security-state   controllers.SecurityStateController.addOrUpdateSecurityState()
+POST    /delete-security-state          controllers.SecurityStateController.deleteSecurityState()
+POST    /clear-security-state-form      controllers.SecurityStateController.clearSecurityStateForm()
+
+GET     /tags                       controllers.TagController.getTags()
+POST    /edit-tag                   controllers.TagController.editTag()
+POST    /add-or-update-tag          controllers.TagController.addOrUpdateTag()
+POST    /delete-tag                 controllers.TagController.deleteTag()
+POST    /clear-tag-form             controllers.TagController.clearTagForm()
+
 GET     /get-umbox-images           controllers.UmboxImageController.getUmboxImages()
 POST    /edit-umbox-image           controllers.UmboxImageController.editUmboxImage()
 POST    /add-or-update-umbox-image  controllers.UmboxImageController.addOrUpdateUmboxImage()
