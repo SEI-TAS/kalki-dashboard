@@ -57,5 +57,11 @@ POST    /add-or-update-group        controllers.GroupController.addOrUpdateGroup
 POST    /delete-group               controllers.GroupController.deleteGroup()
 POST    /clear-group-form           controllers.GroupController.clearGroupForm()
 
+GET     /security-states                controllers.SecurityStateController.getSecurityStates()
+POST    /edit-security-state            controllers.SecurityStateController.editSecurityState()
+POST    /add-or-update-security-state   controllers.SecurityStateController.addOrUpdateSecurityState()
+POST    /delete-security-state          controllers.SecurityStateController.deleteSecurityState()
+POST    /clear-security-state-form      controllers.SecurityStateController.clearSecurityStateForm()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
