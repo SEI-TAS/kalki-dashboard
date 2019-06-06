@@ -26,8 +26,7 @@ jQuery(document).ready(($) => {
 
             $("#alertTypeTableBody #editButton" + alertType.id).click(function () {
                 $.post("/edit-alert-type", {id: alertType.id}, function () {
-                    $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                    });
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                     $("#alertTypeContent #submitFormButton").html("Update");
                     $("#alertTypeContent #clearFormButton").html("Cancel Edit");
                     $("#alertTypeContent .form-group #name").val($("#alertTypeTableBody #name" + alertType.id).html());
