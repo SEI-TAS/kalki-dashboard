@@ -75,7 +75,7 @@ public class DeviceController extends Controller {
             // may have to map the form to the correct Device constructor that accepts the id's
             d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate());
             return d.insertOrUpdate().thenApplyAsync(n -> {
-                return redirect(routes.HomeController.index());
+                return redirect(routes.DBManagementController.dbManagementView());
             }, ec.current());
         }
     }
@@ -90,6 +90,7 @@ public class DeviceController extends Controller {
             idToInt = -1;
         }
         this.updatingId = idToInt;
+        System.out.println("Editing device " +this.updatingId);
         return ok();
     }
 
