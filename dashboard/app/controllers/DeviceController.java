@@ -36,6 +36,7 @@ public class DeviceController extends Controller {
     private final ObjectWriter ow;
     private boolean editPage;
     private String deviceId;
+    private int updatingId;
 
     @Inject
     public DeviceController(FormFactory formFactory, HttpExecutionContext ec) {
@@ -44,6 +45,7 @@ public class DeviceController extends Controller {
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         this.editPage = false;
         this.deviceId = "-1";
+        this.updatingId = -1;
     }
 
     public Result addDevicePage() {
@@ -78,6 +80,19 @@ public class DeviceController extends Controller {
         }
     }
 
+    public Result editDevice() {
+        String id = formFactory.form().bindFromRequest().get("id");
+        int idToInt;
+        try {
+            idToInt = Integer.parseInt(id);
+        }
+        catch (NumberFormatException e) {
+            idToInt = -1;
+        }
+        this.updatingId = idToInt;
+        return ok();
+    }
+
     public CompletionStage<Result> deleteDevice() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
@@ -88,12 +103,13 @@ public class DeviceController extends Controller {
             idToInt = -1;
         }
         return Postgres.deleteDevice(idToInt).thenApplyAsync(isSuccess -> {
-            if(isSuccess) {
-                return ok();
-            } else {
-                return internalServerError();
-            }
+            return ok(isSuccess.toString());
         }, ec.current());
+    }
+
+    public Result clearDeviceForm() {
+        this.updatingId = -1;
+        return ok();
     }
 
     public CompletionStage<Result> getDevice(String id) {

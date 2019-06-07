@@ -1,3 +1,140 @@
 @()
+@*Column holds the form and table displayed vertically*@
+<div class="col" id="deviceContent">
+    @helper.form(action = routes.DeviceController.addOrEditDevice(), 'enctype -> "multipart/form-data") {
+        <div class="form-group row">
+            @* Type *@
+            <div class="col">
+                <div class="row">
+                    <label for="type" class="col-4 col-form-label">Type</label>
+                    <div class="col-6">
+                        <select class="form-control" id="type" name="typeId">
+                            @*Populated by device.js*@
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-<h3>Device Content</h3>
+            @* Copy From Existing Device *@
+            <div class="form-group col">
+                <div class="d-flex justify-content-end">
+                    <button id="copyFromExisting" type="button" class="btn btn-light btn-block col-5">
+                        Copy from Existing Device
+                    </button>
+                </div>
+            </div>
+        </div>
+        @* Name *@
+        <div class="form-group row">
+            <label for="name" class="col-2 col-form-label" id="name-label">Name</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @* Description *@
+            <div class="col">
+                <div class="row">
+                    <label for="description" id="description-label" class="col-4 col-form-label">Description</label>
+                    <div class="col-8">
+                        <input type="text" class="form-control" id="description" name="description" placeholder="Enter Description">
+                    </div>
+                </div>
+            </div>
+
+            @* Group *@
+            <div class="col">
+                <div class="row d-flex justify-content-end">
+                    <label for="group" class="col-2 col-form-label">Group</label>
+                    <div class="col-6">
+                        <select class="form-control" id="group" name="groupId">
+                            @*Populated by device.js*@
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* IP Address *@
+        <div class="form-group row">
+            <label for="ipAddress" class="col-2 col-form-label">IP Address</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="ipAddress" name="ip" placeholder="Enter IP">
+            </div>
+            @* Discover IP*@
+            <div class="col-2">
+                <button id="discoverIp" type="button" class="btn btn-light btn-block">Discover</button>
+            </div>
+        </div>
+        @* History Size *@
+        <div class="form-group row">
+            <label for="statusHistorySize" class="col-2 col-form-label">History Size</label>
+            <div class="col-8">
+                <input type="number" min="0" max="2147483647" class="form-control" id="historySize" name="statusHistorySize" placeholder="Enter Size" required>
+                <div class="invalid-feedback">
+                    Please enter history size.
+                </div>
+            </div>
+        </div>
+        @* Sampling Rate *@
+        <div class="form-group row">
+            <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (milliseconds)</label>
+            <div class="col-8">
+                <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate" required>
+                <div class="invalid-feedback">
+                    Please enter sampling rate.
+                </div>
+            </div>
+        </div>
+        @* Security State *@
+        <div class="form-group row">
+            <label for="securityState" class="col-4 col-form-label">Security State</label>
+            <div class="col-6">
+                <select class="form-control" id="securityState" name="securityState">
+                    @*Populated by device.js*@
+                </select>
+            </div>
+        </div>
+        @* Tags *@
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Tags</label>
+            </div>
+            <div class="col-8">
+                <div id="tags" class="row">
+                    @*Populated by device.js*@
+                </div>
+            </div>
+        </div>
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
+
+<table id="deviceTable" class="table nowrap table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>actions</th>
+            <th>id</th>
+            <th>name</th>
+            <th>description</th>
+            <th>DeviceType</th>
+            <th>DeviceGroup</th>
+            <th>ip address</th>
+            <th>CurrentState</th>
+            <th>last alert</th>
+            <th>status history size</th>
+            <th>sampling rate</th>
+            <th>tags</th>
+        </tr>
+    </thead>
+    <tbody id="deviceTableBody"></tbody>
+</table>
+
+</div>
