@@ -8,8 +8,8 @@ jQuery(document).ready(($) => {
         }
         else {
             $("#name").append(device.name);
-            $("#type").append(device.typeId);
-            $("#policyFile").append(device.policyFileName);
+            $("#type").append(device.type.name);
+            $("#policyFile").append(device.type.policyFileName);
 
             $.get("/state-history", { id: device.id }, function(stateHistory) {
                 let arr = JSON.parse(stateHistory);
