@@ -1,3 +1,49 @@
 @()
+    @*Column holds the form and table displayed vertically*@
+<div class="col" id="alertConditionContent">
+    @helper.form(action = routes.AlertConditionController.addOrUpdateAlertCondition()) {
+        @* Device *@
+        <div class="form-group row">
+            <label for="device" class="col-2 col-form-label">Device</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="device" name="device" placeholder="Enter Device">
+            </div>
+        </div>
+        @* Alert Type *@
+        <div class="form-group row">
+            <label for="alertType" class="col-2 col-form-label">Alert Type</label>
+            <div class="col-4">
+                <select class="form-control" id="alertType" name="alertType">
+                </select>
+            </div>
+        </div>
+        @* variables *@
+        <div class="form-group row">
+            <label for="variables" class="col-2 col-form-label">Variables</label>
+            <div class="col-4">
+                <button type="button" id="addVariable" class="btn btn-secondary">Add Variable</button>
+            </div>
+        </div>
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
 
-<h3>AlertCondition Content</h3>
+    <table id="alertConditionTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>actions</th>
+                <th>device</th>
+                <th>alert type</th>
+            </tr>
+        </thead>
+        <tbody id="alertConditionTableBody"></tbody>
+    </table>
+
+</div>

@@ -69,5 +69,11 @@ POST    /add-or-update-tag          controllers.TagController.addOrUpdateTag()
 POST    /delete-tag                 controllers.TagController.deleteTag()
 POST    /clear-tag-form             controllers.TagController.clearTagForm()
 
+GET     /alertConditions                 controllers.AlertConditionController.getAlertConditions()
+POST    /edit-alertCondition             controllers.AlertConditionController.editAlertCondition()
+POST    /add-or-update-alertCondition    controllers.AlertConditionController.addOrUpdateAlertCondition()
+POST    /delete-alertCondition           controllers.AlertConditionController.deleteAlertCondition()
+POST    /clear-alertCondition-form       controllers.AlertConditionController.clearAlertConditionForm()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
