@@ -38,6 +38,7 @@ public class AlertConditionController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
+    /*
     public CompletionStage<Result> getAlertConditions() {
         return CompletableFuture.supplyAsync(() -> {
             List<AlertCondition> alertTypes = Postgres.findAllAlertConditions();
@@ -47,7 +48,7 @@ public class AlertConditionController extends Controller {
             }
             return ok();
         });
-    }
+    }*/
 
     public Result editAlertCondition() {
         String id = formFactory.form().bindFromRequest().get("id");

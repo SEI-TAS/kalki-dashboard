@@ -69,7 +69,7 @@ POST    /add-or-update-tag          controllers.TagController.addOrUpdateTag()
 POST    /delete-tag                 controllers.TagController.deleteTag()
 POST    /clear-tag-form             controllers.TagController.clearTagForm()
 
-GET     /alertConditions                 controllers.AlertConditionController.getAlertConditions()
+#GET     /alertConditions                 controllers.AlertConditionController.getAlertConditions()
 POST    /edit-alertCondition             controllers.AlertConditionController.editAlertCondition()
 POST    /add-or-update-alertCondition    controllers.AlertConditionController.addOrUpdateAlertCondition()
 POST    /delete-alertCondition           controllers.AlertConditionController.deleteAlertCondition()

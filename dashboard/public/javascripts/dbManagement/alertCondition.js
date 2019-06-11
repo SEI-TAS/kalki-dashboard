@@ -28,7 +28,7 @@ jQuery(document).ready(($) => {
         });
     });
 
-    $.get("/alert-conditions", (alertConditions) => {
+    /*$.get("/alert-conditions", (alertConditions) => {
         $.each(JSON.parse(alertConditions), (index, alertCondition) => {
             let newRow = "<tr id='tableRow" + alertCondition.id + "'>\n" +
                 "    <td class='fit'>" +
@@ -64,6 +64,7 @@ jQuery(document).ready(($) => {
             });
         });
     });
+     */
 
     $("#alertConditionContent #clearFormButton").click(function () {
         $.post("/clear-alert-condition-form", {}, function () {
