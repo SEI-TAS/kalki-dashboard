@@ -30,8 +30,6 @@ jQuery(document).ready(($) => {
         $("#deviceContent .form-control#type").val(typeNameToIDMap[device["type"]["name"]]);
         $("#deviceContent .form-group #name").val(device["name"]);
         $("#deviceContent .form-group #description").val(device["description"]);
-        console.log(deviceGroupName);
-        console.log(groupNameToIDMap[deviceGroupName]);
         $("#deviceContent .form-control#group").val(groupNameToIDMap[deviceGroupName]);
         $("#deviceContent .form-group #ipAddress").val(device["ip"]);
         $("#deviceContent .form-group #statusHistorySize").val(device["statusHistorySize"]);
@@ -63,13 +61,14 @@ jQuery(document).ready(($) => {
 
     //fill groups in form
     $.get("/groups", (groups) => {
+        groupNameToIDMap[""] = -1;
+        groupNameToIDMap["N/A"] = -1;
+        $("#deviceContent #group").append("<option value='-1'></option>");   //assuming this is to allow an empty group
+
         $.each(JSON.parse(groups), (id,group) => {
             groupNameToIDMap[group.name] = group.id;
             $("#deviceContent #group").append("<option id='groupOption" + group.id + "' value='" + group.id + "'>" + group.name + "</option>");
         });
-        groupNameToIDMap[""] = -1;
-        groupNameToIDMap["N/A"] = -1;
-        $("#deviceContent #group").append("<option value='-1' hidden></option>");   //assuming this is to allow an empty group
     });
 
     //fill tags in form
