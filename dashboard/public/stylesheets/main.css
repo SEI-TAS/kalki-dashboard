@@ -216,14 +216,3 @@ table.dataTable thead .sorting_desc_disabled:before {
     bottom: .5em;
 }
 
-.table-sm {
-    font-size: 10px;
-}
-
-.btn-xs {
-    padding: 0.10rem 0.25rem;
-    font-size: 0.5rem;
-    line-height: 1;
-    border-radius: 0.1rem;
-}
-

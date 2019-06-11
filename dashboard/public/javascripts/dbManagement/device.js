@@ -10,15 +10,47 @@ jQuery(document).ready(($) => {
 
     let typeNameToIDMap = {};   //map to go from deviceType name in the table to typeID in the form select
     let groupNameToIDMap = {};   //map to go from group name in the table to groupID in the form select
-    let tagNameToIDMap = {};   //map to go from tag name in the table to tagID in the form select
+    let tagIDtoNameMap = {};   //map to go from tag name in the table to tagID in the form select
+    let deviceIdToTagIdsMap = {}    //map to retrieve list of tagIds based on deviceID
 
-    function checkAllTagsOnEdit(id) {
-        let commaSeparatedString = $("#deviceContent #tags");
-        let tagList = commaSeparatedString.split(", ");
+    function checkTags(tagIds) {
+        //uncheck all tags
+        $('input:checkbox').removeAttr('checked');
 
-        taglist.forEach(tag => {
-            $('#deviceContent #formTags .form-check-input').prop( "checked", false );
+        tagIds.forEach(tagId => {
+            $('#deviceContent #formTags #tagCheckbox' +tagId).prop( "checked", true );
         })
+        $('input:checkbox#hiddenChk').prop("checked", true);
+    }
+
+    //helper function to populate the device form
+    function populateForm(device) {
+        let deviceGroup = device["group"];
+        let deviceGroupName = deviceGroup ? deviceGroup["name"] : "";
+        $("#deviceContent .form-control#type").val(typeNameToIDMap[device["type"]["name"]]);
+        $("#deviceContent .form-group #name").val(device["name"]);
+        $("#deviceContent .form-group #description").val(device["description"]);
+        console.log(deviceGroupName);
+        console.log(groupNameToIDMap[deviceGroupName]);
+        $("#deviceContent .form-control#group").val(groupNameToIDMap[deviceGroupName]);
+        $("#deviceContent .form-group #ipAddress").val(device["ip"]);
+        $("#deviceContent .form-group #statusHistorySize").val(device["statusHistorySize"]);
+        $("#deviceContent .form-group #samplingRate").val(device["samplingRate"]);
+        checkTags(device["tagIds"]);
+    }
+
+    //convert list of tagIds to comma separated names as string
+    function tagIdsToNames(tagIds) {
+        let tagNames = [];
+        tagIds.forEach((id) => {
+            tagNames = tagNames.concat(tagIDtoNameMap[id]);
+        });
+
+        return tagNames.join(", ");
+    }
+
+    function findTagIdsByDevice(id) {
+        return deviceIdToTagIdsMap[id]
     }
 
     //fill device types in form
@@ -35,39 +67,32 @@ jQuery(document).ready(($) => {
             groupNameToIDMap[group.name] = group.id;
             $("#deviceContent #group").append("<option id='groupOption" + group.id + "' value='" + group.id + "'>" + group.name + "</option>");
         });
+        groupNameToIDMap[""] = -1;
+        groupNameToIDMap["N/A"] = -1;
         $("#deviceContent #group").append("<option value='-1' hidden></option>");   //assuming this is to allow an empty group
-    });
-
-    //fill security states in form
-    $.get("/security-states", (securityStates) => {
-        $.each(JSON.parse(securityStates), (id,securityState) => {
-            $("#deviceContent #securityState").append("<option id='securityStateOption" + securityState.id + "' value='" + securityState.id + "'>\n" +
-                securityState.name + "</option>");
-        });
-        $("#deviceContent #securityState").append("<option value='-1' hidden></option>");
     });
 
     //fill tags in form
     $.get("/tags", (tags) => {
         $.each(JSON.parse(tags), (id,tag) => {
-            groupNameToIDMap[tag.name] = tag.id;
-            $("#deviceContent #formtags").append("<div class='form-check col-2'>\n" +
+            tagIDtoNameMap[tag.id] = tag.name;
+            $("#deviceContent #formTags").append("<div class='form-check col-2'>\n" +
                 "    <input class='form-check-input' type='checkbox' id='tagCheckbox" + tag.id + "' name='tagIds[]' value='" + tag.id + "'>\n" +
                 "    <label class='form-check-label' for='tagCheckBox" + tag.id + "'>" + tag.name + "</label>\n" +
                 "</div>");
         });
+        $("#deviceContent #formTags").append("<input class='form-check-input' id='hiddenChk' type='checkbox' name='tagIds[]' value='-1' hidden checked>");
     });
 
     $.get("/devices", (devices) => {
         $.each(JSON.parse(devices), (index, device) => {
             let deviceGroupName = device.group ? device.group.name : "N/A";
-            let lastAlertName = device.lastAlert ? device.lastAlert.name : "N/A";
 
             let newRow = "<tr id='tableRow" + device.id + "'>\n" +
                 "    <td class='fit'>" +
                 "        <div class='editDeleteContainer' >" +
-                "           <button type='button' class='btn btn-primary btn-xs' id='editButton" + device.id + "'>Edit</button>" +
-                "           <button type='button' class='btn btn-secondary btn-xs' id='deleteButton" + device.id + "'>Delete</button>" +
+                "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + device.id + "'>Edit</button>" +
+                "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + device.id + "'>Delete</button>" +
                 "        </div>" +
                 "    </td>\n" +
                 "    <td class='fit' id='deviceID" + device.id + "'>" + device.id + "</td>\n" +
@@ -76,33 +101,43 @@ jQuery(document).ready(($) => {
                 "    <td id='deviceType" + device.id + "'>" + device.type.name + "</td>\n" +
                 "    <td id='group" + device.id + "'>" + deviceGroupName + "</td>\n" +
                 "    <td id='ipAddress" + device.id + "'>" + device.ip + "</td>\n" +
-                "    <td id='currentState" + device.id + "'>" + device.currentState.name + "</td>\n" +
-                "    <td id='lastAlert" + device.id + "'>" + lastAlertName + "</td>\n" +
                 "    <td id='statusHistorySize" + device.id + "'>" + device.statusHistorySize + "</td>\n" +
                 "    <td id='samplingRate" + device.id + "'>" + device.samplingRate + "</td>\n" +
-                "    <td id='tags" + device.id + "'>" + device.tagIds.join(", ") + "</td>\n" +
+                "    <td id='tags" + device.id + "'>" + tagIdsToNames(device.tagIds) + "</td>\n" +
                 "</tr>"
 
             deviceTable.row.add($(newRow)).draw();
+
+            //add tagIds for this device to the map
+            deviceIdToTagIdsMap[device.id] = device.tagIds;
+
+            //Add options in copy from existing device modal
+            $("#deviceContent .form-control#deviceSelect").append("<option id='deviceSelectOption" + device.id + "' value='" + device.id + "'>\n" +
+                device.name + "</option>");
 
             $("#deviceTableBody #editButton" + device.id).click(function () {
                 $.post("/edit-device", {id: device.id}, function () {
                     $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                     $("#deviceContent #submitFormButton").html("Update");
                     $("#deviceContent #clearFormButton").html("Cancel Edit");
-                    $("#deviceContent .form-control#type").val(typeNameToIDMap[$("#deviceTableBody #deviceType" + device.id).html()]);
-                    $("#deviceContent .form-group #name").val($("#deviceTableBody #name" + device.id).html());
-                    $("#deviceContent .form-group #description").val($("#deviceTableBody #description" + device.id).html());
-                    console.log(groupNameToIDMap);
-                    console.log($("#deviceTableBody #group" + device.id).html());
-                    $("#deviceContent .form-control#group").val(groupNameToIDMap[$("#deviceTableBody #group" + device.id).html()]);
-                    $("#deviceContent .form-group #ipAddress").val($("#deviceTableBody #ipAddress" + device.id).html());
-                    $("#deviceContent .form-group #statusHistorySize").val($("#deviceTableBody #statusHistorySize" + device.id).html());
-                    $("#deviceContent .form-group #samplingRate").val($("#deviceTableBody #samplingRate" + device.id).html());
-                    $("#deviceContent .form-control#securityState").val($("#deviceTableBody #securityState" + device.id).html());
-                    checkAllTagsOnEdit(device.id);
-                    //$("#deviceContent .form-group #tags").val($("#deviceTableBody #tags" + device.id).html());
 
+                    //create device object
+                    let newDevice = {
+                        type : {
+                            name : $("#deviceTableBody #deviceType" + device.id).html()
+                        },
+                        name : $("#deviceTableBody #name" + device.id).html(),
+                        description : $("#deviceTableBody #description" + device.id).html(),
+                        group : {
+                            name : $("#deviceTableBody #group" + device.id).html()
+                        },
+                        ip : $("#deviceTableBody #ipAddress" + device.id).html(),
+                        statusHistorySize : $("#deviceTableBody #statusHistorySize" + device.id).html(),
+                        samplingRate : $("#deviceTableBody #samplingRate" + device.id).html(),
+                        tagIds : findTagIdsByDevice(device.id)
+                    }
+
+                    populateForm(newDevice);
                 });
             });
 
@@ -123,15 +158,35 @@ jQuery(document).ready(($) => {
         $.post("/clear-device-form", {}, function () {
             $("#deviceContent #submitFormButton").html("Add");
             $("#deviceContent #clearFormButton").html("Clear");
-            $("#deviceContent .form-control#type").val(1);
-            $("#deviceContent .form-group #name").val("");
-            $("#deviceContent .form-group #description").val("");
-            $("#deviceContent .form-control#group").val(1);
-            $("#deviceContent .form-group #ipAddress").val("");
-            $("#deviceContent .form-group #historySize").val("");
-            $("#deviceContent .form-group #samplingRate").val("");
-            $("#deviceContent .form-control#securityState").val(1);
-            $('#deviceContent #tags .form-check-input').prop( "checked", false );
+
+            //create device object
+            let newDevice = {
+                type : {
+                    name : ""
+                },
+                name : "",
+                description : "",
+                group : {
+                    name : ""
+                },
+                ip : "",
+                statusHistorySize : "",
+                samplingRate : "",
+                tagIds : []
+            }
+
+            populateForm(newDevice);
         });
+    });
+
+    //populate device form with information from the device copying from
+    $("#copyFromDeviceModalForm").submit(function(e) {
+        e.preventDefault();
+        let deviceId = document.getElementById("deviceSelect").value;
+        $.get("/device", { id: deviceId }, function(device) {
+            populateForm(JSON.parse(device))
+            console.log(JSON.parse(device));
+        });
+        $("#copyFromDeviceModal").modal("hide");
     });
 });
