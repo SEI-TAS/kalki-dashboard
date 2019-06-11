@@ -144,6 +144,7 @@ jQuery(document).ready(($) => {
                 $.post("/delete-device", {id: device.id}, function (isSuccess) {
                     if (isSuccess == "true") {
                         deviceTable.row("#tableRow" + device.id).remove().draw();
+                        $("#deviceSelectOption" +device.id).remove();   //remove option from copy device list
                     } else {
                         alert("delete was unsuccessful");
                     }
