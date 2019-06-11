@@ -6,8 +6,6 @@ jQuery(document).ready(($) => {
                 "    <td id='stateHistory" + device.id  + "'>No State History</td>\n" +
                 "    <td id='deviceHistory" + device.id  + "'>No Device History</td>\n" +
                 "    <td id='alertHistory" + device.id  + "'>No Alert History</td>\n" +
-                "    <td><button type='button' class='btn btn-secondary' id='editButton" + device.id + "'>Edit</button></td>\n" +
-                "    <td><button type='button' class='btn btn-secondary' id='deleteButton" + device.id + "'>Delete</button></td>\n" +
                 "</tr>");
 
             $.get("/state-history", { id: device.id }, function(stateHistory) {
@@ -36,28 +34,6 @@ jQuery(document).ready(($) => {
                     document.getElementById("alertHistory" + device.id).innerHTML = arr[0].name;
                 }
             });
-
-            $("#editButton" + device.id).click(function() {
-                $(location).prop("href","/edit-device?id=" + device.id);
-            });
-
-            $("#deleteButton" + device.id).click(function() {
-                $.post("/delete-device", { id: device.id }, function() {
-                    $("#tableRow" + device.id).remove();
-                });
-            });
         });
-    });
-
-    $("#setupDatabaseButton").click(function() {
-        $.post("/setup-database");
-    });
-
-    $("#resetDatabaseButton").click(function() {
-        $.post("/reset-database");
-    });
-
-    $("#listDatabasesButton").click(function() {
-        $.post("/list-all-databases");
     });
 });

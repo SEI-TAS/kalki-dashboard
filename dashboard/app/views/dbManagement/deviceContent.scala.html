@@ -1,7 +1,7 @@
 @()
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="deviceContent">
-    @helper.form(action = routes.DeviceController.addOrEditDevice(), 'enctype -> "multipart/form-data") {
+    @helper.form(action = routes.DeviceController.addOrUpdateDevice(), 'enctype -> "multipart/form-data") {
         <div class="form-group row">
             @* Type *@
             <div class="col">

@@ -54,7 +54,7 @@ jQuery(document).ready(($) => {
     }
 
     //fill device types in form
-    $.get("/types", (types) => {
+    $.get("/device-types", (types) => {
         $.each(JSON.parse(types), (id,type) => {
             typeNameToIDMap[type.name] = type.id;
             $("#deviceContent #type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");

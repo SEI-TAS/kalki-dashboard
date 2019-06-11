@@ -6,7 +6,7 @@ jQuery(document).ready(($) => {
         ]
     });
 
-    $.get("/get-groups", (groups) => {
+    $.get("/groups", (groups) => {
         $.each(JSON.parse(groups), (index, group) => {
             let newRow = "<tr id='tableRow" + group.id + "'>\n" +
                 "    <td class='fit'>" +
