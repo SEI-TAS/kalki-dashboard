@@ -66,9 +66,6 @@ public class AlertConditionController extends Controller {
         Form<AlertCondition> alertTypeForm = formFactory.form(AlertCondition.class);
         Form<AlertCondition> filledForm = alertTypeForm.bindFromRequest();
 
-        System.out.println(filledForm.toString());
-
-
         if(filledForm.hasErrors()) {
             return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
         } else {
@@ -76,8 +73,7 @@ public class AlertConditionController extends Controller {
             at.setId(this.updatingId);
             this.updatingId = -1;
 
-            System.out.println("trying to insert alert condition: \n" +at.toString());
-            System.out.println(at.getVariables().getClass().getName());
+            System.out.println(at.toString());
 
             return at.insertOrUpdate().thenApplyAsync(n -> {
                 return redirect(routes.DBManagementController.dbManagementView());
