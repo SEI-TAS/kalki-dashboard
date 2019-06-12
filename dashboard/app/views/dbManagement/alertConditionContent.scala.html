@@ -2,49 +2,57 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="alertConditionContent">
     @helper.form(action = routes.AlertConditionController.addOrUpdateAlertCondition()) {
-        @* Device and DeviceType Radio buttons *@
-        <div class="form-group row">
-            <div class="col-4">
-                <div class="form-check-inline">
-                    <label class="form-check-label">
-                        <input type="radio" class="form-check-input" id="deviceRadio" name="optRadio" checked>
-                        Device
-                    </label>
-                </div>
-                <div class="form-check-inline">
-                    <label class="form-check-label">
-                        <input type="radio" class="form-check-input" id="deviceTypeRadio" name="optRadio">
-                        Device Type
-                    </label>
-                </div>
-            </div>
+        @* Device and DeviceType switch *@
+        <div class="form-group row justify-content-center" id="alertConditionSwitchContainer">
+            <label class="col-1 selected" id="deviceLabel">Device</label>
+            <label class="switch">
+                <input type="checkbox" id="alertConditionSwitch">
+                <span class="slider round"></span>
+            </label>
+            <label class="col-2" id="typeLabel">Device Type</label>
         </div>
         @* Device and DeviceType select*@
         <div class="form-group row">
             <label for="deviceSelect" class="col-2 col-form-label">Select Device</label>
             <div class="col-4">
-                <select class="form-control" id="deviceSelect" name="deviceSelect"></select>
+                <select class="form-control" id="deviceSelect" name="deviceId"></select>
             </div>
 
             <label for="typeSelect" class="col-2 col-form-label" >Select Device Type</label>
             <div class="col-4">
-                <select class="form-control" id="typeSelect" name="typeSelect" disabled></select>
+                <select class="form-control" id="typeSelect" name="typeId" disabled></select>
             </div>
         </div>
         @* Alert Type *@
         <div class="form-group row">
             <label for="alertType" class="col-2 col-form-label">Alert Type</label>
             <div class="col-4">
-                <select class="form-control" id="alertType" name="alertType"></select>
+                <select class="form-control" id="alertType" name="alertTypeId"></select>
             </div>
         </div>
         @* variables *@
         <div class="form-group row">
-            <label for="variables" class="col-2 col-form-label">Variables</label>
+            <label for="variableKey" class="col-1 col-form-label">Key</label>
+            <input type="text" class="col-2 form-control" id="variableKey" placeholder="Enter Key">
+
+            <label for="variableValue" class="col-1 col-form-label">Value</label>
+            <input type="text" class="col-2 form-control" id="variableValue" placeholder="Enter Value">
+
             <div class="col-4">
-                <button type="button" id="addVariable" class="btn btn-secondary">Add Variable</button>
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addVariableButton">+</button>
             </div>
         </div>
+        @* hidden variable input *@
+        <div id="variableFormInput"></div>
+        @* Variable table *@
+        <table id="variableTable" class="table col-6">
+            <thead>
+                <th></th>
+                <th>Key</th>
+                <th>Value</th>
+            </thead>
+            <tbody id="variableTableBody"></tbody>
+        </table>
         @* Submit *@
         <div class="row justify-content-end">
             <div class="col-2">

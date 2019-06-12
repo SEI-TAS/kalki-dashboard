@@ -38,7 +38,6 @@ public class AlertConditionController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    /*
     public CompletionStage<Result> getAlertConditions() {
         return CompletableFuture.supplyAsync(() -> {
             List<AlertCondition> alertTypes = Postgres.findAllAlertConditions();
@@ -48,7 +47,7 @@ public class AlertConditionController extends Controller {
             }
             return ok();
         });
-    }*/
+    }
 
     public Result editAlertCondition() {
         String id = formFactory.form().bindFromRequest().get("id");
@@ -66,12 +65,19 @@ public class AlertConditionController extends Controller {
     public CompletionStage<Result> addOrUpdateAlertCondition() {
         Form<AlertCondition> alertTypeForm = formFactory.form(AlertCondition.class);
         Form<AlertCondition> filledForm = alertTypeForm.bindFromRequest();
+
+        System.out.println(filledForm.toString());
+
+
         if(filledForm.hasErrors()) {
             return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
         } else {
             AlertCondition at = filledForm.get();
             at.setId(this.updatingId);
             this.updatingId = -1;
+
+            System.out.println("trying to insert alert condition: \n" +at.toString());
+            System.out.println(at.getVariables().getClass().getName());
 
             return at.insertOrUpdate().thenApplyAsync(n -> {
                 return redirect(routes.DBManagementController.dbManagementView());
