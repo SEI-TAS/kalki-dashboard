@@ -58,6 +58,7 @@ public class AlertConditionController extends Controller {
         catch (NumberFormatException e) {
             idToInt = -1;
         }
+
         this.updatingId = idToInt;
         return ok();
     }
@@ -72,8 +73,6 @@ public class AlertConditionController extends Controller {
             AlertCondition at = filledForm.get();
             at.setId(this.updatingId);
             this.updatingId = -1;
-
-            System.out.println(at.toString());
 
             return at.insertOrUpdate().thenApplyAsync(n -> {
                 return redirect(routes.DBManagementController.dbManagementView());

@@ -18,11 +18,16 @@ jQuery(document).ready(($) => {
         $(this).tab('show');
         return false;
     });
+});
 
-    //clear all edits on page load
-    $(window).on('beforeunload', function(){
-        $.post("/clear-alert-type-form", {}, function () {});
-        $.post("/clear-device-type-form", {}, function () {});
-        //TODO clear all the other forms
-    });
+//clear all edits on page load
+$(window).on('load', function(){
+    $.post("/clear-alert-type-form", {}, function () {});
+    $.post("/clear-device-type-form", {}, function () {});
+    $.post("/clear-group-form", {}, function () {});
+    $.post("/clear-security-state-form", {}, function () {});
+    $.post("/clear-tag-form", {}, function () {});
+    $.post("/clear-umbox-image-form", {}, function () {});
+    $.post("/clear-device-form", {}, function () {});
+    $.post("/clear-alert-condition-form", {}, function () {});
 });

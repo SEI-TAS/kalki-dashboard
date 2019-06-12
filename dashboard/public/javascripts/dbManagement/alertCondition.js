@@ -17,6 +17,56 @@ jQuery(document).ready(($) => {
 
     let variableCounter = 0;
 
+    function makeVariablesString(variables) {
+        let resultString = "";
+        if(variables != null) {
+            Object.keys(variables).forEach( key => {
+                resultString = resultString + key + ": " +variables[key]+ "<br>";
+            });
+
+            resultString = resultString.substring(0, resultString.length - 4); //remove the last <br>
+        }
+
+        return resultString;
+    }
+
+    function addVariableRow(key, value) {
+        variableCounter++;
+        let currentCount = variableCounter;
+
+        let newRow = "<tr id='variableTableRow" + currentCount+ "'>\n" +
+            "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
+            "    <td id='key" + currentCount + "'>" + key + "</td>\n" +
+            "    <td id='value" + currentCount + "'>" + value + "</td>\n" +
+            "</tr>"
+
+        $("#variableTable").find("tbody").append($(newRow));
+
+        //add pairing to form data
+        $("#variableFormInput").append("<input type='text' id='variableInput" +currentCount+ "' name='variables["+key+"]' value='"+value+"' hidden>");
+
+        $("#variableTableBody #removeButton" + currentCount).click(function () {
+            $("#variableTableBody #variableTableRow" + currentCount).remove();
+
+            //remove pairing from form data
+            $("#variableFormInput #variableInput" +currentCount).remove()
+        });
+    }
+
+    function populateVariablesTableFromString(variablesString) {
+        if(variablesString != "") {
+            let variablesArray = variablesString.split("<br>");
+
+            variablesArray.forEach(variableString => {
+                let colonIndex = variableString.indexOf(":");
+                let key = variableString.substring(0, colonIndex);
+                let value = variableString.substring(colonIndex+2, variableString.length);
+
+                addVariableRow(key, value);
+            });
+        }
+    }
+
     $.get("/alert-types", (alertTypes) => {
         $.each(JSON.parse(alertTypes), (id, alertType) => {
             $(".form-control#alertType").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
@@ -26,7 +76,6 @@ jQuery(document).ready(($) => {
             alertTypeNametoIDMap[alertType.name] = alertType.id;
         });
         $.get("/devices", (devices) => {
-            console.log(devices);
             $.each(JSON.parse(devices), (id, device) => {
                 $(".form-control#deviceSelect").append("<option id='deviceOption" + device.id + "' value='" + device.id + "'>"
                     + device.name +
@@ -44,7 +93,7 @@ jQuery(document).ready(($) => {
                 });
                 $.get("/alert-conditions", (alertConditions) => {
                     $.each(JSON.parse(alertConditions), (index, alertCondition) => {
-                        console.log(deviceIDtoNameMap);
+
                         let newRow = "<tr id='tableRow" + alertCondition.id + "'>\n" +
                             "    <td class='fit'>" +
                             "        <div class='editDeleteContainer' >" +
@@ -54,17 +103,21 @@ jQuery(document).ready(($) => {
                             "    </td>\n" +
                             "    <td id='device" + alertCondition.id + "'>" + deviceIDtoNameMap[alertCondition.deviceId] + "</td>\n" +
                             "    <td id='alertType" + alertCondition.id + "'>" + alertTypeIDtoNameMap[alertCondition.alertTypeId] + "</td>\n" +
+                            "    <td class='fit' id='variables" + alertCondition.id + "'>" + makeVariablesString(alertCondition.variables) + "</td>\n" +
                             "</tr>"
                         alertConditionTable.row.add($(newRow)).draw();
 
                         $("#alertConditionTableBody #editButton" + alertCondition.id).click(function () {
                             $.post("/edit-alert-condition", {id: alertCondition.id}, function () {
                                 let alertTypeName = $("#alertConditionTableBody #alertType" + alertCondition.id).html();
-                                $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                                });
+                                let deviceName = $("#alertConditionTableBody #device" + alertCondition.id).html();
+
+                                $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                                 $("#alertConditionContent #submitFormButton").html("Update");
                                 $("#alertConditionContent #clearFormButton").html("Cancel Edit");
                                 $("#alertConditionContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
+                                $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
+                                populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
                             });
                         });
 
@@ -84,38 +137,13 @@ jQuery(document).ready(($) => {
     });
 
     $("#alertConditionContent #addVariableButton").click(function () {
-        variableCounter++;
-        let currentCount = variableCounter;
-
         let keyInput = $(".form-control#variableKey");
         let valueInput = $(".form-control#variableValue");
 
-        let keyInputVal = keyInput.val();
-        let valueInputVal = valueInput.val();
-
-
-
-        let newRow = "<tr id='variableTableRow" + currentCount+ "'>\n" +
-            "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
-            "    <td id='key" + currentCount + "'>" + keyInputVal + "</td>\n" +
-            "    <td id='value" + currentCount + "'>" + valueInputVal + "</td>\n" +
-            "</tr>"
-
-        $("#variableTable").find("tbody").append($(newRow));
+        addVariableRow(keyInput.val(), valueInput.val());
 
         keyInput.val("")
         valueInput.val("");
-
-        //add pairing to form data
-        $("#variableFormInput").append("<input type='text' id='variableInput" +currentCount+ "' name='variables["+keyInputVal+"]' value='"+valueInputVal+"' hidden>");
-
-        $("#variableTableBody #removeButton" + currentCount).click(function () {
-            $("#variableTableBody #variableTableRow" + currentCount).remove();
-
-            //remove pairing from form data
-            $("#variableFormInput #variableInput" +currentCount).remove()
-        });
-
     });
 
 
