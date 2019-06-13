@@ -5,7 +5,7 @@
         @* Type *@
         <div class="form-group row">
             <label for="type" class="col-2 col-form-label">Device Type</label>
-            <div class="col-6">
+            <div class="col-4">
                 <select class="form-control" id="type" name="typeId">
                     @*Populated by umboxLookup.js*@
                 </select>
@@ -14,7 +14,7 @@
         @* SecurityState *@
         <div class="form-group row">
             <label for="type" class="col-2 col-form-label">Security State</label>
-            <div class="col-6">
+            <div class="col-4">
                 <select class="form-control" id="securityState" name="securityStateId">
                     @*Populated by umboxLookup.js*@
                 </select>
@@ -25,7 +25,7 @@
             @* UmboxImage *@
             <label for="type" class="col-2 col-form-label">Umbox Image</label>
             <div class="col-3">
-                <select class="form-control" id="umboxImage" name="umboxImageId">
+                <select class="form-control" id="umboxImage">
                     @*Populated by umboxLookup.js*@
                 </select>
             </div>
@@ -33,14 +33,25 @@
             @* Order *@
             <label for="order" class="col-1 col-form-label">Order</label>
             <div class="col-1">
-                <input type="number" min="0" max="2147483647" class="form-control" id="order" name="order" value="1">
+                <input type="number" min="0" max="2147483647" class="form-control" id="order" value="1">
+            </div>
+
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addOrderButton">+</button>
             </div>
         </div>
 
-        @* umbox image to order table *@
-        <div class="form-group row">
-
-        </div>
+        @* hidden variable input *@
+        <div id="orderFormInput"></div>
+        @* Variable table *@
+        <table id="umboxImageOrderTable" class="table col-6">
+            <thead>
+                <th></th>
+                <th>Umbox Image</th>
+                <th>Order</th>
+            </thead>
+            <tbody id="umboxImageOrderTableBody"></tbody>
+        </table>
 
         @* Submit *@
         <div class="row justify-content-end">

@@ -8,6 +8,30 @@ jQuery(document).ready(($) => {
         }
     );
 
+    let umboxImageIDtoNameMap = {};
+
+    let rowCounter = 0;
+
+    function addOrderRow(umboxImageName, order) {
+        let currentCount = ++rowCounter;
+
+        let newRow = "<tr id='umboxImageOrderTableRow" + currentCount+ "'>\n" +
+            "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
+            "    <td id='umboxImage" + currentCount + "'>" + umboxImageName + "</td>\n" +
+            "    <td id='order" + currentCount + "'>" + order + "</td>\n" +
+            "</tr>"
+
+        $("#umboxImageOrderTable").find("tbody").append($(newRow));
+
+        //TODO add pairing to form data
+
+        $("#umboxImageOrderTableBody #removeButton" + currentCount).click(function () {
+            $("#umboxImageOrderTableBody #umboxImageOrderTableRow" + currentCount).remove();
+
+            //TODO remove pairing from form data
+        });
+    }
+
     //fill device types in form
     $.get("/device-types", (types) => {
         $.each(JSON.parse(types), (id, type) => {
@@ -26,6 +50,8 @@ jQuery(document).ready(($) => {
     //fill umbox images in form
     $.get("/umbox-images", (umboxImages) => {
         $.each(JSON.parse(umboxImages), (id, umboxImage) => {
+            umboxImageIDtoNameMap[umboxImage.id] = umboxImage.name;
+
             $("#umboxLookupContent #umboxImage").append("<option id='umboxImageOption" + umboxImage.id + "' value='" + umboxImage.id + "'>"
                 + umboxImage.name + "</option>");
         });
@@ -73,10 +99,19 @@ jQuery(document).ready(($) => {
         $.post("/clear-umbox-lookup-form", {}, function () {
             $("#umboxLookupContent #submitFormButton").html("Add");
             $("#umboxLookupContent #clearFormButton").html("Clear");
-            $("#umboxLookupContent .form-group #name").val("");
-            $("#umboxLookupContent .form-group #description").val("");
-            $("#umboxLookupContent .form-control#source").val("IoT Monitor");
+            //TODO clear other form fields
+            $("#alertConditionContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
         });
     });
      */
+
+    $("#umboxLookupContent #addOrderButton").click(function () {
+        let umboxImageInput = $(".form-control#umboxImage");
+        let orderInput = $(".form-control#order");
+
+        addOrderRow(umboxImageIDtoNameMap[umboxImageInput.val()], orderInput.val());
+
+        umboxImageInput.val("")
+        orderInput.val(1);
+    });
 });

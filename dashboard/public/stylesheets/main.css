@@ -216,3 +216,10 @@ table.dataTable thead .sorting_desc_disabled:before {
     bottom: .5em;
 }
 
+.btn-pill {
+    border-radius: 16px;
+}
+
+#umboxLookupContent table#umboxImageOrderTable {
+    max-width: 50%;
+}
