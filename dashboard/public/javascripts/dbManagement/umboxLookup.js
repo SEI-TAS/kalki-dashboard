@@ -68,9 +68,9 @@ jQuery(document).ready(($) => {
                 "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + umboxLookup.id + "'>Delete</button>" +
                 "        </div>" +
                 "    </td>\n" +
-                "    <td id='umboxImage" + umboxLookup.id + "'>" + umboxLookup.umboxImage.name + "</td>\n" +
                 "    <td id='deviceType" + umboxLookup.id + "'>" + umboxLookup.deviceType.name + "</td>\n" +
                 "    <td id='securityState" + umboxLookup.id + "'>" + umboxLookup.securityState.name + "</td>\n" +
+                "    <td id='umboxImage" + umboxLookup.id + "'>" + umboxLookup.umboxImage.name + "</td>\n" +
                 "    <td class='fit' id='order" + umboxLookup.id + "'>" + umboxLookup.order + "</td>\n" +
                 "</tr>"
             umboxLookupTable.row.add($(newRow)).draw();
