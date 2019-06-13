@@ -20,21 +20,26 @@
                 </select>
             </div>
         </div>
-        @* UmboxImage *@
+
         <div class="form-group row">
+            @* UmboxImage *@
             <label for="type" class="col-2 col-form-label">Umbox Image</label>
-            <div class="col-6">
+            <div class="col-3">
                 <select class="form-control" id="umboxImage" name="umboxImageId">
                     @*Populated by umboxLookup.js*@
                 </select>
             </div>
-        </div>
-        @* Order *@
-        <div class="form-group row">
-            <label for="order" class="col-2 col-form-label">Order</label>
-            <div class="col-2">
+
+            @* Order *@
+            <label for="order" class="col-1 col-form-label">Order</label>
+            <div class="col-1">
                 <input type="number" min="0" max="2147483647" class="form-control" id="order" name="order" value="1">
             </div>
+        </div>
+
+        @* umbox image to order table *@
+        <div class="form-group row">
+
         </div>
 
         @* Submit *@
