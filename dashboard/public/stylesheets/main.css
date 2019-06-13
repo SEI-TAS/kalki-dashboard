@@ -94,7 +94,8 @@ iframe {
     font-weight: bold;
     font-size: 35px;
 }
-#tab-content {
+
+.tab-content {
     padding: 10px;
 }
 

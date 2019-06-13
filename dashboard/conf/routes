@@ -4,21 +4,16 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
-GET     /umbox-setup                controllers.UmboxController.umboxSetup()
 GET     /funcy-view                 controllers.FuncyController.funcyView()
 GET     /db-management              controllers.DBManagementController.dbManagementView()
 GET     /info                       controllers.DeviceController.deviceInfo(id: String ?= "")
 
-POST    /add-umbox-submit           controllers.UmboxController.addUmboxImage()
-POST    /edit-umbox-submit          controllers.UmboxController.editUmboxImage()
-#POST    /delete-umbox-image         controllers.UmboxController.deleteUmboxImage()
 POST    /funcy-monitoring-values    controllers.FuncyController.selectMonitoringValues()
 POST    /funcy-close-stream         controllers.FuncyController.closeInputStream()
 POST    /setup-database             controllers.HomeController.setupDatabase()
 POST    /reset-database             controllers.HomeController.resetDatabase()
 POST    /list-all-databases         controllers.HomeController.listAllDatabases()
 
-GET     /umbox-images               controllers.UmboxController.getUmboxImages()
 GET     /funcy-baud-rates           controllers.FuncyController.getBaudRates()
 GET     /funcy-monitoring-values    controllers.FuncyController.getMonitoringValues()
 GET     /funcy-serial-ports         controllers.FuncyController.getAvailableSerialPorts()
@@ -57,7 +52,7 @@ POST    /add-or-update-tag          controllers.TagController.addOrUpdateTag()
 POST    /delete-tag                 controllers.TagController.deleteTag()
 POST    /clear-tag-form             controllers.TagController.clearTagForm()
 
-GET     /get-umbox-images           controllers.UmboxImageController.getUmboxImages()
+GET     /umbox-images               controllers.UmboxImageController.getUmboxImages()
 POST    /edit-umbox-image           controllers.UmboxImageController.editUmboxImage()
 POST    /add-or-update-umbox-image  controllers.UmboxImageController.addOrUpdateUmboxImage()
 POST    /delete-umbox-image         controllers.UmboxImageController.deleteUmboxImage()
