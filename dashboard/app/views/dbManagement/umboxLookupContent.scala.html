@@ -1,0 +1,64 @@
+@()
+@*Column holds the form and table displayed vertically*@
+<div class="col" id="umboxLookupContent">
+    @helper.form(action = routes.DeviceController.addOrUpdateDevice(), 'enctype -> "multipart/form-data") {
+        @* Type *@
+        <div class="form-group row">
+            <label for="type" class="col-2 col-form-label">Device Type</label>
+            <div class="col-6">
+                <select class="form-control" id="type" name="typeId">
+                    @*Populated by umboxLookup.js*@
+                </select>
+            </div>
+        </div>
+        @* SecurityState *@
+        <div class="form-group row">
+            <label for="type" class="col-2 col-form-label">Security State</label>
+            <div class="col-6">
+                <select class="form-control" id="securityState" name="securityStateId">
+                    @*Populated by umboxLookup.js*@
+                </select>
+            </div>
+        </div>
+        @* UmboxImage *@
+        <div class="form-group row">
+            <label for="type" class="col-2 col-form-label">Umbox Image</label>
+            <div class="col-6">
+                <select class="form-control" id="umboxImage" name="umboxImageId">
+                    @*Populated by umboxLookup.js*@
+                </select>
+            </div>
+        </div>
+        @* Order *@
+        <div class="form-group row">
+            <label for="order" class="col-2 col-form-label">Order</label>
+            <div class="col-2">
+                <input type="number" min="0" max="2147483647" class="form-control" id="order" name="order" value="1">
+            </div>
+        </div>
+
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
+
+<table id="umboxLookupTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>actions</th>
+            <th>umbox image</th>
+            <th>device type</th>
+            <th>security state</th>
+            <th>order</th>
+        </tr>
+    </thead>
+    <tbody id="umboxLookupTableBody"></tbody>
+</table>
+
+</div>
