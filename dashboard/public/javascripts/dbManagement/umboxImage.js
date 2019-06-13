@@ -7,7 +7,7 @@ jQuery(document).ready(($) => {
     });
 
 
-    $.get("/get-umbox-images", (umboxImages) => {
+    $.get("/umbox-images", (umboxImages) => {
         $.each(JSON.parse(umboxImages), (index, umboxImage) => {
             let newRow = "<tr id='tableRow" + umboxImage.id + "'>\n" +
                 "    <td class='fit'>" +
