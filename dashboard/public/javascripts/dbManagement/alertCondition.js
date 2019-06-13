@@ -67,6 +67,21 @@ jQuery(document).ready(($) => {
         }
     }
 
+    function disableSwitch() {
+        let selectSwitch = $("#alertConditionContent #alertConditionSwitch");
+        selectSwitch.prop("checked", false);
+        selectSwitch.prop("disabled", true);
+        $(".form-control#typeSelect").prop("disabled", true);
+        $(".form-control#deviceSelect").prop("disabled", false);
+        $("#typeLabel").removeClass("selected");
+        $("#deviceLabel").addClass("selected");
+    }
+
+    function enableSwitch() {
+        let selectSwitch = $("#alertConditionContent #alertConditionSwitch");
+        selectSwitch.prop("disabled", false);
+    }
+
     $.get("/alert-types", (alertTypes) => {
         $.each(JSON.parse(alertTypes), (id, alertType) => {
             $(".form-control#alertType").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
@@ -118,6 +133,9 @@ jQuery(document).ready(($) => {
                                 $("#alertConditionContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
                                 $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
                                 populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
+
+                                //disbable inputting device type
+                                disableSwitch();
                             });
                         });
 
@@ -176,6 +194,8 @@ jQuery(document).ready(($) => {
             $("#alertConditionContent .form-control#variableKey").val("");
             $("#alertConditionContent .form-control#variableValue").val("");
             $("#alertConditionContent #variableTable").find("tr:gt(0)").remove();   //remove all rows except header
+
+            enableSwitch();
         });
     });
 });
