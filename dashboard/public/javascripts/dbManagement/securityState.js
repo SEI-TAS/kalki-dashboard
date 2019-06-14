@@ -21,7 +21,7 @@ jQuery(document).ready(($) => {
                 "</tr>";
             securityStateTable.row.add($(newRow)).draw();
 
-            $("#securityStateTableBody #editButton" + securityState.id).click(function () {
+            securityStateTable.on("click", "#editButton" +securityState.id, function () {
                 $.post("/edit-security-state", {id: securityState.id}, function () {
                     $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
                     $("#securityStateContent #submitFormButton").html("Update");

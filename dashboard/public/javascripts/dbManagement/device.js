@@ -114,7 +114,7 @@ jQuery(document).ready(($) => {
             $("#deviceContent .form-control#deviceSelect").append("<option id='deviceSelectOption" + device.id + "' value='" + device.id + "'>\n" +
                 device.name + "</option>");
 
-            $("#deviceTableBody #editButton" + device.id).click(function () {
+            deviceTable.on("click", "#editButton" +device.id, function () {
                 $.post("/edit-device", {id: device.id}, function () {
                     $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                     $("#deviceContent #submitFormButton").html("Update");
@@ -140,7 +140,7 @@ jQuery(document).ready(($) => {
                 });
             });
 
-            $("#deviceTableBody #deleteButton" + device.id).click(function () {
+            deviceTable.on("click", "#deleteButton" +device.id, function () {
                 $.post("/delete-device", {id: device.id}, function (isSuccess) {
                     if (isSuccess == "true") {
                         deviceTable.row("#tableRow" + device.id).remove().draw();
@@ -148,7 +148,6 @@ jQuery(document).ready(($) => {
                     } else {
                         alert("delete was unsuccessful");
                     }
-
                 });
             });
         });

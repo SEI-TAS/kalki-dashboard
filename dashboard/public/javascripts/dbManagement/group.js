@@ -20,7 +20,7 @@ jQuery(document).ready(($) => {
                 "</tr>";
             groupTable.row.add($(newRow)).draw();
 
-            $("#groupTableBody #editButton" + group.id).click(function () {
+            groupTable.on("click", "#editButton" +group.id, function () {
                 $.post("/edit-group", {id: group.id}, function () {
                     $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
                     $("#groupContent #submitFormButton").html("Update");
@@ -29,7 +29,7 @@ jQuery(document).ready(($) => {
                 });
             });
 
-            $("#groupTableBody #deleteButton" + group.id).click(function () {
+            groupTable.on("click", "#deleteButton" +group.id, function () {
                 $.post("/delete-group", {id: group.id}, function (isSuccess) {
                     if(isSuccess == "true") {
                         groupTable.row("#tableRow" + group.id).remove().draw();

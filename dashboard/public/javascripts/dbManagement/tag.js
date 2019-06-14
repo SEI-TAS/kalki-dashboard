@@ -21,7 +21,7 @@ jQuery(document).ready(($) => {
                 "</tr>";
             tagTable.row.add($(newRow)).draw();
 
-            $("#tagTableBody #editButton" + tag.id).click(function () {
+            tagTable.on("click", "#editButton" +tag.id, function () {
                 $.post("/edit-tag", {id: tag.id}, function () {
                     $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
                     $("#tagContent #submitFormButton").html("Update");
@@ -30,7 +30,7 @@ jQuery(document).ready(($) => {
                 });
             });
 
-            $("#tagTableBody #deleteButton" + tag.id).click(function () {
+            tagTable.on("click", "#deleteButton" +tag.id, function () {
                 $.post("/delete-tag", {id: tag.id}, function (isSuccess) {
                     if(isSuccess == "true") {
                         tagTable.row("#tableRow" + tag.id).remove().draw();
