@@ -37,62 +37,75 @@ jQuery(document).ready(($) => {
                     $(".form-control#deviceCommandSelect").append("<option id='deviceCommandOption" + command.id + "' value='" + command.id + "'>"
                         + command.name +
                         "</option>")
-                    commandNametoIDMap[state.name] = state.id;
+                    commandNametoIDMap[command.name] = command.id;
                 });
 
-                $.get("/command-lookups", (commandLookups) => {
-                    $.each(JSON.parse(commandLookups), (index, commandLookup) => {
+                //set hidden deviceCommandName to the value of the deviceCommandSelect
+                console.log($(".form-control#deviceCommandSelect").text());
+                $("input#deviceCommandName").val($(".form-control#deviceCommandSelect").text());
 
-                        let newRow = "<tr id='tableRow" + commandLookup.id + "'>\n" +
+                $.get("/command-lookups", (commands) => {
+                    console.log(commands);
+                    $.each(JSON.parse(commands), (index, command) => {
+
+                        let newRow = "<tr id='tableRow" + command.lookupId + "'>\n" +
                             "    <td class='fit'>" +
                             "        <div class='editDeleteContainer' >" +
-                            "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + commandLookup.id + "'>Edit</button>" +
-                            "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + commandLookup.id + "'>Delete</button>" +
+                            "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + command.lookupId + "'>Edit</button>" +
+                            "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + command.lookupId + "'>Delete</button>" +
                             "        </div>" +
                             "    </td>\n" +
-                            "    <td id='deviceType" + commandLookup.id + "'>" + deviceTypeIDtoNameMap[commandLookup.deviceTypeId] + "</td>\n" +
-                            "    <td id='securityState" + commandLookup.id + "'>" + stateIDtoNameMap[commandLookup.stateId] + "</td>\n" +
-                            "    <td id='deviceCommand" + commandLookup.id + "'>" + commandLookup.name + "</td>\n" +
+                            "    <td id='deviceType" + command.lookupId + "'>" + deviceTypeIDtoNameMap[command.deviceTypeId] + "</td>\n" +
+                            "    <td id='securityState" + command.lookupId + "'>" + stateIDtoNameMap[command.stateId] + "</td>\n" +
+                            "    <td id='deviceCommand" + command.lookupId + "'>" + command.name + "</td>\n" +
                             "</tr>"
                         commandLookupTable.row.add($(newRow)).draw();
 
-                        /*
-                        $("#commandLookupTableBody #editButton" + commandLookup.id).click(function () {
-                            $.post("/edit-alert-condition", {id: commandLookup.id}, function () {
-                                let alertTypeName = $("#commandLookupTableBody #alertType" + commandLookup.id).html();
-                                let deviceName = $("#commandLookupTableBody #device" + commandLookup.id).html();
+                        commandLookupTable.on("click", "#editButton" +command.lookupId, function () {
+                            console.log("here");
+                            $.post("/edit-command-lookup", {id: command.lookupId}, function () {
+                                let deviceTypeName = $("#commandLookupTableBody #deviceType" + command.lookupId).html();
+                                let securityStateName = $("#commandLookupTableBody #securityState" + command.lookupId).html();
+                                let deviceCommandName = $("#commandLookupTableBody #deviceCommand" + command.lookupId).html();
 
                                 $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                                 $("#commandLookupContent #submitFormButton").html("Update");
                                 $("#commandLookupContent #clearFormButton").html("Cancel Edit");
-                                $("#commandLookupContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
-                                $("#commandLookupContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
+                                $("#commandLookupContent .form-control#deviceTypeSelect").val(deviceTypeNametoIDMap[deviceTypeName]).change();
+                                $("#commandLookupContent .form-control#securityStateSelect").val(stateNametoIDMap[securityStateName]).change();
+                                $("#commandLookupContent .form-control#deviceCommandSelect").val(commandNametoIDMap[deviceCommandName]).change();
+                                $("#commandLookupContent #deviceCommandName").val(deviceCommandName);
                             });
                         });
 
-                        $("#commandLookupTableBody #deleteButton" + commandLookup.id).click(function () {
-                            $.post("/delete-alert-condition", {id: commandLookup.id}, function (isSuccess) {
+                        commandLookupTable.on("click", "#deleteButton" +command.lookupId, function () {
+                            $.post("/delete-command-lookup", {id: command.lookupId}, function (isSuccess) {
                                 if (isSuccess == "true") {
-                                    commandLookupTable.row("#tableRow" + commandLookup.id).remove().draw();
+                                    commandLookupTable.row("#tableRow" + command.lookupId).remove().draw();
                                 } else {
                                     alert("delete was unsuccessful");
                                 }
                             });
                         });
-                         */
                     });
                 });
             });
         });
     });
 
+    //change hidden deviceCommandName in form when deviceCommandSelect is changed
+    $('.form-control#deviceCommandSelect').on('change', function() {
+        $("input#deviceCommandName").val(this.value);
+    });
+
     $("#commandLookupContent #clearFormButton").click(function () {
         $.post("/clear-command-lookup-form", {}, function () {
             $("#commandLookupContent #submitFormButton").html("Add");
             $("#commandLookupContent #clearFormButton").html("Clear");
-            $("#commandLookupContent .form-control#deviceTypeSelect").val("");
-            $("#commandLookupContent .form-control#securityStateSelect").val("");
-            $("#commandLookupContent .form-control#deviceCommandSelect").val("");
+            $("#commandLookupContent .form-control#deviceTypeSelect").val("").change();
+            $("#commandLookupContent .form-control#securityStateSelect").val("").change();
+            $("#commandLookupContent .form-control#deviceCommandSelect").val("").change();
+            $("#commandLookupContent #deviceCommandName").val("");
         });
     });
 });

@@ -58,7 +58,6 @@ public class CommandLookupController extends Controller {
         }, ec.current());
     }
 
-    /*
     public Result editCommandLookup() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
@@ -73,29 +72,23 @@ public class CommandLookupController extends Controller {
         return ok();
     }
 
-     */
-
-    /*
     public CompletionStage<Result> addOrUpdateCommandLookup() {
-        Form<CommandLookup> alertTypeForm = formFactory.form(CommandLookup.class);
-        Form<CommandLookup> filledForm = alertTypeForm.bindFromRequest();
+        Form<DeviceCommand> commandLookupForm = formFactory.form(DeviceCommand.class);
+        Form<DeviceCommand> filledForm = commandLookupForm.bindFromRequest();
 
         if(filledForm.hasErrors()) {
             return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
         } else {
-            CommandLookup at = filledForm.get();
-            at.setId(this.updatingId);
+            DeviceCommand cl = filledForm.get();
+            cl.setLookupId(this.updatingId);
             this.updatingId = -1;
 
-            return at.insertOrUpdate().thenApplyAsync(n -> {
+            return cl.insertOrUpdate().thenApplyAsync(n -> {
                 return redirect(routes.DBManagementController.dbManagementView());
             }, ec.current());
         }
     }
 
-     */
-
-    /*
     public CompletionStage<Result> deleteCommandLookup() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
@@ -109,7 +102,6 @@ public class CommandLookupController extends Controller {
             return ok(isSuccess.toString());
         }, ec.current());
     }
-    */
 
     public Result clearCommandLookupForm() {
         this.updatingId = -1;

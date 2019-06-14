@@ -1,7 +1,7 @@
 @()
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="commandLookupContent">
-    @helper.form(action = routes.AlertConditionController.addOrUpdateAlertCondition()) {
+    @helper.form(action = routes.CommandLookupController.addOrUpdateCommandLookup()) {
         @* DeviceType *@
         <div class="form-group row">
             <label for="deviceTypeSelect" class="col-2 col-form-label">Select Device Type</label>
@@ -20,8 +20,9 @@
         <div class="form-group row">
             <label for="deviceCommandSelect" class="col-2 col-form-label">Select Device Command</label>
             <div class="col-4">
-                <select class="form-control" id="deviceCommandSelect" name="commandId"></select>
+                <select class="form-control" id="deviceCommandSelect" name="id"></select>
             </div>
+            <input type="text" id="deviceCommandName" name="name" value="" hidden>
         </div>
         @* Submit *@
         <div class="row justify-content-end">
