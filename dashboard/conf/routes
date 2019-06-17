@@ -71,5 +71,11 @@ POST    /add-or-update-alert-condition   controllers.AlertConditionController.ad
 POST    /delete-alert-condition          controllers.AlertConditionController.deleteAlertCondition()
 POST    /clear-alert-condition-form      controllers.AlertConditionController.clearAlertConditionForm()
 
+GET     /umbox-lookups               controllers.UmboxLookupController.getUmboxLookups()
+POST    /edit-umbox-lookup           controllers.UmboxLookupController.editUmboxLookup()
+POST    /add-or-update-umbox-lookup  controllers.UmboxLookupController.addOrUpdateUmboxLookup()
+POST    /delete-umbox-lookup         controllers.UmboxLookupController.deleteUmboxLookup()
+POST    /clear-umbox-lookup-form     controllers.UmboxLookupController.clearUmboxLookupForm()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

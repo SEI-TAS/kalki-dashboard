@@ -1,12 +1,12 @@
 @()
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="umboxLookupContent">
-    @helper.form(action = routes.DeviceController.addOrUpdateDevice(), 'enctype -> "multipart/form-data") {
+    @helper.form(action = routes.UmboxLookupController.addOrUpdateUmboxLookup(), 'enctype -> "multipart/form-data") {
         @* Type *@
         <div class="form-group row">
             <label for="type" class="col-2 col-form-label">Device Type</label>
             <div class="col-4">
-                <select class="form-control" id="type" name="typeId">
+                <select class="form-control" id="type" name="deviceTypeId">
                     @*Populated by umboxLookup.js*@
                 </select>
             </div>
@@ -15,7 +15,7 @@
         <div class="form-group row">
             <label for="type" class="col-2 col-form-label">Security State</label>
             <div class="col-4">
-                <select class="form-control" id="securityState" name="securityStateId">
+                <select class="form-control" id="securityState" name="stateId">
                     @*Populated by umboxLookup.js*@
                 </select>
             </div>
@@ -41,8 +41,8 @@
             </div>
         </div>
 
-        @* hidden variable input *@
-        <div id="orderFormInput"></div>
+        @* hidden image to order input *@
+        <input type="text" id="orderFormInput" name="imageIdDagOrderMap" value="" hidden></input>
         @* Variable table *@
         <table id="umboxImageOrderTable" class="table col-6">
             <thead>
