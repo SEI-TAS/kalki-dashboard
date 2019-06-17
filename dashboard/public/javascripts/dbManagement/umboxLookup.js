@@ -11,8 +11,13 @@ jQuery(document).ready(($) => {
     let umboxImageIdDagOrderMap = {};
 
     let stateIdToNameMap = {};
+    let stateNameToIdMap = {};
+
     let deviceTypeIdToNameMap = {};
+    let deviceTypeNameToIdMap = {};
+
     let umboxImageIDtoNameMap = {};
+    let umboxImageNameToIdMap = {};
 
     let rowCounter = 0;
 
@@ -30,6 +35,8 @@ jQuery(document).ready(($) => {
         //add umbox to dag order relationship to map
         umboxImageIdDagOrderMap[umboxImageId] = order;
 
+        console.log(umboxImageIdDagOrderMap);
+
         //set hidden form input to current map
         $("#orderFormInput").val(JSON.stringify(umboxImageIdDagOrderMap));
 
@@ -41,11 +48,28 @@ jQuery(document).ready(($) => {
         });
     }
 
+    function switchToEditForm() {
+        $("#umboxImageOrderTable").hide();
+        $("#addOrderButton").hide();
+
+        $(".form-control#umboxImage").attr("name", "umboxImageId");
+        $(".form-control#order").attr("name", "dagOrder");
+    }
+
+    function switchToInsertForm() {
+        console.log("called");
+        $("#umboxImageOrderTable").show();
+        $("#addOrderButton").show();
+
+        $(".form-control#umboxImage").removeAttr("name");
+        $(".form-control#order").removeAttr("name");
+    }
+
     //fill device types in form
     $.get("/device-types", (types) => {
         $.each(JSON.parse(types), (id, type) => {
             deviceTypeIdToNameMap[type.id] = type.name;
-
+            deviceTypeNameToIdMap[type.name] = type.id;
             $("#umboxLookupContent #type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
         });
 
@@ -56,6 +80,7 @@ jQuery(document).ready(($) => {
     $.get("/security-states", (securityStates) => {
         $.each(JSON.parse(securityStates), (id, securityState) => {
             stateIdToNameMap[securityState.id] = securityState.name;
+            stateNameToIdMap[securityState.name] = securityState.id;
 
             $("#umboxLookupContent #securityState").append("<option id='securityStateOption" + securityState.id + "' value='" + securityState.id + "'>"
                 + securityState.name + "</option>");
@@ -66,6 +91,7 @@ jQuery(document).ready(($) => {
     $.get("/umbox-images", (umboxImages) => {
         $.each(JSON.parse(umboxImages), (id, umboxImage) => {
             umboxImageIDtoNameMap[umboxImage.id] = umboxImage.name;
+            umboxImageNameToIdMap[umboxImage.name] = umboxImage.id;
 
             $("#umboxLookupContent #umboxImage").append("<option id='umboxImageOption" + umboxImage.id + "' value='" + umboxImage.id + "'>"
                 + umboxImage.name + "</option>");
@@ -93,11 +119,13 @@ jQuery(document).ready(($) => {
                     $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                     $("#umboxLookupContent #submitFormButton").html("Update");
                     $("#umboxLookupContent #clearFormButton").html("Cancel Edit");
-                    $("#umboxLookupContent .form-control#type").val("");
-                    $("#umboxLookupContent .form-control#securityState").val("");
-                    $("#umboxLookupContent .form-control#umboxImage").val("");
-                    $("#umboxLookupContent form-control#order").val("");
+                    $("#umboxLookupContent .form-control#type").val(deviceTypeNameToIdMap[$("#umboxLookupTable #deviceType" +umboxLookup.id).html()]);
+                    $("#umboxLookupContent .form-control#securityState").val(stateNameToIdMap[$("#umboxLookupTable #securityState" +umboxLookup.id).html()]);
+                    $("#umboxLookupContent .form-control#umboxImage").val(umboxImageNameToIdMap[$("#umboxLookupTable #umboxImage" +umboxLookup.id).html()]);
+                    $("#umboxLookupContent form-control#order").val($("#umboxLookupTable #order" + umboxLookup.id).html());
                     $("#alertConditionContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
+
+                    switchToEditForm();
                 });
             });
 
@@ -120,8 +148,12 @@ jQuery(document).ready(($) => {
             $("#umboxLookupContent .form-control#type").val("");
             $("#umboxLookupContent .form-control#securityState").val("");
             $("#umboxLookupContent .form-control#umboxImage").val("");
-            $("#umboxLookupContent form-control#order").val("");
-            $("#alertConditionContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
+            $("#umboxLookupContent form-control#order").val($(""));
+            $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
+
+            umboxImageIdDagOrderMap = {};
+
+            switchToInsertForm();
         });
     });
 
