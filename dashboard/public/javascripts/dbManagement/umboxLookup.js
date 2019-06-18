@@ -215,15 +215,22 @@ jQuery(document).ready(($) => {
         };
     });
 
+    $('#umboxLookupContent form').on("submit", function () {
+        return false;
+    });
+
     //before submitting, ensure that an image or a dag order is not being repeated for the
     //device type and state compared to what is already in the database
-    $('#umboxLookupContent form').on("submit", function () {
+    $('#umboxLookupContent #submitFormButton').on("click", function () {
         let deviceTypeId = $("#umboxLookupContent .form-control#type").val();
         let stateId = $("#umboxLookupContent .form-control#securityState").val();
         let key = deviceTypeId.toString() + stateId.toString();
 
         let usedDagOrders = globalDeviceTypeAndStateOrderMap[key];
         let usedImageIds = globalDeviceTypeAndStateImageMap[key];
+
+        let areDupImgIds = false;
+        let areDupOrders = false;
 
         let retVal = true;
 
@@ -237,19 +244,41 @@ jQuery(document).ready(($) => {
 
         // check to ensure that orders are not repeated for the current device type and state
         if (usedDagOrders) {
+            let duplicateImageIds = new Set();
+            let duplicateOrders = new Set();
             Object.keys(currentUmboxImageIdDagOrderMap).forEach((umboxImageId) => {
                 let dagOrder = parseInt(currentUmboxImageIdDagOrderMap[umboxImageId]);
                 let imageId = parseInt(umboxImageId);
 
                 if (usedImageIds.has(imageId) && imageId != editingUmboxImageId) {
-                    alert("cannot duplicate image");
-                    retVal = false;
+                    duplicateImageIds.add(imageId);
+                    areDupImgIds = true;
                 }
                 if (usedDagOrders.has(dagOrder) && dagOrder != editingDagOrder) {
-                    alert("cannot duplicate dag order");
-                    retVal = false;
+                    duplicateOrders.add(dagOrder);
+                    areDupOrders = true;
                 }
             });
+
+            retVal = !(areDupImgIds || areDupOrders);
+            console.log(retVal);
+
+            if(retVal == false) {
+                let alertMessage = "Error adding umboxLookup:\n";
+                if(areDupImgIds) {
+                    alertMessage += "\nPlease remove duplicate umboxImages:\n";
+                    duplicateImageIds.forEach((imageId) => {
+                        alertMessage += "" +umboxImageIDtoNameMap[imageId] + "\n";
+                    });
+                }
+                if(areDupOrders) {
+                    alertMessage += "\nPlease remove duplicate orders:\n" ;
+                    duplicateOrders.forEach((order) => {
+                        alertMessage += "" +order + "\n";
+                    });
+                }
+                alert(alertMessage);
+            }
         }
 
         return retVal;
