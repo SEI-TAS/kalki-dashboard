@@ -84,7 +84,7 @@ jQuery(document).ready(($) => {
 
     $.get("/alert-types", (alertTypes) => {
         $.each(JSON.parse(alertTypes), (id, alertType) => {
-            $(".form-control#alertType").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
+            $("#alertConditionContent .form-control#alertType").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
                 + alertType.name +
                 "</option>")
             alertTypeIDtoNameMap[alertType.id] = alertType.name;
@@ -92,7 +92,7 @@ jQuery(document).ready(($) => {
         });
         $.get("/devices", (devices) => {
             $.each(JSON.parse(devices), (id, device) => {
-                $(".form-control#deviceSelect").append("<option id='deviceOption" + device.id + "' value='" + device.id + "'>"
+                $("#alertConditionContent .form-control#deviceSelect").append("<option id='deviceOption" + device.id + "' value='" + device.id + "'>"
                     + device.name +
                     "</option>")
                 deviceIDtoNameMap[device.id] = device.name;
@@ -100,7 +100,7 @@ jQuery(document).ready(($) => {
             });
             $.get("/device-types", (deviceTypes) => {
                 $.each(JSON.parse(deviceTypes), (id, deviceType) => {
-                    $(".form-control#typeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
+                    $("#alertConditionContent .form-control#typeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
                         + deviceType.name +
                         "</option>")
                     deviceTypeIDtoNameMap[deviceType.id] = deviceType.name;

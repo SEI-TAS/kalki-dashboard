@@ -184,7 +184,6 @@ jQuery(document).ready(($) => {
         let deviceId = document.getElementById("deviceSelect").value;
         $.get("/device", { id: deviceId }, function(device) {
             populateForm(JSON.parse(device))
-            console.log(JSON.parse(device));
         });
         $("#copyFromDeviceModal").modal("hide");
     });
