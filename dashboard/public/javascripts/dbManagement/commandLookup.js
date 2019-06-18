@@ -41,7 +41,6 @@ jQuery(document).ready(($) => {
                 });
 
                 //set hidden deviceCommandName to the value of the deviceCommandSelect
-                console.log($(".form-control#deviceCommandSelect").text());
                 $("input#deviceCommandName").val($(".form-control#deviceCommandSelect").text());
 
                 $.get("/command-lookups", (commands) => {
@@ -102,10 +101,10 @@ jQuery(document).ready(($) => {
         $.post("/clear-command-lookup-form", {}, function () {
             $("#commandLookupContent #submitFormButton").html("Add");
             $("#commandLookupContent #clearFormButton").html("Clear");
-            $("#commandLookupContent .form-control#deviceTypeSelect").val("").change();
-            $("#commandLookupContent .form-control#securityStateSelect").val("").change();
-            $("#commandLookupContent .form-control#deviceCommandSelect").val("").change();
-            $("#commandLookupContent #deviceCommandName").val("");
+            $("#commandLookupContent .form-control#deviceTypeSelect").val(1).change();
+            $("#commandLookupContent .form-control#securityStateSelect").val(1).change();
+            $("#commandLookupContent .form-control#deviceCommandSelect").val(1).change();
+            $("#commandLookupContent #deviceCommandName").val($(".form-control#deviceCommandSelect").text());
         });
     });
 });
