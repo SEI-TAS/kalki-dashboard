@@ -13,6 +13,10 @@ jQuery(document).ready(($) => {
 
     let currentUmboxImageIdDagOrderMap = {};
 
+    let editing = false;
+    let editingDagOrder = null;
+    let editingUmboxImageId = null;
+
     let stateIdToNameMap = {};
     let stateNameToIdMap = {};
 
@@ -127,16 +131,23 @@ jQuery(document).ready(($) => {
             umboxLookupTable.row.add($(newRow)).draw();
 
             umboxLookupTable.on("click", "#editButton" + umboxLookup.id, function () {
+                editing = true;
+
                 $.post("/edit-umbox-lookup", {id: umboxLookup.id}, function () {
-                    $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                    });
+                    let dagOrder = parseInt($("#umboxLookupTable #order" + umboxLookup.id).html());
+                    let umboxImageId = umboxImageNameToIdMap[$("#umboxLookupTable #umboxImage" + umboxLookup.id).html()];
+
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                     $("#umboxLookupContent #submitFormButton").html("Update");
                     $("#umboxLookupContent #clearFormButton").html("Cancel Edit");
                     $("#umboxLookupContent .form-control#type").val(deviceTypeNameToIdMap[$("#umboxLookupTable #deviceType" + umboxLookup.id).html()]);
                     $("#umboxLookupContent .form-control#securityState").val(stateNameToIdMap[$("#umboxLookupTable #securityState" + umboxLookup.id).html()]);
-                    $("#umboxLookupContent .form-control#umboxImage").val(umboxImageNameToIdMap[$("#umboxLookupTable #umboxImage" + umboxLookup.id).html()]);
-                    $("#umboxLookupContent form-control#order").val($("#umboxLookupTable #order" + umboxLookup.id).html());
+                    $("#umboxLookupContent .form-control#umboxImage").val(umboxImageId);
+                    $("#umboxLookupContent .form-control#order").val(dagOrder);
                     $("#alertConditionContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
+
+                    editingDagOrder = dagOrder;
+                    editingUmboxImageId = umboxImageId;
 
                     switchToEditForm();
                 });
@@ -155,6 +166,8 @@ jQuery(document).ready(($) => {
     });
 
     $("#umboxLookupContent #clearFormButton").click(function () {
+        editing = false;
+
         $.post("/clear-umbox-lookup-form", {}, function () {
             $("#umboxLookupContent #submitFormButton").html("Add");
             $("#umboxLookupContent #clearFormButton").html("Clear");
@@ -165,6 +178,8 @@ jQuery(document).ready(($) => {
             $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
 
             currentUmboxImageIdDagOrderMap = {};
+            editingDagOrder = null;
+            editingUmboxImageId = null;
 
             switchToInsertForm();
         });
@@ -180,6 +195,8 @@ jQuery(document).ready(($) => {
         orderInput.val(1);
     });
 
+    //before submitting, ensure that an image or a dag order is not being repeated for the
+    //device type and state compared to what is already in the database
     $('#umboxLookupContent form').on("submit", function () {
         let deviceTypeId = $("#umboxLookupContent .form-control#type").val();
         let stateId = $("#umboxLookupContent .form-control#securityState").val();
@@ -190,16 +207,25 @@ jQuery(document).ready(($) => {
 
         let retVal = true;
 
-        console.log(usedImageIds);
+        if(editing) {
+            let newImageId = parseInt($("#umboxLookupContent .form-control#umboxImage").val());
+            let newDagOrder = parseInt($("#umboxLookupContent .form-control#order").val());
+
+            currentUmboxImageIdDagOrderMap = {};
+            currentUmboxImageIdDagOrderMap[newImageId] = newDagOrder
+        }
 
         // check to ensure that orders are not repeated for the current device type and state
         if (usedDagOrders) {
             Object.keys(currentUmboxImageIdDagOrderMap).forEach((umboxImageId) => {
-                if (usedImageIds.has(parseInt(umboxImageId))) {
+                let dagOrder = parseInt(currentUmboxImageIdDagOrderMap[umboxImageId]);
+                let imageId = parseInt(umboxImageId);
+
+                if (usedImageIds.has(imageId) && imageId != editingUmboxImageId) {
                     alert("cannot duplicate image");
                     retVal = false;
                 }
-                if (usedDagOrders.has(parseInt(currentUmboxImageIdDagOrderMap[umboxImageId]))) {
+                if (usedDagOrders.has(dagOrder) && dagOrder != editingDagOrder) {
                     alert("cannot duplicate dag order");
                     retVal = false;
                 }
