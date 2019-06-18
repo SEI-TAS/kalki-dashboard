@@ -122,7 +122,7 @@ jQuery(document).ready(($) => {
                             "</tr>"
                         alertConditionTable.row.add($(newRow)).draw();
 
-                        $("#alertConditionTableBody #editButton" + alertCondition.id).click(function () {
+                        alertConditionTable.on("click", "#editButton" +alertCondition.id, function () {
                             $.post("/edit-alert-condition", {id: alertCondition.id}, function () {
                                 let alertTypeName = $("#alertConditionTableBody #alertType" + alertCondition.id).html();
                                 let deviceName = $("#alertConditionTableBody #device" + alertCondition.id).html();
@@ -139,7 +139,7 @@ jQuery(document).ready(($) => {
                             });
                         });
 
-                        $("#alertConditionTableBody #deleteButton" + alertCondition.id).click(function () {
+                        alertConditionTable.on("click", "#deleteButton" +alertCondition.id, function () {
                             $.post("/delete-alert-condition", {id: alertCondition.id}, function (isSuccess) {
                                 if (isSuccess == "true") {
                                     alertConditionTable.row("#tableRow" + alertCondition.id).remove().draw();

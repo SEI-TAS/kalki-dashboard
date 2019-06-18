@@ -22,7 +22,7 @@ jQuery(document).ready(($) => {
                 "</tr>";
             umboxImageTable.row.add($(newRow)).draw();
 
-            $("#umboxImageTableBody #editButton" + umboxImage.id).click(function () {
+            umboxImageTable.on("click", "#editButton" +umboxImage.id, function () {
                 $.post("/edit-umbox-image", {id: umboxImage.id}, function () {
                     $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
                     $("#umboxImageContent #submitFormButton").html("Update");
@@ -32,7 +32,7 @@ jQuery(document).ready(($) => {
                 });
             });
 
-            $("#umboxImageTableBody #deleteButton" + umboxImage.id).click(function () {
+            umboxImageTable.on("click", "#deleteButton" +umboxImage.id, function () {
                 $.post("/delete-umbox-image", {id: umboxImage.id}, function (isSuccess) {
                     if(isSuccess == "true") {
                         umboxImageTable.row("#tableRow" + umboxImage.id).remove().draw();

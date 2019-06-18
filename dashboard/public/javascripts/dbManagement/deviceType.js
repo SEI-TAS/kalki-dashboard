@@ -21,7 +21,7 @@ jQuery(document).ready(($) => {
                          "</tr>";
             deviceTypeTable.row.add($(newRow)).draw();
 
-            $("#deviceTypeTableBody #editButton" + deviceType.id).click(function () {
+            deviceTypeTable.on("click", "#editButton" +deviceType.id, function () {
                 $.post("/edit-device-type", {id: deviceType.id}, function () {
                     $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
                     $("#deviceTypeContent #submitFormButton").html("Update");
@@ -30,7 +30,7 @@ jQuery(document).ready(($) => {
                 });
             });
 
-            $("#deviceTypeTableBody #deleteButton" + deviceType.id).click(function () {
+            deviceTypeTable.on("click", "#deleteButton" +deviceType.id, function () {
                 $.post("/delete-device-type", {id: deviceType.id}, function (isSuccess) {
                     if(isSuccess == "true") {
                         deviceTypeTable.row("#tableRow" + deviceType.id).remove().draw();
