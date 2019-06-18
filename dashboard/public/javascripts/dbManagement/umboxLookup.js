@@ -1,3 +1,5 @@
+jQuery.ajaxSetup({async: false});
+
 jQuery(document).ready(($) => {
     let umboxLookupTable = $('#umboxLookupTable').DataTable(
         {
@@ -280,3 +282,5 @@ jQuery(document).ready(($) => {
         return retVal;
     });
 });
+
+jQuery.ajaxSetup({async: true});
