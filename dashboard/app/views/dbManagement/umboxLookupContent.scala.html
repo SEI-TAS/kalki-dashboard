@@ -42,7 +42,8 @@
         </div>
 
         @* hidden image to order input *@
-        <input type="text" id="orderFormInput" name="imageIdDagOrderMap" value="" hidden></input>
+        <input type="text" id="orderFormInput" name="imageIdDagOrderMap" value="" hidden required
+        oninvalid="alert('Please Add an Image and Order before Adding a UmboxLookup')">
         @* Variable table *@
         <table id="umboxImageOrderTable" class="table col-6">
             <thead>
