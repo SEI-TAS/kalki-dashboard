@@ -1,3 +1,5 @@
+jQuery.ajaxSetup({async: false});
+
 jQuery(document).ready(($) => {
     let deviceTable = $('#deviceTable').DataTable(
         {
@@ -188,3 +190,5 @@ jQuery(document).ready(($) => {
         $("#copyFromDeviceModal").modal("hide");
     });
 });
+
+jQuery.ajaxSetup({async: false});
