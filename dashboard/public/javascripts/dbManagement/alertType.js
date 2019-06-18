@@ -24,9 +24,10 @@ jQuery(document).ready(($) => {
                 "</tr>"
             alertTypeTable.row.add($(newRow)).draw();
 
-            $("#alertTypeTableBody #editButton" + alertType.id).click(function () {
+            alertTypeTable.on("click", "#editButton" + alertType.id, function () {
                 $.post("/edit-alert-type", {id: alertType.id}, function () {
-                    $('html, body').animate({scrollTop: 0}, 'fast', function () {});
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {
+                    });
                     $("#alertTypeContent #submitFormButton").html("Update");
                     $("#alertTypeContent #clearFormButton").html("Cancel Edit");
                     $("#alertTypeContent .form-group #name").val($("#alertTypeTableBody #name" + alertType.id).html());
@@ -35,7 +36,7 @@ jQuery(document).ready(($) => {
                 });
             });
 
-            $("#alertTypeTableBody #deleteButton" + alertType.id).click(function () {
+            alertTypeTable.on("click", "#deleteButton" + alertType.id, function () {
                 $.post("/delete-alert-type", {id: alertType.id}, function (isSuccess) {
                     if (isSuccess == "true") {
                         alertTypeTable.row("#tableRow" + alertType.id).remove().draw();

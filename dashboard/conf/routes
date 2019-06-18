@@ -71,6 +71,13 @@ POST    /add-or-update-alert-condition   controllers.AlertConditionController.ad
 POST    /delete-alert-condition          controllers.AlertConditionController.deleteAlertCondition()
 POST    /clear-alert-condition-form      controllers.AlertConditionController.clearAlertConditionForm()
 
+GET     /device-commands                controllers.CommandLookupController.getDeviceCommands()
+GET     /command-lookups                controllers.CommandLookupController.getCommandLookups()
+POST    /edit-command-lookup            controllers.CommandLookupController.editCommandLookup()
+POST    /add-or-update-command-lookup   controllers.CommandLookupController.addOrUpdateCommandLookup()
+POST    /delete-command-lookup          controllers.CommandLookupController.deleteCommandLookup()
+POST    /clear-command-lookup-form      controllers.CommandLookupController.clearCommandLookupForm()
+
 GET     /umbox-lookups               controllers.UmboxLookupController.getUmboxLookups()
 POST    /edit-umbox-lookup           controllers.UmboxLookupController.editUmboxLookup()
 POST    /add-or-update-umbox-lookup  controllers.UmboxLookupController.addOrUpdateUmboxLookup()
