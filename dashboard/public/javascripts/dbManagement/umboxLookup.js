@@ -29,28 +29,48 @@ jQuery(document).ready(($) => {
     let rowCounter = 0;
 
     function addOrderRow(umboxImageId, order) {
-        let currentCount = ++rowCounter;
+        let hasDuplicate = false;
+        Object.keys(currentUmboxImageIdDagOrderMap).forEach((uid) => {
+            let dagOrder = parseInt(currentUmboxImageIdDagOrderMap[uid]);
+            let imageId = parseInt(uid);
 
-        let newRow = "<tr id='umboxImageOrderTableRow" + currentCount + "'>\n" +
-            "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
-            "    <td id='umboxImage" + currentCount + "'>" + umboxImageIDtoNameMap[umboxImageId] + "</td>\n" +
-            "    <td id='order" + currentCount + "'>" + order + "</td>\n" +
-            "</tr>"
-
-        $("#umboxImageOrderTable").find("tbody").append($(newRow));
-
-        //add umbox to dag order relationship to map
-        currentUmboxImageIdDagOrderMap[umboxImageId] = order;
-
-        //set hidden form input to current map
-        $("#orderFormInput").val(JSON.stringify(currentUmboxImageIdDagOrderMap));
-
-        $("#umboxImageOrderTableBody #removeButton" + currentCount).click(function () {
-            $("#umboxImageOrderTableBody #umboxImageOrderTableRow" + currentCount).remove();
-
-            delete currentUmboxImageIdDagOrderMap[umboxImageId.toString()];
-            console.log(currentUmboxImageIdDagOrderMap);
+            if (umboxImageId == imageId) {
+                alert("cannot add duplicate image");
+                hasDuplicate = true;
+            }
+            if (dagOrder == order) {
+                alert("cannot add duplicate dag order");
+                hasDuplicate = true;
+            }
         });
+
+        if(hasDuplicate) {
+            return false;
+        } else {
+            let currentCount = ++rowCounter;
+
+            let newRow = "<tr id='umboxImageOrderTableRow" + currentCount + "'>\n" +
+                "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
+                "    <td id='umboxImage" + currentCount + "'>" + umboxImageIDtoNameMap[umboxImageId] + "</td>\n" +
+                "    <td id='order" + currentCount + "'>" + order + "</td>\n" +
+                "</tr>"
+
+            $("#umboxImageOrderTable").find("tbody").append($(newRow));
+
+            //add umbox to dag order relationship to map
+            currentUmboxImageIdDagOrderMap[umboxImageId] = order;
+
+            //set hidden form input to current map
+            $("#orderFormInput").val(JSON.stringify(currentUmboxImageIdDagOrderMap));
+
+            $("#umboxImageOrderTableBody #removeButton" + currentCount).click(function () {
+                $("#umboxImageOrderTableBody #umboxImageOrderTableRow" + currentCount).remove();
+
+                delete currentUmboxImageIdDagOrderMap[umboxImageId.toString()];
+                console.log(currentUmboxImageIdDagOrderMap);
+            });
+        }
+        return true;
     }
 
     function switchToEditForm() {
@@ -189,10 +209,10 @@ jQuery(document).ready(($) => {
         let umboxImageInput = $(".form-control#umboxImage");
         let orderInput = $(".form-control#order");
 
-        addOrderRow(umboxImageInput.val(), orderInput.val());
-
-        umboxImageInput.val("")
-        orderInput.val(1);
+        if (addOrderRow(umboxImageInput.val(), orderInput.val())) { //if the add was successful
+            umboxImageInput.val("")
+            orderInput.val(1);
+        };
     });
 
     //before submitting, ensure that an image or a dag order is not being repeated for the
