@@ -193,10 +193,10 @@ jQuery(document).ready(($) => {
         $.post("/clear-umbox-lookup-form", {}, function () {
             $("#umboxLookupContent #submitFormButton").html("Add");
             $("#umboxLookupContent #clearFormButton").html("Clear");
-            $("#umboxLookupContent .form-control#type").val("");
-            $("#umboxLookupContent .form-control#securityState").val("");
-            $("#umboxLookupContent .form-control#umboxImage").val("");
-            $("#umboxLookupContent form-control#order").val($(""));
+            $("#umboxLookupContent .form-control#type").val(1);
+            $("#umboxLookupContent .form-control#securityState").val(1);
+            $("#umboxLookupContent .form-control#umboxImage").val(1);
+            $("#umboxLookupContent .form-control#order").val(1);
             $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
 
             currentUmboxImageIdDagOrderMap = {};
