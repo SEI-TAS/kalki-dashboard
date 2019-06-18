@@ -215,13 +215,9 @@ jQuery(document).ready(($) => {
         };
     });
 
-    $('#umboxLookupContent form').on("submit", function () {
-        return false;
-    });
-
     //before submitting, ensure that an image or a dag order is not being repeated for the
     //device type and state compared to what is already in the database
-    $('#umboxLookupContent #submitFormButton').on("click", function () {
+    $('#umboxLookupContent form').on("submit", function () {
         let deviceTypeId = $("#umboxLookupContent .form-control#type").val();
         let stateId = $("#umboxLookupContent .form-control#securityState").val();
         let key = deviceTypeId.toString() + stateId.toString();
