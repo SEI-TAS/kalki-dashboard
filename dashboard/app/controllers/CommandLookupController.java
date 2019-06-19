@@ -84,7 +84,7 @@ public class CommandLookupController extends Controller {
             this.updatingId = -1;
 
             return cl.insertOrUpdate().thenApplyAsync(n -> {
-                return redirect(routes.DBManagementController.dbManagementView());
+                return redirect(routes.DBManagementController.dbManagementView(n));
             }, ec.current());
         }
     }
