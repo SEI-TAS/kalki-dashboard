@@ -5,7 +5,7 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
 GET     /funcy-view                 controllers.FuncyController.funcyView()
-GET     /db-management              controllers.DBManagementController.dbManagementView()
+GET     /db-management              controllers.DBManagementController.dbManagementView(id: Integer ?= 1)
 GET     /info                       controllers.DeviceController.deviceInfo(id: String ?= "")
 
 POST    /funcy-monitoring-values    controllers.FuncyController.selectMonitoringValues()
