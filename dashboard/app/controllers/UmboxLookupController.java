@@ -91,7 +91,7 @@ public class UmboxLookupController extends Controller {
                 for (String umboxImageId : imageIdToDagOrderMap.keySet()) {
                     String dagOrder = imageIdToDagOrderMap.get(umboxImageId);
                     UmboxLookup newLookup = new UmboxLookup(-1, stateId, deviceTypeId, Integer.parseInt(umboxImageId), Integer.parseInt(dagOrder));
-                    newLookup.insertOrUpdate();
+                    insertId = newLookup.insertOrUpdate();
                 }
             } else {  //updating with only a single image and dag order
                 ul.setId(this.updatingId);
