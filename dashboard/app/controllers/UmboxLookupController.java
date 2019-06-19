@@ -67,6 +67,7 @@ public class UmboxLookupController extends Controller {
     public Result addOrUpdateUmboxLookup() {
         Form<UmboxLookup> umboxLookupForm = formFactory.form(UmboxLookup.class);
         Form<UmboxLookup> filledForm = umboxLookupForm.bindFromRequest();
+        int insertId = -1;
         if (filledForm.hasErrors()) {
             return badRequest(views.html.form.render(filledForm));
         } else {
@@ -94,13 +95,13 @@ public class UmboxLookupController extends Controller {
                 }
             } else {  //updating with only a single image and dag order
                 ul.setId(this.updatingId);
-                ul.insertOrUpdate();
+                insertId = ul.insertOrUpdate();
             }
         }
 
         this.updatingId = -1;
 
-        return redirect(routes.DBManagementController.dbManagementView());
+        return redirect(routes.DBManagementController.dbManagementView(insertId));
     }
 
 
