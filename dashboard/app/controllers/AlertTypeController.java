@@ -73,7 +73,7 @@ public class AlertTypeController extends Controller {
             this.updatingId = -1;
 
             return at.insertOrUpdate().thenApplyAsync(n -> {
-                return redirect(routes.DBManagementController.dbManagementView());
+                return redirect(routes.DBManagementController.dbManagementView(n));
             }, ec.current());
         }
     }
