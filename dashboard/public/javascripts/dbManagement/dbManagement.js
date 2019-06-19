@@ -1,7 +1,7 @@
 //This javascript allows the page to remember what tab is was on even after page refresh
 
 jQuery(document).ready(($) => {
-    let activeTab = window.localStorage.getItem('activeTab');
+    let activeTab = window.sessionStorage.getItem('activeTab');
 
     if (activeTab) {
         $('a[href="' + activeTab + '"]').tab('show');
@@ -11,9 +11,9 @@ jQuery(document).ready(($) => {
     }
 
     $(".dbManagementView  .nav-link").click(function (e) {
-        let tab_name = this.getAttribute('href')
+        let tab_name = this.getAttribute('href');
 
-        window.localStorage.setItem('activeTab', tab_name)
+        window.sessionStorage.setItem('activeTab', tab_name);
 
         $(this).tab('show');
         return false;
@@ -30,4 +30,6 @@ $(window).on('load', function(){
     $.post("/clear-umbox-image-form", {}, function () {});
     $.post("/clear-device-form", {}, function () {});
     $.post("/clear-alert-condition-form", {}, function () {});
+    $.post("/clear-command-lookup-form", {}, function () {});
+    $.post("/clear-umbox-lookup-form", {}, function () {});
 });

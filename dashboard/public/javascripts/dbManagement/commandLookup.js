@@ -65,7 +65,6 @@ jQuery(document).ready(($) => {
             commandLookupTable.row.add($(newRow)).draw();
 
             commandLookupTable.on("click", "#editButton" + command.lookupId, function () {
-                console.log("here");
                 $.post("/edit-command-lookup", {id: command.lookupId}, function () {
                     let deviceTypeName = $("#commandLookupTableBody #deviceType" + command.lookupId).html();
                     let securityStateName = $("#commandLookupTableBody #securityState" + command.lookupId).html();

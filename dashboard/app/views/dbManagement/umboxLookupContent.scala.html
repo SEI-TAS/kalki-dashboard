@@ -1,0 +1,81 @@
+@()
+@*Column holds the form and table displayed vertically*@
+<div class="col" id="umboxLookupContent">
+    @helper.form(action = routes.UmboxLookupController.addOrUpdateUmboxLookup(), 'enctype -> "multipart/form-data") {
+        @* Type *@
+        <div class="form-group row">
+            <label for="type" class="col-2 col-form-label">Device Type</label>
+            <div class="col-4">
+                <select class="form-control" id="type" name="deviceTypeId">
+                    @*Populated by umboxLookup.js*@
+                </select>
+            </div>
+        </div>
+        @* SecurityState *@
+        <div class="form-group row">
+            <label for="type" class="col-2 col-form-label">Security State</label>
+            <div class="col-4">
+                <select class="form-control" id="securityState" name="stateId">
+                    @*Populated by umboxLookup.js*@
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @* UmboxImage *@
+            <label for="type" class="col-2 col-form-label">Umbox Image</label>
+            <div class="col-3">
+                <select class="form-control" id="umboxImage">
+                    @*Populated by umboxLookup.js*@
+                </select>
+            </div>
+
+            @* Order *@
+            <label for="order" class="col-1 col-form-label">Order</label>
+            <div class="col-1">
+                <input type="number" min="0" max="2147483647" class="form-control" id="order" value="1">
+            </div>
+
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addOrderButton">+</button>
+            </div>
+        </div>
+
+        @* hidden image to order input *@
+        <input type="text" id="orderFormInput" name="imageIdDagOrderMap" value="" hidden required
+        oninvalid="alert('Please Add an Image and Order before Adding a UmboxLookup')">
+        @* Variable table *@
+        <table id="umboxImageOrderTable" class="table col-6">
+            <thead>
+                <th></th>
+                <th>Umbox Image</th>
+                <th>Order</th>
+            </thead>
+            <tbody id="umboxImageOrderTableBody"></tbody>
+        </table>
+
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
+
+<table id="umboxLookupTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>actions</th>
+            <th>device type</th>
+            <th>security state</th>
+            <th>umbox image</th>
+            <th>order</th>
+        </tr>
+    </thead>
+    <tbody id="umboxLookupTableBody"></tbody>
+</table>
+
+</div>
