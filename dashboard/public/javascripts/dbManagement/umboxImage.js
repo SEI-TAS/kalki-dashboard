@@ -18,7 +18,7 @@ jQuery(document).ready(($) => {
                 "    </td>\n" +
                 "    <td class='fit' id='id" + umboxImage.id + "'>" + umboxImage.id + "</td>\n" +
                 "    <td id='name" + umboxImage.id + "'>" + umboxImage.name + "</td>\n" +
-                "    <td id='path" + umboxImage.id + "'>" + umboxImage.path + "</td>\n" +
+                "    <td id='fileName" + umboxImage.id + "'>" + umboxImage.fileName + "</td>\n" +
                 "</tr>";
             umboxImageTable.row.add($(newRow)).draw();
 
@@ -28,7 +28,7 @@ jQuery(document).ready(($) => {
                     $("#umboxImageContent #submitFormButton").html("Update");
                     $("#umboxImageContent #clearFormButton").html("Cancel Edit");
                     $("#umboxImageContent .form-group #name").val($("#umboxImageTableBody #name" +umboxImage.id).html());
-                    $("#umboxImageContent .form-group #path").val($("#umboxImageTableBody #path" +umboxImage.id).html());
+                    $("#umboxImageContent .form-group #fileName").val($("#umboxImageTableBody #fileName" +umboxImage.id).html());
                 });
             });
 
@@ -50,7 +50,7 @@ jQuery(document).ready(($) => {
             $("#umboxImageContent #submitFormButton").html("Add");
             $("#umboxImageContent #clearFormButton").html("Clear");
             $("#umboxImageContent .form-group #name").val("");
-            $("#umboxImageContent .form-group #path").val("");
+            $("#umboxImageContent .form-group #fileName").val("");
         });
     });
 });

@@ -2,13 +2,14 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="deviceContent">
     @helper.form(action = routes.DeviceController.addOrUpdateDevice(), 'enctype -> "multipart/form-data") {
+        <h4>Device</h4>
         <div class="form-group row">
             @* Type *@
             <div class="col">
                 <div class="row">
-                    <label for="type" class="col-4 col-form-label">Type</label>
+                    <label for="type" class="col-4 col-form-label">Type<span>*</span></label>
                     <div class="col-6">
-                        <select class="form-control" id="type" name="typeId">
+                        <select class="form-control" id="type" name="typeId" required>
                             @*Populated by device.js*@
                         </select>
                     </div>
@@ -26,7 +27,7 @@
         </div>
         @* Name *@
         <div class="form-group row">
-            <label for="name" class="col-2 col-form-label" id="name-label">Name</label>
+            <label for="name" class="col-2 col-form-label" id="name-label">Name<span>*</span></label>
             <div class="col-4">
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">
@@ -65,7 +66,7 @@
         </div>
         @* History Size *@
         <div class="form-group row">
-            <label for="statusHistorySize" class="col-2 col-form-label">History Size</label>
+            <label for="statusHistorySize" class="col-2 col-form-label">History Size<span>*</span></label>
             <div class="col-8">
                 <input type="number" min="0" max="2147483647" class="form-control" id="statusHistorySize" name="statusHistorySize" placeholder="Enter Size" required
                 oninvalid="this.setCustomValidity('Please Enter History Size')" oninput="setCustomValidity('')">
@@ -73,7 +74,7 @@
         </div>
         @* Sampling Rate *@
         <div class="form-group row">
-            <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (milliseconds)</label>
+            <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (milliseconds)<span>*</span></label>
             <div class="col-8">
                 <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate" required
                 oninvalid="this.setCustomValidity('Please Enter Sampling Rate')" oninput="setCustomValidity('')">

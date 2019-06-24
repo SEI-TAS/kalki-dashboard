@@ -2,6 +2,7 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="alertConditionContent">
     @helper.form(action = routes.AlertConditionController.addOrUpdateAlertCondition()) {
+        <h4>Alert Condition</h4>
         @* Device and DeviceType switch *@
         <div class="form-group row justify-content-center" id="alertConditionSwitchContainer">
             <label class="col-1 selected" id="deviceLabel">Device</label>
@@ -13,21 +14,21 @@
         </div>
         @* Device and DeviceType select*@
         <div class="form-group row">
-            <label for="deviceSelect" class="col-2 col-form-label">Select Device</label>
+            <label for="deviceSelect" class="col-2 col-form-label">Select Device<span>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="deviceSelect" name="deviceId"></select>
+                <select class="form-control" id="deviceSelect" name="deviceId" required></select>
             </div>
 
-            <label for="typeSelect" class="col-2 col-form-label" >Select Device Type</label>
+            <label for="typeSelect" class="col-2 col-form-label" >Select Device Type<span hidden>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="typeSelect" name="deviceTypeId" disabled></select>
+                <select class="form-control" id="typeSelect" name="deviceTypeId" disabled required></select>
             </div>
         </div>
         @* Alert Type *@
         <div class="form-group row">
-            <label for="alertType" class="col-2 col-form-label">Alert Type</label>
+            <label for="alertType" class="col-2 col-form-label">Alert Type<span>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="alertType" name="alertTypeId"></select>
+                <select class="form-control" id="alertType" name="alertTypeId" required></select>
             </div>
         </div>
         @* variables *@

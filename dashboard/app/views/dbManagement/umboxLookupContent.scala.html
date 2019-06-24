@@ -2,20 +2,21 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="umboxLookupContent">
     @helper.form(action = routes.UmboxLookupController.addOrUpdateUmboxLookup(), 'enctype -> "multipart/form-data") {
+        <h4>Umbox Lookup</h4>
         @* Type *@
         <div class="form-group row">
-            <label for="type" class="col-2 col-form-label">Device Type</label>
+            <label for="type" class="col-2 col-form-label">Device Type<span>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="type" name="deviceTypeId">
+                <select class="form-control" id="type" name="deviceTypeId" required>
                     @*Populated by umboxLookup.js*@
                 </select>
             </div>
         </div>
         @* SecurityState *@
         <div class="form-group row">
-            <label for="type" class="col-2 col-form-label">Security State</label>
+            <label for="type" class="col-2 col-form-label">Security State<span>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="securityState" name="stateId">
+                <select class="form-control" id="securityState" name="stateId" required>
                     @*Populated by umboxLookup.js*@
                 </select>
             </div>
@@ -48,8 +49,8 @@
         <table id="umboxImageOrderTable" class="table col-6">
             <thead>
                 <th></th>
-                <th>Umbox Image</th>
-                <th>Order</th>
+                <th>Umbox Image<span>*</span></th>
+                <th>Order<span>*</span></th>
             </thead>
             <tbody id="umboxImageOrderTableBody"></tbody>
         </table>

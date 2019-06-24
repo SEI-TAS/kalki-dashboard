@@ -77,11 +77,28 @@ jQuery(document).ready(($) => {
         $(".form-control#deviceSelect").prop("disabled", false);
         $("#typeLabel").removeClass("selected");
         $("#deviceLabel").addClass("selected");
+
+        //make sure the asterisk is present
+        $("#alertConditionContent label[for='deviceSelect'] span").prop("hidden", false);
+        $("#alertConditionContent label[for='typeSelect'] span").prop("hidden", true);
+
+        //hide the device type selections
+        selectSwitch.parent().hide();
+        $("#deviceLabel").hide();
+        $("#typeLabel").hide();
+        $("#alertConditionContent label[for='typeSelect']").hide();
+        $("#alertConditionContent .form-control#typeSelect").parent().hide();
     }
 
     function enableSwitch() {
         let selectSwitch = $("#alertConditionContent #alertConditionSwitch");
         selectSwitch.prop("disabled", false);
+
+        selectSwitch.parent().show();
+        $("#deviceLabel").show();
+        $("#typeLabel").show();
+        $("#alertConditionContent label[for='typeSelect']").show();
+        $("#alertConditionContent .form-control#typeSelect").parent().show();
     }
 
     $.get("/alert-types", (alertTypes) => {
@@ -177,10 +194,14 @@ jQuery(document).ready(($) => {
         if ($(this).is(':checked')) {
             typeSelect.prop("disabled", false);
             deviceSelect.prop("disabled", true);
+            $("#alertConditionContent label[for='deviceSelect'] span").prop("hidden", true);
+            $("#alertConditionContent label[for='typeSelect'] span").prop("hidden", false);
 
         } else {
             typeSelect.prop("disabled", true);
             deviceSelect.prop("disabled", false);
+            $("#alertConditionContent label[for='deviceSelect'] span").prop("hidden", false);
+            $("#alertConditionContent label[for='typeSelect'] span").prop("hidden", true);
         }
 
         typeLabel.toggleClass("selected");

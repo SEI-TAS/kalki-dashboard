@@ -2,25 +2,26 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="commandLookupContent">
     @helper.form(action = routes.CommandLookupController.addOrUpdateCommandLookup()) {
+        <h4>Command Lookup</h4>
         @* DeviceType *@
         <div class="form-group row">
-            <label for="deviceTypeSelect" class="col-2 col-form-label">Select Device Type</label>
+            <label for="deviceTypeSelect" class="col-3 col-form-label">Select Device Type<span>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="deviceTypeSelect" name="deviceTypeId"></select>
+                <select class="form-control" id="deviceTypeSelect" name="deviceTypeId" required></select>
             </div>
         </div>
         @* SecurityState *@
         <div class="form-group row">
-            <label for="securityStateSelect" class="col-2 col-form-label">Select Security State</label>
+            <label for="securityStateSelect" class="col-3 col-form-label">Select Security State<span>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="securityStateSelect" name="stateId"></select>
+                <select class="form-control" id="securityStateSelect" name="stateId" required></select>
             </div>
         </div>
         @* DeviceCommand*@
         <div class="form-group row">
-            <label for="deviceCommandSelect" class="col-2 col-form-label">Select Device Command</label>
+            <label for="deviceCommandSelect" class="col-3 col-form-label">Select Device Command<span>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="deviceCommandSelect" name="id"></select>
+                <select class="form-control" id="deviceCommandSelect" name="id" requried></select>
             </div>
             <input type="text" id="deviceCommandName" name="name" value="" hidden>
         </div>

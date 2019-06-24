@@ -295,3 +295,13 @@ input:checked + .slider:before {
     color: #007bff;
     font-weight: bold;
 }
+
+/* Make db management form headers closer to top */
+.dbManagementView form h4 {
+    margin-top: 0;
+}
+
+/* make asterisk red */
+.dbManagementView form label span, .dbManagementView form th span{
+    color: red;
+}

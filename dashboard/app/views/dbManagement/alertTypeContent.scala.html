@@ -2,9 +2,10 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="alertTypeContent">
     @helper.form(action = routes.AlertTypeController.addOrUpdateAlertType()) {
+        <h4>Alert Type</h4>
         @* Name *@
         <div class="form-group row">
-            <label for="name" class="col-2 col-form-label">Name</label>
+            <label for="name" class="col-2 col-form-label">Name<span>*</span></label>
             <div class="col-4">
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">
@@ -23,8 +24,7 @@
             <label for="source" class="col-2 col-form-label">Source</label>
             <div class="col-4">
                 <select class="form-control" id="source" name="source">
-                    <option value="IoT Monitor">IoT Monitor</option>
-                    <option value="Data Node">Data Node</option>
+                    <option value="IoT Interface">IoT Monitor</option>
                     <option value="umbox">umbox</option>
                     <option value="Dashboard">Dashboard</option>
                 </select>

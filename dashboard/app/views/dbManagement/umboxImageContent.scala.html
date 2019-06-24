@@ -2,9 +2,10 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="umboxImageContent">
     @helper.form(action = routes.UmboxImageController.addOrUpdateUmboxImage()) {
+        <h4>Umbox Lookup</h4>
         @* Name *@
         <div class="form-group row">
-            <label for="name" class="col-2 col-form-label">Name</label>
+            <label for="name" class="col-2 col-form-label">Name<span>*</span></label>
             <div class="col-4">
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">
@@ -13,10 +14,10 @@
 
         @* Path *@
         <div class="form-group row">
-            <label for="path" class="col-2 col-form-label">Path</label>
+            <label for="fileName" class="col-2 col-form-label">File Name<span>*</span></label>
             <div class="col-4">
-                <input type="text" class="form-control" id="path" name="path" placeholder="Enter Path" required
-                oninvalid="this.setCustomValidity('Please Enter Path')" oninput="setCustomValidity('')">
+                <input type="text" class="form-control" id="fileName" name="fileName" placeholder="Enter File Name" required
+                oninvalid="this.setCustomValidity('Please Enter File Name')" oninput="setCustomValidity('')">
             </div>
         </div>
 
@@ -36,7 +37,7 @@
             <th>actions</th>
             <th>id</th>
             <th>name</th>
-            <th>path</th>
+            <th>file name</th>
         </tr>
     </thead>
     <tbody id="umboxImageTableBody"></tbody>

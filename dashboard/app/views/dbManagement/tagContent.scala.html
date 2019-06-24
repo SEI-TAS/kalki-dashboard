@@ -2,9 +2,10 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="tagContent">
     @helper.form(action = routes.TagController.addOrUpdateTag()) {
+        <h4>Tag</h4>
         @* Name *@
         <div class="form-group row">
-            <label for="name" class="col-2 col-form-label">Name</label>
+            <label for="name" class="col-2 col-form-label">Name<span>*</span></label>
             <div class="col-4">
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">

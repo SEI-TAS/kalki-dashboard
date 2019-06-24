@@ -55,7 +55,7 @@ jQuery(document).ready(($) => {
             $("#alertTypeContent #clearFormButton").html("Clear");
             $("#alertTypeContent .form-group #name").val("");
             $("#alertTypeContent .form-group #description").val("");
-            $("#alertTypeContent .form-control#source").val("IoT Monitor");
+            $("#alertTypeContent .form-control#source").val("IoT Interface");
         });
     });
 });
