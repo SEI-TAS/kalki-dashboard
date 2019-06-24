@@ -1,5 +1,3 @@
-jQuery.ajaxSetup({async: false});
-
 jQuery(document).ready(($) => {
     let umboxLookupTable = $('#umboxLookupTable').DataTable(
         {
@@ -190,12 +188,16 @@ jQuery(document).ready(($) => {
     $("#umboxLookupContent #clearFormButton").click(function () {
         editing = false;
 
+        let typeSelect = $("#umboxLookupContent .form-control#type");
+        let securityStateSelect = $("#umboxLookupContent .form-control#securityState");
+        let umboxImageSelect = $("#umboxLookupContent .form-control#umboxImage");
+
         $.post("/clear-umbox-lookup-form", {}, function () {
             $("#umboxLookupContent #submitFormButton").html("Add");
             $("#umboxLookupContent #clearFormButton").html("Clear");
-            $("#umboxLookupContent .form-control#type").val(1);
-            $("#umboxLookupContent .form-control#securityState").val(1);
-            $("#umboxLookupContent .form-control#umboxImage").val(1);
+            typeSelect.val(typeSelect.find("option:first").val());
+            securityStateSelect.val(securityStateSelect.find("option:first").val());
+            umboxImageSelect.val(umboxImageSelect.find("option:first").val());
             $("#umboxLookupContent .form-control#order").val(1);
             $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
 
@@ -282,5 +284,3 @@ jQuery(document).ready(($) => {
         return retVal;
     });
 });
-
-jQuery.ajaxSetup({async: true});

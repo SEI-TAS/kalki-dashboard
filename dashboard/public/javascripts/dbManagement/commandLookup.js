@@ -1,5 +1,3 @@
-jQuery.ajaxSetup({async: false});
-
 jQuery(document).ready(($) => {
     let commandLookupTable = $('#commandLookupTable').DataTable(
         {
@@ -100,14 +98,17 @@ jQuery(document).ready(($) => {
     });
 
     $("#commandLookupContent #clearFormButton").click(function () {
+        let deviceTypeSelect = $("#commandLookupContent .form-control#deviceTypeSelect");
+        let securityStateSelect = $("#commandLookupContent .form-control#securityStateSelect");
+        let deviceCommandSelect = $("#commandLookupContent .form-control#deviceCommandSelect");
+
         $.post("/clear-command-lookup-form", {}, function () {
             $("#commandLookupContent #submitFormButton").html("Add");
             $("#commandLookupContent #clearFormButton").html("Clear");
-            $("#commandLookupContent .form-control#deviceTypeSelect").val(1).change();
-            $("#commandLookupContent .form-control#securityStateSelect").val(1).change();
-            $("#commandLookupContent .form-control#deviceCommandSelect").val(1).change();
+            deviceTypeSelect.val(deviceTypeSelect.find("option:first").val()).change();
+            securityStateSelect.val(securityStateSelect.find("option:first").val()).change();
+            deviceCommandSelect.val(securityStateSelect.find("option:first").val()).change();
             $("#commandLookupContent #deviceCommandName").val($(".form-control#deviceCommandSelect").text());
         });
     });
 });
-jQuery.ajaxSetup({async: true});

@@ -1,5 +1,3 @@
-jQuery.ajaxSetup({async: false});
-
 jQuery(document).ready(($) => {
     let alertConditionTable = $('#alertConditionTable').DataTable(
         {
@@ -209,12 +207,16 @@ jQuery(document).ready(($) => {
     });
 
     $("#alertConditionContent #clearFormButton").click(function () {
+        let alertTypeSelect = $("#alertConditionContent .form-control#alertType");
+        let deviceSelect = $("#alertConditionContent .form-control#deviceSelect");
+        let typeSelect = $("#alertConditionContent .form-control#typeSelect");
+
         $.post("/clear-alert-condition-form", {}, function () {
             $("#alertConditionContent #submitFormButton").html("Add");
             $("#alertConditionContent #clearFormButton").html("Clear");
-            $("#alertConditionContent .form-control#alertType").val("");
-            $("#alertConditionContent .form-control#deviceSelect").val("");
-            $("#alertConditionContent .form-control#typeSelect").val("");
+            alertTypeSelect.val(alertTypeSelect.find("option:first").val());
+            deviceSelect.val(deviceSelect.find("option:first").val());
+            typeSelect.val(typeSelect.find("option:first").val());
             $("#alertConditionContent .form-control#variableKey").val("");
             $("#alertConditionContent .form-control#variableValue").val("");
             $("#alertConditionContent #variableTable").find("tr:gt(0)").remove();   //remove all rows except header
@@ -223,5 +225,3 @@ jQuery(document).ready(($) => {
         });
     });
 });
-
-jQuery.ajaxSetup({async: true});

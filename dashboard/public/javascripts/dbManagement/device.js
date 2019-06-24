@@ -1,5 +1,3 @@
-jQuery.ajaxSetup({async: false});
-
 jQuery(document).ready(($) => {
     let deviceTable = $('#deviceTable').DataTable(
         {
@@ -11,6 +9,7 @@ jQuery(document).ready(($) => {
     );
 
     let typeNameToIDMap = {};   //map to go from deviceType name in the table to typeID in the form select
+    let typeIdToNameMap = {};
     let groupNameToIDMap = {};   //map to go from group name in the table to groupID in the form select
     let tagIDtoNameMap = {};   //map to go from tag name in the table to tagID in the form select
     let deviceIdToTagIdsMap = {}    //map to retrieve list of tagIds based on deviceID
@@ -30,12 +29,12 @@ jQuery(document).ready(($) => {
         let deviceGroup = device["group"];
         let deviceGroupName = deviceGroup ? deviceGroup["name"] : "";
         $("#deviceContent .form-control#type").val(typeNameToIDMap[device["type"]["name"]]);
-        $("#deviceContent .form-group #name").val(device["name"]);
+        $("#deviceContent .form-group #name").val(device["name"]).change();
         $("#deviceContent .form-group #description").val(device["description"]);
         $("#deviceContent .form-control#group").val(groupNameToIDMap[deviceGroupName]);
         $("#deviceContent .form-group #ipAddress").val(device["ip"]);
-        $("#deviceContent .form-group #statusHistorySize").val(device["statusHistorySize"]);
-        $("#deviceContent .form-group #samplingRate").val(device["samplingRate"]);
+        $("#deviceContent .form-group #statusHistorySize").val(device["statusHistorySize"]).change();
+        $("#deviceContent .form-group #samplingRate").val(device["samplingRate"]).change();
         checkTags(device["tagIds"]);
     }
 
@@ -57,6 +56,7 @@ jQuery(document).ready(($) => {
     $.get("/device-types", (types) => {
         $.each(JSON.parse(types), (id,type) => {
             typeNameToIDMap[type.name] = type.id;
+            typeIdToNameMap[type.id] = type.name;
             $("#deviceContent #type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
         });
     });
@@ -163,7 +163,7 @@ jQuery(document).ready(($) => {
             //create device object
             let newDevice = {
                 type : {
-                    name : ""
+                    name : typeIdToNameMap[$("#deviceContent .form-control#type option:first").val()]
                 },
                 name : "",
                 description : "",
@@ -190,5 +190,3 @@ jQuery(document).ready(($) => {
         $("#copyFromDeviceModal").modal("hide");
     });
 });
-
-jQuery.ajaxSetup({async: false});
