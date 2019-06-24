@@ -12,8 +12,6 @@ jQuery(document).ready(($) => {
     let alertTypeNametoIDMap = {};
     let deviceIDtoNameMap = {};
     let deviceNametoIDMap = {};
-    let deviceTypeIDtoNameMap = {};
-    let deviceTypeNametoIDMap = {};
 
     let variableCounter = 0;
 
@@ -99,78 +97,91 @@ jQuery(document).ready(($) => {
         $("#alertConditionContent .form-control#typeSelect").parent().show();
     }
 
-    $.get("/alert-types", (alertTypes) => {
-        $.each(JSON.parse(alertTypes), (id, alertType) => {
-            $("#alertConditionContent .form-control#alertType").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
-                + alertType.name +
-                "</option>")
-            alertTypeIDtoNameMap[alertType.id] = alertType.name;
-            alertTypeNametoIDMap[alertType.name] = alertType.id;
-        });
-    });
-    $.get("/devices", (devices) => {
-        $.each(JSON.parse(devices), (id, device) => {
-            $("#alertConditionContent .form-control#deviceSelect").append("<option id='deviceOption" + device.id + "' value='" + device.id + "'>"
-                + device.name +
-                "</option>")
-            deviceIDtoNameMap[device.id] = device.name;
-            deviceNametoIDMap[device.name] = device.id;
-        });
-    });
     $.get("/device-types", (deviceTypes) => {
         $.each(JSON.parse(deviceTypes), (id, deviceType) => {
             $("#alertConditionContent .form-control#typeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
                 + deviceType.name +
                 "</option>")
-            deviceTypeIDtoNameMap[deviceType.id] = deviceType.name;
-            deviceTypeNametoIDMap[deviceType.name] = deviceType.id;
         });
     });
-    $.get("/alert-conditions", (alertConditions) => {
-        $.each(JSON.parse(alertConditions), (index, alertCondition) => {
 
-            let newRow = "<tr id='tableRow" + alertCondition.id + "'>\n" +
-                "    <td class='fit'>" +
-                "        <div class='editDeleteContainer' >" +
-                "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + alertCondition.id + "'>Edit</button>" +
-                "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + alertCondition.id + "'>Delete</button>" +
-                "        </div>" +
-                "    </td>\n" +
-                "    <td id='device" + alertCondition.id + "'>" + deviceIDtoNameMap[alertCondition.deviceId] + "</td>\n" +
-                "    <td id='alertType" + alertCondition.id + "'>" + alertTypeIDtoNameMap[alertCondition.alertTypeId] + "</td>\n" +
-                "    <td class='fit' id='variables" + alertCondition.id + "'>" + makeVariablesString(alertCondition.variables) + "</td>\n" +
-                "</tr>"
-            alertConditionTable.row.add($(newRow)).draw();
+    getAllAlertConditions();
 
-            alertConditionTable.on("click", "#editButton" + alertCondition.id, function () {
-                $.post("/edit-alert-condition", {id: alertCondition.id}, function () {
-                    let alertTypeName = $("#alertConditionTableBody #alertType" + alertCondition.id).html();
-                    let deviceName = $("#alertConditionTableBody #device" + alertCondition.id).html();
+    async function getAllAlertTypes() {
+        return $.get("/alert-types", (alertTypes) => {
+            $.each(JSON.parse(alertTypes), (id, alertType) => {
+                $("#alertConditionContent .form-control#alertType").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
+                    + alertType.name +
+                    "</option>")
+                alertTypeIDtoNameMap[alertType.id] = alertType.name;
+                alertTypeNametoIDMap[alertType.name] = alertType.id;
+            });
+        });
+    }
 
-                    $('html, body').animate({scrollTop: 0}, 'fast', function () {
+    async function getAllDevices() {
+        return $.get("/devices", (devices) => {
+            $.each(JSON.parse(devices), (id, device) => {
+                $("#alertConditionContent .form-control#deviceSelect").append("<option id='deviceOption" + device.id + "' value='" + device.id + "'>"
+                    + device.name +
+                    "</option>")
+                deviceIDtoNameMap[device.id] = device.name;
+                deviceNametoIDMap[device.name] = device.id;
+            });
+        });
+    }
+
+    async function getAllAlertConditions() {
+        await getAllAlertTypes();
+        await getAllDevices();
+
+        $.get("/alert-conditions", (alertConditions) => {
+
+            $.each(JSON.parse(alertConditions), (index, alertCondition) => {
+
+                let newRow = "<tr id='tableRow" + alertCondition.id + "'>\n" +
+                    "    <td class='fit'>" +
+                    "        <div class='editDeleteContainer' >" +
+                    "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + alertCondition.id + "'>Edit</button>" +
+                    "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + alertCondition.id + "'>Delete</button>" +
+                    "        </div>" +
+                    "    </td>\n" +
+                    "    <td id='device" + alertCondition.id + "'>" + deviceIDtoNameMap[alertCondition.deviceId] + "</td>\n" +
+                    "    <td id='alertType" + alertCondition.id + "'>" + alertTypeIDtoNameMap[alertCondition.alertTypeId] + "</td>\n" +
+                    "    <td class='fit' id='variables" + alertCondition.id + "'>" + makeVariablesString(alertCondition.variables) + "</td>\n" +
+                    "</tr>"
+                alertConditionTable.row.add($(newRow)).draw();
+
+                alertConditionTable.on("click", "#editButton" + alertCondition.id, function () {
+                    $.post("/edit-alert-condition", {id: alertCondition.id}, function () {
+                        let alertTypeName = $("#alertConditionTableBody #alertType" + alertCondition.id).html();
+                        let deviceName = $("#alertConditionTableBody #device" + alertCondition.id).html();
+
+                        $('html, body').animate({scrollTop: 0}, 'fast', function () {
+                        });
+                        $("#alertConditionContent #submitFormButton").html("Update");
+                        $("#alertConditionContent #clearFormButton").html("Cancel Edit");
+                        $("#alertConditionContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
+                        $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
+                        populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
+
+                        //disbable inputting device type
+                        disableSwitch();
                     });
-                    $("#alertConditionContent #submitFormButton").html("Update");
-                    $("#alertConditionContent #clearFormButton").html("Cancel Edit");
-                    $("#alertConditionContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
-                    $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
-                    populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
-
-                    //disbable inputting device type
-                    disableSwitch();
                 });
-            });
 
-            alertConditionTable.on("click", "#deleteButton" + alertCondition.id, function () {
-                $.post("/delete-alert-condition", {id: alertCondition.id}, function (isSuccess) {
-                    if (isSuccess == "true") {
-                        alertConditionTable.row("#tableRow" + alertCondition.id).remove().draw();
-                    } else {
-                        alert("delete was unsuccessful");
-                    }
+                alertConditionTable.on("click", "#deleteButton" + alertCondition.id, function () {
+                    $.post("/delete-alert-condition", {id: alertCondition.id}, function (isSuccess) {
+                        if (isSuccess == "true") {
+                            alertConditionTable.row("#tableRow" + alertCondition.id).remove().draw();
+                        } else {
+                            alert("delete was unsuccessful");
+                        }
+                    });
                 });
             });
         });
-    });
+    }
 
     $("#alertConditionContent #addVariableButton").click(function () {
         let keyInput = $(".form-control#variableKey");
