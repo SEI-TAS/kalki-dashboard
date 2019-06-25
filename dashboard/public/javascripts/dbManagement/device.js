@@ -163,7 +163,8 @@ jQuery(document).ready(($) => {
                             deviceTable.row("#tableRow" + device.id).remove().draw();
                             $("#deviceSelectOption" + device.id).remove();   //remove option from copy device list
                         } else {
-                            alert("delete was unsuccessful");
+                            alert("Delete was unsuccessful.  Please check that another table entry " +
+                                "does not rely on this Device");
                         }
                     });
                 });
