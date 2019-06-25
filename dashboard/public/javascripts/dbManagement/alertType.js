@@ -41,7 +41,8 @@ jQuery(document).ready(($) => {
                     if (isSuccess == "true") {
                         alertTypeTable.row("#tableRow" + alertType.id).remove().draw();
                     } else {
-                        alert("delete was unsuccessful");
+                        alert("Delete was unsuccessful.  Please check that another table entry " +
+                            "does not rely on this Alert Type");
                     }
 
                 });
