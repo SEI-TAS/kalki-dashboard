@@ -13,9 +13,6 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
@@ -39,14 +36,13 @@ public class GroupController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    public CompletionStage<Result> getGroups() {
-        return Postgres.findAllGroups().thenApplyAsync(groups -> {
-            try {
-                return ok(ow.writeValueAsString(groups));
-            }
-            catch(JsonProcessingException e) {}
-            return ok();
-        }, ec.current());
+    public Result getGroups() {
+        List<Group> groups = Postgres.findAllGroups();
+        try {
+            return ok(ow.writeValueAsString(groups));
+        } catch (JsonProcessingException e) {
+        }
+        return ok();
     }
 
     public Result editGroup() {
@@ -54,42 +50,38 @@ public class GroupController extends Controller {
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
         this.updatingId = idToInt;
         return ok();
     }
 
-    public CompletionStage<Result> addOrUpdateGroup() {
+    public Result addOrUpdateGroup() {
         Form<Group> deviceGroupForm = formFactory.form(Group.class);
         Form<Group> filledForm = deviceGroupForm.bindFromRequest();
-        if(filledForm.hasErrors()) {
-            return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
+        if (filledForm.hasErrors()) {
+            return badRequest(views.html.form.render(filledForm));
         } else {
             Group dg = filledForm.get();
             dg.setId(this.updatingId);
             this.updatingId = -1;
 
-            return dg.insertOrUpdate().thenApplyAsync(n -> {
-                return redirect(routes.DBManagementController.dbManagementView(n));
-            }, ec.current());
+            int n = dg.insertOrUpdate();
+            return redirect(routes.DBManagementController.dbManagementView(n));
         }
     }
 
-    public CompletionStage<Result> deleteGroup() {
+    public Result deleteGroup() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
-        return Postgres.deleteGroup(idToInt).thenApplyAsync(isSuccess -> {
-            return ok(isSuccess.toString());
-        }, ec.current());
+        Boolean isSuccess = Postgres.deleteGroup(idToInt);
+        return ok(isSuccess.toString());
     }
 
     public Result clearGroupForm() {

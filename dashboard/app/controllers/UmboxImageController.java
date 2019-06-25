@@ -13,9 +13,6 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
@@ -39,14 +36,13 @@ public class UmboxImageController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    public CompletionStage<Result> getUmboxImages() {
-        return Postgres.findAllUmboxImages().thenApplyAsync(umboxImages -> {
-            try {
-                return ok(ow.writeValueAsString(umboxImages));
-            }
-            catch(JsonProcessingException e) {}
-            return ok();
-        }, ec.current());
+    public Result getUmboxImages() {
+        List<UmboxImage> umboxImages = Postgres.findAllUmboxImages();
+        try {
+            return ok(ow.writeValueAsString(umboxImages));
+        } catch (JsonProcessingException e) {
+        }
+        return ok();
     }
 
     public Result editUmboxImage() {
@@ -54,42 +50,38 @@ public class UmboxImageController extends Controller {
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
         this.updatingId = idToInt;
         return ok();
     }
 
-    public CompletionStage<Result> addOrUpdateUmboxImage() {
+    public Result addOrUpdateUmboxImage() {
         Form<UmboxImage> umboxImageForm = formFactory.form(UmboxImage.class);
         Form<UmboxImage> filledForm = umboxImageForm.bindFromRequest();
-        if(filledForm.hasErrors()) {
-            return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
+        if (filledForm.hasErrors()) {
+            return badRequest(views.html.form.render(filledForm));
         } else {
             UmboxImage dt = filledForm.get();
             dt.setId(this.updatingId);
             this.updatingId = -1;
 
-            return dt.insertOrUpdate().thenApplyAsync(n -> {
-                return redirect(routes.DBManagementController.dbManagementView(n));
-            }, ec.current());
+            int n = dt.insertOrUpdate();
+            return redirect(routes.DBManagementController.dbManagementView(n));
         }
     }
 
-    public CompletionStage<Result> deleteUmboxImage() {
+    public Result deleteUmboxImage() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
-        return Postgres.deleteUmboxImage(idToInt).thenApplyAsync(isSuccess -> {
-            return ok(isSuccess.toString());
-        }, ec.current());
+        Boolean isSuccess = Postgres.deleteUmboxImage(idToInt);
+        return ok(isSuccess.toString());
     }
 
     public Result clearUmboxImageForm() {

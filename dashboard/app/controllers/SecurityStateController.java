@@ -13,9 +13,6 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
@@ -39,14 +36,13 @@ public class SecurityStateController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    public CompletionStage<Result> getSecurityStates() {
-        return Postgres.findAllSecurityStates().thenApplyAsync(securityStates -> {
-            try {
-                return ok(ow.writeValueAsString(securityStates));
-            }
-            catch(JsonProcessingException e) {}
-            return ok();
-        }, ec.current());
+    public Result getSecurityStates() {
+        List<SecurityState> securityStates = Postgres.findAllSecurityStates();
+        try {
+            return ok(ow.writeValueAsString(securityStates));
+        } catch (JsonProcessingException e) {
+        }
+        return ok();
     }
 
     public Result editSecurityState() {
@@ -54,42 +50,38 @@ public class SecurityStateController extends Controller {
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
         this.updatingId = idToInt;
         return ok();
     }
 
-    public CompletionStage<Result> addOrUpdateSecurityState() {
+    public Result addOrUpdateSecurityState() {
         Form<SecurityState> securityStateForm = formFactory.form(SecurityState.class);
         Form<SecurityState> filledForm = securityStateForm.bindFromRequest();
-        if(filledForm.hasErrors()) {
-            return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
+        if (filledForm.hasErrors()) {
+            return badRequest(views.html.form.render(filledForm));
         } else {
             SecurityState dt = filledForm.get();
             dt.setId(this.updatingId);
             this.updatingId = -1;
 
-            return dt.insertOrUpdate().thenApplyAsync(n -> {
-                return redirect(routes.DBManagementController.dbManagementView(n));
-            }, ec.current());
+            int n = dt.insertOrUpdate();
+            return redirect(routes.DBManagementController.dbManagementView(n));
         }
     }
 
-    public CompletionStage<Result> deleteSecurityState() {
+    public Result deleteSecurityState() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
-        return Postgres.deleteSecurityState(idToInt).thenApplyAsync(isSuccess -> {
-            return ok(isSuccess.toString());
-        }, ec.current());
+        Boolean isSuccess = Postgres.deleteSecurityState(idToInt);
+        return ok(isSuccess.toString());
     }
 
     public Result clearSecurityStateForm() {

@@ -12,9 +12,6 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
@@ -38,15 +35,13 @@ public class AlertConditionController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    public CompletionStage<Result> getAlertConditions() {
-        return CompletableFuture.supplyAsync(() -> {
-            List<AlertCondition> alertTypes = Postgres.findAllAlertConditions();
-            try {
-                return ok(ow.writeValueAsString(alertTypes));
-            } catch (JsonProcessingException e) {
-            }
-            return ok();
-        });
+    public Result getAlertConditions() {
+        List<AlertCondition> alertTypes = Postgres.findAllAlertConditions();
+        try {
+            return ok(ow.writeValueAsString(alertTypes));
+        } catch (JsonProcessingException e) {
+        }
+        return ok();
     }
 
     public Result editAlertCondition() {
@@ -54,8 +49,7 @@ public class AlertConditionController extends Controller {
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
 
@@ -63,35 +57,32 @@ public class AlertConditionController extends Controller {
         return ok();
     }
 
-    public CompletionStage<Result> addOrUpdateAlertCondition() {
+    public Result addOrUpdateAlertCondition() {
         Form<AlertCondition> alertTypeForm = formFactory.form(AlertCondition.class);
         Form<AlertCondition> filledForm = alertTypeForm.bindFromRequest();
 
-        if(filledForm.hasErrors()) {
-            return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
+        if (filledForm.hasErrors()) {
+            return badRequest(views.html.form.render(filledForm));
         } else {
             AlertCondition at = filledForm.get();
             at.setId(this.updatingId);
             this.updatingId = -1;
 
-            return at.insertOrUpdate().thenApplyAsync(n -> {
-                return redirect(routes.DBManagementController.dbManagementView(n));
-            }, ec.current());
+            int n = at.insertOrUpdate();
+            return redirect(routes.DBManagementController.dbManagementView(n));
         }
     }
 
-    public CompletionStage<Result> deleteAlertCondition() {
+    public Result deleteAlertCondition() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
-        return Postgres.deleteAlertCondition(idToInt).thenApplyAsync(isSuccess -> {
-            return ok(isSuccess.toString());
-        }, ec.current());
+        Boolean isSuccess = Postgres.deleteAlertCondition(idToInt);
+        return ok(isSuccess.toString());
     }
 
     public Result clearAlertConditionForm() {

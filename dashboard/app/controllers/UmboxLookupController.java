@@ -13,9 +13,6 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 import java.io.IOException;
@@ -42,14 +39,13 @@ public class UmboxLookupController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    public CompletionStage<Result> getUmboxLookups() {
-        return Postgres.findAllUmboxLookups().thenApplyAsync(umboxLookups -> {
-            try {
-                return ok(ow.writeValueAsString(umboxLookups));
-            } catch (JsonProcessingException e) {
-            }
-            return ok();
-        }, ec.current());
+    public Result getUmboxLookups() {
+        List<UmboxLookup> umboxLookups = Postgres.findAllUmboxLookups();
+        try {
+            return ok(ow.writeValueAsString(umboxLookups));
+        } catch (JsonProcessingException e) {
+        }
+        return ok();
     }
 
     public Result editUmboxLookup() {
@@ -104,8 +100,7 @@ public class UmboxLookupController extends Controller {
         return redirect(routes.DBManagementController.dbManagementView(insertId));
     }
 
-
-    public CompletionStage<Result> deleteUmboxLookup() {
+    public Result deleteUmboxLookup() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
@@ -113,9 +108,8 @@ public class UmboxLookupController extends Controller {
         } catch (NumberFormatException e) {
             idToInt = -1;
         }
-        return Postgres.deleteUmboxLookup(idToInt).thenApplyAsync(isSuccess -> {
-            return ok(isSuccess.toString());
-        }, ec.current());
+        Boolean isSuccess = Postgres.deleteUmboxLookup(idToInt);
+        return ok(isSuccess.toString());
     }
 
     public Result clearUmboxLookupForm() {
