@@ -12,8 +12,6 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
@@ -24,31 +22,30 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import javax.inject.Inject;
 
-public class CommandLookupController extends Controller {
+public class CommandController extends Controller {
     private final FormFactory formFactory;
     private final HttpExecutionContext ec;
     private final ObjectWriter ow;
     private int updatingId;
 
     @Inject
-    public CommandLookupController(FormFactory formFactory, HttpExecutionContext ec) {
+    public CommandController(FormFactory formFactory, HttpExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    public CompletionStage<Result> getCommandLookups() {
-        return Postgres.findAllCommandLookups().thenApplyAsync(commands -> {
-            try {
-                return ok(ow.writeValueAsString(commands));
-            } catch (JsonProcessingException e) {
-            }
+    public Result getCommands() {
+        List<DeviceCommand> commands = Postgres.findAllCommands();
+        try {
+            return ok(ow.writeValueAsString(commands));
+        } catch (JsonProcessingException e) {
             return ok();
-        }, ec.current());
+        }
     }
 
-    public Result editCommandLookup() {
+    public Result editCommand() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
@@ -62,24 +59,23 @@ public class CommandLookupController extends Controller {
         return ok();
     }
 
-    public CompletionStage<Result> addOrUpdateCommandLookup() {
-        Form<DeviceCommand> commandLookupForm = formFactory.form(DeviceCommand.class);
-        Form<DeviceCommand> filledForm = commandLookupForm.bindFromRequest();
+    public Result addOrUpdateCommand() {
+        Form<DeviceCommand> commandForm = formFactory.form(DeviceCommand.class);
+        Form<DeviceCommand> filledForm = commandForm.bindFromRequest();
 
         if(filledForm.hasErrors()) {
-            return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
+            return badRequest(views.html.form.render(filledForm));
         } else {
-            DeviceCommand cl = filledForm.get();
-            cl.setLookupId(this.updatingId);
+            DeviceCommand command = filledForm.get();
+            command.setId(this.updatingId);
             this.updatingId = -1;
 
-            return cl.insertOrUpdateCommandLookup().thenApplyAsync(n -> {
-                return redirect(routes.DBManagementController.dbManagementView(n));
-            }, ec.current());
+            int n = command.insertOrUpdate();
+            return redirect(routes.DBManagementController.dbManagementView(n));
         }
     }
 
-    public CompletionStage<Result> deleteCommandLookup() {
+    public Result deleteCommand() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
@@ -88,12 +84,12 @@ public class CommandLookupController extends Controller {
         catch (NumberFormatException e) {
             idToInt = -1;
         }
-        return Postgres.deleteCommandLookup(idToInt).thenApplyAsync(isSuccess -> {
-            return ok(isSuccess.toString());
-        }, ec.current());
+
+        Boolean isSuccess = Postgres.deleteCommand(idToInt);
+        return ok(isSuccess.toString());
     }
 
-    public Result clearCommandLookupForm() {
+    public Result clearCommandForm() {
         this.updatingId = -1;
         return ok();
     }

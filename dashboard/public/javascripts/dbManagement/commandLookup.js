@@ -41,7 +41,7 @@ jQuery(document).ready(($) => {
     }
 
     async function getDeviceCommands() {
-        return $.get("/device-commands", (commands) => {
+        return $.get("/commands", (commands) => {
             $.each(JSON.parse(commands), (id, command) => {
                 $(".form-control#deviceCommandSelect").append("<option id='deviceCommandOption" + command.id + "' value='" + command.id + "'>"
                     + command.name +
