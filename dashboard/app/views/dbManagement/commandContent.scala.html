@@ -5,10 +5,17 @@
         <h4>Command</h4>
         @* Name *@
         <div class="form-group row">
-            <label for="name" class="col-2 col-form-label">Name<span>*</span></label>
+            <label for="name" class="col-3 col-form-label">Name<span>*</span></label>
             <div class="col-4">
                 <input type="text" maxlength="200" class="form-control" id="name" name="name" placeholder="Enter Name" required
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">
+            </div>
+        </div>
+        @* DeviceType *@
+        <div class="form-group row">
+            <label for="deviceTypeSelect" class="col-3 col-form-label">Select Device Type<span>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="deviceTypeSelect" name="deviceTypeId" required></select>
             </div>
         </div>
         @* Submit *@
@@ -27,6 +34,7 @@
             <th>actions</th>
             <th>id</th>
             <th>name</th>
+            <th>device type</th>
         </tr>
     </thead>
     <tbody id="commandTableBody"></tbody>

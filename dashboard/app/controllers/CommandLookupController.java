@@ -36,7 +36,7 @@ public class CommandLookupController extends Controller {
     }
 
     public Result getCommandLookups() {
-        List<DeviceCommand> commandLookups = Postgres.findAllCommandLookups();
+        List<DeviceCommandLookup> commandLookups = Postgres.findAllCommandLookups();
         try {
             return ok(ow.writeValueAsString(commandLookups));
         } catch (JsonProcessingException e) {
@@ -58,17 +58,18 @@ public class CommandLookupController extends Controller {
     }
 
     public Result addOrUpdateCommandLookup() {
-        Form<DeviceCommand> commandLookupForm = formFactory.form(DeviceCommand.class);
-        Form<DeviceCommand> filledForm = commandLookupForm.bindFromRequest();
+        Form<DeviceCommandLookup> commandLookupForm = formFactory.form(DeviceCommandLookup.class);
+        Form<DeviceCommandLookup> filledForm = commandLookupForm.bindFromRequest();
 
         if (filledForm.hasErrors()) {
             return badRequest(views.html.form.render(filledForm));
         } else {
-            DeviceCommand cl = filledForm.get();
-            cl.setLookupId(this.updatingId);
+            DeviceCommandLookup cl = filledForm.get();
+
+            cl.setId(this.updatingId);
             this.updatingId = -1;
 
-            int n = cl.insertOrUpdateCommandLookup();
+            int n = cl.insertOrUpdate();
             return redirect(routes.DBManagementController.dbManagementView(n));
         }
     }

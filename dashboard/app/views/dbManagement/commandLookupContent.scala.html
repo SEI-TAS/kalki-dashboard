@@ -3,13 +3,6 @@
 <div class="col" id="commandLookupContent">
     @helper.form(action = routes.CommandLookupController.addOrUpdateCommandLookup()) {
         <h4>Command Lookup</h4>
-        @* DeviceType *@
-        <div class="form-group row">
-            <label for="deviceTypeSelect" class="col-3 col-form-label">Select Device Type<span>*</span></label>
-            <div class="col-4">
-                <select class="form-control" id="deviceTypeSelect" name="deviceTypeId" required></select>
-            </div>
-        </div>
         @* SecurityState *@
         <div class="form-group row">
             <label for="securityStateSelect" class="col-3 col-form-label">Select Security State<span>*</span></label>
@@ -21,9 +14,8 @@
         <div class="form-group row">
             <label for="deviceCommandSelect" class="col-3 col-form-label">Select Device Command<span>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="deviceCommandSelect" name="id" requried></select>
+                <select class="form-control" id="deviceCommandSelect" name="commandId" requried></select>
             </div>
-            <input type="text" id="deviceCommandName" name="name" value="" hidden>
         </div>
         @* Submit *@
         <div class="row justify-content-end">
@@ -40,7 +32,6 @@
     <thead>
         <tr>
             <th>actions</th>
-            <th>device type</th>
             <th>security state</th>
             <th>device command</th>
         </tr>

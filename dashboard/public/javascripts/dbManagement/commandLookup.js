@@ -9,24 +9,11 @@ jQuery(document).ready(($) => {
     );
 
     let stateIDtoNameMap = {};
-    let stateNametoIDMap = {};
-    let deviceTypeIDtoNameMap = {};
-    let deviceTypeNametoIDMap = {};
-    let commandNametoIDMap = {};
+    let stateNameToIDMap = {};
+    let commandNameToIDMap = {};
+    let commandIdToNameMap = {};
 
     getCommandLookups();
-
-    async function getDeviceTypes() {
-        return $.get("/device-types", (deviceTypes) => {
-            $.each(JSON.parse(deviceTypes), (id, deviceType) => {
-                $(".form-control#deviceTypeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
-                    + deviceType.name +
-                    "</option>")
-                deviceTypeIDtoNameMap[deviceType.id] = deviceType.name;
-                deviceTypeNametoIDMap[deviceType.name] = deviceType.id;
-            });
-        });
-    }
 
     async function getSecurityStates() {
         return $.get("/security-states", (securityStates) => {
@@ -35,7 +22,7 @@ jQuery(document).ready(($) => {
                     + state.name +
                     "</option>")
                 stateIDtoNameMap[state.id] = state.name;
-                stateNametoIDMap[state.name] = state.id;
+                stateNameToIDMap[state.name] = state.id;
             });
         });
     }
@@ -43,10 +30,11 @@ jQuery(document).ready(($) => {
     async function getDeviceCommands() {
         return $.get("/commands", (commands) => {
             $.each(JSON.parse(commands), (id, command) => {
+                commandNameToIDMap[command.name] = command.id;
+                commandIdToNameMap[command.id] = command.name;
+
                 $(".form-control#deviceCommandSelect").append("<option id='deviceCommandOption" + command.id + "' value='" + command.id + "'>"
-                    + command.name +
-                    "</option>")
-                commandNametoIDMap[command.name] = command.id;
+                    + command.name + "</option>")
             });
 
             //set hidden deviceCommandName to the value of the deviceCommandSelect
@@ -55,47 +43,42 @@ jQuery(document).ready(($) => {
     }
 
     async function getCommandLookups() {
-        await getDeviceTypes();
         await getSecurityStates();
         await getDeviceCommands();
 
-        $.get("/command-lookups", (commands) => {
-            $.each(JSON.parse(commands), (index, command) => {
+        $.get("/command-lookups", (commandLookups) => {
+            $.each(JSON.parse(commandLookups), (index, commandLookup) => {
 
-                let newRow = "<tr id='tableRow" + command.lookupId + "'>\n" +
+                let newRow = "<tr id='tableRow" + commandLookup.id + "'>\n" +
                     "    <td class='fit'>" +
                     "        <div class='editDeleteContainer' >" +
-                    "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + command.lookupId + "'>Edit</button>" +
-                    "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + command.lookupId + "'>Delete</button>" +
+                    "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + commandLookup.id + "'>Edit</button>" +
+                    "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + commandLookup.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + command.lookupId + "'>" + deviceTypeIDtoNameMap[command.deviceTypeId] + "</td>\n" +
-                    "    <td id='securityState" + command.lookupId + "'>" + stateIDtoNameMap[command.stateId] + "</td>\n" +
-                    "    <td id='deviceCommand" + command.lookupId + "'>" + command.name + "</td>\n" +
+                    "    <td id='securityState" + commandLookup.id + "'>" + stateIDtoNameMap[commandLookup.stateId] + "</td>\n" +
+                    "    <td id='deviceCommand" + commandLookup.id + "'>" + commandIdToNameMap[commandLookup.commandId] + "</td>\n" +
                     "</tr>"
                 commandLookupTable.row.add($(newRow)).draw();
 
-                commandLookupTable.on("click", "#editButton" + command.lookupId, function () {
-                    $.post("/edit-command-lookup", {id: command.lookupId}, function () {
-                        let deviceTypeName = $("#commandLookupTableBody #deviceType" + command.lookupId).html();
-                        let securityStateName = $("#commandLookupTableBody #securityState" + command.lookupId).html();
-                        let deviceCommandName = $("#commandLookupTableBody #deviceCommand" + command.lookupId).html();
+                commandLookupTable.on("click", "#editButton" + commandLookup.id, function () {
+                    $.post("/edit-command-lookup", {id: commandLookup.id}, function () {
+                        let securityStateName = $("#commandLookupTableBody #securityState" + commandLookup.id).html();
+                        let deviceCommandName = $("#commandLookupTableBody #deviceCommand" + commandLookup.id).html();
 
                         $('html, body').animate({scrollTop: 0}, 'fast', function () {
                         });
                         $("#commandLookupContent #submitFormButton").html("Update");
                         $("#commandLookupContent #clearFormButton").html("Cancel Edit");
-                        $("#commandLookupContent .form-control#deviceTypeSelect").val(deviceTypeNametoIDMap[deviceTypeName]).change();
-                        $("#commandLookupContent .form-control#securityStateSelect").val(stateNametoIDMap[securityStateName]).change();
-                        $("#commandLookupContent .form-control#deviceCommandSelect").val(commandNametoIDMap[deviceCommandName]).change();
-                        $("#commandLookupContent #deviceCommandName").val(deviceCommandName);
+                        $("#commandLookupContent .form-control#securityStateSelect").val(stateNameToIDMap[securityStateName]).change();
+                        $("#commandLookupContent .form-control#deviceCommandSelect").val(commandNameToIDMap[deviceCommandName]).change();
                     });
                 });
 
-                commandLookupTable.on("click", "#deleteButton" + command.lookupId, function () {
-                    $.post("/delete-command-lookup", {id: command.lookupId}, function (isSuccess) {
+                commandLookupTable.on("click", "#deleteButton" + commandLookup.id, function () {
+                    $.post("/delete-command-lookup", {id: commandLookup.id}, function (isSuccess) {
                         if (isSuccess == "true") {
-                            commandLookupTable.row("#tableRow" + command.lookupId).remove().draw();
+                            commandLookupTable.row("#tableRow" + commandLookup.id).remove().draw();
                         } else {
                             alert("Delete was unsuccessful.  Please check that another table entry " +
                                 "does not rely on this Command Lookup");
@@ -106,22 +89,13 @@ jQuery(document).ready(($) => {
         });
     }
 
-
-
-    //change hidden deviceCommandName in form when deviceCommandSelect is changed
-    $('.form-control#deviceCommandSelect').on('change', function () {
-        $("input#deviceCommandName").val(this.value);
-    });
-
     $("#commandLookupContent #clearFormButton").click(function () {
-        let deviceTypeSelect = $("#commandLookupContent .form-control#deviceTypeSelect");
         let securityStateSelect = $("#commandLookupContent .form-control#securityStateSelect");
         let deviceCommandSelect = $("#commandLookupContent .form-control#deviceCommandSelect");
 
         $.post("/clear-command-lookup-form", {}, function () {
             $("#commandLookupContent #submitFormButton").html("Add");
-            $("#commandLookupContent #clearFormButton").html("Clear");
-            deviceTypeSelect.val(deviceTypeSelect.find("option:first").val()).change();
+            $("#commandLookuContent #clearFormButton").html("Clear");
             securityStateSelect.val(securityStateSelect.find("option:first").val()).change();
             deviceCommandSelect.val(securityStateSelect.find("option:first").val()).change();
             $("#commandLookupContent #deviceCommandName").val($(".form-control#deviceCommandSelect").text());

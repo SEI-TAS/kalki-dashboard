@@ -67,6 +67,7 @@ public class CommandController extends Controller {
             return badRequest(views.html.form.render(filledForm));
         } else {
             DeviceCommand command = filledForm.get();
+
             command.setId(this.updatingId);
             this.updatingId = -1;
 
