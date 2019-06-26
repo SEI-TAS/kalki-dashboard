@@ -13,9 +13,6 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
@@ -39,14 +36,13 @@ public class TagController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    public CompletionStage<Result> getTags() {
-        return Postgres.findAllTags().thenApplyAsync(tags -> {
-            try {
-                return ok(ow.writeValueAsString(tags));
-            }
-            catch(JsonProcessingException e) {}
-            return ok();
-        }, ec.current());
+    public Result getTags() {
+        List<Tag> tags = Postgres.findAllTags();
+        try {
+            return ok(ow.writeValueAsString(tags));
+        } catch (JsonProcessingException e) {
+        }
+        return ok();
     }
 
     public Result editTag() {
@@ -54,42 +50,38 @@ public class TagController extends Controller {
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
         this.updatingId = idToInt;
         return ok();
     }
 
-    public CompletionStage<Result> addOrUpdateTag() {
+    public Result addOrUpdateTag() {
         Form<Tag> tagForm = formFactory.form(Tag.class);
         Form<Tag> filledForm = tagForm.bindFromRequest();
-        if(filledForm.hasErrors()) {
-            return CompletableFuture.supplyAsync(() -> { return badRequest(views.html.form.render(filledForm)); });
+        if (filledForm.hasErrors()) {
+            return badRequest(views.html.form.render(filledForm));
         } else {
             Tag dt = filledForm.get();
             dt.setId(this.updatingId);
             this.updatingId = -1;
 
-            return dt.insertOrUpdate().thenApplyAsync(n -> {
-                return redirect(routes.DBManagementController.dbManagementView(n));
-            }, ec.current());
+            int n = dt.insertOrUpdate();
+            return redirect(routes.DBManagementController.dbManagementView(n));
         }
     }
 
-    public CompletionStage<Result> deleteTag() {
+    public Result deleteTag() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             idToInt = -1;
         }
-        return Postgres.deleteTag(idToInt).thenApplyAsync(isSuccess -> {
-            return ok(isSuccess.toString());
-        }, ec.current());
+        Boolean isSuccess = Postgres.deleteTag(idToInt);
+        return ok(isSuccess.toString());
     }
 
     public Result clearTagForm() {

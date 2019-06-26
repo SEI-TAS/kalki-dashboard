@@ -97,7 +97,8 @@ jQuery(document).ready(($) => {
                         if (isSuccess == "true") {
                             commandLookupTable.row("#tableRow" + command.lookupId).remove().draw();
                         } else {
-                            alert("delete was unsuccessful");
+                            alert("Delete was unsuccessful.  Please check that another table entry " +
+                                "does not rely on this Command Lookup");
                         }
                     });
                 });

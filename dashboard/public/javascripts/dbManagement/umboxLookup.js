@@ -192,7 +192,8 @@ jQuery(document).ready(($) => {
                         if (isSuccess == "true") {
                             umboxLookupTable.row("#tableRow" + umboxLookup.id).remove().draw();
                         } else {
-                            alert("delete was unsuccessful");
+                            alert("Delete was unsuccessful.  Please check that another table entry " +
+                                "does not rely on this Umbox Lookup");
                         }
                     });
                 });

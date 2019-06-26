@@ -36,7 +36,8 @@ jQuery(document).ready(($) => {
                         tagTable.row("#tableRow" + tag.id).remove().draw();
                     }
                     else {
-                        alert("delete was unsuccessful");
+                        alert("Delete was unsuccessful.  Please check that another table entry " +
+                            "does not rely on this Tag");
                     }
                 });
             });
