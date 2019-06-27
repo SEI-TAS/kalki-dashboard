@@ -90,10 +90,10 @@ jQuery(document).ready(($) => {
         $(".form-control#order").removeAttr("name");
     }
 
-    getUmboxLookups();
-
     //fill device types in form
     async function getDeviceTypes() {
+        $("#umboxLookupContent #type").empty();
+
         return $.get("/device-types", (types) => {
             $.each(JSON.parse(types), (id, type) => {
                 deviceTypeIdToNameMap[type.id] = type.name;
@@ -106,6 +106,8 @@ jQuery(document).ready(($) => {
 
     //fill security states in form
     async function getSecurityStates() {
+        $("#umboxLookupContent #securityState").empty();
+
         return $.get("/security-states", (securityStates) => {
             $.each(JSON.parse(securityStates), (id, securityState) => {
                 stateIdToNameMap[securityState.id] = securityState.name;
@@ -119,6 +121,8 @@ jQuery(document).ready(($) => {
 
     //fill umbox images in form
     async function getUmboxImages() {
+        $("#umboxLookupContent #umboxImage").empty();
+
         return $.get("/umbox-images", (umboxImages) => {
             $.each(JSON.parse(umboxImages), (id, umboxImage) => {
                 umboxImageIDtoNameMap[umboxImage.id] = umboxImage.name;
@@ -134,6 +138,8 @@ jQuery(document).ready(($) => {
         await getDeviceTypes();
         await getSecurityStates();
         await getUmboxImages();
+
+        umboxLookupTable.clear();
 
         $.get("/umbox-lookups", (umboxLookups) => {
             $.each(JSON.parse(umboxLookups), (index, umboxLookup) => {
@@ -233,7 +239,6 @@ jQuery(document).ready(($) => {
             umboxImageInput.val("")
             orderInput.val(1);
         }
-        ;
     });
 
     //before submitting, ensure that an image or a dag order is not being repeated for the
@@ -299,5 +304,11 @@ jQuery(document).ready(($) => {
         }
 
         return retVal;
+    });
+
+    //only load data when tab is active
+    $('a[href="#UmboxLookupContent"]').on('shown.bs.tab', function (e) {
+        console.log("running umboxLookup script");
+        getUmboxLookups();
     });
 });

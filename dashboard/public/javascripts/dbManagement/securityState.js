@@ -6,43 +6,46 @@ jQuery(document).ready(($) => {
         ]
     });
 
+    function getSecurityStates() {
+        securityStateTable.clear();
 
-    $.get("/security-states", (securityStates) => {
-        $.each(JSON.parse(securityStates), (index, securityState) => {
-            let newRow = "<tr id='tableRow" + securityState.id + "'>\n" +
-                "    <td class='fit'>" +
-                "        <div class='editDeleteContainer'>" +
-                "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + securityState.id + "'>Edit</button>" +
-                "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + securityState.id + "'>Delete</button>" +
-                "        </div>" +
-                "    </td>\n" +
-                "    <td class='fit' id='id" + securityState.id + "'>" + securityState.id + "</td>\n" +
-                "    <td id='name" + securityState.id + "'>" + securityState.name + "</td>\n" +
-                "</tr>";
-            securityStateTable.row.add($(newRow)).draw();
+        $.get("/security-states", (securityStates) => {
+            $.each(JSON.parse(securityStates), (index, securityState) => {
+                let newRow = "<tr id='tableRow" + securityState.id + "'>\n" +
+                    "    <td class='fit'>" +
+                    "        <div class='editDeleteContainer'>" +
+                    "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + securityState.id + "'>Edit</button>" +
+                    "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + securityState.id + "'>Delete</button>" +
+                    "        </div>" +
+                    "    </td>\n" +
+                    "    <td class='fit' id='id" + securityState.id + "'>" + securityState.id + "</td>\n" +
+                    "    <td id='name" + securityState.id + "'>" + securityState.name + "</td>\n" +
+                    "</tr>";
+                securityStateTable.row.add($(newRow)).draw();
 
-            securityStateTable.on("click", "#editButton" +securityState.id, function () {
-                $.post("/edit-security-state", {id: securityState.id}, function () {
-                    $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
-                    $("#securityStateContent #submitFormButton").html("Update");
-                    $("#securityStateContent #clearFormButton").html("Cancel Edit");
-                    $("#securityStateContent .form-group #name").val($("#securityStateTableBody #name" +securityState.id).html());
+                securityStateTable.on("click", "#editButton" +securityState.id, function () {
+                    $.post("/edit-security-state", {id: securityState.id}, function () {
+                        $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
+                        $("#securityStateContent #submitFormButton").html("Update");
+                        $("#securityStateContent #clearFormButton").html("Cancel Edit");
+                        $("#securityStateContent .form-group #name").val($("#securityStateTableBody #name" +securityState.id).html());
+                    });
                 });
-            });
 
-            $("#securityStateTableBody #deleteButton" + securityState.id).click(function () {
-                $.post("/delete-security-state", {id: securityState.id}, function (isSuccess) {
-                    if(isSuccess == "true") {
-                        securityStateTable.row("#tableRow" + securityState.id).remove().draw();
-                    }
-                    else {
-                        alert("Delete was unsuccessful.  Please check that another table entry " +
-                            "does not rely on this Security State");
-                    }
+                $("#securityStateTableBody #deleteButton" + securityState.id).click(function () {
+                    $.post("/delete-security-state", {id: securityState.id}, function (isSuccess) {
+                        if(isSuccess == "true") {
+                            securityStateTable.row("#tableRow" + securityState.id).remove().draw();
+                        }
+                        else {
+                            alert("Delete was unsuccessful.  Please check that another table entry " +
+                                "does not rely on this Security State");
+                        }
+                    });
                 });
             });
         });
-    });
+    }
 
     $("#securityStateContent #clearFormButton").click(function () {
         $.post("/clear-security-state-form", {}, function () {
@@ -50,5 +53,11 @@ jQuery(document).ready(($) => {
             $("#securityStateContent #clearFormButton").html("Clear");
             $("#securityStateContent .form-group #name").val("");
         });
+    });
+
+    //only load data when tab is active
+    $('a[href="#SecurityStateContent"]').on('shown.bs.tab', function (e) {
+        console.log("running securityState script");
+        getSecurityStates();
     });
 });

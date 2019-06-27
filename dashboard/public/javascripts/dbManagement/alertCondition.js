@@ -97,17 +97,9 @@ jQuery(document).ready(($) => {
         $("#alertConditionContent .form-control#typeSelect").parent().show();
     }
 
-    $.get("/device-types", (deviceTypes) => {
-        $.each(JSON.parse(deviceTypes), (id, deviceType) => {
-            $("#alertConditionContent .form-control#typeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
-                + deviceType.name +
-                "</option>")
-        });
-    });
-
-    getAllAlertConditions();
-
     async function getAllAlertTypes() {
+        $("#alertConditionContent .form-control#alertType").empty();
+
         return $.get("/alert-types", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
                 $("#alertConditionContent .form-control#alertType").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
@@ -120,6 +112,7 @@ jQuery(document).ready(($) => {
     }
 
     async function getAllDevices() {
+        $("#alertConditionContent .form-control#deviceSelect").empty();
         return $.get("/devices", (devices) => {
             $.each(JSON.parse(devices), (id, device) => {
                 $("#alertConditionContent .form-control#deviceSelect").append("<option id='deviceOption" + device.id + "' value='" + device.id + "'>"
@@ -135,10 +128,10 @@ jQuery(document).ready(($) => {
         await getAllAlertTypes();
         await getAllDevices();
 
+        alertConditionTable.clear();
+
         $.get("/alert-conditions", (alertConditions) => {
-
             $.each(JSON.parse(alertConditions), (index, alertCondition) => {
-
                 let newRow = "<tr id='tableRow" + alertCondition.id + "'>\n" +
                     "    <td class='fit'>" +
                     "        <div class='editDeleteContainer' >" +
@@ -235,5 +228,20 @@ jQuery(document).ready(($) => {
 
             enableSwitch();
         });
+    });
+
+    //only load content if the tab is active
+    $('a[href="#AlertConditionContent"]').on('shown.bs.tab', function (e) {
+        console.log("running alertCondition script");
+
+        $.get("/device-types", (deviceTypes) => {
+            $.each(JSON.parse(deviceTypes), (id, deviceType) => {
+                $("#alertConditionContent .form-control#typeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
+                    + deviceType.name +
+                    "</option>")
+            });
+        });
+
+        getAllAlertConditions();
     });
 });
