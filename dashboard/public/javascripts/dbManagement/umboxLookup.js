@@ -29,6 +29,12 @@ jQuery(document).ready(($) => {
     let rowCounter = 0;
 
     function addOrderRow(umboxImageId, order) {
+        //make sure the imageId is not null
+        if(umboxImageId == null) {
+            alert("please select a valid umbox image");
+            return false;
+        }
+
         let hasDuplicate = false;
         Object.keys(currentUmboxImageIdDagOrderMap).forEach((uid) => {
             let dagOrder = parseInt(currentUmboxImageIdDagOrderMap[uid]);
@@ -236,7 +242,7 @@ jQuery(document).ready(($) => {
         let orderInput = $(".form-control#order");
 
         if (addOrderRow(umboxImageInput.val(), orderInput.val())) { //if the add was successful
-            umboxImageInput.val("")
+            umboxImageInput.val(umboxImageInput.find("option:first").val());
             orderInput.val(1);
         }
     });
