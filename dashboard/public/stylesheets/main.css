@@ -67,8 +67,8 @@ iframe {
 }
 .tab {
     cursor: pointer;
-    padding: 2px;                       /* Spacing between text and border internal */
-    margin: 5px;                       /* The amount of spacing to put around the tabs */
+    padding: 1px;                       /* Spacing between text and border internal */
+    margin: 3px;                       /* The amount of spacing to put around the tabs */
     border: 1px solid rgba(0, 0, 0, 0.2);             /* alternative color: #cfcecf */
     background-color: white;
 }

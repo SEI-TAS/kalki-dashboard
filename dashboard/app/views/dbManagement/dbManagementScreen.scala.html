@@ -21,6 +21,7 @@
                 CommandLookup</a></li>
             <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#UmboxLookupContent">
                 UmboxLookup</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#CommandContent">Command</a></li>
         </ul>
 
         @*The content in the db management tabs*@
@@ -55,6 +56,9 @@
             <div id="UmboxLookupContent" class="tab-pane fade">
             @dbManagement.umboxLookupContent()
             </div>
+            <div id="CommandContent" class="tab-pane fade">
+            @dbManagement.commandContent()
+            </div>
         </div>
     </div>
 } {
@@ -70,4 +74,5 @@
     <script src="@routes.Assets.versioned("javascripts/dbManagement/alertCondition.js")" type="text/javascript"></script>
     <script src="@routes.Assets.versioned("javascripts/dbManagement/commandLookup.js")" type="text/javascript"></script>
     <script src="@routes.Assets.versioned("javascripts/dbManagement/umboxLookup.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/command.js")" type="text/javascript"></script>
 }

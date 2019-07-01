@@ -12,6 +12,7 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
@@ -21,35 +22,36 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import javax.inject.Inject;
 
-public class CommandLookupController extends Controller {
+public class CommandController extends Controller {
     private final FormFactory formFactory;
     private final HttpExecutionContext ec;
     private final ObjectWriter ow;
     private int updatingId;
 
     @Inject
-    public CommandLookupController(FormFactory formFactory, HttpExecutionContext ec) {
+    public CommandController(FormFactory formFactory, HttpExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    public Result getCommandLookups() {
-        List<DeviceCommandLookup> commandLookups = Postgres.findAllCommandLookups();
+    public Result getCommands() {
+        List<DeviceCommand> commands = Postgres.findAllCommands();
         try {
-            return ok(ow.writeValueAsString(commandLookups));
+            return ok(ow.writeValueAsString(commands));
         } catch (JsonProcessingException e) {
+            return ok();
         }
-        return ok();
     }
 
-    public Result editCommandLookup() {
+    public Result editCommand() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             idToInt = -1;
         }
 
@@ -57,36 +59,38 @@ public class CommandLookupController extends Controller {
         return ok();
     }
 
-    public Result addOrUpdateCommandLookup() {
-        Form<DeviceCommandLookup> commandLookupForm = formFactory.form(DeviceCommandLookup.class);
-        Form<DeviceCommandLookup> filledForm = commandLookupForm.bindFromRequest();
+    public Result addOrUpdateCommand() {
+        Form<DeviceCommand> commandForm = formFactory.form(DeviceCommand.class);
+        Form<DeviceCommand> filledForm = commandForm.bindFromRequest();
 
-        if (filledForm.hasErrors()) {
+        if(filledForm.hasErrors()) {
             return badRequest(views.html.form.render(filledForm));
         } else {
-            DeviceCommandLookup cl = filledForm.get();
+            DeviceCommand command = filledForm.get();
 
-            cl.setId(this.updatingId);
+            command.setId(this.updatingId);
             this.updatingId = -1;
 
-            int n = cl.insertOrUpdate();
+            int n = command.insertOrUpdate();
             return redirect(routes.DBManagementController.dbManagementView(n));
         }
     }
 
-    public Result deleteCommandLookup() {
+    public Result deleteCommand() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
             idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             idToInt = -1;
         }
-        Boolean isSuccess = Postgres.deleteCommandLookup(idToInt);
+
+        Boolean isSuccess = Postgres.deleteCommand(idToInt);
         return ok(isSuccess.toString());
     }
 
-    public Result clearCommandLookupForm() {
+    public Result clearCommandForm() {
         this.updatingId = -1;
         return ok();
     }
