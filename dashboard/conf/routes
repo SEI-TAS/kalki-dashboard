@@ -18,6 +18,7 @@ GET     /funcy-output               controllers.FuncyController.socket()
 GET     /device-security-state      controllers.DeviceController.getDeviceSecurityState(id: Integer ?= -1)
 GET     /device-status-history      controllers.DeviceController.getDeviceStatusHistory(id: Integer ?= -1)
 GET     /alert-history              controllers.DeviceController.getAlertHistory(id: Integer ?= -1)
+GET     /device-status              controllers.DeviceController.getDeviceStatus(id: Integer ?= -1)
 
 GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
 POST    /edit-alert-type            controllers.AlertTypeController.editAlertType()
