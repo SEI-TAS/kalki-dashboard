@@ -1,28 +1,42 @@
 jQuery(document).ready(($) => {
+    function makeAttributessString(attributes) {
+        let resultString = "";
+        if (attributes != null) {
+            Object.keys(attributes).forEach(key => {
+                resultString = resultString + key + ": " + attributes[key] + "<br>";
+            });
+
+            resultString = resultString.substring(0, resultString.length - 4); //remove the last <br>
+        }
+
+        return resultString;
+    }
+
     $.get("/devices", (devices) => {
         $.each(JSON.parse(devices), (index, device) => {
             $("#dashboardTableBody").append("<tr id='tableRow" + device.id + "'>\n" +
-                "    <td><a href='/info?id=" + device.id + "' class='btn'>" + device.name + "</a></td>\n" +
-                "    <td id='stateHistory" + device.id  + "'>No State History</td>\n" +
-                "    <td id='deviceHistory" + device.id  + "'>No Device History</td>\n" +
-                "    <td id='alertHistory" + device.id  + "'>No Alert History</td>\n" +
+                "    <td><a href='/info?id=" + device.id + "'>" + device.name + "</a></td>\n" +
+                "    <td id='securityState" + device.id  + "'>No Security State</td>\n" +
+                "    <td id='deviceStatus" + device.id  + "'>No Status History</td>\n" +
+                "    <td id='latestAlert" + device.id  + "'>No Alert History</td>\n" +
                 "</tr>");
 
-            $.get("/state-history", { id: device.id }, function(stateHistory) {
-                let arr = JSON.parse(stateHistory);
-                if(arr !== null && arr.length !== 0) {
-                    // This sorts the array in reverse order by timestamp
-                    arr.sort(function(a,b){ return b.timestamp - a.timestamp });
-                    document.getElementById("stateHistory" + device.id).innerHTML = arr[0].state;
+            $.get("/device-security-state", { id: device.id }, function(stateHistory) {
+                let deviceState = JSON.parse(stateHistory);
+                if(deviceState !== null) {
+                    document.getElementById("securityState" + device.id).innerHTML = deviceState.name;
                 }
             });
 
-            $.get("/device-history", { id: device.id }, function(deviceHistory) {
+            $.get("/device-status-history", { id: device.id }, function(deviceHistory) {
                 let arr = JSON.parse(deviceHistory);
                 if(arr !== null && arr.length !== 0) {
                     // This sorts the array in reverse order by timestamp
                     arr.sort(function(a,b){ return b.timestamp - a.timestamp });
-                    document.getElementById("deviceHistory" + device.id).innerHTML = JSON.stringify(arr[0].attributes);
+                    let statusAttributes = arr[0].attributes;
+
+                    document.getElementById("deviceStatus" + device.id).innerHTML =
+                        makeAttributessString(statusAttributes);
                 }
             });
 
@@ -31,7 +45,7 @@ jQuery(document).ready(($) => {
                 if(arr !== null && arr.length !== 0) {
                     // This sorts the array in reverse order by timestamp
                     arr.sort(function(a,b){ return b.timestamp - a.timestamp });
-                    document.getElementById("alertHistory" + device.id).innerHTML = arr[0].name;
+                    document.getElementById("latestAlert" + device.id).innerHTML = arr[0].name;
                 }
             });
         });

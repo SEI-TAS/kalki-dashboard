@@ -7,42 +7,47 @@ jQuery(document).ready(($) => {
             console.log("Invalid ID");
         }
         else {
-            $("#name").append(device.name);
-            $("#type").append(device.type.name);
-            $("#policyFile").append(device.type.policyFileName);
+            $("#name").text(device.name);
+            $("#type").text(device.type.name);
 
-            $.get("/state-history", { id: device.id }, function(stateHistory) {
-                let arr = JSON.parse(stateHistory);
-                if(arr !== null && arr.length !== 0) {
-                    // This sorts the array in reverse order by timestamp
-                    arr.sort(function(a,b){ return b.timestamp - a.timestamp });
-                    $("#securityState").append(arr[0].state);
+            if(device.type.policyFileName) {
+                $("#policyFile").text(device.type.policyFileName);
+            }
+            else {
+                $("#policyFile").text("No policy file");
+            }
+
+
+            $.get("/device-security-state", { id: device.id }, function(stateHistory) {
+                let deviceState = JSON.parse(stateHistory);
+                if(deviceState !== null) {
+                    $("#securityState").text(deviceState.name);
                 }
             });
 
             $.get("/alert-history", { id: device.id }, function(alertHistory) {
                 let arr = JSON.parse(alertHistory);
+                console.log(alertHistory);
                 if(arr !== null && arr.length !== 0) {
                     // This sorts the array in reverse order by timestamp
                     arr.sort(function(a,b){ return b.timestamp - a.timestamp });
                     arr.forEach(function(alert) {
                         $("#alertHistoryTableBody").append("<tr>" +
-                            "<td>" + new Date(alert.timestamp).toString() + "</td>" +
-                            "<td>" + alert.externalId + "</td>" +
+                            "<td>" + new Date(alert.timestamp).toLocaleString() + "</td>" +
                             "<td>" + alert.name + "</td>" +
                             "</tr>")
                     });
                 }
             });
 
-            $.get("/device-history", { id: device.id }, function(deviceHistory) {
+            $.get("/device-status-history", { id: device.id }, function(deviceHistory) {
                 let arr = JSON.parse(deviceHistory);
                 if(arr !== null && arr.length !== 0) {
                     // This sorts the array in reverse order by timestamp
                     arr.sort(function(a,b){ return b.timestamp - a.timestamp });
                     let obj = arr[0].attributes;
                     for (var key in obj) {
-                        $("#variablesTableBody").append("<tr>" +
+                        $("#attributesTableBody").append("<tr>" +
                             "<td>" + key + "</td>" +
                             "<td>" + obj[key] + "</td>" +
                             "</tr>")
