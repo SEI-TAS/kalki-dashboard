@@ -13,9 +13,9 @@ jQuery(document).ready(($) => {
     let commandNameToIDMap = {};
     let commandIdToNameMap = {};
 
-    getCommandLookups();
-
     async function getSecurityStates() {
+        $(".form-control#securityStateSelect").empty();
+
         return $.get("/security-states", (securityStates) => {
             $.each(JSON.parse(securityStates), (id, state) => {
                 $(".form-control#securityStateSelect").append("<option id='securityStateOption" + state.id + "' value='" + state.id + "'>"
@@ -28,6 +28,8 @@ jQuery(document).ready(($) => {
     }
 
     async function getDeviceCommands() {
+        $(".form-control#deviceCommandSelect").empty();
+
         return $.get("/commands", (commands) => {
             $.each(JSON.parse(commands), (id, command) => {
                 commandNameToIDMap[command.name] = command.id;
@@ -45,6 +47,8 @@ jQuery(document).ready(($) => {
     async function getCommandLookups() {
         await getSecurityStates();
         await getDeviceCommands();
+
+        commandLookupTable.clear();
 
         $.get("/command-lookups", (commandLookups) => {
             $.each(JSON.parse(commandLookups), (index, commandLookup) => {
@@ -100,5 +104,11 @@ jQuery(document).ready(($) => {
             deviceCommandSelect.val(securityStateSelect.find("option:first").val()).change();
             $("#commandLookupContent #deviceCommandName").val($(".form-control#deviceCommandSelect").text());
         });
+    });
+
+    //only load data when tab is active
+    $('a[href="#CommandLookupContent"]').on('shown.bs.tab', function (e) {
+        console.log("running command lookup script");
+        getCommandLookups();
     });
 });

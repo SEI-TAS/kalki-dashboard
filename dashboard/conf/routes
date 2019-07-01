@@ -10,9 +10,6 @@ GET     /info                       controllers.DeviceController.deviceInfo(id: 
 
 POST    /funcy-monitoring-values    controllers.FuncyController.selectMonitoringValues()
 POST    /funcy-close-stream         controllers.FuncyController.closeInputStream()
-POST    /setup-database             controllers.HomeController.setupDatabase()
-POST    /reset-database             controllers.HomeController.resetDatabase()
-POST    /list-all-databases         controllers.HomeController.listAllDatabases()
 
 GET     /funcy-baud-rates           controllers.FuncyController.getBaudRates()
 GET     /funcy-monitoring-values    controllers.FuncyController.getMonitoringValues()

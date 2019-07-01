@@ -8,47 +8,51 @@ jQuery(document).ready(($) => {
         }
     );
 
-    $.get("/alert-types", (alertTypes) => {
-        $.each(JSON.parse(alertTypes), (index, alertType) => {
-            let newRow = "<tr id='tableRow" + alertType.id + "'>\n" +
-                "    <td class='fit'>" +
-                "        <div class='editDeleteContainer' >" +
-                "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + alertType.id + "'>Edit</button>" +
-                "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + alertType.id + "'>Delete</button>" +
-                "        </div>" +
-                "    </td>\n" +
-                "    <td class='fit' id='alertTypeID" + alertType.id + "'>" + alertType.id + "</td>\n" +
-                "    <td id='name" + alertType.id + "'>" + alertType.name + "</td>\n" +
-                "    <td id='description" + alertType.id + "'>" + alertType.description + "</td>\n" +
-                "    <td id='source" + alertType.id + "'>" + alertType.source + "</td>\n" +
-                "</tr>"
-            alertTypeTable.row.add($(newRow)).draw();
+    function getAlertTypes() {
+        alertTypeTable.clear();
 
-            alertTypeTable.on("click", "#editButton" + alertType.id, function () {
-                $.post("/edit-alert-type", {id: alertType.id}, function () {
-                    $('html, body').animate({scrollTop: 0}, 'fast', function () {
+        $.get("/alert-types", (alertTypes) => {
+            $.each(JSON.parse(alertTypes), (index, alertType) => {
+                let newRow = "<tr id='tableRow" + alertType.id + "'>\n" +
+                    "    <td class='fit'>" +
+                    "        <div class='editDeleteContainer' >" +
+                    "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + alertType.id + "'>Edit</button>" +
+                    "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + alertType.id + "'>Delete</button>" +
+                    "        </div>" +
+                    "    </td>\n" +
+                    "    <td class='fit' id='alertTypeID" + alertType.id + "'>" + alertType.id + "</td>\n" +
+                    "    <td id='name" + alertType.id + "'>" + alertType.name + "</td>\n" +
+                    "    <td id='description" + alertType.id + "'>" + alertType.description + "</td>\n" +
+                    "    <td id='source" + alertType.id + "'>" + alertType.source + "</td>\n" +
+                    "</tr>"
+                alertTypeTable.row.add($(newRow)).draw();
+
+                alertTypeTable.on("click", "#editButton" + alertType.id, function () {
+                    $.post("/edit-alert-type", {id: alertType.id}, function () {
+                        $('html, body').animate({scrollTop: 0}, 'fast', function () {
+                        });
+                        $("#alertTypeContent #submitFormButton").html("Update");
+                        $("#alertTypeContent #clearFormButton").html("Cancel Edit");
+                        $("#alertTypeContent .form-group #name").val($("#alertTypeTableBody #name" + alertType.id).html());
+                        $("#alertTypeContent .form-group #description").val($("#alertTypeTableBody #description" + alertType.id).html());
+                        $("#alertTypeContent .form-control#source").val($("#alertTypeTableBody #source" + alertType.id).html()).change();
                     });
-                    $("#alertTypeContent #submitFormButton").html("Update");
-                    $("#alertTypeContent #clearFormButton").html("Cancel Edit");
-                    $("#alertTypeContent .form-group #name").val($("#alertTypeTableBody #name" + alertType.id).html());
-                    $("#alertTypeContent .form-group #description").val($("#alertTypeTableBody #description" + alertType.id).html());
-                    $("#alertTypeContent .form-control#source").val($("#alertTypeTableBody #source" + alertType.id).html()).change();
                 });
-            });
 
-            alertTypeTable.on("click", "#deleteButton" + alertType.id, function () {
-                $.post("/delete-alert-type", {id: alertType.id}, function (isSuccess) {
-                    if (isSuccess == "true") {
-                        alertTypeTable.row("#tableRow" + alertType.id).remove().draw();
-                    } else {
-                        alert("Delete was unsuccessful.  Please check that another table entry " +
-                            "does not rely on this Alert Type");
-                    }
+                alertTypeTable.on("click", "#deleteButton" + alertType.id, function () {
+                    $.post("/delete-alert-type", {id: alertType.id}, function (isSuccess) {
+                        if (isSuccess == "true") {
+                            alertTypeTable.row("#tableRow" + alertType.id).remove().draw();
+                        } else {
+                            alert("Delete was unsuccessful.  Please check that another table entry " +
+                                "does not rely on this Alert Type");
+                        }
 
+                    });
                 });
             });
         });
-    });
+    }
 
     $("#alertTypeContent #clearFormButton").click(function () {
         $.post("/clear-alert-type-form", {}, function () {
@@ -59,5 +63,11 @@ jQuery(document).ready(($) => {
             $("#alertTypeContent .form-control#source").val(
                 $("#alertTypeContent .form-control#source option:first").val());
         });
+    });
+
+    //only load data when tab is active
+    $('a[href="#AlertTypeContent"]').on('shown.bs.tab', function (e) {
+        console.log("running alertType script");
+        getAlertTypes();
     });
 });

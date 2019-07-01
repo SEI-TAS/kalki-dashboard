@@ -52,10 +52,10 @@ jQuery(document).ready(($) => {
         return deviceIdToTagIdsMap[id]
     }
 
-    getDevices();
-
     //fill device types in form
     async function getDeviceTypes() {
+        $("#deviceContent #type").empty();
+
         return $.get("/device-types", (types) => {
             $.each(JSON.parse(types), (id, type) => {
                 typeNameToIDMap[type.name] = type.id;
@@ -67,6 +67,8 @@ jQuery(document).ready(($) => {
 
     //fill groups in form
     async function getGroups() {
+        $("#deviceContent #group").empty();
+
         return $.get("/groups", (groups) => {
             groupNameToIDMap[""] = -1;
             groupNameToIDMap["N/A"] = -1;
@@ -81,6 +83,8 @@ jQuery(document).ready(($) => {
 
     //fill tags in form
     async function getTags() {
+        $("#deviceContent #formTags").empty();
+
        return $.get("/tags", (tags) => {
             $.each(JSON.parse(tags), (id, tag) => {
                 tagIDtoNameMap[tag.id] = tag.name;
@@ -98,6 +102,8 @@ jQuery(document).ready(($) => {
         await getDeviceTypes();
         await getGroups();
         await getTags();
+
+        deviceTable.clear();
 
         $.get("/devices", (devices) => {
             $.each(JSON.parse(devices), (index, device) => {
@@ -172,7 +178,6 @@ jQuery(document).ready(($) => {
         });
     }
 
-
     $("#deviceContent #clearFormButton").click(function () {
         $.post("/clear-device-form", {}, function () {
             $("#deviceContent #submitFormButton").html("Add");
@@ -206,5 +211,11 @@ jQuery(document).ready(($) => {
             populateForm(JSON.parse(device))
         });
         $("#copyFromDeviceModal").modal("hide");
+    });
+
+    //only load data when tab is active
+    $('a[href="#DeviceContent"]').on('shown.bs.tab', function (e) {
+        console.log("running device script");
+        getDevices();
     });
 });

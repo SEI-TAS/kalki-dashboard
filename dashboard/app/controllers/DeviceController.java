@@ -3,6 +3,9 @@ package controllers;
 import edu.cmu.sei.ttg.kalki.models.*;
 import edu.cmu.sei.ttg.kalki.database.Postgres;
 
+import models.DatabaseExecutionContext;
+import play.libs.concurrent.HttpExecution;
+
 import java.lang.OutOfMemoryError;
 import java.lang.SecurityException;
 import java.lang.InterruptedException;
@@ -12,14 +15,14 @@ import java.io.File;
 import java.nio.file.Files;
 
 import play.data.*;
-import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-//import play.mvc.Http.Dynamicform;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,12 +36,12 @@ import java.util.Arrays;
 public class DeviceController extends Controller {
 
     private final FormFactory formFactory;
-    private final HttpExecutionContext ec;
+    private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
     private int updatingId;
 
     @Inject
-    public DeviceController(FormFactory formFactory, HttpExecutionContext ec) {
+    public DeviceController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -49,64 +52,70 @@ public class DeviceController extends Controller {
         return ok(views.html.info.render(id));
     }
 
-    public Result getDevices() {
-        List<Device> devices = Postgres.findAllDevices();
-        try {
-            return ok(ow.writeValueAsString(devices));
-        } catch (JsonProcessingException e) {
-        }
-        return ok();
-    }
-
-    public Result getDevice(String id) {
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-        Device device = Postgres.findDevice(idToInt);
-        try {
-            return ok(ow.writeValueAsString(device));
-        } catch (JsonProcessingException e) {
-        }
-        return ok();
-    }
-
-    public Result addOrUpdateDevice() throws Exception {
-        Form<Device> deviceForm = formFactory.form(Device.class);
-        Form<Device> filledForm = deviceForm.bindFromRequest();
-        if (filledForm.hasErrors()) {
-            return badRequest(views.html.form.render(filledForm));
-        } else {
-            Device d = filledForm.get();
-            // filledForm.get is not handling typeId and groupId correctly
-            // may have to map the form to the correct Device constructor that accepts the id's
-
-            d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate());
-
-            List<Integer> tagIdsList = new ArrayList<Integer>();
-
-            String tagIdsString = filledForm.field("tagIds").getValue().get();
-
-            String[] tagIdsStringArray = tagIdsString.substring(1, tagIdsString.length() - 1).split(", ");
-
-            //convert array of strings to list of integer
-
-            for (String s : tagIdsStringArray) {
-                if (!s.equals("-1")) {    //need to remove dummy -1 value
-                    tagIdsList.add(Integer.valueOf(s));
-                }
+    public CompletionStage<Result> getDevices() {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Device> devices = Postgres.findAllDevices();
+            try {
+                return ok(ow.writeValueAsString(devices));
+            } catch (JsonProcessingException e) {
             }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
 
-            d.setTagIds(tagIdsList);
-            d.setId(this.updatingId);
+    public CompletionStage<Result> getDevice(String id) {
+        return CompletableFuture.supplyAsync(() -> {
+            int idToInt;
+            try {
+                idToInt = Integer.parseInt(id);
+            } catch (NumberFormatException e) {
+                idToInt = -1;
+            }
+            Device device = Postgres.findDevice(idToInt);
+            try {
+                return ok(ow.writeValueAsString(device));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
 
-            this.updatingId = -1;
+    public CompletionStage<Result> addOrUpdateDevice() {
+        return CompletableFuture.supplyAsync(() -> {
+            Form<Device> deviceForm = formFactory.form(Device.class);
+            Form<Device> filledForm = deviceForm.bindFromRequest();
+            if (filledForm.hasErrors()) {
+                return badRequest(views.html.form.render(filledForm));
+            } else {
+                Device d = filledForm.get();
+                // filledForm.get is not handling typeId and groupId correctly
+                // may have to map the form to the correct Device constructor that accepts the id's
 
-            int n = d.insertOrUpdate();
-            return redirect(routes.DBManagementController.dbManagementView(n));
-        }
+                d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate());
+
+                List<Integer> tagIdsList = new ArrayList<Integer>();
+
+                String tagIdsString = filledForm.field("tagIds").getValue().get();
+
+                String[] tagIdsStringArray = tagIdsString.substring(1, tagIdsString.length() - 1).split(", ");
+
+                //convert array of strings to list of integer
+
+                for (String s : tagIdsStringArray) {
+                    if (!s.equals("-1")) {    //need to remove dummy -1 value
+                        tagIdsList.add(Integer.valueOf(s));
+                    }
+                }
+
+                d.setTagIds(tagIdsList);
+                d.setId(this.updatingId);
+
+                this.updatingId = -1;
+
+                int n = d.insertOrUpdate();
+                return redirect(routes.DBManagementController.dbManagementView(n));
+            }
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
     public Result editDevice() {
@@ -121,16 +130,18 @@ public class DeviceController extends Controller {
         return ok();
     }
 
-    public Result deleteDevice() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-        Boolean isSuccess = Postgres.deleteDevice(idToInt);
-        return ok(isSuccess.toString());
+    public CompletionStage<Result> deleteDevice() {
+        return CompletableFuture.supplyAsync(() -> {
+            String id = formFactory.form().bindFromRequest().get("id");
+            int idToInt;
+            try {
+                idToInt = Integer.parseInt(id);
+            } catch (NumberFormatException e) {
+                idToInt = -1;
+            }
+            Boolean isSuccess = Postgres.deleteDevice(idToInt);
+            return ok(isSuccess.toString());
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
     public Result clearDeviceForm() {
@@ -138,37 +149,43 @@ public class DeviceController extends Controller {
         return ok();
     }
 
-    public Result getDeviceHistory(int deviceId) {
-        List<DeviceStatus> deviceHistory = Postgres.findDeviceStatuses(deviceId);
-        try {
-            return ok(ow.writeValueAsString(deviceHistory));
-        } catch (JsonProcessingException e) {
-        }
-        return ok();
+    public CompletionStage<Result> getDeviceHistory(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<DeviceStatus> deviceHistory = Postgres.findDeviceStatuses(deviceId);
+            try {
+                return ok(ow.writeValueAsString(deviceHistory));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result getStateHistory(int deviceId) {
-        DeviceSecurityState state = Postgres.findDeviceSecurityStateByDevice(deviceId);
-        try {
-            return ok(ow.writeValueAsString(state));
-        } catch (JsonProcessingException e) {
-        }
-        return ok();
+    public CompletionStage<Result> getStateHistory(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            DeviceSecurityState state = Postgres.findDeviceSecurityStateByDevice(deviceId);
+            try {
+                return ok(ow.writeValueAsString(state));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result getAlertHistory(int deviceId) {
-        List<UmboxInstance> umboxInstances = Postgres.findUmboxInstances(deviceId);
-        List<String> umboxAlerterIds = new ArrayList<String>();
-        for (UmboxInstance u : umboxInstances) {
-            umboxAlerterIds.add(u.getAlerterId());
-        }
-        // getAlertHistory is not async because Play dones't like when the return type of this method is
-        // CompletionStage<CompletionStage<Result>> apparently.
-        try {
-            List<Alert> alertHistory = Postgres.findAlerts(umboxAlerterIds);
-            return ok(ow.writeValueAsString(alertHistory));
-        } catch (JsonProcessingException e) {
-        }
-        return ok();
+    public CompletionStage<Result> getAlertHistory(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<UmboxInstance> umboxInstances = Postgres.findUmboxInstances(deviceId);
+            List<String> umboxAlerterIds = new ArrayList<String>();
+            for (UmboxInstance u : umboxInstances) {
+                umboxAlerterIds.add(u.getAlerterId());
+            }
+            // getAlertHistory is not async because Play dones't like when the return type of this method is
+            // CompletionStage<CompletionStage<Result>> apparently.
+            try {
+                List<Alert> alertHistory = Postgres.findAlerts(umboxAlerterIds);
+                return ok(ow.writeValueAsString(alertHistory));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 }

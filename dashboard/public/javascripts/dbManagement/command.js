@@ -9,9 +9,9 @@ jQuery(document).ready(($) => {
     let deviceTypeIDtoNameMap = {};
     let deviceTypeNametoIDMap = {};
 
-    getCommands();
-
     async function getDeviceTypes() {
+        $(".form-control#deviceTypeSelect").empty();
+
         return $.get("/device-types", (deviceTypes) => {
             $.each(JSON.parse(deviceTypes), (id, deviceType) => {
                 $(".form-control#deviceTypeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
@@ -25,6 +25,8 @@ jQuery(document).ready(($) => {
 
     async function getCommands() {
         await getDeviceTypes();
+
+        commandTable.clear();
 
         $.get("/commands", (commands) => {
             $.each(JSON.parse(commands), (index, command) => {
@@ -78,5 +80,11 @@ jQuery(document).ready(($) => {
             $("#commandContent .form-group #name").val("");
             deviceTypeSelect.val(deviceTypeSelect.find("option:first").val()).change();
         });
+    });
+
+    //only load data when tab is active
+    $('a[href="#CommandContent"]').on('shown.bs.tab', function (e) {
+        console.log("running command script");
+        getCommands();
     });
 });
