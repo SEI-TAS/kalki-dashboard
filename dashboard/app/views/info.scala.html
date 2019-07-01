@@ -1,32 +1,44 @@
 @(id: String)
 
 @main("Device Info") {
-    <h4 id="name">Device Name: </h4>
-    <h4 id="type">Type: </h4>
-    <h4 id="securityState">Security State: </h4>
-    <h4 id="policyFile">Policy File: </h4>
+    <div class="row" id="deviceNameRow">
+        <h4 class="col-3">Device Name:</h4>
+        <h4 id="name" class="col-3"></h4>
+    </div>
+    <div class="row" id="deviceTypeRow">
+        <h4 class="col-3">Type:</h4>
+        <h4 id="type" class="col-3"></h4>
+    </div>
+    <div class="row" id="deviceSecurityStateRow">
+        <h4 class="col-3">Security State: </h4>
+        <h4 id="securityState" class="col-3"></h4>
+    </div>
+    <div class="row" id="policyFileRow">
+        <h4 class="col-3">Policy File: </h4>
+        <h4 id="policyFile" class="col-3"></h4>
+    </div>
+
     <h4 id="alertHistory">Alert History: </h4>
     <table class="table">
         <thead>
             <tr>
                 <th>Timestamp</th>
-                <th>External ID</th>
                 <th>Name</th>
             </tr>
         </thead>
         <tbody id="alertHistoryTableBody"></tbody>
     </table>
-    <h4 id="variables">Variables: </h4>
+
+    <h4 id="deviceStatus">Device Status: </h4>
     <table class="table">
         <thead>
             <tr>
-                <th>Variable Name</th>
+                <th>Attribute Name</th>
                 <th>Value</th>
             </tr>
         </thead>
-        <tbody id="variablesTableBody"></tbody>
+        <tbody id="attributesTableBody"></tbody>
     </table>
-    @*<h4 id="securityStateFlowgraph">Security State Flowgraph: </h4>*@
 } {
     <script src="@routes.Assets.versioned("javascripts/info.js")" type="text/javascript" data-id="@id"></script>
 }

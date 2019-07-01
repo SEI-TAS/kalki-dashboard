@@ -149,18 +149,7 @@ public class DeviceController extends Controller {
         return ok();
     }
 
-    public CompletionStage<Result> getDeviceHistory(int deviceId) {
-        return CompletableFuture.supplyAsync(() -> {
-            List<DeviceStatus> deviceHistory = Postgres.findDeviceStatuses(deviceId);
-            try {
-                return ok(ow.writeValueAsString(deviceHistory));
-            } catch (JsonProcessingException e) {
-            }
-            return ok();
-        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public CompletionStage<Result> getStateHistory(int deviceId) {
+    public CompletionStage<Result> getDeviceSecurityState(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
             DeviceSecurityState state = Postgres.findDeviceSecurityStateByDevice(deviceId);
             try {
@@ -171,17 +160,37 @@ public class DeviceController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getDeviceStatusHistory(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<DeviceStatus> deviceHistory = Postgres.findDeviceStatuses(deviceId);
+            try {
+                return ok(ow.writeValueAsString(deviceHistory));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+//    public CompletionStage<Result> getAlertHistory(int deviceId) {
+//        return CompletableFuture.supplyAsync(() -> {
+//            List<UmboxInstance> umboxInstances = Postgres.findUmboxInstances(deviceId);
+//            List<String> umboxAlerterIds = new ArrayList<String>();
+//            for (UmboxInstance u : umboxInstances) {
+//                umboxAlerterIds.add(u.getAlerterId());
+//            }
+//            List<Alert> alertHistory = Postgres.findAlerts(umboxAlerterIds);
+//            try {
+//                return ok(ow.writeValueAsString(alertHistory));
+//            } catch (JsonProcessingException e) {
+//            }
+//            return ok();
+//        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+//    }
+
     public CompletionStage<Result> getAlertHistory(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<UmboxInstance> umboxInstances = Postgres.findUmboxInstances(deviceId);
-            List<String> umboxAlerterIds = new ArrayList<String>();
-            for (UmboxInstance u : umboxInstances) {
-                umboxAlerterIds.add(u.getAlerterId());
-            }
-            // getAlertHistory is not async because Play dones't like when the return type of this method is
-            // CompletionStage<CompletionStage<Result>> apparently.
+            List<Alert> alertHistory = Postgres.findAlertsByDevice(deviceId);
             try {
-                List<Alert> alertHistory = Postgres.findAlerts(umboxAlerterIds);
                 return ok(ow.writeValueAsString(alertHistory));
             } catch (JsonProcessingException e) {
             }
