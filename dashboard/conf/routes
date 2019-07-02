@@ -45,6 +45,7 @@ POST    /delete-security-state          controllers.SecurityStateController.dele
 POST    /clear-security-state-form      controllers.SecurityStateController.clearSecurityStateForm()
 
 GET     /tags                       controllers.TagController.getTags()
+GET     /get-tags-by-device         controllers.TagController.getTagsByDevice(id: Integer ?= -1)
 POST    /edit-tag                   controllers.TagController.editTag()
 POST    /add-or-update-tag          controllers.TagController.addOrUpdateTag()
 POST    /delete-tag                 controllers.TagController.deleteTag()
