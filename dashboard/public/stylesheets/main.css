@@ -1,0 +1,307 @@
+/* Remove ugly border on the iframes. */
+iframe {
+    border: none; }
+
+/* Header */
+.roof {
+    height: 45px
+}
+.roof a.cmu-wordmark {
+    background: url(../images/CMU_Logo_Horiz_White.png) no-repeat left top scroll transparent;
+    background-size: contain;
+}
+.roof a.cmu-wordmark {
+    border-bottom: none 0;
+    min-height: 1.65rem;
+    margin: 0.75rem 0 0.2rem;
+    text-indent: -9999px;
+    width: 100%;
+    display: inline-block;
+    -webkit-box-flex: 0 1 auto;
+    -moz-box-flex: 0 1 auto;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+}
+.roof a.sei-wordmark {
+    color: white;
+    margin-left: auto;
+}
+.roof a.sei-wordmark h2 {
+    font-size: 1.5rem;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.nav-menu-item a:after {
+    content: none;
+    font-family: none;
+    font-size: .70rem;
+    margin: 0 0 0 0;
+    text-decoration: none;
+}
+.menus nav {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+.institute {
+    border-bottom: none;
+}
+.main-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Settings page */
+.facet-link-box .active {
+    color: #b00;
+}
+.time-range .btn-small {
+    margin: 2px;
+    border-width: 1px;
+}
+.time-range .row {
+    margin-bottom: 10px;
+}
+
+/* Tabs CSS for the AAEStatistics styled pages. */
+.tabs {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);      /* Border for the bottom, separating the panes */
+}
+.tab {
+    cursor: pointer;
+    padding: 1px;                       /* Spacing between text and border internal */
+    margin: 3px;                       /* The amount of spacing to put around the tabs */
+    border: 1px solid rgba(0, 0, 0, 0.2);             /* alternative color: #cfcecf */
+    background-color: white;
+}
+.tab:hover {
+    background-color: #868e96;
+    color: white;
+}
+.active-tab .tab {
+    padding-bottom: 19px;               /* Used to bring the box border down to the info pane. Heavily dependant on paddings/margins */
+    margin-bottom: -1px;                /* Used to offset the margin of the tabs border */
+    background-color: white;
+    color: rgba(0, 0, 0, 0.65);
+    border-bottom: hidden;              /* Then remove the bottom to complete the appearance! */
+}
+.tab-title {                            /* TODO change text size based on viewframe */
+    text-align: center;
+    height: 2em;
+    font-size: 12px;
+}
+.tab-quickdata {                        /* TODO change text size based on viewframe */
+    padding-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 35px;
+}
+
+.tab-content {
+    padding: 10px;
+}
+
+/* Stylize the name of the page (aka our logo) */
+.name {
+    font-weight: bold;
+    line-height: 1;
+}
+.name:hover {
+    color: #b00;
+}
+.name .optional {
+    color: #b00;
+    font-weight: normal;
+}
+.name:hover .optional{
+    color: black;
+}
+
+/* Used in hiding the graphs while they load */
+.hidden {
+    display: none;
+}
+
+.form-check > .form-check-input {
+    margin-left: 0px;
+}
+
+/*.form {
+    margin-bottom: 30px;
+}*/
+
+select {
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+    appearance: menulist;
+}
+
+select.form-control:not([size]):not([multiple]) {
+    color: #020202;
+}
+
+.funcyView {
+    min-height: 400px;
+}
+
+#outputContainer {
+    border: 2px solid black;
+    height: 200px;
+    overflow: scroll;
+    background-color: #d9dbdd;
+}
+
+.outputItem {
+    display: block;
+    color: black;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+#port, #baud {
+    text-align: left;
+}
+
+
+/* -------DBManagement page styling-------- */
+
+.dbManagementView .nav-item.tab:hover {     /* give active dbManagement tabs background color */
+    background-color: transparent;
+}
+
+.dbManagementView  .nav-tabs .nav-link {    /* get rid of unwanted border on nav-tabs */
+    border: none;
+    background-color: transparent;
+}
+
+.dbManagementView  .nav-tabs .nav-link.active {     /* get rid of unwanted border on active nav-tabs */
+    color: #bb0000;     /* make selected tab text redish */
+    border: none;
+    background-color: transparent;
+}
+
+.dbManagementView form {    /*gives some padding for the form from its border*/
+    padding: 10px;
+    border-style: outset;
+    border-width: 3px;
+    border-spacing: 15px 50px;
+    margin-bottom: 20px;
+}
+
+.dbManagementView table td.fit,
+.dbManagementView .table th.fit {   /*Adds the ability to have an item fit exactly into a table column */
+    white-space: nowrap;
+    width: 1%;
+}
+
+.dbManagementView .editDeleteContainer {        /* alligns the edit and delete buttons in a row */
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.dbManagementView .editDeleteContainer .btn-primary{     /* creates space between all edit and delete buttons*/
+    margin-right: 10px;
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+    bottom: .5em;
+}
+
+.btn-pill {
+    border-radius: 16px;
+}
+
+#alertConditionContent table#variableTable,
+#umboxLookupContent table#umboxImageOrderTable {
+    max-width: 50%;
+}
+
+/* alertCondition switch */
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+#alertConditionSwitchContainer {
+    margin-top: 10px;
+}
+
+#alertConditionContent label.selected {
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Make db management form headers closer to top */
+.dbManagementView form h4 {
+    margin-top: 0;
+}
+
+/* make asterisk red */
+.dbManagementView form label span, .dbManagementView form th span{
+    color: red;
+}

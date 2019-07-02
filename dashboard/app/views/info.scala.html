@@ -1,0 +1,44 @@
+@(id: String)
+
+@main("Device Info") {
+    <div class="row" id="deviceNameRow">
+        <h4 class="col-3">Device Name:</h4>
+        <h4 id="name" class="col-3"></h4>
+    </div>
+    <div class="row" id="deviceTypeRow">
+        <h4 class="col-3">Type:</h4>
+        <h4 id="type" class="col-3"></h4>
+    </div>
+    <div class="row" id="deviceSecurityStateRow">
+        <h4 class="col-3">Security State: </h4>
+        <h4 id="securityState" class="col-3"></h4>
+    </div>
+    <div class="row" id="policyFileRow">
+        <h4 class="col-3">Policy File: </h4>
+        <h4 id="policyFile" class="col-3"></h4>
+    </div>
+
+    <h4 id="alertHistory">Alert History: </h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody id="alertHistoryTableBody"></tbody>
+    </table>
+
+    <h4 id="deviceStatus">Device Status: </h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Attribute Name</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody id="attributesTableBody"></tbody>
+    </table>
+} {
+    <script src="@routes.Assets.versioned("javascripts/info.js")" type="text/javascript" data-id="@id"></script>
+}

@@ -1,0 +1,24 @@
+/* Handle different fonts for SEI/CMU styling */
+@font-face{
+    font-family: 'Open Sans';
+    src: url(../fonts/Open_Sans/OpenSans-Light.ttf);
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family: 'Open Sans';
+    src: url(../fonts/Open_Sans/OpenSans-Italic.ttf);
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face{
+    font-family: 'Open Sans';
+    src: url(../fonts/Open_Sans/OpenSans-Bold.ttf);
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto/Roboto-Regular.ttf);
+}
