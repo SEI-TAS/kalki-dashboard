@@ -197,4 +197,15 @@ public class DeviceController extends Controller {
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
+
+    public CompletionStage<Result> getDeviceStatus(int deviceStatusId) {
+        return CompletableFuture.supplyAsync(() -> {
+           DeviceStatus status = Postgres.findDeviceStatus(deviceStatusId);
+            try {
+                return ok(ow.writeValueAsString(status));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
 }
