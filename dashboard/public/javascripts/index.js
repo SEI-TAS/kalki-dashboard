@@ -8,7 +8,10 @@ jQuery(document).ready(($) => {
             columnDefs: [
                 {type: 'time-uni', targets: 3},
                 {orderable: false, targets: 4}
-            ]
+            ],
+            language: {
+                "emptyTable": "No devices to show"
+            }
         }
     );
 
@@ -84,9 +87,9 @@ jQuery(document).ready(($) => {
             await getSecurityState(device.id);
             await getLatestAlert(device.id);
             await getDeviceStatus(currentLatestAlert.deviceStatusId);
+
             let attributes = currentDeviceStatus ? makeAttributesString(currentDeviceStatus.attributes) : "";
             let formattedTime = currentLatestAlert.timestamp ? moment(currentLatestAlert.timestamp).format(timeFormat): "";
-
 
             let newRow = "<tr id='tableRow" + device.id + "'>\n" +
                 "    <td><a href='/info?id=" + device.id + "'>" + device.name + "</a></td>\n" +
