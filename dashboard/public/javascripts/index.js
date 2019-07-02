@@ -1,5 +1,5 @@
 jQuery(document).ready(($) => {
-    let timeFormat = "MMM Do YY, h:mm:ss a"
+    let timeFormat = "MMM Do YY, h:mm:ss a";
     $.fn.dataTable.moment(timeFormat);
 
     let homeTable = $('#homeTable').DataTable(
