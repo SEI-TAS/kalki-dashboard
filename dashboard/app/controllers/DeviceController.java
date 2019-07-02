@@ -49,7 +49,7 @@ public class DeviceController extends Controller {
     }
 
     public Result deviceInfo(String id) {
-        return ok(views.html.info.render(id));
+        return ok(views.html.deviceInfo.info.render(id));
     }
 
     public CompletionStage<Result> getDevices() {

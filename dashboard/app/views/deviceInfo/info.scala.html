@@ -1,0 +1,43 @@
+@(id: String)
+
+@main("Device Info") {
+    <div id="deviceInfoPage">
+        <div class="row" id="deviceNameRow">
+            <h4 class="col-3">Device Name:</h4>
+            <h4 id="name" class="col-3"></h4>
+        </div>
+        <div class="row" id="deviceTypeRow">
+            <h4 class="col-3">Type:</h4>
+            <h4 id="type" class="col-3"></h4>
+        </div>
+        <div class="row" id="deviceSecurityStateRow">
+            <h4 class="col-3">Security State: </h4>
+            <h4 id="securityState" class="col-3"></h4>
+        </div>
+        <div class="row" id="policyFileRow">
+            <h4 class="col-3">Policy File: </h4>
+            <h4 id="policyFile" class="col-3"></h4>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item tab"><a class="nav-link active" data-toggle="tab" href="#alertHistoryContent">
+                Alert History</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#statusHistoryContent">
+                Status History</a></li>
+        </ul>
+
+        @*The content in info tabs*@
+        <div class="tab-content">
+            <div id="alertHistoryContent" class="tab-pane fade show active">
+            @deviceInfo.alertHistoryContent()
+            </div>
+            <div id="statusHistoryContent" class="tab-pane fade">
+            @deviceInfo.statusHistoryContent()
+            </div>
+        </div>
+    </div>
+} {
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/info.js")" type="text/javascript" data-id="@id"></script>
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/alertHistory.js")" type="text/javascript" data-id="@id"></script>
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/statusHistory.js")" type="text/javascript" data-id="@id"></script>
+}

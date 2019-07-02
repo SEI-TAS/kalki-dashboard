@@ -165,16 +165,19 @@ select.form-control:not([size]):not([multiple]) {
 
 /* -------DBManagement page styling-------- */
 
-.dbManagementView .nav-item.tab:hover {     /* give active dbManagement tabs background color */
+.dbManagementView .nav-item.tab:hover,
+#deviceInfoPage .nav-item.tab:hover {     /* give active dbManagement and device info tabs background color */
     background-color: transparent;
 }
 
-.dbManagementView  .nav-tabs .nav-link {    /* get rid of unwanted border on nav-tabs */
+.dbManagementView .nav-tabs .nav-link,
+#deviceInfoPage .nav-tabs .nav-link {    /* get rid of unwanted border on nav-tabs */
     border: none;
     background-color: transparent;
 }
 
-.dbManagementView  .nav-tabs .nav-link.active {     /* get rid of unwanted border on active nav-tabs */
+.dbManagementView .nav-tabs .nav-link.active,
+#deviceInfoPage .nav-tabs .nav-link.active {     /* get rid of unwanted border on active nav-tabs */
     color: #bb0000;     /* make selected tab text redish */
     border: none;
     background-color: transparent;
