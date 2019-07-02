@@ -20,6 +20,7 @@ GET     /device-status-history      controllers.DeviceController.getDeviceStatus
 GET     /alert-history              controllers.DeviceController.getAlertHistory(id: Integer ?= -1)
 GET     /device-status              controllers.DeviceController.getDeviceStatus(id: Integer ?= -1)
 
+GET     /alert-type                 controllers.AlertTypeController.getAlertType(id: Integer ?= -1)
 GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
 POST    /edit-alert-type            controllers.AlertTypeController.editAlertType()
 POST    /add-or-update-alert-type   controllers.AlertTypeController.addOrUpdateAlertType()
@@ -65,6 +66,7 @@ POST    /delete-device              controllers.DeviceController.deleteDevice()
 POST    /clear-device-form          controllers.DeviceController.clearDeviceForm()
 
 GET     /alert-conditions                controllers.AlertConditionController.getAlertConditions()
+GET     /get-alert-conditions-by-device  controllers.AlertConditionController.getAlertConditionsByDevice(id: Integer ?= -1)
 POST    /edit-alert-condition            controllers.AlertConditionController.editAlertCondition()
 POST    /add-or-update-alert-condition   controllers.AlertConditionController.addOrUpdateAlertCondition()
 POST    /delete-alert-condition          controllers.AlertConditionController.deleteAlertCondition()

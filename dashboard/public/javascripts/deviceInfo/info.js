@@ -27,11 +27,6 @@ jQuery(document).ready(($) => {
                 $("#deviceInfoPage #group").text("N/A");
             }
         }
-
-        $.get('/get-tags-by-device', {"id": id}, (tags) => {
-           let tagString = createTagString(JSON.parse(tags));
-            $("#deviceInfoPage #tags").text(tagString);
-        });
     });
 
     $.get("/device-security-state", { id: id }, function(stateHistory) {
@@ -39,5 +34,10 @@ jQuery(document).ready(($) => {
         if(deviceState !== null) {
             $("#securityState").text(deviceState.name);
         }
+    });
+
+    $.get('/get-tags-by-device', {"id": id}, (tags) => {
+        let tagString = createTagString(JSON.parse(tags));
+        $("#deviceInfoPage #tags").text(tagString);
     });
 });
