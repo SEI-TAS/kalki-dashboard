@@ -7,22 +7,22 @@ jQuery(document).ready(($) => {
             console.log("Invalid ID");
         }
         else {
-            $("#name").text(device.name);
-            $("#type").text(device.type.name);
-
-            if(device.type.policyFileName) {
-                $("#policyFile").text(device.type.policyFileName);
+            $("#deviceInfoPage #name").text(device.name);
+            $("#deviceInfoPage #type").text(device.type.name);
+            if(device.group != null) {
+                $("#deviceInfoPage #group").text(device.group.name);
+            } else {
+                $("#deviceInfoPage #group").text("N/A");
             }
-            else {
-                $("#policyFile").text("No policy file");
-            }
-
-            $.get("/device-security-state", { id: device.id }, function(stateHistory) {
-                let deviceState = JSON.parse(stateHistory);
-                if(deviceState !== null) {
-                    $("#securityState").text(deviceState.name);
-                }
-            });
         }
-    })
+
+        //once findTagsByDevice is implemented add them here
+    });
+
+    $.get("/device-security-state", { id: id }, function(stateHistory) {
+        let deviceState = JSON.parse(stateHistory);
+        if(deviceState !== null) {
+            $("#securityState").text(deviceState.name);
+        }
+    });
 });
