@@ -47,6 +47,17 @@ public class CommandLookupController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getCommandLookupsByDevice(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<DeviceCommandLookup> commandLookups = Postgres.findCommandLookupsByDevice(id);
+            try {
+                return ok(ow.writeValueAsString(commandLookups));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public Result editCommandLookup() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;

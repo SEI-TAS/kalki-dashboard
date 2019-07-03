@@ -37,6 +37,17 @@ public class CommandController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
+    public CompletionStage<Result> getCommand(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            DeviceCommand command = Postgres.findCommand(id);
+            try {
+                return ok(ow.writeValueAsString(command));
+            } catch (JsonProcessingException e) {
+                return ok();
+            }
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> getCommands() {
         return CompletableFuture.supplyAsync(() -> {
             List<DeviceCommand> commands = Postgres.findAllCommands();

@@ -37,6 +37,17 @@ public class SecurityStateController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
+    public CompletionStage<Result> getSecurityState(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            SecurityState securityState = Postgres.findSecurityState(id);
+            try {
+                return ok(ow.writeValueAsString(securityState));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> getSecurityStates() {
         return CompletableFuture.supplyAsync(() -> {
             List<SecurityState> securityStates = Postgres.findAllSecurityStates();

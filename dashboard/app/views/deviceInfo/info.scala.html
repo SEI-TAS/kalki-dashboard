@@ -38,8 +38,6 @@
                 State Transitions Reference</a></li>
             <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#umboxInstancesContent">
                 umBox Instances</a></li>
-            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#deviceCommandsContent">
-                Device Commands</a></li>
         </ul>
 
         @*The content in info tabs*@
@@ -59,9 +57,6 @@
             <div id="umboxInstancesContent" class="tab-pane fade">
             @deviceInfo.umboxInstancesContent()
             </div>
-            <div id="deviceCommandsContent" class="tab-pane fade">
-            @deviceInfo.deviceCommandsContent()
-            </div>
         </div>
     </div>
 } {
@@ -69,7 +64,6 @@
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/alertHistory.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/statusHistory.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/deviceAlertConditions.js")" type="text/javascript" data-id="@id"></script>
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/stateTransitions.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/umboxInstances.js")" type="text/javascript" data-id="@id"></script>
-    <script src="@routes.Assets.versioned("javascripts/deviceInfo/deviceCommands.js")" type="text/javascript" data-id="@id"></script>
-
 }
