@@ -2,33 +2,27 @@
 
 @main("Device Info") {
     <div id="deviceInfoPage">
-        <div class="row" id="deviceNameRow">
-            <h4 class="col-3">Device Name:</h4>
-            <h4 id="name" class="col-3"></h4>
-        </div>
-        <div class="row" id="descriptionRow">
-            <h4 class="col-3">Description:</h4>
-            <h4 id="description" class="col-3"></h4>
-        </div>
-        <div class="row" id="deviceTypeRow">
-            <h4 class="col-3">Type:</h4>
-            <h4 id="type" class="col-3"></h4>
-        </div>
-        <div class="row" id="deviceSecurityStateRow">
-            <h4 class="col-3">Security State: </h4>
-            <h4 id="securityState" class="col-3"></h4>
-        </div>
-        <div class="row" id="deviceGroupRow">
-            <h4 class="col-3">Group: </h4>
-            <h4 id="group" class="col-3"></h4>
-        </div>
-        <div class="row" id="deviceTagsRow">
-            <h4 class="col-3">Tags: </h4>
-            <h4 id="tags" class="col-3"></h4>
-        </div>
-        <div class="row" id="deviceIPRow">
-            <h4 class="col-3">IP Address: </h4>
-            <h4 id="ipAddress" class="col-3"></h4>
+        <div id="deviceInfoTextContainer">
+            <div class="row form-group" id="nameDescriptionRow">
+                <div id="name" class="col-2"></div>
+                <div id="description" class="col-10 my-auto"></div>
+            </div>
+            <div class="row" id="typeStateRow">
+                <div class="col-2 infoLabel">Type:</div>
+                <div id="type" class="col-3 infoText"></div>
+                <div class="col-2 infoLabel">Security State: </div>
+                <div id="securityState" class="col-3 infoText"></div>
+            </div>
+            <div class="row" id="ipGroupRow">
+                <div class="col-2 infoLabel">IP Address: </div>
+                <div id="ipAddress" class="col-3 infoText"></div>
+                <div class="col-2 infoLabel">Group: </div>
+                <div id="group" class="col-3 infoText"></div>
+            </div>
+            <div class="row" id="deviceTagsRow">
+                <div class="col-2 infoLabel">Tags: </div>
+                <div id="tags" class="col-3 infoText"></div>
+            </div>
         </div>
 
         <ul class="nav nav-tabs">

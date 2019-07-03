@@ -27,7 +27,7 @@ jQuery(document).ready(($) => {
             } else {
                 $("#deviceInfoPage #group").text("N/A");
             }
-            $("#deviceInfoPage #ipAddress").text(device.ipAddress);
+            $("#deviceInfoPage #ipAddress").text(device.ip);
         }
     });
 

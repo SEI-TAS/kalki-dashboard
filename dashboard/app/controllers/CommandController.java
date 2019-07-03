@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +51,14 @@ public class CommandController extends Controller {
     public CompletionStage<Result> getCommandsByDevice(int id) {
         return CompletableFuture.supplyAsync(() -> {
             Device device = Postgres.findDevice(id);
-            List<DeviceCommand> commands = Postgres.findCommandsByDevice(device);
+            List<DeviceCommand> commands;
+            if(device != null) {
+                commands = Postgres.findCommandsByDevice(device);
+            }
+            else {
+                commands = Collections.emptyList();
+            }
+
             try {
                 return ok(ow.writeValueAsString(commands));
             } catch (JsonProcessingException e) {

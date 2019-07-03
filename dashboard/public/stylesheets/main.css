@@ -308,3 +308,35 @@ input:checked + .slider:before {
 .dbManagementView form label span, .dbManagementView form th span{
     color: red;
 }
+
+/* Style the device info top section */
+#deviceInfoTextContainer {
+    padding: 10px;
+    border-style: outset;
+    border-width: 3px;
+    border-spacing: 15px 50px;
+    margin-bottom: 20px;
+}
+
+#deviceInfoTextContainer #nameDescriptionRow {
+    background: lightgrey;
+}
+
+#deviceInfoTextContainer #name {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+#deviceInfoTextContainer #description {
+    font-style: italic;
+}
+
+#deviceInfoTextContainer .infoLabel {
+    font-size: 1.3rem;
+}
+
+#deviceInfoTextContainer .infoText {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
