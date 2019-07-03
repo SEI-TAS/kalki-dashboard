@@ -10,26 +10,33 @@ jQuery(document).ready(($) => {
             order: [[0, 'desc']],
             columnDefs: [
                 {type: 'time-uni', targets: 0},
-                {orderable: false, targets: 2}
+                {orderable: false, targets: 1}
             ],
             language: {
-                "emptyTable": "No alert history"
+                "emptyTable": "No status history"
             }
         }
     );
 
+    function makeAttributesString(attributes) {
+        let resultArray = [];
+        Object.keys(attributes).forEach((key) => {
+            resultArray.push(key +": "+ attributes.key);
+        });
+
+        return resultArray.join("<br>");
+    }
+
     $.get("/device-status-history", { id: given_id_status }, function(deviceHistory) {
         let arr = JSON.parse(deviceHistory);
         if(arr !== null && arr.length !== 0) {
-            let obj = arr[0].attributes;
-            for (let key in obj) {
+            arr.forEach((status) => {
                 let newRow = "<tr>" +
-                    "   <td>" + moment(alert.timestamp).format(timeFormat) + "</td>" +
-                    "   <td>" + key + "</td>" +
-                    "   <td>" + obj[key] + "</td>" +
+                    "   <td>" + moment(status.timestamp).format(timeFormat) + "</td>" +
+                    "   <td>" + makeAttributesString(status.attributes) + "</td>" +
                     "</tr>";
                 statusHistoryTable.row.add($(newRow)).draw();
-            }
+            });
         }
     });
 });
