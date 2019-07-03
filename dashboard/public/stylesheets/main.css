@@ -318,8 +318,12 @@ input:checked + .slider:before {
     margin-bottom: 20px;
 }
 
-#deviceInfoTextContainer #nameDescriptionRow {
+#deviceInfoTextContainer #nameRow {
     background: lightgrey;
+}
+
+#deviceInfoTextContainer #descriptionRow {
+    padding-left: 40px;
 }
 
 #deviceInfoTextContainer #name {
