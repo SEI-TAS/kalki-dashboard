@@ -20,12 +20,14 @@ jQuery(document).ready(($) => {
         }
         else {
             $("#deviceInfoPage #name").text(device.name);
+            $("#deviceInfoPage #description").text(device.description);
             $("#deviceInfoPage #type").text(device.type.name);
             if(device.group != null) {
                 $("#deviceInfoPage #group").text(device.group.name);
             } else {
                 $("#deviceInfoPage #group").text("N/A");
             }
+            $("#deviceInfoPage #ipAddress").text(device.ipAddress);
         }
     });
 

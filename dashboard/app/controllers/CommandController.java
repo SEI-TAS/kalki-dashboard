@@ -47,6 +47,18 @@ public class CommandController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getCommandsByDevice(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            Device device = Postgres.findDevice(id);
+            List<DeviceCommand> commands = Postgres.findCommandsByDevice(device);
+            try {
+                return ok(ow.writeValueAsString(commands));
+            } catch (JsonProcessingException e) {
+                return ok();
+            }
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public Result editCommand() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;

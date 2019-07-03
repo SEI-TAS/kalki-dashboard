@@ -87,6 +87,7 @@ POST    /delete-umbox-lookup         controllers.UmboxLookupController.deleteUmb
 POST    /clear-umbox-lookup-form     controllers.UmboxLookupController.clearUmboxLookupForm()
 
 GET     /commands                   controllers.CommandController.getCommands()
+GET     /get-commands-by-device     controllers.CommandController.getCommandsByDevice(id: Integer ?= -1)
 POST    /edit-command               controllers.CommandController.editCommand()
 POST    /add-or-update-command      controllers.CommandController.addOrUpdateCommand()
 POST    /delete-command             controllers.CommandController.deleteCommand()
