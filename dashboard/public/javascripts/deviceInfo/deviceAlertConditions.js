@@ -36,7 +36,6 @@ jQuery(document).ready(($) => {
         return $.get("/get-alert-conditions-by-device", { id: given_id_conditions }, function(alertConditions) {
             let arr = JSON.parse(alertConditions);
             if(arr !== null && arr.length !== 0) {
-
                 arr.forEach(function(alertCondition) {
                     foundAlertConditions.push(alertCondition)
 
@@ -51,7 +50,6 @@ jQuery(document).ready(($) => {
         foundAlertConditions.forEach((alertCondition) => {
             $.get("/alert-type", {id: alertCondition.alertTypeId}, (alertType) => {
                 alertType = JSON.parse(alertType);
-                console.log(alertType);
                 let newRow = "<tr>" +
                     "   <td>" + makeVariablesString(alertCondition.variables) + "</td>" +
                     "   <td>" + alertType.name + "</td>" +

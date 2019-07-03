@@ -19,6 +19,7 @@ GET     /device-security-state      controllers.DeviceController.getDeviceSecuri
 GET     /device-status-history      controllers.DeviceController.getDeviceStatusHistory(id: Integer ?= -1)
 GET     /alert-history              controllers.DeviceController.getAlertHistory(id: Integer ?= -1)
 GET     /device-status              controllers.DeviceController.getDeviceStatus(id: Integer ?= -1)
+GET     /umbox-instances            controllers.DeviceController.getUmboxInstances(id: Integer ?= -1)
 
 GET     /alert-type                 controllers.AlertTypeController.getAlertType(id: Integer ?= -1)
 GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
@@ -52,6 +53,7 @@ POST    /add-or-update-tag          controllers.TagController.addOrUpdateTag()
 POST    /delete-tag                 controllers.TagController.deleteTag()
 POST    /clear-tag-form             controllers.TagController.clearTagForm()
 
+GET     /umbox-image                controllers.UmboxImageController.getUmboxImage(id: Integer ?= -1)
 GET     /umbox-images               controllers.UmboxImageController.getUmboxImages()
 POST    /edit-umbox-image           controllers.UmboxImageController.editUmboxImage()
 POST    /add-or-update-umbox-image  controllers.UmboxImageController.addOrUpdateUmboxImage()

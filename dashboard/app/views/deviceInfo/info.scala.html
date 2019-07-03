@@ -30,6 +30,8 @@
                 Status History</a></li>
             <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#deviceAlertConditionsContent">
                 Alert Conditions</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#umboxInstancesContent">
+                umBox Instances</a></li>
         </ul>
 
         @*The content in info tabs*@
@@ -43,6 +45,9 @@
             <div id="deviceAlertConditionsContent" class="tab-pane fade">
             @deviceInfo.deviceAlertConditionsContent()
             </div>
+            <div id="umboxInstancesContent" class="tab-pane fade">
+            @deviceInfo.umboxInstancesContent()
+            </div>
         </div>
     </div>
 } {
@@ -50,4 +55,5 @@
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/alertHistory.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/statusHistory.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/deviceAlertConditions.js")" type="text/javascript" data-id="@id"></script>
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/umboxInstances.js")" type="text/javascript" data-id="@id"></script>
 }

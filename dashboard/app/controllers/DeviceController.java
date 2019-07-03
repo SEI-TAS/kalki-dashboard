@@ -208,4 +208,15 @@ public class DeviceController extends Controller {
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
+
+    public CompletionStage<Result> getUmboxInstances(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<UmboxInstance> instances = Postgres.findUmboxInstances(deviceId);
+            try {
+                return ok(ow.writeValueAsString(instances));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
 }
