@@ -34,6 +34,8 @@
                 Status History</a></li>
             <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#deviceAlertConditionsContent">
                 Alert Conditions</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#stateTransitionsContent">
+                State Transitions Reference</a></li>
             <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#umboxInstancesContent">
                 umBox Instances</a></li>
             <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#deviceCommandsContent">
@@ -50,6 +52,9 @@
             </div>
             <div id="deviceAlertConditionsContent" class="tab-pane fade">
             @deviceInfo.deviceAlertConditionsContent()
+            </div>
+            <div id="stateTransitionsContent" class="tab-pane fade">
+            @deviceInfo.stateTransitionsContent()
             </div>
             <div id="umboxInstancesContent" class="tab-pane fade">
             @deviceInfo.umboxInstancesContent()
