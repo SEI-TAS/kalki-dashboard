@@ -20,8 +20,10 @@ jQuery(document).ready(($) => {
 
     function makeAttributesString(attributes) {
         let resultArray = [];
-        Object.keys(attributes).forEach((key) => {
-            resultArray.push(key +": "+ attributes.key);
+        let keys = Object.keys(attributes);
+        keys.sort();
+        keys.forEach((key) => {
+            resultArray.push(key +": "+ attributes[key]);
         });
 
         return resultArray.join("<br>");
