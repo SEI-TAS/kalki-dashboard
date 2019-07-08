@@ -42,4 +42,11 @@ jQuery(document).ready(($) => {
         let tagString = createTagString(JSON.parse(tags));
         $("#deviceInfoPage #tags").text(tagString);
     });
+
+    $("#stateResetButton").click(() => {
+        console.log(id);
+        $.get('/state-reset', {"id": id}, function() {
+            window.location.reload();
+        });
+    })
 });

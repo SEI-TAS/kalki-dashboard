@@ -20,6 +20,7 @@ GET     /device-status-history      controllers.DeviceController.getDeviceStatus
 GET     /alert-history              controllers.DeviceController.getAlertHistory(id: Integer ?= -1)
 GET     /device-status              controllers.DeviceController.getDeviceStatus(id: Integer ?= -1)
 GET     /umbox-instances            controllers.DeviceController.getUmboxInstances(id: Integer ?= -1)
+GET     /state-reset                controllers.DeviceController.resetSecurityState(id: Integer ?= -1)
 
 GET     /alert-type                 controllers.AlertTypeController.getAlertType(id: Integer ?= -1)
 GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
