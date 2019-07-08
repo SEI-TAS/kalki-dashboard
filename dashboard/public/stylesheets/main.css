@@ -311,15 +311,15 @@ input:checked + .slider:before {
 
 /* Style the device info top section */
 #deviceInfoTextContainer {
-    padding: 10px;
-    border-style: outset;
-    border-width: 3px;
-    border-spacing: 15px 50px;
+    padding: 0px 10px 10px 10px;
+    outline: 5px outset lightgrey;
     margin-bottom: 20px;
+    margin-top: 20px;
+
 }
 
 #deviceInfoTextContainer #nameRow {
-    background: lightgrey;
+    background: darkgrey;
 }
 
 #deviceInfoTextContainer #descriptionRow {
