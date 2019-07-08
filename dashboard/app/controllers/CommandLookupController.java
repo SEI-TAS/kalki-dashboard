@@ -49,7 +49,7 @@ public class CommandLookupController extends Controller {
 
     public CompletionStage<Result> getCommandLookupsByDevice(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceCommandLookup> commandLookups = Postgres.findCommandLookupsByDevice(id);
+            List<DeviceCommandLookup> commandLookups = Postgres.findCommandLookupsByDevice(deviceId);
             try {
                 return ok(ow.writeValueAsString(commandLookups));
             } catch (JsonProcessingException e) {

@@ -1,13 +1,8 @@
 let given_id_transitions = document.currentScript.getAttribute('data-id');
 
 jQuery(document).ready(($) => {
-    const timeFormat = "MMM Do YY, h:mm:ss a";
-
     let foundImageLookups = [];
     let foundCommandLookups = [];
-
-    let stateToImage = {};
-    let stateToCommand = {};
 
     let stateToImagesAndCommands = {};
 
@@ -37,28 +32,36 @@ jQuery(document).ready(($) => {
     async function addToImageRelationship(lookup) {
         let foundState;
         await $.get("/security-state", {id: lookup.stateId}, (state) => {
-            foundState = state;
+            foundState = JSON.parse(state);
         });
 
-        return $.get("/umbox-image", {id: lookup.imageId}, (image) => {
-            if (stateToImage[foundState.name] == null) {
-                stateToImage[foundState.name] = [];
+        return $.get("/umbox-image", {id: lookup.umboxImageId}, (image) => {
+            image = JSON.parse(image);
+            if (stateToImagesAndCommands[foundState.name] == null) {
+                stateToImagesAndCommands[foundState.name] = {
+                    images: [],
+                    commands: []
+                };
             }
-            stateToImage[foundState.name].push(image.name);
+            stateToImagesAndCommands[foundState.name].images.push(image.name);
         });
     }
 
     async function addToCommandRelationship(lookup) {
         let foundState;
         await $.get("/security-state", {id: lookup.stateId}, (state) => {
-            foundState = state;
+            foundState = JSON.parse(state);
         });
 
         return $.get("/command", {id: lookup.commandId}, (command) => {
-            if (stateToCommand[foundState.name] == null) {
-                stateToCommand[foundState.name] = [];
+            command = JSON.parse(command);
+            if (stateToImagesAndCommands[foundState.name] == null) {
+                stateToImagesAndCommands[foundState.name] = {
+                    images: [],
+                    commands: []
+                };
             }
-            stateToCommand[foundState.name].push(command.name);
+            stateToImagesAndCommands[foundState.name].commands.push(command.name);
         });
     }
 
@@ -66,14 +69,24 @@ jQuery(document).ready(($) => {
         await getImageLookups();
         await getCommandLookups();
 
-        for(let lookup in foundImageLookups) {
-            await addToImageRelationship(lookup);
+        for (let index in foundImageLookups) {
+            await addToImageRelationship(foundImageLookups[index]);
         }
-        for(let lookup in foundCommandLookups) {
-            await addToCommandRelationship(lookup);
+        for (let index in foundCommandLookups) {
+            await addToCommandRelationship(foundCommandLookups[index]);
         }
 
-        //TODO: combine the relationships
+        Object.keys(stateToImagesAndCommands).forEach((state) => {
+            console.log(stateToImagesAndCommands[state].images);
+            let newRow = "<tr>" +
+                "   <td>" + state + "</td>" +
+                "   <td>" + stateToImagesAndCommands[state].images.join("<br>") + "</td>" +
+                "   <td>" + stateToImagesAndCommands[state].commands.join("<br>") + "</td>" +
+                "</tr>";
 
+            $("#stateTransitionsTableBody").append($(newRow));
+        });
     }
+
+    fillTable();
 });
