@@ -206,19 +206,7 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> resetSecurityState(Integer deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            System.out.println(deviceId);
-            Device device = Postgres.findDevice(deviceId);
-            if(device == null) {
-                return ok();
-            }
-            DeviceSecurityState state = new DeviceSecurityState(deviceId, 1);
-            state.insert();
-
-            device.setCurrentState(state);
-            device.insertOrUpdate();
-
-            Postgres.insertStateReset(deviceId);
-
+            Postgres.resetSecurityState(deviceId);
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

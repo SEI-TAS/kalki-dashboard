@@ -44,9 +44,8 @@ jQuery(document).ready(($) => {
     });
 
     $("#stateResetButton").click(() => {
-        console.log(id);
         $.get('/state-reset', {"id": id}, function() {
             window.location.reload();
         });
-    })
+    });
 });
