@@ -8,9 +8,6 @@ jQuery(document).ready(($) => {
     let alertHistoryTable = $('#alertHistoryTable').DataTable(
         {
             order: [[0, 'desc']],
-            columnDefs: [
-                {type: 'time-uni', targets: 0},
-            ],
             language: {
                 "emptyTable": "No alert history"
             }

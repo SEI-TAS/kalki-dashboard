@@ -9,7 +9,6 @@ jQuery(document).ready(($) => {
         {
             order: [[0, 'desc']],
             columnDefs: [
-                {type: 'time-uni', targets: 0},
                 {orderable: false, targets: 1}
             ],
             language: {

@@ -342,3 +342,14 @@ input:checked + .slider:before {
     font-weight: bold;
     font-size: 1.3rem;
 }
+
+/* fade in a background color for dynamically updated rows */
+.updated {
+    animation: 3s fadeBackground;
+}
+
+@keyframes fadeBackground {
+    0% {
+        background-color: #bcf516;
+    }
+}
