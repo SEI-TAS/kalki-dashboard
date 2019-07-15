@@ -1,8 +1,6 @@
 jQuery(document).ready(($) => {
-    let timeFormat = "MMM Do YY, h:mm:ss a";
-    let infoPollInterval = 10 * 1000;
-    let startAlertListener = true;
-    let startStateListener = true;
+    const timeFormat = "MMM Do YY, h:mm:ss a";
+    const infoPollInterval = 10 * 1000;
 
     $.fn.dataTable.moment(timeFormat);
 
@@ -123,8 +121,6 @@ jQuery(document).ready(($) => {
                     }, 3000);
                 });
             }
-
-            startStateListener = false;
         });
     }
 
@@ -162,8 +158,6 @@ jQuery(document).ready(($) => {
                     }
                 });
             }
-
-            startAlertListener = false;
         });
     }
 

@@ -79,4 +79,15 @@ public class NotificationController extends Controller {
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
+
+    public CompletionStage<Result> getNewStatuses() {
+        return CompletableFuture.supplyAsync(() -> {
+            List<DeviceStatus> newStatuses = Postgres.getNewStatuses();
+            try {
+                return ok(ow.writeValueAsString(newStatuses));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
 }

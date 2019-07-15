@@ -24,6 +24,7 @@ GET     /state-reset                controllers.DeviceController.resetSecuritySt
 
 GET     /get-new-alerts             controllers.NotificationController.getNewAlerts()
 GET     /get-new-states             controllers.NotificationController.getNewStates()
+GET     /get-new-statuses           controllers.NotificationController.getNewStatuses()
 POST    /start-listener             controllers.NotificationController.startListener()
 POST    /stop-listener              controllers.NotificationController.stopListener()
 

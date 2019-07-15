@@ -48,4 +48,8 @@ jQuery(document).ready(($) => {
             window.location.reload();
         });
     });
+
+    $(window).on("beforeunload", function() {
+        $.post("/stop-listener", () => {});
+    });
 });
