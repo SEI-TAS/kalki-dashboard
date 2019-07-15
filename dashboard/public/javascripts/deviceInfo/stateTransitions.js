@@ -77,7 +77,6 @@ jQuery(document).ready(($) => {
         }
 
         Object.keys(stateToImagesAndCommands).forEach((state) => {
-            console.log(stateToImagesAndCommands[state].images);
             let newRow = "<tr>" +
                 "   <td>" + state + "</td>" +
                 "   <td>" + stateToImagesAndCommands[state].images.join("<br>") + "</td>" +

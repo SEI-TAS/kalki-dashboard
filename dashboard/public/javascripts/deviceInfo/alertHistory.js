@@ -16,7 +16,7 @@ jQuery(document).ready(($) => {
     );
 
     async function getAlertHistory() {
-        $.get("/alert-history", { id: given_id_alert }, function(alertHistory) {
+        return $.get("/alert-history", { id: given_id_alert }, function(alertHistory) {
             let arr = JSON.parse(alertHistory);
             if(arr !== null && arr.length !== 0) {
                 arr.forEach(function(alert) {
@@ -31,7 +31,7 @@ jQuery(document).ready(($) => {
     }
 
     function getNewAlerts() {
-        $.get("/get-new-alerts", (alerts) => {
+        return $.get("/get-new-alerts", (alerts) => {
             let newAlerts = JSON.parse(alerts);
             if (newAlerts != null) {
                 newAlerts.forEach((alert) => {

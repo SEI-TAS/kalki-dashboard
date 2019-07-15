@@ -343,13 +343,23 @@ input:checked + .slider:before {
     font-size: 1.3rem;
 }
 
-/* fade in a background color for dynamically updated rows */
-.updated {
+/* fade in a background color for dynamically updated rows and state name */
+tr.updated {
     animation: 3s fadeBackground;
 }
 
 @keyframes fadeBackground {
     0% {
         background-color: #bcf516;
+    }
+}
+
+#securityState.updated {
+    animation: 3s fadeColor;
+}
+
+@keyframes fadeColor {
+    0% {
+        color: #bcf516;
     }
 }

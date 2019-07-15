@@ -30,7 +30,7 @@ jQuery(document).ready(($) => {
     }
 
     async function getDeviceStatuses() {
-        $.get("/device-status-history", { id: given_id_status }, function(deviceHistory) {
+        return $.get("/device-status-history", { id: given_id_status }, function(deviceHistory) {
             let arr = JSON.parse(deviceHistory);
             if(arr !== null && arr.length !== 0) {
                 arr.forEach((status) => {
@@ -45,7 +45,7 @@ jQuery(document).ready(($) => {
     }
 
     function getNewStatuses() {
-        $.get("/get-new-statuses", (statuses) => {
+        return $.get("/get-new-statuses", (statuses) => {
             let newStatuses = JSON.parse(statuses);
             if (newStatuses != null) {
                 newStatuses.forEach((status) => {
