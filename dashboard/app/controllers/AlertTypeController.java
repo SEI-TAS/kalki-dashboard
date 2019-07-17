@@ -36,6 +36,17 @@ public class AlertTypeController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
+    public CompletionStage<Result> getAlertType(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            AlertType alertType = Postgres.findAlertType(id);
+            try {
+                return ok(ow.writeValueAsString(alertType));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> getAlertTypes() {
         return CompletableFuture.supplyAsync(() -> {
             List<AlertType> alertTypes = Postgres.findAllAlertTypes();

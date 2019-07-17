@@ -51,6 +51,17 @@ public class UmboxLookupController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getUmboxLookupsByDevice(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<UmboxLookup> umboxLookups = Postgres.findUmboxLookupsByDevice(deviceId);
+            try {
+                return ok(ow.writeValueAsString(umboxLookups));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public Result editUmboxLookup() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;

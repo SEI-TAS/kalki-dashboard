@@ -37,6 +37,17 @@ public class UmboxImageController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
+    public CompletionStage<Result> getUmboxImage(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            UmboxImage umboxImage = Postgres.findUmboxImage(id);
+            try {
+                return ok(ow.writeValueAsString(umboxImage));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> getUmboxImages() {
         return CompletableFuture.supplyAsync(() -> {
             List<UmboxImage> umboxImages = Postgres.findAllUmboxImages();

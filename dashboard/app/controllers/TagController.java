@@ -48,6 +48,17 @@ public class TagController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getTagsByDevice(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Tag> tags = Postgres.findTagsByDevice(id);
+            try {
+                return ok(ow.writeValueAsString(tags));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public Result editTag() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;

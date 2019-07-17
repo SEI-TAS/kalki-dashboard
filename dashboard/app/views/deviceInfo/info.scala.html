@@ -2,21 +2,29 @@
 
 @main("Device Info") {
     <div id="deviceInfoPage">
-        <div class="row" id="deviceNameRow">
-            <h4 class="col-3">Device Name:</h4>
-            <h4 id="name" class="col-3"></h4>
-        </div>
-        <div class="row" id="deviceTypeRow">
-            <h4 class="col-3">Type:</h4>
-            <h4 id="type" class="col-3"></h4>
-        </div>
-        <div class="row" id="deviceSecurityStateRow">
-            <h4 class="col-3">Security State: </h4>
-            <h4 id="securityState" class="col-3"></h4>
-        </div>
-        <div class="row" id="policyFileRow">
-            <h4 class="col-3">Policy File: </h4>
-            <h4 id="policyFile" class="col-3"></h4>
+        <div id="deviceInfoTextContainer">
+            <div class="row form-group" id="nameRow">
+                <div class="col" id="name"></div>
+            </div>
+            <div class="row form-group" id="descriptionRow">
+                <div class="col" id="description"></div>
+            </div>
+            <div class="row" id="typeStateRow">
+                <div class="col-2 infoLabel">Type:</div>
+                <div id="type" class="col-3 infoText"></div>
+                <div class="col-2 infoLabel">Security State: </div>
+                <div id="securityState" class="col-3 infoText"></div>
+            </div>
+            <div class="row" id="ipGroupRow">
+                <div class="col-2 infoLabel">IP Address: </div>
+                <div id="ipAddress" class="col-3 infoText"></div>
+                <div class="col-2 infoLabel">Group: </div>
+                <div id="group" class="col-3 infoText"></div>
+            </div>
+            <div class="row" id="deviceTagsRow">
+                <div class="col-2 infoLabel">Tags: </div>
+                <div id="tags" class="col-3 infoText"></div>
+            </div>
         </div>
 
         <ul class="nav nav-tabs">
@@ -24,6 +32,12 @@
                 Alert History</a></li>
             <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#statusHistoryContent">
                 Status History</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#deviceAlertConditionsContent">
+                Alert Conditions</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#stateTransitionsContent">
+                State Transitions Reference</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#umboxInstancesContent">
+                umBox Instances</a></li>
         </ul>
 
         @*The content in info tabs*@
@@ -34,10 +48,22 @@
             <div id="statusHistoryContent" class="tab-pane fade">
             @deviceInfo.statusHistoryContent()
             </div>
+            <div id="deviceAlertConditionsContent" class="tab-pane fade">
+            @deviceInfo.deviceAlertConditionsContent()
+            </div>
+            <div id="stateTransitionsContent" class="tab-pane fade">
+            @deviceInfo.stateTransitionsContent()
+            </div>
+            <div id="umboxInstancesContent" class="tab-pane fade">
+            @deviceInfo.umboxInstancesContent()
+            </div>
         </div>
     </div>
 } {
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/info.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/alertHistory.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/statusHistory.js")" type="text/javascript" data-id="@id"></script>
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/deviceAlertConditions.js")" type="text/javascript" data-id="@id"></script>
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/stateTransitions.js")" type="text/javascript" data-id="@id"></script>
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/umboxInstances.js")" type="text/javascript" data-id="@id"></script>
 }

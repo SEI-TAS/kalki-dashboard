@@ -39,9 +39,20 @@ public class AlertConditionController extends Controller {
 
     public CompletionStage<Result> getAlertConditions() {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertCondition> alertTypes = Postgres.findAllAlertConditions();
+            List<AlertCondition> alertConditions = Postgres.findAllAlertConditions();
             try {
-                return ok(ow.writeValueAsString(alertTypes));
+                return ok(ow.writeValueAsString(alertConditions));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+    public CompletionStage<Result> getAlertConditionsByDevice(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<AlertCondition> alertConditions = Postgres.findAlertConditionsByDevice(id);
+            try {
+                return ok(ow.writeValueAsString(alertConditions));
             } catch (JsonProcessingException e) {
             }
             return ok();
