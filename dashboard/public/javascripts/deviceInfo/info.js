@@ -1,7 +1,7 @@
 var id = document.currentScript.getAttribute('data-id');
 
 jQuery(document).ready(($) => {
-    const infoPollInterval = 10 * 1000;
+    const infoPollInterval = 1 * 1000;
 
     function createTagString(tags) {
         let tagNames = [];

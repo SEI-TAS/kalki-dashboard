@@ -1,6 +1,6 @@
 jQuery(document).ready(($) => {
     const timeFormat = "MMM Do YY, h:mm:ss a";
-    const infoPollInterval = 10 * 1000;
+    const infoPollInterval = 1 * 1000;
 
     $.fn.dataTable.moment(timeFormat);
 

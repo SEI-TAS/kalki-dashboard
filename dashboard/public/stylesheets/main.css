@@ -363,3 +363,8 @@ tr.updated {
         color: #bcf516;
     }
 }
+
+/* add some space below the status history refresh button */
+#statusHistoryResetButton {
+    margin-bottom: 10px;
+}

@@ -2,9 +2,7 @@ let given_id_alert = document.currentScript.getAttribute('data-id');
 
 jQuery(document).ready(($) => {
     const timeFormat = "MMM Do YY, h:mm:ss a";
-    const infoPollInterval = 10 * 1000;
-
-    const originalStatusIds = new Set();
+    const infoPollInterval = 1 * 1000;
 
     $.fn.dataTable.moment(timeFormat);
 
@@ -65,6 +63,8 @@ jQuery(document).ready(($) => {
     /*
         Status history related
      */
+    let originalStatusIds = new Set();
+
     let statusHistoryTable = $('#statusHistoryTable').DataTable(
         {
             order: [[0, 'desc']],
@@ -109,11 +109,7 @@ jQuery(document).ready(($) => {
             let newStatuses = JSON.parse(statuses);
             if (newStatuses != null) {
                 newStatuses.forEach((status) => {
-                    if(originalStatusIds.has(status.id)) {
-                        console.log("new status found that was inserted on startup");
-                    }
-
-                    if(status.deviceId == given_id_alert) {
+                    if(status.deviceId == given_id_alert && !originalStatusIds.has(status.id)) {
                         let newRow = "<tr id='tableRow" +status.id+ "'>" +
                             "   <td>" + moment(status.timestamp).format(timeFormat) + "</td>" +
                             "   <td>" + makeAttributesString(status.attributes) + "</td>" +
@@ -130,6 +126,10 @@ jQuery(document).ready(($) => {
         });
     }
 
+    $("#statusHistoryContent #statusHistoryResetButton").click(() => {
+        getNewStatuses();
+    });
+
     /*
         General
      */
@@ -144,7 +144,6 @@ jQuery(document).ready(($) => {
 
         setInterval(function () {
             getNewAlerts();
-            getNewStatuses();
         }, infoPollInterval);
     }
 
