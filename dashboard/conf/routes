@@ -22,6 +22,12 @@ GET     /device-status              controllers.DeviceController.getDeviceStatus
 GET     /umbox-instances            controllers.DeviceController.getUmboxInstances(id: Integer ?= -1)
 GET     /state-reset                controllers.DeviceController.resetSecurityState(id: Integer ?= -1)
 
+GET     /get-new-alerts             controllers.NotificationController.getNewAlerts()
+GET     /get-new-states             controllers.NotificationController.getNewStates()
+GET     /get-new-statuses           controllers.NotificationController.getNewStatuses()
+POST    /start-listener             controllers.NotificationController.startListener()
+POST    /stop-listener              controllers.NotificationController.stopListener()
+
 GET     /alert-type                 controllers.AlertTypeController.getAlertType(id: Integer ?= -1)
 GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
 POST    /edit-alert-type            controllers.AlertTypeController.editAlertType()

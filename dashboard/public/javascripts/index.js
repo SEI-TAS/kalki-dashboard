@@ -1,12 +1,13 @@
 jQuery(document).ready(($) => {
-    let timeFormat = "MMM Do YY, h:mm:ss a";
+    const timeFormat = "MMM Do YY, h:mm:ss a";
+    const infoPollInterval = 1 * 1000;
+
     $.fn.dataTable.moment(timeFormat);
 
     let homeTable = $('#homeTable').DataTable(
         {
             order: [[3, 'desc']],
             columnDefs: [
-                {type: 'time-uni', targets: 3},
                 {orderable: false, targets: 4}
             ],
             language: {
@@ -36,10 +37,9 @@ jQuery(document).ready(($) => {
     async function getSecurityState(id) {
         return $.get("/device-security-state", {id: id}, function (stateHistory) {
             let deviceState = JSON.parse(stateHistory);
-            if(deviceState != null) {
+            if (deviceState != null) {
                 currentState = deviceState;
-            }
-            else {
+            } else {
                 currentState = {name: "no current state"};
             }
         });
@@ -70,7 +70,7 @@ jQuery(document).ready(($) => {
         });
     }
 
-    async function getDevices() {
+    async function getAllDevices() {
         return $.get("/devices", (devices) => {
             let deviceArray = [];
             $.each(JSON.parse(devices), (index, device) => {
@@ -81,7 +81,7 @@ jQuery(document).ready(($) => {
     }
 
     async function fillTable() {
-        await getDevices();
+        await getAllDevices();
 
         for (const device of currentDevices) {
             await getSecurityState(device.id);
@@ -89,7 +89,7 @@ jQuery(document).ready(($) => {
             await getDeviceStatus(currentLatestAlert.deviceStatusId);
 
             let attributes = currentDeviceStatus ? makeAttributesString(currentDeviceStatus.attributes) : "";
-            let formattedTime = currentLatestAlert.timestamp ? moment(currentLatestAlert.timestamp).format(timeFormat): "";
+            let formattedTime = currentLatestAlert.timestamp ? moment(currentLatestAlert.timestamp).format(timeFormat) : "";
 
             let newRow = "<tr id='tableRow" + device.id + "'>\n" +
                 "    <td><a href='/info?id=" + device.id + "'>" + device.name + "</a></td>\n" +
@@ -100,7 +100,81 @@ jQuery(document).ready(($) => {
                 "</tr>";
             homeTable.row.add($(newRow)).draw();
         }
+
+        getNewStates();
+        getNewAlerts();
+    }
+
+    function getNewStates() {
+        $.get("/get-new-states", (states) => {
+            let newStates = JSON.parse(states);
+            if (newStates != null) {
+                newStates.forEach((state) => {
+                    let deviceId = state.deviceId;
+                    let stateName = state.name;
+
+
+                    homeTable.row("#tableRow" +deviceId).cell("#securityState" +deviceId).data(stateName);
+                    $("#homeTable #tableRow" + deviceId).addClass("updated");
+                    setTimeout(function() {
+                        $("#homeTable #tableRow" + deviceId).removeClass("updated");
+                    }, 3000);
+                });
+            }
+        });
+    }
+
+    function getNewAlerts() {
+        $.get("/get-new-alerts", (alerts) => {
+            let newAlerts = JSON.parse(alerts);
+            if (newAlerts != null) {
+                newAlerts.forEach((alert) => {
+                    let deviceId = alert.deviceId;
+                    let alertName = alert.name;
+                    let deviceStatusId = alert.deviceStatusId;
+                    let formattedTime = alert.timestamp ? moment(alert.timestamp).format(timeFormat) : "";
+
+                    homeTable.row("#tableRow" + deviceId).cell("#latestAlert" + deviceId).data(alertName).draw();
+                    homeTable.row("#tableRow" + deviceId).cell("#time" + deviceId).data(formattedTime).draw();
+
+                    $("#homeTable #tableRow" + deviceId).addClass("updated");
+
+                    setTimeout(function() {
+                        $("#homeTable #tableRow" + deviceId).removeClass("updated");
+                    }, 3000);
+
+                    if (deviceStatusId != 0) {
+                        $.get("/device-status", {id: id}, function (deviceStatus) {
+                            if (deviceStatus != null) {
+                                deviceStatus = JSON.parse(deviceStatus);
+                            } else {
+                                deviceStatus = null;
+                            }
+
+                            let attributes = deviceStatus ? makeAttributesString(deviceStatus.attributes) : "";
+
+                            homeTable.row("#tableRow" + deviceId).cell("#deviceStatus" + deviceId).data(attributes);
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    function startListener() {
+        $.post("/start-listener", () => {});
     }
 
     fillTable();
+
+    startListener();
+
+    setInterval(function () {
+        getNewStates();
+        getNewAlerts();
+    }, infoPollInterval);
+
+    $(window).on("beforeunload", function() {
+       $.post("/stop-listener", () => {});
+    });
 });
