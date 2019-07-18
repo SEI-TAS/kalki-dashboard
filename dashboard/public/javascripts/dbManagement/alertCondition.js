@@ -155,9 +155,10 @@ jQuery(document).ready(($) => {
                     $("#alertConditionContent #clearFormButton").html("Cancel Edit");
                     $("#alertConditionContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
                     $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
+                    $("#alertConditionContent #variableTableBody").empty();
                     populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
 
-                    //disbable inputting device type
+                    //disable inputting device type
                     disableSwitch();
                 });
 
