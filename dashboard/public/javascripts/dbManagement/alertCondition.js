@@ -146,21 +146,19 @@ jQuery(document).ready(($) => {
                 alertConditionTable.row.add($(newRow)).draw();
 
                 alertConditionTable.on("click", "#editButton" + alertCondition.id, function () {
-                    $.post("/edit-alert-condition", {id: alertCondition.id}, function () {
-                        let alertTypeName = $("#alertConditionTableBody #alertType" + alertCondition.id).html();
-                        let deviceName = $("#alertConditionTableBody #device" + alertCondition.id).html();
+                    let alertTypeName = $("#alertConditionTableBody #alertType" + alertCondition.id).html();
+                    let deviceName = $("#alertConditionTableBody #device" + alertCondition.id).html();
 
-                        $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                        });
-                        $("#alertConditionContent #submitFormButton").html("Update");
-                        $("#alertConditionContent #clearFormButton").html("Cancel Edit");
-                        $("#alertConditionContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
-                        $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
-                        populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
-
-                        //disbable inputting device type
-                        disableSwitch();
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {
                     });
+                    $("#alertConditionContent #submitFormButton").html("Update");
+                    $("#alertConditionContent #clearFormButton").html("Cancel Edit");
+                    $("#alertConditionContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
+                    $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
+                    populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
+
+                    //disbable inputting device type
+                    disableSwitch();
                 });
 
                 alertConditionTable.on("click", "#deleteButton" + alertCondition.id, function () {
@@ -216,18 +214,16 @@ jQuery(document).ready(($) => {
         let deviceSelect = $("#alertConditionContent .form-control#deviceSelect");
         let typeSelect = $("#alertConditionContent .form-control#typeSelect");
 
-        $.post("/clear-alert-condition-form", {}, function () {
-            $("#alertConditionContent #submitFormButton").html("Add");
-            $("#alertConditionContent #clearFormButton").html("Clear");
-            alertTypeSelect.val(alertTypeSelect.find("option:first").val());
-            deviceSelect.val(deviceSelect.find("option:first").val());
-            typeSelect.val(typeSelect.find("option:first").val());
-            $("#alertConditionContent .form-control#variableKey").val("");
-            $("#alertConditionContent .form-control#variableValue").val("");
-            $("#alertConditionContent #variableTable").find("tr:gt(0)").remove();   //remove all rows except header
+        $("#alertConditionContent #submitFormButton").html("Add");
+        $("#alertConditionContent #clearFormButton").html("Clear");
+        alertTypeSelect.val(alertTypeSelect.find("option:first").val());
+        deviceSelect.val(deviceSelect.find("option:first").val());
+        typeSelect.val(typeSelect.find("option:first").val());
+        $("#alertConditionContent .form-control#variableKey").val("");
+        $("#alertConditionContent .form-control#variableValue").val("");
+        $("#alertConditionContent #variableTable").find("tr:gt(0)").remove();   //remove all rows except header
 
-            enableSwitch();
-        });
+        enableSwitch();
     });
 
     //only load content if the tab is active

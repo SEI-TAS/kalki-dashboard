@@ -77,10 +77,8 @@ POST    /clear-device-form          controllers.DeviceController.clearDeviceForm
 
 GET     /alert-conditions                controllers.AlertConditionController.getAlertConditions()
 GET     /get-alert-conditions-by-device  controllers.AlertConditionController.getAlertConditionsByDevice(id: Integer ?= -1)
-POST    /edit-alert-condition            controllers.AlertConditionController.editAlertCondition()
-POST    /add-or-update-alert-condition   controllers.AlertConditionController.addOrUpdateAlertCondition()
+POST    /add-alert-condition             controllers.AlertConditionController.addAlertCondition()
 POST    /delete-alert-condition          controllers.AlertConditionController.deleteAlertCondition()
-POST    /clear-alert-condition-form      controllers.AlertConditionController.clearAlertConditionForm()
 
 GET     /command-lookups                controllers.CommandLookupController.getCommandLookups()
 GET     /get-command-lookups-by-device  controllers.CommandLookupController.getCommandLookupsByDevice(id: Integer ?= -1)

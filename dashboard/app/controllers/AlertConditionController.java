@@ -27,14 +27,12 @@ public class AlertConditionController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
-    private int updatingId;
 
     @Inject
     public AlertConditionController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
     public CompletionStage<Result> getAlertConditions() {
@@ -59,20 +57,7 @@ public class AlertConditionController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result editAlertCondition() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-
-        this.updatingId = idToInt;
-        return ok();
-    }
-
-    public CompletionStage<Result> addOrUpdateAlertCondition() {
+    public CompletionStage<Result> addAlertCondition() {
         return CompletableFuture.supplyAsync(() -> {
             Form<AlertCondition> alertTypeForm = formFactory.form(AlertCondition.class);
             Form<AlertCondition> filledForm = alertTypeForm.bindFromRequest();
@@ -81,10 +66,8 @@ public class AlertConditionController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 AlertCondition at = filledForm.get();
-                at.setId(this.updatingId);
-                this.updatingId = -1;
 
-                int n = at.insertOrUpdate();
+                int n = at.insert();
                 return redirect(routes.DBManagementController.dbManagementView(n));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
@@ -102,10 +85,5 @@ public class AlertConditionController extends Controller {
             Boolean isSuccess = Postgres.deleteAlertCondition(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result clearAlertConditionForm() {
-        this.updatingId = -1;
-        return ok();
     }
 }
