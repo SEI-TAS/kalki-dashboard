@@ -171,22 +171,6 @@ public class DeviceController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-//    public CompletionStage<Result> getAlertHistory(int deviceId) {
-//        return CompletableFuture.supplyAsync(() -> {
-//            List<UmboxInstance> umboxInstances = Postgres.findUmboxInstances(deviceId);
-//            List<String> umboxAlerterIds = new ArrayList<String>();
-//            for (UmboxInstance u : umboxInstances) {
-//                umboxAlerterIds.add(u.getAlerterId());
-//            }
-//            List<Alert> alertHistory = Postgres.findAlerts(umboxAlerterIds);
-//            try {
-//                return ok(ow.writeValueAsString(alertHistory));
-//            } catch (JsonProcessingException e) {
-//            }
-//            return ok();
-//        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-//    }
-
     public CompletionStage<Result> getAlertHistory(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
             List<Alert> alertHistory = Postgres.findAlertsByDevice(deviceId);
@@ -216,6 +200,13 @@ public class DeviceController extends Controller {
                 return ok(ow.writeValueAsString(instances));
             } catch (JsonProcessingException e) {
             }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+    public CompletionStage<Result> resetSecurityState(Integer deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            Postgres.resetSecurityState(deviceId);
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

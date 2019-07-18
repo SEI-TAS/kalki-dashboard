@@ -315,7 +315,6 @@ input:checked + .slider:before {
     outline: 5px outset lightgrey;
     margin-bottom: 20px;
     margin-top: 20px;
-
 }
 
 #deviceInfoTextContainer #nameRow {
@@ -343,4 +342,3 @@ input:checked + .slider:before {
     font-weight: bold;
     font-size: 1.3rem;
 }
-
