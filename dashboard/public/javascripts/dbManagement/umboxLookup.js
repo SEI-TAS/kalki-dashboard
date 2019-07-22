@@ -314,7 +314,6 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#UmboxLookupContent"]').on('shown.bs.tab', function (e) {
-        console.log("running umboxLookup script");
         getUmboxLookups();
     });
 });

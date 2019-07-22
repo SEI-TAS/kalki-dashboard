@@ -57,7 +57,6 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#DeviceGroupContent"]').on('shown.bs.tab', function (e) {
-        console.log("running group script");
         getGroups();
     });
 });
