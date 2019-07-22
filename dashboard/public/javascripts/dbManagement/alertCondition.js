@@ -65,38 +65,6 @@ jQuery(document).ready(($) => {
         }
     }
 
-    function disableSwitch() {
-        let selectSwitch = $("#alertConditionContent #alertConditionSwitch");
-        selectSwitch.prop("checked", false);
-        selectSwitch.prop("disabled", true);
-        $(".form-control#typeSelect").prop("disabled", true);
-        $(".form-control#deviceSelect").prop("disabled", false);
-        $("#typeLabel").removeClass("selected");
-        $("#deviceLabel").addClass("selected");
-
-        //make sure the asterisk is present
-        $("#alertConditionContent label[for='deviceSelect'] span").prop("hidden", false);
-        $("#alertConditionContent label[for='typeSelect'] span").prop("hidden", true);
-
-        //hide the device type selections
-        selectSwitch.parent().hide();
-        $("#deviceLabel").hide();
-        $("#typeLabel").hide();
-        $("#alertConditionContent label[for='typeSelect']").hide();
-        $("#alertConditionContent .form-control#typeSelect").parent().hide();
-    }
-
-    function enableSwitch() {
-        let selectSwitch = $("#alertConditionContent #alertConditionSwitch");
-        selectSwitch.prop("disabled", false);
-
-        selectSwitch.parent().show();
-        $("#deviceLabel").show();
-        $("#typeLabel").show();
-        $("#alertConditionContent label[for='typeSelect']").show();
-        $("#alertConditionContent .form-control#typeSelect").parent().show();
-    }
-
     async function getAllAlertTypes() {
         $("#alertConditionContent .form-control#alertType").empty();
 
@@ -157,9 +125,6 @@ jQuery(document).ready(($) => {
                     $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
                     $("#alertConditionContent #variableTableBody").empty();
                     populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
-
-                    //disable inputting device type
-                    disableSwitch();
                 });
 
                 alertConditionTable.on("click", "#deleteButton" + alertCondition.id, function () {
@@ -182,7 +147,7 @@ jQuery(document).ready(($) => {
 
         addVariableRow(keyInput.val(), valueInput.val());
 
-        keyInput.val("")
+        keyInput.val("");
         valueInput.val("");
     });
 
@@ -223,14 +188,10 @@ jQuery(document).ready(($) => {
         $("#alertConditionContent .form-control#variableKey").val("");
         $("#alertConditionContent .form-control#variableValue").val("");
         $("#alertConditionContent #variableTable").find("tr:gt(0)").remove();   //remove all rows except header
-
-        enableSwitch();
     });
 
     //only load content if the tab is active
     $('a[href="#AlertConditionContent"]').on('shown.bs.tab', function (e) {
-        console.log("running alertCondition script");
-
         $.get("/device-types", (deviceTypes) => {
             $.each(JSON.parse(deviceTypes), (id, deviceType) => {
                 $("#alertConditionContent .form-control#typeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
