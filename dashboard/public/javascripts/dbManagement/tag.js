@@ -57,7 +57,6 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#TagContent"]').on('shown.bs.tab', function (e) {
-        console.log("running tag script");
         getTags();
     });
 });

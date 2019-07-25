@@ -65,38 +65,6 @@ jQuery(document).ready(($) => {
         }
     }
 
-    function disableSwitch() {
-        let selectSwitch = $("#alertConditionContent #alertConditionSwitch");
-        selectSwitch.prop("checked", false);
-        selectSwitch.prop("disabled", true);
-        $(".form-control#typeSelect").prop("disabled", true);
-        $(".form-control#deviceSelect").prop("disabled", false);
-        $("#typeLabel").removeClass("selected");
-        $("#deviceLabel").addClass("selected");
-
-        //make sure the asterisk is present
-        $("#alertConditionContent label[for='deviceSelect'] span").prop("hidden", false);
-        $("#alertConditionContent label[for='typeSelect'] span").prop("hidden", true);
-
-        //hide the device type selections
-        selectSwitch.parent().hide();
-        $("#deviceLabel").hide();
-        $("#typeLabel").hide();
-        $("#alertConditionContent label[for='typeSelect']").hide();
-        $("#alertConditionContent .form-control#typeSelect").parent().hide();
-    }
-
-    function enableSwitch() {
-        let selectSwitch = $("#alertConditionContent #alertConditionSwitch");
-        selectSwitch.prop("disabled", false);
-
-        selectSwitch.parent().show();
-        $("#deviceLabel").show();
-        $("#typeLabel").show();
-        $("#alertConditionContent label[for='typeSelect']").show();
-        $("#alertConditionContent .form-control#typeSelect").parent().show();
-    }
-
     async function getAllAlertTypes() {
         $("#alertConditionContent .form-control#alertType").empty();
 
@@ -146,21 +114,17 @@ jQuery(document).ready(($) => {
                 alertConditionTable.row.add($(newRow)).draw();
 
                 alertConditionTable.on("click", "#editButton" + alertCondition.id, function () {
-                    $.post("/edit-alert-condition", {id: alertCondition.id}, function () {
-                        let alertTypeName = $("#alertConditionTableBody #alertType" + alertCondition.id).html();
-                        let deviceName = $("#alertConditionTableBody #device" + alertCondition.id).html();
+                    let alertTypeName = $("#alertConditionTableBody #alertType" + alertCondition.id).html();
+                    let deviceName = $("#alertConditionTableBody #device" + alertCondition.id).html();
 
-                        $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                        });
-                        $("#alertConditionContent #submitFormButton").html("Update");
-                        $("#alertConditionContent #clearFormButton").html("Cancel Edit");
-                        $("#alertConditionContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
-                        $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
-                        populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
-
-                        //disbable inputting device type
-                        disableSwitch();
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {
                     });
+                    $("#alertConditionContent #submitFormButton").html("Update");
+                    $("#alertConditionContent #clearFormButton").html("Cancel Edit");
+                    $("#alertConditionContent .form-control#alertType").val(alertTypeNametoIDMap[alertTypeName]).change();
+                    $("#alertConditionContent .form-control#deviceSelect").val(deviceNametoIDMap[deviceName]).change();
+                    $("#alertConditionContent #variableTableBody").empty();
+                    populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
                 });
 
                 alertConditionTable.on("click", "#deleteButton" + alertCondition.id, function () {
@@ -183,7 +147,7 @@ jQuery(document).ready(($) => {
 
         addVariableRow(keyInput.val(), valueInput.val());
 
-        keyInput.val("")
+        keyInput.val("");
         valueInput.val("");
     });
 
@@ -216,24 +180,18 @@ jQuery(document).ready(($) => {
         let deviceSelect = $("#alertConditionContent .form-control#deviceSelect");
         let typeSelect = $("#alertConditionContent .form-control#typeSelect");
 
-        $.post("/clear-alert-condition-form", {}, function () {
-            $("#alertConditionContent #submitFormButton").html("Add");
-            $("#alertConditionContent #clearFormButton").html("Clear");
-            alertTypeSelect.val(alertTypeSelect.find("option:first").val());
-            deviceSelect.val(deviceSelect.find("option:first").val());
-            typeSelect.val(typeSelect.find("option:first").val());
-            $("#alertConditionContent .form-control#variableKey").val("");
-            $("#alertConditionContent .form-control#variableValue").val("");
-            $("#alertConditionContent #variableTable").find("tr:gt(0)").remove();   //remove all rows except header
-
-            enableSwitch();
-        });
+        $("#alertConditionContent #submitFormButton").html("Add");
+        $("#alertConditionContent #clearFormButton").html("Clear");
+        alertTypeSelect.val(alertTypeSelect.find("option:first").val());
+        deviceSelect.val(deviceSelect.find("option:first").val());
+        typeSelect.val(typeSelect.find("option:first").val());
+        $("#alertConditionContent .form-control#variableKey").val("");
+        $("#alertConditionContent .form-control#variableValue").val("");
+        $("#alertConditionContent #variableTable").find("tr:gt(0)").remove();   //remove all rows except header
     });
 
     //only load content if the tab is active
     $('a[href="#AlertConditionContent"]').on('shown.bs.tab', function (e) {
-        console.log("running alertCondition script");
-
         $.get("/device-types", (deviceTypes) => {
             $.each(JSON.parse(deviceTypes), (id, deviceType) => {
                 $("#alertConditionContent .form-control#typeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"

@@ -57,7 +57,6 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#SecurityStateContent"]').on('shown.bs.tab', function (e) {
-        console.log("running securityState script");
         getSecurityStates();
     });
 });

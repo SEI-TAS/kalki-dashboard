@@ -108,7 +108,6 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#CommandLookupContent"]').on('shown.bs.tab', function (e) {
-        console.log("running command lookup script");
         getCommandLookups();
     });
 });

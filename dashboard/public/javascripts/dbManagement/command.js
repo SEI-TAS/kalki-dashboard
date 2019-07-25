@@ -84,7 +84,6 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#CommandContent"]').on('shown.bs.tab', function (e) {
-        console.log("running command script");
         getCommands();
     });
 });

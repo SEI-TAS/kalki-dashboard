@@ -60,7 +60,6 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#UmboxImageContent"]').on('shown.bs.tab', function (e) {
-        console.log("running umboxImage script");
         getUmboxImages();
     });
 });

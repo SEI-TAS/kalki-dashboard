@@ -1,7 +1,7 @@
 @()
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="alertConditionContent">
-    @helper.form(action = routes.AlertConditionController.addOrUpdateAlertCondition()) {
+    @helper.form(action = routes.AlertConditionController.addAlertCondition()) {
         <h4>Alert Condition</h4>
         @* Device and DeviceType switch *@
         <div class="form-group row justify-content-center" id="alertConditionSwitchContainer">

@@ -215,7 +215,6 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#DeviceContent"]').on('shown.bs.tab', function (e) {
-        console.log("running device script");
         getDevices();
     });
 });

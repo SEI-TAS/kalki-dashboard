@@ -29,7 +29,6 @@ $(window).on('load', function(){
     $.post("/clear-tag-form", {}, function () {});
     $.post("/clear-umbox-image-form", {}, function () {});
     $.post("/clear-device-form", {}, function () {});
-    $.post("/clear-alert-condition-form", {}, function () {});
     $.post("/clear-command-lookup-form", {}, function () {});
     $.post("/clear-umbox-lookup-form", {}, function () {});
 });
