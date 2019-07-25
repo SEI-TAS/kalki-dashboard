@@ -169,7 +169,6 @@ jQuery(document).ready(($) => {
                             deviceTable.row("#tableRow" + device.id).remove().draw();
                             $("#deviceSelectOption" + device.id).remove();   //remove option from copy device list
                         } else {
-                            console.log("here");
                             alert("Delete was unsuccessful.  Please check that another table entry " +
                                 "does not rely on this Device");
                         }
