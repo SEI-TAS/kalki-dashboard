@@ -1,15 +1,13 @@
 # kalki-dashboard
 
 ## Prerequisites
-To compile this program, Java JDK 8 is required. This program uses Gradle as its build system, but since it uses an included Gradle wrapper, no external Gradle setup is required.
+The Kalki Dashboard is a web application developed using the Java play! framework.  To compile this application, Java JDK 8 is required. This application also uses sbt as its build system, so sbt will need to be installed in order to build and run the dashboard.
 
 To build the Docker image of the program, Docker should be installed first.
 
 Kalki-db should be installed on a local Maven repo for this program to compile. You can find more details here: https://github.com/SEI-TTG/kalki-db/tree/dev
 
 This program requires a Postgres database engine to run. This can be installed manually, or a Docker image can be used. You can find more details here: https://github.com/SEI-TTG/kalki-db/tree/dev
-
-The Kalki Dashboard is a web application developed using the Java play! framework.  This framework depends on sbt as a build tool and must be installed prior to building or running the dashboard.
 
 ### MAC
 sbt for Mac can be installed using `$ brew install sbt@1`. Also, see https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Mac.html
