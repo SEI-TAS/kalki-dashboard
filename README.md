@@ -9,10 +9,10 @@ Kalki-db should be installed on a local Maven repo for this program to compile. 
 
 This program requires a Postgres database engine to run. This can be installed manually, or a Docker image can be used. You can find more details here: https://github.com/SEI-TTG/kalki-db/tree/dev
 
-### MAC
-sbt for Mac can be installed using `$ brew install sbt@1`. Also, see https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Mac.html
+### macOS
+sbt for macOS can be installed using `$ brew install sbt@1`. Also, see https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Mac.html
 
-Docker for Mac can be installed using `brew cask install docker`.
+Docker for macOS can be installed using `brew cask install docker`.
 Also, see https://docs.docker.com/docker-for-mac/install/.
 
 ### Linux
