@@ -86,6 +86,9 @@ fabric.properties
 *.tar.gz
 *.rar
 
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
@@ -156,6 +159,7 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/osx,linux,windows,intellij,java
 
 # Play specific things
+/target
 dashboard/logs
 dashboard/project/project
 dashboard/project/target
@@ -164,4 +168,8 @@ dashboard/tmp
 dashboard/dist
 dashboard/.cache
 dashboard/.gradle
+dashboard/.g8/form/form.iml
+dashboard/dashboard.iml
 .idea/
+
+

@@ -1,55 +1,42 @@
 # kalki-dashboard
 
 ## Prerequisites
-The Kalki Dashboard must be run using Docker for Mac.
-It will not run on other Docker distributions.
+The Kalki Dashboard is a web application developed using the Java play! framework.  To compile this application, Java JDK 8 is required. This application also uses sbt as its build system, so sbt will need to be installed in order to build and run the dashboard.
 
-## Configuration
-Docker for Mac can be installed using `brew cask install docker`.
+To build the Docker image of the program, Docker should be installed first.
+
+Kalki-db should be installed on a local Maven repo for this program to compile. You can find more details here: https://github.com/SEI-TTG/kalki-db/tree/dev
+
+This program requires a Postgres database engine to run. This can be installed manually, or a Docker image can be used. You can find more details here: https://github.com/SEI-TTG/kalki-db/tree/dev
+
+### macOS
+sbt for macOS can be installed using `$ brew install sbt@1`. Also, see https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Mac.html
+
+Docker for macOS can be installed using `brew cask install docker`.
 Also, see https://docs.docker.com/docker-for-mac/install/.
 
-sbt for Mac can be installed using `$ brew install sbt@1`. Also, see https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Mac.html
+### Linux
+sbt for Linux can installed by following the directions found at https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Linux.html.
+
+Docker for Linux can be installed by running `sudo apt-get install docker`.  Also, see https://docs.docker.com/install/linux/linux-postinstall/ for instructions on setting up a user group so that docker can be run without prefacing it with the sudo command.
 
 ## Usage
-Set up a docker network by running `$ docker network create -d bridge kalki_nw`. This initializes a container network to 
-allow this application to connect to the database. *This only needs to be done once*
-
-Start the database by running `$ ./run_postgres_container.sh` from the project root.
-This will create a docker volume named `kalki-database` so the data persists when the database is terminated.
-
-#### Local Development
-To develop locally:
-- Set `db_host="localhost"` in the config file at `dashboard/conf/application.conf`
+### Local Development
+To develop locally you only need to know how to run the application:
 - Run the application:
 ```
 cd dashboard/
 sbt run
 ```
 - The application can then be viewed at `http://localhost:9000`
+
+The server can be stopped by pressing `<C-D>`. 
 ### Docker Deployment
-To deploy and run a docker container:
-- Set `db_host="kalki-db"` in the config file at `dashboard/conf/application.conf`
-- Build the docker image:
-```
-$ cd dashboard/
-$ sbt docker:publishLocal
-```
-- Run a container:
-```
-$ docker run --p [PORT]:9000 --net=kalki_nw --rm -d --name=[NAME] dashboard:1.0-SNAPSHOT
-```
+To deploy and run a docker container navigate to the *dashboard/* directory:
 
-The dashboard can then be viewed at `http://localhost:[PORT]`.
+- create the docker image by running `sbt docker:publishLocal`
+- Deploy the docker container by running `./run_dashboard_container.sh`
 
-For example,
-```
-$ cd dashboard/
-$ sbt docker:publishLocal
-$ docker run -p 80:9000 --net=kalki_nw --rm -d --name=kalki-dashboard dashboard:1.0-SNAPSHOT
-```
-will make the dashboard available for viewing at `http://localhost`.
+The dashboard can then be viewed at `http://localhost:9000`
 
-The server can be stopped by pressing `<C-D>`. \
-The container can be stopped by running `$ docker container stop [name]` \
-To stop the database, run `$ docker container stop kalki-postgres`.
-All data is preserved and will be accessable next time `$ ./run-postgres-container.sh` is run.
+The container can be stopped by running `$ docker stop kalki-dashboard`

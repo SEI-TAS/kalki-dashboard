@@ -23,7 +23,5 @@ public class ApplicationStart {
 
         // Initializes the database
         Postgres.initialize(config.getString("db_host"), "5432", "kalkidb", "kalkiuser", "kalkipass");
-        Postgres.resetDatabase();
-//        Postgres.setupDatabase();
     }
 }
