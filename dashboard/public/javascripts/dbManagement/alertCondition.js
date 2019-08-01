@@ -36,16 +36,15 @@ jQuery(document).ready(($) => {
             "    <td id='value" + currentCount + "'>" + value + "</td>\n" +
             "</tr>"
 
-        $("#variableTable").find("tbody").append($(newRow));
+        $("#editVariablesModal #variableTable").find("tbody").append($(newRow));
 
         //add pairing to form data
-        $("#variableFormInput").append("<input type='text' id='variableInput" + currentCount + "' name='variables[" + key + "]' value='" + value + "' hidden>");
-
-        $("#variableTableBody #removeButton" + currentCount).click(function () {
-            $("#variableTableBody #variableTableRow" + currentCount).remove();
+        $("#editVariablesModal #variableFormInput").append("<input type='text' id='variableInput" + currentCount + "' name='variables[" + key + "]' value='" + value + "' hidden>");
+        $("#editVariablesModal #variableTableBody #removeButton" + currentCount).click(function () {
+            $("#editVariablesModal #variableTableBody #variableTableRow" + currentCount).remove();
 
             //remove pairing from form data
-            $("#variableFormInput #variableInput" + currentCount).remove()
+            $("#editVariablesModal #variableFormInput #variableInput" + currentCount).remove()
         });
     }
 
@@ -75,7 +74,7 @@ jQuery(document).ready(($) => {
                     "    <td class='fit'>" +
                     "        <div class='editDeleteContainer' >" +
                     "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + alertCondition.id + "'"+
-                    "                   role='button' data-toggle='modal' data-target='#selectMonitoringValuesModal'>Edit</button> "+
+                    "                   role='button' data-toggle='modal' data-target='#editVariablesModal'>Edit</button> "+
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + alertCondition.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
@@ -86,9 +85,9 @@ jQuery(document).ready(($) => {
                 alertConditionTable.row.add($(newRow)).draw();
 
                 alertConditionTable.on("click", "#editButton" + alertCondition.id, function () {
-                    $("alertConditionContent #variableFormInput").append("<input type='text' id='deviceIdInput' name='deviceId' " +
+                    $("#alertConditionContent #variableFormInput").append("<input type='text' id='deviceIdInput' name='deviceId' " +
                         "value='" + conditionIdToDeviceIdMap[alertCondition.id] + "' hidden>");
-                    $("alertConditionContent #variableFormInput").append("<input type='text' id='alertTypeLookupIdInput' name='alertTypeLookupId' " +
+                    $("#alertConditionContent #variableFormInput").append("<input type='text' id='alertTypeLookupIdInput' name='alertTypeLookupId' " +
                         "value='" + conditionIdToLookupIdMap[alertCondition.id] + "' hidden>");
                     $("#alertConditionContent #variableTableBody").empty();
                     populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
@@ -109,8 +108,8 @@ jQuery(document).ready(($) => {
     }
 
     $("#alertConditionContent #addVariableButton").click(function () {
-        let keyInput = $(".form-control#variableKey");
-        let valueInput = $(".form-control#variableValue");
+        let keyInput = $("#editVariablesModal .form-control#variableKey");
+        let valueInput = $("#editVariablesModal .form-control#variableValue");
 
         addVariableRow(keyInput.val(), valueInput.val());
 

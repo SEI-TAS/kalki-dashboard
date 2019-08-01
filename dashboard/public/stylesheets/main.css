@@ -302,3 +302,14 @@ tr.updated {
 #statusHistoryResetButton {
     margin-bottom: 10px;
 }
+
+/* style the alert condition edit variables modal */
+#editVariablesModal h4 {
+    margin-left: 10px;
+}
+
+#editVariablesModal form {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
