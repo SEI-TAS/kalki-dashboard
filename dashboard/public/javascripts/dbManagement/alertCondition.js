@@ -8,10 +8,27 @@ jQuery(document).ready(($) => {
         }
     );
 
+    let entityMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+        '/': '&#x2F;',
+        '`': '&#x60;',
+        '=': '&#x3D;'
+    };
+
     let conditionIdToDeviceIdMap = {};
     let conditionIdToLookupIdMap = {};
 
     let variableCounter = 0;
+
+    function escapeHtml (string) {
+        return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
 
     function makeVariablesString(variables) {
         let resultString = "";
@@ -39,7 +56,8 @@ jQuery(document).ready(($) => {
         $("#editVariablesModal #variableTable").find("tbody").append($(newRow));
 
         //add pairing to form data
-        $("#editVariablesModal #variableFormInput").append("<input type='text' id='variableInput" + currentCount + "' name='variables[" + key + "]' value='" + value + "' hidden>");
+        $("#editVariablesModal #variableFormInput").append("<input type='text' id='variableInput" + currentCount + "' " +
+            "name='variables[" + escapeHtml(key) + "]' value='" + escapeHtml(value) + "' hidden>");
         $("#editVariablesModal #variableTableBody #removeButton" + currentCount).click(function () {
             $("#editVariablesModal #variableTableBody #variableTableRow" + currentCount).remove();
 
@@ -86,9 +104,9 @@ jQuery(document).ready(($) => {
 
                 alertConditionTable.on("click", "#editButton" + alertCondition.id, function () {
                     $("#alertConditionContent #variableFormInput").append("<input type='text' id='deviceIdInput' name='deviceId' " +
-                        "value='" + conditionIdToDeviceIdMap[alertCondition.id] + "' hidden>");
+                        "value='" + escapeHtml(conditionIdToDeviceIdMap[alertCondition.id]) + "' hidden>");
                     $("#alertConditionContent #variableFormInput").append("<input type='text' id='alertTypeLookupIdInput' name='alertTypeLookupId' " +
-                        "value='" + conditionIdToLookupIdMap[alertCondition.id] + "' hidden>");
+                        "value='" + escapeHtml(conditionIdToLookupIdMap[alertCondition.id]) + "' hidden>");
                     $("#alertConditionContent #variableTableBody").empty();
                     populateVariablesTableFromString($("#alertConditionTableBody #variables" + alertCondition.id).html());
                 });

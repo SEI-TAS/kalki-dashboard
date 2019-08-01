@@ -227,7 +227,6 @@ table.dataTable thead .sorting_desc_disabled:before {
     border-radius: 16px;
 }
 
-#alertConditionContent table#variableTable,
 #alertTypeLookupContent table#variableTable,
 #umboxLookupContent table#umboxImageOrderTable {
     max-width: 50%;
