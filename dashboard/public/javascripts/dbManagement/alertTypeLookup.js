@@ -70,7 +70,7 @@ jQuery(document).ready(($) => {
 
         return $.get("/alert-types", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
-                $("#alertTypeLookupContent .form-control#alertType").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
+                $("#alertTypeLookupContent .form-control#alertTypeSelect").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
                     + alertType.name +
                     "</option>")
                 alertTypeIDtoNameMap[alertType.id] = alertType.name;
@@ -82,7 +82,7 @@ jQuery(document).ready(($) => {
     async function getAllDeviceTypes() {
         $("#alertTypeLookupContent .form-control#deviceTypeSelect").empty();
 
-        $.get("/device-types", (deviceTypes) => {
+        return $.get("/device-types", (deviceTypes) => {
             $.each(JSON.parse(deviceTypes), (id, deviceType) => {
                 $("#alertTypeLookupContent .form-control#deviceTypeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
                     + deviceType.name +
@@ -108,23 +108,25 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + alertTypeLookup.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + alertTypeLookup.id + "'>" + deviceTypeIDtoNameMap[alertTypeLookup.deviceId] + "</td>\n" +
+                    "    <td id='deviceType" + alertTypeLookup.id + "'>" + deviceTypeIDtoNameMap[alertTypeLookup.deviceTypeId] + "</td>\n" +
                     "    <td id='alertType" + alertTypeLookup.id + "'>" + alertTypeIDtoNameMap[alertTypeLookup.alertTypeId] + "</td>\n" +
                     "    <td class='fit' id='variables" + alertTypeLookup.id + "'>" + makeVariablesString(alertTypeLookup.variables) + "</td>\n" +
                     "</tr>"
                 alertTypeLookupTable.row.add($(newRow)).draw();
 
                 alertTypeLookupTable.on("click", "#editButton" + alertTypeLookup.id, function () {
-                    let alertTypeName = $("#alertTypeLookupTableBody #alertType" + alertTypeLookup.id).html();
-                    let deviceTypeName = $("#alertTypeLookupTableBody #deviceType" + alertTypeLookup.id).html();
+                    $.post("/edit-alert-type-lookup", {id: alertTypeLookup.id}, function() {
+                        let alertTypeName = $("#alertTypeLookupTableBody #alertType" + alertTypeLookup.id).html();
+                        let deviceTypeName = $("#alertTypeLookupTableBody #deviceType" + alertTypeLookup.id).html();
 
-                    $('html, body').animate({scrollTop: 0}, 'fast', function () {});
-                    $("#alertTypeLookupContent #submitFormButton").html("Update");
-                    $("#alertTypeLookupContent #clearFormButton").html("Cancel Edit");
-                    $("#alertTypeLookupContent .form-control#alertType").val(alertTypeNameToIDMap[alertTypeName]).change();
-                    $("#alertTypeLookupContent .form-control#deviceTypeSelect").val(deviceTypeNameToIDMap[deviceTypeName]).change();
-                    $("#alertTypeLookupContent #variableTableBody").empty();
-                    populateVariablesTableFromString($("#alertTypeLookupTableBody #variables" + alertTypeLookup.id).html());
+                        $('html, body').animate({scrollTop: 0}, 'fast', function () {});
+                        $("#alertTypeLookupContent #submitFormButton").html("Update");
+                        $("#alertTypeLookupContent #clearFormButton").html("Cancel Edit");
+                        $("#alertTypeLookupContent .form-control#alertTypeSelect").val(alertTypeNameToIDMap[alertTypeName]).change();
+                        $("#alertTypeLookupContent .form-control#deviceTypeSelect").val(deviceTypeNameToIDMap[deviceTypeName]).change();
+                        $("#alertTypeLookupContent #variableTableBody").empty();
+                        populateVariablesTableFromString($("#alertTypeLookupTableBody #variables" + alertTypeLookup.id).html());
+                    });
                 });
 
                 alertTypeLookupTable.on("click", "#deleteButton" + alertTypeLookup.id, function () {
