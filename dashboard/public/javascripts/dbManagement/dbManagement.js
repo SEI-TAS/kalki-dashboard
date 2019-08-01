@@ -23,6 +23,7 @@ jQuery(document).ready(($) => {
 //clear all edits on page load
 $(window).on('load', function(){
     $.post("/clear-alert-type-form", {}, function () {});
+    $.post("/clear-alert-type-lookup-form", {}, function () {});
     $.post("/clear-device-type-form", {}, function () {});
     $.post("/clear-group-form", {}, function () {});
     $.post("/clear-security-state-form", {}, function () {});

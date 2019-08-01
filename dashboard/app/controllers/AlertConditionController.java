@@ -67,7 +67,7 @@ public class AlertConditionController extends Controller {
             } else {
                 AlertCondition at = filledForm.get();
 
-                int n = at.insert();
+                int n = at.insertOrUpdate();
                 return redirect(routes.DBManagementController.dbManagementView(n));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));

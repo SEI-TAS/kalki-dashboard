@@ -35,6 +35,12 @@ POST    /add-or-update-alert-type   controllers.AlertTypeController.addOrUpdateA
 POST    /delete-alert-type          controllers.AlertTypeController.deleteAlertType()
 POST    /clear-alert-type-form      controllers.AlertTypeController.clearAlertTypeForm()
 
+GET     /alert-type-lookups                controllers.AlertTypeLookupController.getAlertTypeLookups()
+POST    /edit-alert-type-lookup            controllers.AlertTypeLookupController.editAlertTypeLookup()
+POST    /add-or-update-alert-type-lookup   controllers.AlertTypeLookupController.addOrUpdateAlertTypeLookup()
+POST    /delete-alert-type-lookup          controllers.AlertTypeLookupController.deleteAlertTypeLookup()
+POST    /clear-alert-type-lookup-form      controllers.AlertTypeLookupController.clearAlertTypeLookupForm()
+
 GET     /device-types               controllers.DeviceTypeController.getDeviceTypes()
 POST    /edit-device-type           controllers.DeviceTypeController.editDeviceType()
 POST    /add-or-update-device-type  controllers.DeviceTypeController.addOrUpdateDeviceType()
