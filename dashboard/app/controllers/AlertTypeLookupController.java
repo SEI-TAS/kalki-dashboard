@@ -23,57 +23,61 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public class AlertConditionController extends Controller {
+public class AlertTypeLookupController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
+    private int updatingId;
 
     @Inject
-    public AlertConditionController(FormFactory formFactory, DatabaseExecutionContext ec) {
+    public AlertTypeLookupController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        this.updatingId = -1;
     }
 
-    public CompletionStage<Result> getAlertConditions() {
+    public CompletionStage<Result> getAlertTypeLookups() {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertCondition> alertConditions = Postgres.findAllAlertConditions();
+            List<AlertTypeLookup> alertTypeLookups = Postgres.findAllAlertTypeLookups();
             try {
-                return ok(ow.writeValueAsString(alertConditions));
+                return ok(ow.writeValueAsString(alertTypeLookups));
             } catch (JsonProcessingException e) {
             }
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public CompletionStage<Result> getAlertConditionsByDevice(int id) {
+    public CompletionStage<Result> addOrUpdateAlertTypeLookup() {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertCondition> alertConditions = Postgres.findAlertConditionsByDevice(id);
-            try {
-                return ok(ow.writeValueAsString(alertConditions));
-            } catch (JsonProcessingException e) {
-            }
-            return ok();
-        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public CompletionStage<Result> addAlertCondition() {
-        return CompletableFuture.supplyAsync(() -> {
-            Form<AlertCondition> alertTypeForm = formFactory.form(AlertCondition.class);
-            Form<AlertCondition> filledForm = alertTypeForm.bindFromRequest();
+            Form<AlertTypeLookup> alertTypeLookupForm = formFactory.form(AlertTypeLookup.class);
+            Form<AlertTypeLookup> filledForm = alertTypeLookupForm.bindFromRequest();
 
             if (filledForm.hasErrors()) {
                 return badRequest(views.html.form.render(filledForm));
             } else {
-                AlertCondition at = filledForm.get();
+                AlertTypeLookup atl = filledForm.get();
+                atl.setId(this.updatingId);
 
-                int n = at.insertOrUpdate();
+                int n = atl.insertOrUpdate();
                 return redirect(routes.DBManagementController.dbManagementView(n));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public CompletionStage<Result> deleteAlertCondition() {
+    public Result editAlertTypeLookup() {
+        String id = formFactory.form().bindFromRequest().get("id");
+        int idToInt;
+        try {
+            idToInt = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            idToInt = -1;
+        }
+        this.updatingId = idToInt;
+        return ok();
+    }
+
+    public CompletionStage<Result> deleteAlertTypeLookup() {
         return CompletableFuture.supplyAsync(() -> {
             String id = formFactory.form().bindFromRequest().get("id");
             int idToInt;
@@ -82,8 +86,13 @@ public class AlertConditionController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteAlertCondition(idToInt);
+            Boolean isSuccess = Postgres.deleteAlertTypeLookup(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+    public Result clearAlertTypeLookupForm() {
+        this.updatingId = -1;
+        return ok();
     }
 }

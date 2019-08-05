@@ -68,7 +68,7 @@ iframe {
 .tab {
     cursor: pointer;
     padding: 1px;                       /* Spacing between text and border internal */
-    margin: 3px;                       /* The amount of spacing to put around the tabs */
+    margin: 2px;                       /* The amount of spacing to put around the tabs */
     border: 1px solid rgba(0, 0, 0, 0.2);             /* alternative color: #cfcecf */
     background-color: white;
 }
@@ -164,6 +164,9 @@ select.form-control:not([size]):not([multiple]) {
 
 
 /* -------DBManagement page styling-------- */
+.dbManagementView .nav-item a {
+    font-size: 0.77rem;
+}
 
 .dbManagementView .nav-item.tab:hover,
 #deviceInfoPage .nav-item.tab:hover {     /* give active dbManagement and device info tabs background color */
@@ -225,6 +228,7 @@ table.dataTable thead .sorting_desc_disabled:before {
 }
 
 #alertConditionContent table#variableTable,
+#alertTypeLookupContent table#variableTable,
 #umboxLookupContent table#umboxImageOrderTable {
     max-width: 50%;
 }

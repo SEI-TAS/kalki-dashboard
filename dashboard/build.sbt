@@ -16,6 +16,7 @@ resolvers += Resolver.mavenLocal
 libraryDependencies += guice
 libraryDependencies += filters
 libraryDependencies += javaJdbc
+libraryDependencies += "javax.xml.bind" % "jaxb-api" % "2.3.0"
 // https://mvnrepository.com/artifact/org.postgresql/postgresql
 libraryDependencies += "org.postgresql" % "postgresql" % "42.2.2"
 libraryDependencies += "edu.cmu.sei.ttg" % "kalki-db" % "0.0.4-SNAPSHOT"
