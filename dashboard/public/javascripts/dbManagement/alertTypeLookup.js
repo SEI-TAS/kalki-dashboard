@@ -8,12 +8,29 @@ jQuery(document).ready(($) => {
         }
     );
 
+    let entityMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+        '/': '&#x2F;',
+        '`': '&#x60;',
+        '=': '&#x3D;'
+    };
+
     let alertTypeIDtoNameMap = {};
     let alertTypeNameToIDMap = {};
     let deviceTypeIDtoNameMap = {};
     let deviceTypeNameToIDMap = {};
 
     let variableCounter = 0;
+
+    function escapeHtml (string) {
+        return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
 
     function makeVariablesString(variables) {
         let resultString = "";
@@ -32,6 +49,8 @@ jQuery(document).ready(($) => {
         variableCounter++;
         let currentCount = variableCounter;
 
+        console.log(typeof key);
+
         let newRow = "<tr id='variableTableRow" + currentCount + "'>\n" +
             "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
             "    <td id='key" + currentCount + "'>" + key + "</td>\n" +
@@ -41,7 +60,8 @@ jQuery(document).ready(($) => {
         $("#variableTable").find("tbody").append($(newRow));
 
         //add pairing to form data
-        $("#variableFormInput").append("<input type='text' id='variableInput" + currentCount + "' name='variables[" + key + "]' value='" + value + "' hidden>");
+        $("#variableFormInput").append("<input type='text' id='variableInput" + currentCount + "' " +
+            "name='variables[" + escapeHtml(key) + "]' value='" + escapeHtml(value) + "' hidden>");
 
         $("#variableTableBody #removeButton" + currentCount).click(function () {
             $("#variableTableBody #variableTableRow" + currentCount).remove();
@@ -146,6 +166,8 @@ jQuery(document).ready(($) => {
     $("#alertTypeLookupContent #addVariableButton").click(function () {
         let keyInput = $(".form-control#variableKey");
         let valueInput = $(".form-control#variableValue");
+
+        console.log(keyInput.val());
 
         addVariableRow(keyInput.val(), valueInput.val());
 
