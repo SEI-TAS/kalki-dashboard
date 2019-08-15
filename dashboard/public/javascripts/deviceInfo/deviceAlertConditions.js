@@ -48,14 +48,11 @@ jQuery(document).ready(($) => {
         await getAlertConditions();
 
         foundAlertConditions.forEach((alertCondition) => {
-            $.get("/alert-type", {id: alertCondition.alertTypeId}, (alertType) => {
-                alertType = JSON.parse(alertType);
-                let newRow = "<tr>" +
-                    "   <td>" + makeVariablesString(alertCondition.variables) + "</td>" +
-                    "   <td>" + alertType.name + "</td>" +
-                    "</tr>";
-                conditionsTable.row.add($(newRow)).draw();
-            });
+            let newRow = "<tr>" +
+                "   <td>" + makeVariablesString(alertCondition.variables) + "</td>" +
+                "   <td>" + alertCondition.alertTypeName + "</td>" +
+                "</tr>";
+            conditionsTable.row.add($(newRow)).draw();
         });
     }
 
