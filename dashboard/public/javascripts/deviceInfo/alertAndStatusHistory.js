@@ -49,8 +49,10 @@ jQuery(document).ready(($) => {
                             "</tr>";
                         alertHistoryTable.row.add($(newRow)).draw();
 
+                        //add updated class to highlight updated row
                         $("#alertHistoryTable #tableRow" + alertId).addClass("updated");
 
+                        //remove row highlight after three seconds
                         setTimeout(function() {
                             $("#alertHistoryTable #tableRow" + alertId).removeClass("updated");
                         }, 3000);
@@ -63,6 +65,8 @@ jQuery(document).ready(($) => {
     /*
         Status history related
      */
+    
+    //a set to determine which statuses were populated on page load
     let originalStatusIds = new Set();
 
     let statusHistoryTable = $('#statusHistoryTable').DataTable(
@@ -133,11 +137,14 @@ jQuery(document).ready(($) => {
     /*
         General
      */
+
+    //tell the controller to start listening for new updates
     function startListener() {
         $.post("/start-listener", () => {});
     }
 
     async function main() {
+        //wait for the tables be populated before listening for new entries
         await Promise.all([getAlertHistory(), getDeviceStatuses()]);
 
         startListener();

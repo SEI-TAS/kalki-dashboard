@@ -8,6 +8,7 @@ jQuery(document).ready(($) => {
         }
     );
 
+    //mappings from id to name to avoid uneccesary database calls
     let stateIDtoNameMap = {};
     let stateNameToIDMap = {};
     let commandNameToIDMap = {};
@@ -45,6 +46,7 @@ jQuery(document).ready(($) => {
     }
 
     async function getCommandLookups() {
+        //must wait on these functions to complete to ensure the mappings are present
         await getSecurityStates();
         await getDeviceCommands();
 

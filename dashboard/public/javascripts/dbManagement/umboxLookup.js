@@ -8,15 +8,19 @@ jQuery(document).ready(($) => {
         }
     );
 
-    let globalDeviceTypeAndStateOrderMap = {};
-    let globalDeviceTypeAndStateImageMap = {};
-
-    let currentUmboxImageIdDagOrderMap = {};
-
     let editing = false;
     let editingDagOrder = null;
     let editingUmboxImageId = null;
 
+    //running maps from a device type and state combination that allow checking
+    //for duplicates when inserting without making another DB call
+    let globalDeviceTypeAndStateOrderMap = {};
+    let globalDeviceTypeAndStateImageMap = {};
+
+    //a map from image id to dag order for the current top form
+    let currentUmboxImageIdDagOrderMap = {};
+
+    //general mappings to save on database calls
     let stateIdToNameMap = {};
     let stateNameToIdMap = {};
 
@@ -26,8 +30,10 @@ jQuery(document).ready(($) => {
     let umboxImageIDtoNameMap = {};
     let umboxImageNameToIdMap = {};
 
+    //a counter to ensure that every row in the top form has a unique id
     let rowCounter = 0;
 
+    //adds a dag order row to the top form
     function addOrderRow(umboxImageId, order) {
         //make sure the imageId is not null
         if(umboxImageId == null) {
@@ -36,6 +42,8 @@ jQuery(document).ready(($) => {
         }
 
         let hasDuplicate = false;
+
+        //ensure that there are no duplicate orders or image in the top form
         Object.keys(currentUmboxImageIdDagOrderMap).forEach((uid) => {
             let dagOrder = parseInt(currentUmboxImageIdDagOrderMap[uid]);
             let imageId = parseInt(uid);
@@ -66,14 +74,13 @@ jQuery(document).ready(($) => {
             //add umbox to dag order relationship to map
             currentUmboxImageIdDagOrderMap[umboxImageId] = order;
 
-            //set hidden form input to current map
+            //set hidden form input to current map (needed to pass form data to controller)
             $("#orderFormInput").val(JSON.stringify(currentUmboxImageIdDagOrderMap));
 
             $("#umboxImageOrderTableBody #removeButton" + currentCount).click(function () {
                 $("#umboxImageOrderTableBody #umboxImageOrderTableRow" + currentCount).remove();
 
                 delete currentUmboxImageIdDagOrderMap[umboxImageId.toString()];
-                console.log(currentUmboxImageIdDagOrderMap);
             });
         }
         return true;
@@ -88,7 +95,6 @@ jQuery(document).ready(($) => {
     }
 
     function switchToInsertForm() {
-        console.log("called");
         $("#umboxImageOrderTable").show();
         $("#addOrderButton").show();
 
@@ -141,6 +147,7 @@ jQuery(document).ready(($) => {
     }
 
     async function getUmboxLookups() {
+        //must wait for these functions to complete otherwise the mappings may not be set
         await getDeviceTypes();
         await getSecurityStates();
         await getUmboxImages();

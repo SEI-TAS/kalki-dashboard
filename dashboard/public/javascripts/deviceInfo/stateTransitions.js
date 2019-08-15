@@ -1,9 +1,11 @@
 let given_id_transitions = document.currentScript.getAttribute('data-id');
 
 jQuery(document).ready(($) => {
+    //list of found items on page load
     let foundImageLookups = [];
     let foundCommandLookups = [];
 
+    //relationship from security state to list of images and commands
     let stateToImagesAndCommands = {};
 
 
@@ -29,8 +31,11 @@ jQuery(document).ready(($) => {
         });
     }
 
+    //given a umboxImageLookup, add a relationship from its security state to its image
     async function addToImageRelationship(lookup) {
         let foundState;
+
+        //wait to get the security state before proceeding
         await $.get("/security-state", {id: lookup.stateId}, (state) => {
             foundState = JSON.parse(state);
         });
@@ -47,8 +52,11 @@ jQuery(document).ready(($) => {
         });
     }
 
+    //given a commandLookup, add a relationship from its security state to its command
     async function addToCommandRelationship(lookup) {
         let foundState;
+
+        //wait to get the security state before proceeding
         await $.get("/security-state", {id: lookup.stateId}, (state) => {
             foundState = JSON.parse(state);
         });
@@ -66,6 +74,7 @@ jQuery(document).ready(($) => {
     }
 
     async function fillTable() {
+        //wait to gather all imageLookups and commandLookups before proceeding
         await getImageLookups();
         await getCommandLookups();
 
