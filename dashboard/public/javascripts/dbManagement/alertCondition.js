@@ -8,6 +8,7 @@ jQuery(document).ready(($) => {
         }
     );
 
+    //map of characters we wish to escape before placing directly into HTML
     let entityMap = {
         '&': '&amp;',
         '<': '&lt;',
@@ -22,6 +23,7 @@ jQuery(document).ready(($) => {
     let conditionIdToDeviceIdMap = {};
     let conditionIdToLookupIdMap = {};
 
+    //a counter that will give each new variable a unique id
     let variableCounter = 0;
 
     function escapeHtml (string) {
@@ -30,6 +32,7 @@ jQuery(document).ready(($) => {
         });
     }
 
+    //construct a string from a variable map so that it can be displayed in the table
     function makeVariablesString(variables) {
         let resultString = "";
         if (variables != null) {
@@ -43,6 +46,7 @@ jQuery(document).ready(($) => {
         return resultString;
     }
 
+    //add a row to the top form for a new variable mapping
     function addVariableRow(key, value) {
         variableCounter++;
         let currentCount = variableCounter;
@@ -66,6 +70,7 @@ jQuery(document).ready(($) => {
         });
     }
 
+    //when editing an alert condition, populate the form with each of the variables from that table row
     function populateVariablesTableFromString(variablesString) {
         if (variablesString != "") {
             let variablesArray = variablesString.split("<br>");
@@ -80,6 +85,7 @@ jQuery(document).ready(($) => {
         }
     }
 
+    //retrieve all alert conditions and populate the table
     function getAllAlertConditions() {
         alertConditionTable.clear();
 

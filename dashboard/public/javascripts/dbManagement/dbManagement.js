@@ -1,5 +1,4 @@
-//This javascript allows the page to remember what tab is was on even after page refresh
-
+//This javascript allows the page to remember what tab it was on even after page refresh
 jQuery(document).ready(($) => {
     let activeTab = window.sessionStorage.getItem('activeTab');
 
@@ -21,6 +20,7 @@ jQuery(document).ready(($) => {
 });
 
 //clear all edits on page load
+//This needs to be done to clear the updating IDs of each controller
 $(window).on('load', function(){
     $.post("/clear-alert-type-form", {}, function () {});
     $.post("/clear-alert-type-lookup-form", {}, function () {});

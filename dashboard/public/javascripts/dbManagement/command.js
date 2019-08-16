@@ -6,6 +6,7 @@ jQuery(document).ready(($) => {
         ]
     });
 
+    //id and name mappings to avoid unnecessary database calls
     let deviceTypeIDtoNameMap = {};
     let deviceTypeNametoIDMap = {};
 
@@ -24,6 +25,7 @@ jQuery(document).ready(($) => {
     }
 
     async function getCommands() {
+        //must wait until this function completes to ensure the mappings are present
         await getDeviceTypes();
 
         commandTable.clear();

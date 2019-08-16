@@ -8,6 +8,7 @@ jQuery(document).ready(($) => {
         }
     );
 
+    //retrieve all alert types and populate the table
     function getAlertTypes() {
         alertTypeTable.clear();
 

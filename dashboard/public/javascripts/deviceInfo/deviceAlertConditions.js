@@ -9,7 +9,7 @@ jQuery(document).ready(($) => {
         {
             order: [[0, 'desc']],
             columnDefs: [
-                {type: 'time-uni', targets: 0},
+                {type: 'time-uni', targets: 0}, //needed to sort formatted time correctly
             ],
             language: {
                 "emptyTable": "No alert conditions"
@@ -38,7 +38,6 @@ jQuery(document).ready(($) => {
             if(arr !== null && arr.length !== 0) {
                 arr.forEach(function(alertCondition) {
                     foundAlertConditions.push(alertCondition)
-
                 });
             }
         });

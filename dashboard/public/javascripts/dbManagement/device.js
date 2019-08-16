@@ -14,6 +14,7 @@ jQuery(document).ready(($) => {
     let tagIDtoNameMap = {};   //map to go from tag name in the table to tagID in the form select
     let deviceIdToTagIdsMap = {}    //map to retrieve list of tagIds based on deviceID
 
+    //searches through the tags and checks each box given the list of tagIds
     function checkTags(tagIds) {
         //uncheck all tags
         $('input:checkbox').removeAttr('checked');
@@ -38,7 +39,7 @@ jQuery(document).ready(($) => {
         checkTags(device["tagIds"]);
     }
 
-    //convert list of tagIds to comma separated names as string
+    //convert list of tagIds to comma separated names as a string to display in the table
     function tagIdsToNames(tagIds) {
         let tagNames = [];
         tagIds.forEach((id) => {
@@ -99,6 +100,7 @@ jQuery(document).ready(($) => {
 
 
     async function getDevices() {
+        //must wait on these functions to complete otherwise the mappings might not be set in time
         await getDeviceTypes();
         await getGroups();
         await getTags();
@@ -203,7 +205,7 @@ jQuery(document).ready(($) => {
         });
     });
 
-    //populate device form with information from the device copying from
+    //populate device form with information from the desired device
     $("#copyFromDeviceModalForm").submit(function (e) {
         e.preventDefault();
         let deviceId = document.getElementById("deviceSelect").value;

@@ -8,6 +8,7 @@ jQuery(document).ready(($) => {
         }
     );
 
+    //map of characters we wish to escape before placing directly into HTML
     let entityMap = {
         '&': '&amp;',
         '<': '&lt;',
@@ -19,11 +20,13 @@ jQuery(document).ready(($) => {
         '=': '&#x3D;'
     };
 
+    //id to name mappings to easily fill form and table names and ids without querying the DB again
     let alertTypeIDtoNameMap = {};
     let alertTypeNameToIDMap = {};
     let deviceTypeIDtoNameMap = {};
     let deviceTypeNameToIDMap = {};
 
+    //a counter that will give each new variable a unique id
     let variableCounter = 0;
 
     function escapeHtml (string) {
@@ -32,6 +35,7 @@ jQuery(document).ready(($) => {
         });
     }
 
+    //create a string from a variable mapping to be placed into the table
     function makeVariablesString(variables) {
         let resultString = "";
         if (variables != null) {
@@ -45,6 +49,7 @@ jQuery(document).ready(($) => {
         return resultString;
     }
 
+    //add a variable row to the form for editing or creating new alertTypes
     function addVariableRow(key, value) {
         variableCounter++;
         let currentCount = variableCounter;
@@ -71,6 +76,7 @@ jQuery(document).ready(($) => {
         });
     }
 
+    //given variable mappings from an alertType, populate the top form with rows for each
     function populateVariablesTableFromString(variablesString) {
         if (variablesString != "") {
             let variablesArray = variablesString.split("<br>");
@@ -85,6 +91,7 @@ jQuery(document).ready(($) => {
         }
     }
 
+    //query the database for all alert types
     async function getAllAlertTypes() {
         $("#alertTypeLookupContent .form-control#alertType").empty();
 
@@ -99,6 +106,7 @@ jQuery(document).ready(($) => {
         });
     }
 
+    //query the database for all device types
     async function getAllDeviceTypes() {
         $("#alertTypeLookupContent .form-control#deviceTypeSelect").empty();
 
@@ -114,6 +122,7 @@ jQuery(document).ready(($) => {
     }
 
     async function getAllAlertTypeLookups() {
+        //must wait for these functions to complete to ensure the mappings are present
         await getAllAlertTypes();
         await getAllDeviceTypes();
 

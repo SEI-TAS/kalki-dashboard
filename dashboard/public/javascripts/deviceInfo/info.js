@@ -70,6 +70,7 @@ jQuery(document).ready(($) => {
     }
 
     async function main() {
+        //must wait to fill table before polling for new security states
         await Promise.all([getDevice(), getSecurityState(), getTags()]);
 
         getNewStates();

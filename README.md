@@ -40,3 +40,11 @@ To deploy and run a docker container navigate to the *dashboard/* directory:
 The dashboard can then be viewed at `http://localhost:9000`
 
 The container can be stopped by running `$ docker stop kalki-dashboard`
+
+## Debugging Tips
+* Always check dev tools console for javascript errors first since these are the most common (probably obvious)
+* `cmd-shift-c` lets you click on an element on the page and inspect it, which is easier than navigating through the html to find the element
+* If you ever see "undefined" in one of the tables, it is most likely a synchronization issue.  In most cases, names need to be stored into maps before the table is loaded.  Check that the functions that store data into maps are being awaited before the table is populated.
+* If a table does not appear to be sorting based on the formatted time correctly, then go into the javascript for that table and look at the datatables definition at the top.  Under columnDefs remove the part that specifies time-uni.  If that is not there, then look into datatables sorting with datatime-moment
+
+
