@@ -109,6 +109,10 @@ jQuery(document).ready(($) => {
 
     function addStatusesToTable(statuses, newStatuses){
         if (statuses !== null && statuses.length !== 0) {
+            let ind = statuses.length - 1;
+            if(statuses[ind].id < lowestStatusId){
+                lowestStatusId = statuses[ind].id;
+            }
             statuses.forEach((status) => {
                 originalStatusIds.add(status.id);
                 let newRow = "<tr id='tableRow" + status.id + "'>" +
@@ -125,11 +129,6 @@ jQuery(document).ready(($) => {
                 }
             });
         }
-
-        let ind = statuses.length - 1;
-        if(statuses[ind].id < lowestStatusId){
-            lowestStatusId = statuses[ind].id;
-        }
     }
 
 
@@ -137,7 +136,7 @@ jQuery(document).ready(($) => {
         getNewStatuses();
     });
 
-    $("#statusHistoryTable_next").click(() => {
+    $("#fetchMoreStatuses").click(() => {
         return $.get("/next-statuses",{ id: given_id_alert, lowestId: lowestStatusId }, (statuses) => {
             let arr = JSON.parse(statuses);
             addStatusesToTable(arr, false);
