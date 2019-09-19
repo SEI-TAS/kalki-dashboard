@@ -17,6 +17,7 @@ GET     /funcy-serial-ports         controllers.FuncyController.getAvailableSeri
 GET     /funcy-output               controllers.FuncyController.socket()
 GET     /device-security-state      controllers.DeviceController.getDeviceSecurityState(id: Integer ?= -1)
 GET     /device-status-history      controllers.DeviceController.getDeviceStatusHistory(id: Integer ?= -1)
+GET     /next-statuses              controllers.DeviceController.getNextDeviceStatusHistory(id: Integer ?= -1, lowestId: Integer ?= 0)
 GET     /alert-history              controllers.DeviceController.getAlertHistory(id: Integer ?= -1)
 GET     /device-status              controllers.DeviceController.getDeviceStatus(id: Integer ?= -1)
 GET     /umbox-instances            controllers.DeviceController.getUmboxInstances(id: Integer ?= -1)

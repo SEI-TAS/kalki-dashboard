@@ -3,6 +3,7 @@ let given_id_alert = document.currentScript.getAttribute('data-id');
 jQuery(document).ready(($) => {
     const timeFormat = "MMM Do YY, h:mm:ss a";
     const infoPollInterval = 1 * 1000;
+    let lowestStatusId = -1;
 
     $.fn.dataTable.moment(timeFormat);
 
@@ -95,43 +96,53 @@ jQuery(document).ready(($) => {
     async function getDeviceStatuses() {
        $.get("/device-status-history", { id: given_id_alert }, function(deviceHistory) {
             let arr = JSON.parse(deviceHistory);
-            if(arr !== null && arr.length !== 0) {
-                arr.forEach((status) => {
-                    originalStatusIds.add(status.id);
-                    let newRow = "<tr id='tableRow" +status.id+ "'>" +
-                        "   <td>" + moment(status.timestamp).format(timeFormat) + "</td>" +
-                        "   <td>" + makeAttributesString(status.attributes) + "</td>" +
-                        "</tr>";
-                    statusHistoryTable.row.add($(newRow)).draw();
-                });
-            }
+            addStatusesToTable(arr, false);
         });
     }
 
     function getNewStatuses() {
         $.get("/get-new-statuses", (statuses) => {
             let newStatuses = JSON.parse(statuses);
-            if (newStatuses != null) {
-                newStatuses.forEach((status) => {
-                    if(status.deviceId == given_id_alert && !originalStatusIds.has(status.id)) {
-                        let newRow = "<tr id='tableRow" +status.id+ "'>" +
-                            "   <td>" + moment(status.timestamp).format(timeFormat) + "</td>" +
-                            "   <td>" + makeAttributesString(status.attributes) + "</td>" +
-                            "</tr>";
-                        statusHistoryTable.row.add($(newRow)).draw();
-
-                        $("#statusHistoryTable #tableRow" + status.id).addClass("updated");
-                        setTimeout(function() {
-                            $("#statusHistoryTable #tableRow" + status.id).removeClass("updated");
-                        }, 3000);
-                    }
-                });
-            }
+            addStatusesToTable(newStatuses, true);
         });
     }
 
+    function addStatusesToTable(statuses, newStatuses){
+        if (statuses !== null && statuses.length !== 0) {
+            statuses.forEach((status) => {
+                originalStatusIds.add(status.id);
+                let newRow = "<tr id='tableRow" + status.id + "'>" +
+                    "   <td>" + moment(status.timestamp).format(timeFormat) + "</td>" +
+                    "   <td>" + makeAttributesString(status.attributes) + "</td>" +
+                    "</tr>";
+                statusHistoryTable.row.add($(newRow)).draw();
+
+                if(newStatuses){
+                    $("#statusHistoryTable #tableRow" + status.id).addClass("updated");
+                    setTimeout(function() {
+                        $("#statusHistoryTable #tableRow" + status.id).removeClass("updated");
+                    }, 3000);
+                }
+            });
+        }
+
+        let ind = statuses.length - 1;
+        if(statuses[ind].id < lowestStatusId){
+            lowestStatusId = statuses[ind].id;
+        }
+    }
+
+
     $("#statusHistoryContent #statusHistoryResetButton").click(() => {
         getNewStatuses();
+    });
+
+    $("#statusHistoryTable_next").click(() => {
+        return $.get("/next-statuses",{ id: given_id_alert, lowestId: lowestStatusId }, (statuses) => {
+            let arr = JSON.parse(statuses);
+            addStatusesToTable(arr, false);
+            statusHistoryTable.order(0, 'desc');
+        });
     });
 
     /*

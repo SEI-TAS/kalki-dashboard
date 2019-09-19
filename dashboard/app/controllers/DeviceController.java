@@ -162,10 +162,21 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> getDeviceStatusHistory(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceStatus> deviceHistory = Postgres.findDeviceStatuses(deviceId);
+            List<DeviceStatus> deviceHistory = Postgres.findNDeviceStatuses(deviceId, 50);
             try {
                 return ok(ow.writeValueAsString(deviceHistory));
             } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+    public CompletionStage<Result> getNextDeviceStatusHistory(int deviceId, int lowestId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<DeviceStatus> deviceHistory = Postgres.findSubsetNDeviceStatuses(deviceId, 50, lowestId);
+            try {
+                return ok(ow.writeValueAsString(deviceHistory));
+            } catch (JsonProcessingException e){
             }
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
