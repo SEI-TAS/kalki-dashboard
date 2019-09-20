@@ -96,36 +96,38 @@ jQuery(document).ready(($) => {
     async function getDeviceStatuses() {
        $.get("/device-status-history", { id: given_id_alert }, function(deviceHistory) {
             let arr = JSON.parse(deviceHistory);
-            addStatusesToTable(arr, false);
+            addStatusesToTable(arr, false, given_id_alert);
         });
     }
 
     function getNewStatuses() {
         $.get("/get-new-statuses", (statuses) => {
             let newStatuses = JSON.parse(statuses);
-            addStatusesToTable(newStatuses, true);
+            addStatusesToTable(newStatuses, true, given_id_alert);
         });
     }
 
-    function addStatusesToTable(statuses, newStatuses){
+    function addStatusesToTable(statuses, newStatuses, device_id){
         if (statuses !== null && statuses.length !== 0) {
             let ind = statuses.length - 1;
             if(statuses[ind].id < lowestStatusId){
                 lowestStatusId = statuses[ind].id;
             }
             statuses.forEach((status) => {
-                originalStatusIds.add(status.id);
-                let newRow = "<tr id='tableRow" + status.id + "'>" +
-                    "   <td>" + moment(status.timestamp).format(timeFormat) + "</td>" +
-                    "   <td>" + makeAttributesString(status.attributes) + "</td>" +
-                    "</tr>";
-                statusHistoryTable.row.add($(newRow)).draw();
+                if(device_id == status.deviceId && !originalStatusIds.has(status.deviceId)){
+                    originalStatusIds.add(status.id);
+                    let newRow = "<tr id='tableRow" + status.id + "'>" +
+                        "   <td>" + moment(status.timestamp).format(timeFormat) + "</td>" +
+                        "   <td>" + makeAttributesString(status.attributes) + "</td>" +
+                        "</tr>";
+                    statusHistoryTable.row.add($(newRow)).draw();
 
-                if(newStatuses){
-                    $("#statusHistoryTable #tableRow" + status.id).addClass("updated");
-                    setTimeout(function() {
-                        $("#statusHistoryTable #tableRow" + status.id).removeClass("updated");
-                    }, 3000);
+                    if(newStatuses){
+                        $("#statusHistoryTable #tableRow" + status.id).addClass("updated");
+                        setTimeout(function() {
+                            $("#statusHistoryTable #tableRow" + status.id).removeClass("updated");
+                        }, 3000);
+                    }
                 }
             });
         }
@@ -139,7 +141,7 @@ jQuery(document).ready(($) => {
     $("#fetchMoreStatuses").click(() => {
         return $.get("/next-statuses",{ id: given_id_alert, lowestId: lowestStatusId }, (statuses) => {
             let arr = JSON.parse(statuses);
-            addStatusesToTable(arr, false);
+            addStatusesToTable(arr, false, given_id_alert);
             statusHistoryTable.order(0, 'desc');
         });
     });
