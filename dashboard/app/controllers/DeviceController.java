@@ -91,7 +91,7 @@ public class DeviceController extends Controller {
                 // filledForm.get is not handling typeId and groupId correctly
                 // may have to map the form to the correct Device constructor that accepts the id's
 
-                d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate());
+                d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate(), d.getSamplingRate());
 
                 List<Integer> tagIdsList = new ArrayList<Integer>();
 
