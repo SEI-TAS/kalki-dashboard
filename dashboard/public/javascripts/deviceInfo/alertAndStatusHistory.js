@@ -96,25 +96,26 @@ jQuery(document).ready(($) => {
     async function getDeviceStatuses() {
        $.get("/device-status-history", { id: given_id_alert }, function(deviceHistory) {
             let arr = JSON.parse(deviceHistory);
-            addStatusesToTable(arr, false, given_id_alert);
+            addStatusesToTable(arr, false);
         });
     }
 
     function getNewStatuses() {
         $.get("/get-new-statuses", (statuses) => {
             let newStatuses = JSON.parse(statuses);
-            addStatusesToTable(newStatuses, true, given_id_alert);
+            addStatusesToTable(newStatuses, true);
         });
     }
 
-    function addStatusesToTable(statuses, newStatuses, device_id){
+    function addStatusesToTable(statuses, newStatuses){
         if (statuses !== null && statuses.length !== 0) {
             let ind = statuses.length - 1;
-            if(statuses[ind].id < lowestStatusId){
+            if(statuses[ind].id < lowestStatusId || lowestStatusId < 0){
                 lowestStatusId = statuses[ind].id;
             }
             statuses.forEach((status) => {
-                if(device_id == status.deviceId && !originalStatusIds.has(status.deviceId)){
+               console.log(getUrlParameter('id')); 
+		if(getUrlParameter('id') == status.deviceId && !originalStatusIds.has(status.id)){
                     originalStatusIds.add(status.id);
                     let newRow = "<tr id='tableRow" + status.id + "'>" +
                         "   <td>" + moment(status.timestamp).format(timeFormat) + "</td>" +
@@ -141,10 +142,21 @@ jQuery(document).ready(($) => {
     $("#fetchMoreStatuses").click(() => {
         return $.get("/next-statuses",{ id: given_id_alert, lowestId: lowestStatusId }, (statuses) => {
             let arr = JSON.parse(statuses);
-            addStatusesToTable(arr, false, given_id_alert);
+            addStatusesToTable(arr, false);
             statusHistoryTable.order(0, 'desc');
         });
     });
+
+    function getUrlParameter(sParam) {
+	var pageUrl = window.location.search.substring(1), urlVariables = pageUrl.split('&'), parameterName, i;
+        for(i=0; i<urlVariables.length;i++){
+		parameterName = urlVariables[i].split('=');
+		if(parameterName[0] == sParam){
+			return parameterName[1] == undefined?true:decodeURIComponent(parameterName[1]);
+		}
+
+	}
+    }
 
     /*
         General
