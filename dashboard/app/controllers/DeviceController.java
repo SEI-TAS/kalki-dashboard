@@ -91,7 +91,7 @@ public class DeviceController extends Controller {
                 // filledForm.get is not handling typeId and groupId correctly
                 // may have to map the form to the correct Device constructor that accepts the id's
 
-                d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate());
+                d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate(), d.getSamplingRate());
 
                 List<Integer> tagIdsList = new ArrayList<Integer>();
 
@@ -162,10 +162,21 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> getDeviceStatusHistory(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceStatus> deviceHistory = Postgres.findDeviceStatuses(deviceId);
+            List<DeviceStatus> deviceHistory = Postgres.findNDeviceStatuses(deviceId, 50);
             try {
                 return ok(ow.writeValueAsString(deviceHistory));
             } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+    public CompletionStage<Result> getNextDeviceStatusHistory(int deviceId, int lowestId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<DeviceStatus> deviceHistory = Postgres.findSubsetNDeviceStatuses(deviceId, 50, lowestId);
+            try {
+                return ok(ow.writeValueAsString(deviceHistory));
+            } catch (JsonProcessingException e){
             }
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));

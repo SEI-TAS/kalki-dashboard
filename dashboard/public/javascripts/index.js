@@ -113,12 +113,14 @@ jQuery(document).ready(($) => {
                     let deviceId = state.deviceId;
                     let stateName = state.name;
 
+                    if(homeTable.row("#tableRow"+deviceId).cell("#securityState" +deviceId) != undefined) {
+                        homeTable.row("#tableRow" +deviceId).cell("#securityState" +deviceId).data(stateName);
+                        $("#homeTable #tableRow" + deviceId).addClass("updated");
+                        setTimeout(function() {
+                            $("#homeTable #tableRow" + deviceId).removeClass("updated");
+                        }, 3000);
+                    }
 
-                    homeTable.row("#tableRow" +deviceId).cell("#securityState" +deviceId).data(stateName);
-                    $("#homeTable #tableRow" + deviceId).addClass("updated");
-                    setTimeout(function() {
-                        $("#homeTable #tableRow" + deviceId).removeClass("updated");
-                    }, 3000);
                 });
             }
         });

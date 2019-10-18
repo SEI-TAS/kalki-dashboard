@@ -22,8 +22,9 @@ Docker for Linux can be installed by running `sudo apt-get install docker`.  Als
 
 ## Usage
 ### Local Development
-To develop locally you only need to know how to run the application:
-- Run the application:
+To develop locally:
+1) Make sure the Postgres DB container is running. (this can be ensured by starting other components first).
+2) Run the application:
 ```
 cd dashboard/
 sbt run
