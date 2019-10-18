@@ -1,0 +1,66 @@
+@()
+@*Column holds the form and table displayed vertically*@
+<div class="col" id="alertTypeLookupContent">
+    @helper.form(action = routes.AlertTypeLookupController.addOrUpdateAlertTypeLookup()) {
+        <h4>Alert Type Lookup</h4>
+        @* DeviceType select*@
+        <div class="form-group row">
+            <label for="deviceTypeSelect" class="col-2 col-form-label" >Device Type<span hidden>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="deviceTypeSelect" name="deviceTypeId" required></select>
+            </div>
+        </div>
+        @* Alert Type *@
+        <div class="form-group row">
+            <label for="alertTypeSelect" class="col-2 col-form-label">Alert Type<span>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="alertTypeSelect" name="alertTypeId" required></select>
+            </div>
+        </div>
+        @* variables *@
+        <div class="form-group row">
+            <label for="variableKey" class="col-1 col-form-label">Key</label>
+            <input type="text" maxlength="50" class="col-2 form-control" id="variableKey" placeholder="Enter Key">
+
+            <label for="variableValue" class="col-1 col-form-label">Value</label>
+            <input type="text" maxlength="50" class="col-2 form-control" id="variableValue" placeholder="Enter Value">
+
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addVariableButton">+</button>
+            </div>
+        </div>
+        @* hidden variable input *@
+        <div id="variableFormInput"></div>
+        @* Variable table *@
+        <table id="variableTable" class="table col-6">
+            <thead>
+                <th></th>
+                <th>Key</th>
+                <th>Value</th>
+            </thead>
+            <tbody id="variableTableBody"></tbody>
+        </table>
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
+
+<table id="alertTypeLookupTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>actions</th>
+            <th>device type</th>
+            <th>alert type</th>
+            <th>variables</th>
+        </tr>
+    </thead>
+    <tbody id="alertTypeLookupTableBody"></tbody>
+</table>
+
+</div>

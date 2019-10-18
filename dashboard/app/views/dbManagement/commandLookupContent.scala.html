@@ -1,0 +1,42 @@
+@()
+@*Column holds the form and table displayed vertically*@
+<div class="col" id="commandLookupContent">
+    @helper.form(action = routes.CommandLookupController.addOrUpdateCommandLookup()) {
+        <h4>Command Lookup</h4>
+        @* SecurityState *@
+        <div class="form-group row">
+            <label for="securityStateSelect" class="col-3 col-form-label">Select Security State<span>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="securityStateSelect" name="stateId" required></select>
+            </div>
+        </div>
+        @* DeviceCommand*@
+        <div class="form-group row">
+            <label for="deviceCommandSelect" class="col-3 col-form-label">Select Device Command<span>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="deviceCommandSelect" name="commandId" requried></select>
+            </div>
+        </div>
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
+
+<table id="commandLookupTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>actions</th>
+            <th>security state</th>
+            <th>device command</th>
+        </tr>
+    </thead>
+    <tbody id="commandLookupTableBody"></tbody>
+</table>
+
+</div>

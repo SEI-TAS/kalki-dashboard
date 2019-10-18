@@ -1,0 +1,84 @@
+@(insertId: Int)
+
+@main("db Management View") {
+    <div class="dbManagementView">
+
+        @*The tabs of the db management screen*@
+        <h4>Database Management</h4>
+        <ul class="nav nav-tabs">
+            <li class="nav-item tab"><a class="nav-link default-tab" data-toggle="tab" href="#AlertTypeContent">
+                AlertType</a></li>
+            <li class="nav-item tab"><a class="nav-link default-tab" data-toggle="tab" href="#AlertTypeLookupContent">
+                AlertTypeLookup</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#DeviceTypeContent">DeviceType</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#DeviceGroupContent">Group</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#SecurityStateContent">
+                SecurityState</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#TagContent">Tag</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#UmboxImageContent">UmboxImage</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#DeviceContent">Device</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#AlertConditionContent">
+                AlertCondition</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#CommandLookupContent">
+                CommandLookup</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#UmboxLookupContent">
+                UmboxLookup</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#CommandContent">Command</a></li>
+        </ul>
+
+        @*The content in the db management tabs*@
+        <div class="tab-content">
+            <div id="AlertTypeContent" class="tab-pane fade">
+            @dbManagement.alertTypeContent()
+            </div>
+            <div id="AlertTypeLookupContent" class="tab-pane fade">
+            @dbManagement.alertTypeLookupContent()
+            </div>
+            <div id="DeviceTypeContent" class="tab-pane fade">
+            @dbManagement.deviceTypeContent()
+            </div>
+            <div id="DeviceGroupContent" class="tab-pane fade">
+            @dbManagement.groupContent()
+            </div>
+            <div id="SecurityStateContent" class="tab-pane fade">
+            @dbManagement.securityStateContent()
+            </div>
+            <div id="TagContent" class="tab-pane fade">
+            @dbManagement.tagContent()
+            </div>
+            <div id="UmboxImageContent" class="tab-pane fade">
+            @dbManagement.umboxImageContent()
+            </div>
+            <div id="DeviceContent" class="tab-pane fade">
+            @dbManagement.deviceContent()
+            </div>
+            <div id="AlertConditionContent" class="tab-pane fade">
+            @dbManagement.alertConditionContent()
+            </div>
+            <div id="CommandLookupContent" class="tab-pane fade">
+            @dbManagement.commandLookupContent()
+            </div>
+            <div id="UmboxLookupContent" class="tab-pane fade">
+            @dbManagement.umboxLookupContent()
+            </div>
+            <div id="CommandContent" class="tab-pane fade">
+            @dbManagement.commandContent()
+            </div>
+        </div>
+    </div>
+} {
+    <script>if(@insertId == -1) alert("insert was unsuccessful")</script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/alertType.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/alertTypeLookup.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/deviceType.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/group.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/securityState.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/tag.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/umboxImage.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/device.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/alertCondition.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/commandLookup.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/umboxLookup.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/command.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/dbManagement.js")" type="text/javascript"></script>
+}
