@@ -22,6 +22,7 @@ GET     /alert-history              controllers.DeviceController.getAlertHistory
 GET     /device-status              controllers.DeviceController.getDeviceStatus(id: Integer ?= -1)
 GET     /umbox-instances            controllers.DeviceController.getUmboxInstances(id: Integer ?= -1)
 GET     /stage-logs                 controllers.DeviceController.getStageLogs(id: Integer ?= -1)
+GET     /umbox-logs                 controllers.DeviceController.getUmboxLogs(id: Integer ?= -1)
 GET     /state-reset                controllers.DeviceController.resetSecurityState(id: Integer ?= -1)
 
 GET     /get-new-alerts             controllers.NotificationController.getNewAlerts()

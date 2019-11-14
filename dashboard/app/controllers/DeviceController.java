@@ -226,6 +226,17 @@ public class DeviceController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getUmboxLogs(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<UmboxLog> logs = Postgres.findAllUmboxLogsForDevice(deviceId);
+            try {
+                return ok(ow.writeValueAsString(logs));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> resetSecurityState(Integer deviceId) {
         return CompletableFuture.supplyAsync(() -> {
             Postgres.resetSecurityState(deviceId);
