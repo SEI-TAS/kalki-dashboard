@@ -215,6 +215,17 @@ public class DeviceController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getStageLogs(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<StageLog> logs = Postgres.findAllStageLogsForDevice(deviceId);
+            try {
+                return ok(ow.writeValueAsString(logs));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> resetSecurityState(Integer deviceId) {
         return CompletableFuture.supplyAsync(() -> {
             Postgres.resetSecurityState(deviceId);
