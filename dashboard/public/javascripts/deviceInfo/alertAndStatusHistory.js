@@ -57,6 +57,7 @@ jQuery(document).ready(($) => {
             "   <td>" + alert.name + "</td>" +
             "   <td>" + alert.deviceStatusId + "</td>" +
             "   <td>" + alert.alerterId + "</td>" +
+            "   <td>" + alert.info + "</td>" +
             "   <td>" + formattedTime + "</td>" +
             "</tr>";
 
