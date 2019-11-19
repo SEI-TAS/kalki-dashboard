@@ -41,6 +41,10 @@
                 State Transitions Reference</a></li>
             <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#umboxInstancesContent">
                 umBox Instances</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#stageLogContent">
+                Stage Logs</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#umboxLogContent">
+                Umbox Logs</a></li>
         </ul>
 
         @*The content in info tabs*@
@@ -60,12 +64,19 @@
             <div id="umboxInstancesContent" class="tab-pane fade">
             @deviceInfo.umboxInstancesContent()
             </div>
-        </div>
+            <div id="stageLogContent" class="tab-pane fade">
+                @deviceInfo.stageLogContent()
+            </div>
+            <div id="umboxLogContent" class="tab-pane fade">
+                @deviceInfo.umboxLogContent()
+            </div></div>
     </div>
 } {
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/info.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/alertAndStatusHistory.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/deviceAlertConditions.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/stateTransitions.js")" type="text/javascript" data-id="@id"></script>
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/stageLogs.js")" type="text/javascript" data-id="@id"></script>
+    <script src="@routes.Assets.versioned("javascripts/deviceInfo/umboxLogs.js")" type="text/javascript" data-id="@id"></script>
     <script src="@routes.Assets.versioned("javascripts/deviceInfo/umboxInstances.js")" type="text/javascript" data-id="@id"></script>
 }
