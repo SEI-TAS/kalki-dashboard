@@ -3,13 +3,19 @@ let given_id_umboxlogs = document.currentScript.getAttribute('data-id');
 jQuery(document).ready(($) => {
     const timeFormat = "MMM Do YY, h:mm:ss a";
 
-    let umboxLogTable = $('#umboxLogTable');
+    let umboxLogTable = $("#umboxLogTable").DataTable(
+        {
+            order: [[0, 'desc']],
+            language: {
+                "emptyTable": "No umbox logs"
+            }
+        }
+    );
 
     $.get("/umbox-logs", { id: given_id_umboxlogs }, function(umboxLogs) {
         let arr = JSON.parse(umboxLogs);
         if(arr !== null && arr.length !== 0) {
             arr.forEach((log) => {
-                console.log("log: ", log);
                 appendToTable(log);
             });
         }
@@ -23,6 +29,6 @@ jQuery(document).ready(($) => {
             "<td id='id" + log.id + "'>" + moment(log.timestamp).format(timeFormat) + "</td>"+
             "</tr>";
 
-        umboxLogTable.append(newRow);
+        umboxLogTable.row.add($(newRow)).draw();
     }
 });

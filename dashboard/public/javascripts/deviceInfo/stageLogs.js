@@ -3,7 +3,14 @@ let given_id_stagelogs = document.currentScript.getAttribute('data-id');
 jQuery(document).ready(($) => {
     const timeFormat = "MMM Do YY, h:mm:ss a";
 
-    let stageLogTable = $('#stageLogTable');
+    let stageLogTable = $('#stageLogTable').DataTable(
+        {
+            order: [[0, 'desc']],
+            language: {
+                "emptyTable": "No stage logs"
+            }
+        }
+    );
 
    $.get("/stage-logs", { id: given_id_stagelogs }, function(stageLogs) {
       let arr = JSON.parse(stageLogs);
@@ -24,6 +31,6 @@ jQuery(document).ready(($) => {
             "<td id='id" + log.id + "'>" + moment(log.timestamp).format(timeFormat) + "</td>"+
             "</tr>";
 
-        stageLogTable.append(newRow);
+        stageLogTable.row.add($(newRow)).draw();
    }
 });
