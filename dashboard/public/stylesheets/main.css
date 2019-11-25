@@ -162,6 +162,19 @@ select.form-control:not([size]):not([multiple]) {
     text-align: left;
 }
 
+.add-device-cont {
+    display: block;
+    margin: auto;
+    text-align: right;
+}
+
+.devicePage form {
+    padding: 10px;
+    border-style: outset;
+    border-width: 3px;
+    border-spacing: 15px 50px;
+    margin-bottom: 20px;
+}
 
 /* -------DBManagement page styling-------- */
 .dbManagementView .nav-item a {

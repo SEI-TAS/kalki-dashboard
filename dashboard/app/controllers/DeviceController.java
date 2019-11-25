@@ -113,7 +113,7 @@ public class DeviceController extends Controller {
                 this.updatingId = -1;
 
                 int n = d.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementView(n));
+                return redirect(routes.HomeController.devices());
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
