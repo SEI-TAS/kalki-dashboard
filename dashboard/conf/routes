@@ -3,7 +3,7 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index()
+GET     /                           controllers.HomeController.devices()
 GET     /funcy-view                 controllers.FuncyController.funcyView()
 GET     /db-management              controllers.DBManagementController.dbManagementView(id: Integer ?= 1)
 GET     /info                       controllers.DeviceController.deviceInfo(id: String ?= "")
