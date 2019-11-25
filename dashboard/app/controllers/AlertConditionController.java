@@ -66,9 +66,9 @@ public class AlertConditionController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 AlertCondition at = filledForm.get();
-
-                int n = at.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementView(n));
+                at.insertOrUpdate();
+                int deviceId = at.getDeviceId();
+                return redirect(routes.DeviceController.deviceInfo(String.valueOf(deviceId)));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
