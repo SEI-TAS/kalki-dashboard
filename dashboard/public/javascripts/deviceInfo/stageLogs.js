@@ -16,7 +16,6 @@ jQuery(document).ready(($) => {
       let arr = JSON.parse(stageLogs);
       if(arr !== null && arr.length !== 0) {
           arr.forEach((log) => {
-              console.log("log: ", log);
               appendToTable(log);
           });
       }

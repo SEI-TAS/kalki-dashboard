@@ -6,7 +6,7 @@
 GET     /                           controllers.HomeController.devices()
 GET     /funcy-view                 controllers.FuncyController.funcyView()
 GET     /db-management              controllers.DBManagementController.dbManagementView(id: Integer ?= 1)
-GET     /info                       controllers.DeviceController.deviceInfo(id: String ?= "")
+GET     /info                       @controllers.DeviceController.deviceInfo(id: String ?= "")
 
 POST    /funcy-monitoring-values    controllers.FuncyController.selectMonitoringValues()
 POST    /funcy-close-stream         controllers.FuncyController.closeInputStream()

@@ -13,6 +13,7 @@ scalaVersion := "2.12.4"
 // Allows kalki-db dependency to be found
 resolvers += Resolver.mavenLocal
 
+routesGenerator := InjectedRoutesGenerator
 libraryDependencies += guice
 libraryDependencies += filters
 libraryDependencies += javaJdbc

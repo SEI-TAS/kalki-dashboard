@@ -49,7 +49,8 @@ public class DeviceController extends Controller {
     }
 
     public Result deviceInfo(String id) {
-        return ok(views.html.deviceInfo.info.render(id));
+        Device d = Postgres.findDevice(Integer.valueOf(id));
+        return ok(views.html.deviceInfo.info.render(id, d));
     }
 
     public CompletionStage<Result> getDevices() {
