@@ -32,6 +32,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class DeviceController extends Controller {
 
@@ -89,29 +90,34 @@ public class DeviceController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 Device d = filledForm.get();
+
+                Map<String, String> formData = filledForm.data();
+                for(Map.Entry<String, String> entry: formData.entrySet()) {
+                    System.out.println("key = "+entry.getKey());
+                    System.out.println("value = "+entry.getValue());
+                }
                 // filledForm.get is not handling typeId and groupId correctly
                 // may have to map the form to the correct Device constructor that accepts the id's
 
-                d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate(), d.getSamplingRate());
+                d = new Device(d.getId(), d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate(), d.getSamplingRate());
 
                 List<Integer> tagIdsList = new ArrayList<Integer>();
 
-                String tagIdsString = filledForm.field("tagIds").getValue().get();
-
-                String[] tagIdsStringArray = tagIdsString.substring(1, tagIdsString.length() - 1).split(", ");
-
-                //convert array of strings to list of integer
-
-                for (String s : tagIdsStringArray) {
-                    if (!s.equals("-1")) {    //need to remove dummy -1 value
-                        tagIdsList.add(Integer.valueOf(s));
+                String tagIdsString = "";
+                String[] tagIdsStringArray = {};
+                try {
+                    tagIdsString = filledForm.field("tagIds").getValue().get();
+                    tagIdsStringArray = tagIdsString.substring(1, tagIdsString.length() - 1).split(", ");
+                    for (String s : tagIdsStringArray) {
+                        if (!s.equals("-1")) {    //need to remove dummy -1 value
+                            tagIdsList.add(Integer.valueOf(s));
+                        }
                     }
+
+                    d.setTagIds(tagIdsList);
+                } catch (Exception e) {
+                    System.out.println("No tags.");
                 }
-
-                d.setTagIds(tagIdsList);
-                d.setId(this.updatingId);
-
-                this.updatingId = -1;
 
                 int n = d.insertOrUpdate();
                 return redirect(routes.HomeController.devices());

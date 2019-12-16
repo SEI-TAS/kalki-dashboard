@@ -257,6 +257,10 @@ table.dataTable thead .sorting_desc_disabled:before {
 
 /* Style the device info top section */
 #deviceInfoTextContainer {
+
+}
+
+.deviceContainer {
     padding: 0px 10px 10px 10px;
     outline: 5px outset lightgrey;
     margin-bottom: 20px;

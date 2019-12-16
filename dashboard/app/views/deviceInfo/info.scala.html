@@ -1,10 +1,12 @@
 @(id: String, device: edu.cmu.sei.ttg.kalki.models.Device)
 
 @main("Device Info") {
-    @partials.deviceForm(device)
 
     <div id="deviceInfoPage">
-        <div id="deviceInfoTextContainer">
+        <div id="deviceEditForm" class="deviceContainer" hidden="true">
+            @partials.deviceForm(device)
+        </div>
+        <div id="deviceInfoTextContainer" class="deviceContainer">
             <div class="row form-group" id="nameRow">
                 <div class="col" id="name"></div>
                 <div class="col-2">
@@ -29,6 +31,15 @@
             <div class="row" id="deviceTagsRow">
                 <div class="col-2 infoLabel">Tags: </div>
                 <div id="tags" class="col-3 infoText"></div>
+            </div>
+            <div class="row" id="btnRow">
+                <div class="col-8"></div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary btn-block" id="editDeviceBtn">Edit</button>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-secondary  btn-block" id="deleteDeviceBtn">Delete</button>
+                </div>
             </div>
         </div>
 

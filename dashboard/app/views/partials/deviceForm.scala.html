@@ -2,6 +2,11 @@
 <div class="col">
     @helper.form(action = routes.DeviceController.addOrUpdateDevice(), 'enctype -> "multipart/form-data") {
     <h4>Device</h4>
+    @if(device != null){
+        <input name="id" value="@device.getId()" hidden>
+    } else {
+        <input name="id" value="-1" hidden>
+    }
     <div class="form-group row">
         @* Type *@
         <label for="type" class="col-2 col-form-label">Type<span>*</span></label>

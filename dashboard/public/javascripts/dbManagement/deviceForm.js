@@ -1,5 +1,7 @@
-jQuery(document).ready(($) => {
+var id = document.currentScript.getAttribute('data-id');
 
+jQuery(document).ready(($) => {
+    let device = null;
     let typeNameToIDMap = {};   //map to go from deviceType name in the table to typeID in the form select
     let typeIdToNameMap = {};
     let groupNameToIDMap = {};   //map to go from group name in the table to groupID in the form select
@@ -108,19 +110,25 @@ jQuery(document).ready(($) => {
         return deviceIdToTagIdsMap[id]
     }
 
-    async function getDeviceTypes() {
+    async function getDeviceTypes(typeId) {
         $("#type").empty();
+        console.log("typeId: ",typeId);
 
         return $.get("/device-types", (types) => {
             $.each(JSON.parse(types), (id, type) => {
                 typeNameToIDMap[type.name] = type.id;
                 typeIdToNameMap[type.id] = type.name;
-                $("#type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
+                if(typeId == type.id){
+                    $("#type").append("<option id='typeOption" + type.id + "' value='" + type.id + "' selected>" + type.name + "</option>");
+                } else {
+                    $("#type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
+                }
+
             });
         });
     }
 
-    async function getGroups() {
+    async function getGroups(groupId) {
         $("#group").empty();
 
         return $.get("/groups", (groups) => {
@@ -130,12 +138,17 @@ jQuery(document).ready(($) => {
 
             $.each(JSON.parse(groups), (id, group) => {
                 groupNameToIDMap[group.name] = group.id;
-                $("#group").append("<option id='groupOption" + group.id + "' value='" + group.id + "'>" + group.name + "</option>");
+                if(groupId == group.id){
+                    $("#group").append("<option id='groupOption" + group.id + "' value='" + group.id + "' selected>" + group.name + "</option>");
+
+                } else {
+                    $("#group").append("<option id='groupOption" + group.id + "' value='" + group.id + "'>" + group.name + "</option>");
+                }
             });
         });
     }
 
-    async function getTags() {
+    async function getTags(tagIds) {
         $("#formTags").empty();
 
         return $.get("/tags", (tags) => {
@@ -145,12 +158,28 @@ jQuery(document).ready(($) => {
                     "    <input class='form-check-input' type='checkbox' id='tagCheckbox" + tag.id + "' name='tagIds[]' value='" + tag.id + "'>\n" +
                     "    <label class='form-check-label' for='tagCheckBox" + tag.id + "'>" + tag.name + "</label>\n" +
                     "</div>");
+                if(tagIds.includes(tag.id)){
+                    $("#formTags").append("<input class='form-check-input' id='' type='checkbox' name='tagIds[]' value='-1' checked>");
+
+                } else {
+                    $("#formTags").append("<input class='form-check-input' id='' type='checkbox' name='tagIds[]' value='-1'>");
+                }
             });
-            $("#formTags").append("<input class='form-check-input' id='hiddenChk' type='checkbox' name='tagIds[]' value='-1' hidden checked>");
         });
+
     }
 
-    getDeviceTypes();
-    getGroups();
-    getTags();
+    async function loadData(device) {
+        console.log("device", device);
+        getDeviceTypes(device.type.id);
+        getGroups(device.group.id);
+        getTags(device.tagIds);
+    }
+
+    $("#editDeviceBtn").click(()=>{
+        $.get('/device', {"id": id}, (deviceString) => {
+            device = JSON.parse(deviceString);
+            loadData(device);
+        });
+    });
 });
