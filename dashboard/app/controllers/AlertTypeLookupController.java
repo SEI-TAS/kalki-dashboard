@@ -60,7 +60,7 @@ public class AlertTypeLookupController extends Controller {
                 atl.setId(this.updatingId);
 
                 int n = atl.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementView(n));
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(n));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

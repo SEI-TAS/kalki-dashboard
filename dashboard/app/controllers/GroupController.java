@@ -72,7 +72,7 @@ public class GroupController extends Controller {
                 this.updatingId = -1;
 
                 int n = dg.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementView(n));
+                return redirect(routes.DBManagementController.dbManagementOtherView(n));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

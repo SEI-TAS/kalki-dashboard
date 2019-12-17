@@ -83,7 +83,7 @@ public class UmboxImageController extends Controller {
                 this.updatingId = -1;
 
                 int n = dt.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementView(n));
+                return redirect(routes.DBManagementController.dbManagementOtherView(n));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
