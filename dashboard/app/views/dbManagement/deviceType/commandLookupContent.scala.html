@@ -3,30 +3,30 @@
 <div class="col" id="commandLookupContent">
     @helper.form(action = routes.CommandLookupController.addOrUpdateCommandLookup()) {
         <h4>Command Lookup</h4>
+        @* DeviceType *@
+        <div class="form-group row">
+            <label for="deviceTypeSelect" class="col-3 col-form-label">Device Type<span>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="deviceTypeSelect" name="deviceTypeId" requried></select>
+            </div>
+        </div>
         @* CurrentSecurityState *@
         <div class="form-group row">
-            <label for="currentSecurityStateSelect" class="col-3 col-form-label">Select Current Security State<span>*</span></label>
+            <label for="currentSecurityStateSelect" class="col-3 col-form-label">Current Security State<span>*</span></label>
             <div class="col-4">
                 <select class="form-control" id="currentSecurityStateSelect" name="currentStateId" required></select>
             </div>
         </div>
         @* PreviousSecurityState *@
         <div class="form-group row">
-            <label for="previousSecurityStateSelect" class="col-3 col-form-label">Select Previous Security State<span>*</span></label>
+            <label for="previousSecurityStateSelect" class="col-3 col-form-label">Previous Security State<span>*</span></label>
             <div class="col-4">
                 <select class="form-control" id="previousSecurityStateSelect" name="previousStateId" required></select>
             </div>
         </div>
-        @* DeviceType *@
-        <div class="form-group row">
-            <label for="deviceTypeSelect" class="col-3 col-form-label">Select Device Type<span>*</span></label>
-            <div class="col-4">
-                <select class="form-control" id="deviceTypeSelect" name="deviceTypeId" requried></select>
-            </div>
-        </div>
         @* DeviceCommand*@
         <div class="form-group row">
-            <label for="deviceCommandSelect" class="col-3 col-form-label">Select Device Command<span>*</span></label>
+            <label for="deviceCommandSelect" class="col-3 col-form-label">Device Command<span>*</span></label>
             <div class="col-4">
                 <select class="form-control" id="deviceCommandSelect" name="commandId" requried></select>
             </div>
