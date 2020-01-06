@@ -13,8 +13,12 @@ jQuery(document).ready(($) => {
         return $.get("/get-umbox-lookups-by-device", {id: given_id_transitions}, function (umboxLookups) {
             let arr = JSON.parse(umboxLookups);
             if (arr !== null && arr.length !== 0) {
-                arr.forEach((lookup) => {
-                    foundImageLookups.push(lookup);
+                foundImageLookups = arr;
+                foundImageLookups.forEach((imageLookup) => {
+                   $.get("/umbox-image", {id: imageLookup.umboxImageId}, (umb) => {
+                      let umbox = JSON.parse(umb);
+                      imageLookup.name = umbox.name;
+                   });
                 });
             }
         });
@@ -24,52 +28,50 @@ jQuery(document).ready(($) => {
         return $.get("/get-command-lookups-by-device", {id: given_id_transitions}, function (commandLookups) {
             let arr = JSON.parse(commandLookups);
             if (arr !== null && arr.length !== 0) {
-                arr.forEach((lookup) => {
-                    foundCommandLookups.push(lookup);
-                });
+                foundCommandLookups = arr;
+                foundCommandLookups.forEach((commandLookup) => {
+                    $.get("/command", {id:commandLookup.commandId}, (comm) =>{
+                        let command = JSON.parse(comm);
+                        commandLookup.name = command.name;
+                    });
+                })
             }
         });
     }
 
     //given a umboxImageLookup, add a relationship from its security state to its image
-    async function addToImageRelationship(lookup) {
-        let foundState;
-
-        //wait to get the security state before proceeding
-        await $.get("/security-state", {id: lookup.stateId}, (state) => {
-            foundState = JSON.parse(state);
-        });
-
-        return $.get("/umbox-image", {id: lookup.umboxImageId}, (image) => {
-            image = JSON.parse(image);
-            if (stateToImagesAndCommands[foundState.name] == null) {
-                stateToImagesAndCommands[foundState.name] = {
-                    images: [],
-                    commands: []
-                };
-            }
-            stateToImagesAndCommands[foundState.name].images.push(image.name);
+    function addToImageRelationship() {
+        foundImageLookups.forEach((image) => {
+            Object.keys(stateToImagesAndCommands[image.stateId]).forEach((previousState) => {
+                stateToImagesAndCommands[image.stateId][previousState].images.push(image.name)
+            });
         });
     }
 
     //given a commandLookup, add a relationship from its security state to its command
-    async function addToCommandRelationship(lookup) {
-        let foundState;
-
-        //wait to get the security state before proceeding
-        await $.get("/security-state", {id: lookup.stateId}, (state) => {
-            foundState = JSON.parse(state);
+    function addToCommandRelationship() {
+        foundCommandLookups.forEach((commandLookup) => {
+            stateToImagesAndCommands[commandLookup.currentStateId][commandLookup.previousStateId].commands.push(commandLookup.name);
         });
+    }
 
-        return $.get("/command", {id: lookup.commandId}, (command) => {
-            command = JSON.parse(command);
-            if (stateToImagesAndCommands[foundState.name] == null) {
-                stateToImagesAndCommands[foundState.name] = {
-                    images: [],
-                    commands: []
-                };
-            }
-            stateToImagesAndCommands[foundState.name].commands.push(command.name);
+    async function configureStates() {
+        //wait to get the security state before proceeding
+        await $.get("/security-states", (states) => {
+            let securityStates = JSON.parse(states);
+            securityStates.forEach((currentState) => {
+                if(stateToImagesAndCommands[currentState.id] == null) {
+                    stateToImagesAndCommands[currentState.id] = {};
+                    securityStates.forEach((previousState) => {
+                        stateToImagesAndCommands[currentState.id][previousState.id] = {
+                            currentState: currentState.name,
+                            previousState: previousState.name,
+                            images: [],
+                            commands: []
+                        };
+                    });
+                }
+            });
         });
     }
 
@@ -77,22 +79,24 @@ jQuery(document).ready(($) => {
         //wait to gather all imageLookups and commandLookups before proceeding
         await getImageLookups();
         await getCommandLookups();
+        await configureStates();
 
-        for (let index in foundImageLookups) {
-            await addToImageRelationship(foundImageLookups[index]);
-        }
-        for (let index in foundCommandLookups) {
-            await addToCommandRelationship(foundCommandLookups[index]);
-        }
+        addToImageRelationship();
+        addToCommandRelationship();
 
-        Object.keys(stateToImagesAndCommands).forEach((state) => {
-            let newRow = "<tr>" +
-                "   <td>" + state + "</td>" +
-                "   <td>" + stateToImagesAndCommands[state].images.join("<br>") + "</td>" +
-                "   <td>" + stateToImagesAndCommands[state].commands.join("<br>") + "</td>" +
-                "</tr>";
+        Object.keys(stateToImagesAndCommands).forEach((currState) => {
+            Object.keys(stateToImagesAndCommands[currState]).forEach((prevState) => {
+                let state = stateToImagesAndCommands[currState][prevState];
+                let newRow = "<tr>" +
+                    "   <td>" + state.previousState + "</td>" +
+                    "   <td>" + state.currentState + "</td>" +
+                    "   <td>" + state.images.join("<br>") + "</td>" +
+                    "   <td>" + state.commands.join("<br>") + "</td>" +
+                    "</tr>";
 
-            $("#stateTransitionsTableBody").append($(newRow));
+                $("#stateTransitionsTableBody").append($(newRow));
+            });
+
         });
     }
 
