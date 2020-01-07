@@ -93,7 +93,7 @@ jQuery(document).ready(($) => {
 
         $.get("/get-alert-conditions-by-device",{id:given_id_conditions}, (alertConditions) => {
             let conditions = JSON.parse(alertConditions);
-            console.log("conditions: ", conditions);
+
             $.each(conditions, (index, alertCondition) => {
                 conditionIdToDeviceIdMap[alertCondition.id] = alertCondition.deviceId;
                 conditionIdToLookupIdMap[alertCondition.id] = alertCondition.alertTypeLookupId;
