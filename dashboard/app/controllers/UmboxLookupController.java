@@ -112,7 +112,7 @@ public class UmboxLookupController extends Controller {
 
             this.updatingId = -1;
 
-            return redirect(routes.DBManagementController.dbManagementView(insertId));
+            return redirect(routes.DBManagementController.dbManagementDeviceTypeView(insertId));
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 

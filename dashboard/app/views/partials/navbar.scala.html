@@ -27,7 +27,7 @@
             <ul class="nav nav-fill">
                 <li class="nav-menu-item">
                     <a class="nav-link" href="/">
-                        <span>Home</span>
+                        <span>Devices</span>
                     </a>
                 </li>
                 <li class="nav-menu-item">
@@ -35,10 +35,14 @@
                         <span>FUNCy View</span>
                     </a>
                 </li>
-                <li class="nav-menu-item">
-                    <a class="nav-link" href="/db-management?id=1">
-                        <span>DB Management</span>
+                <li class="nav-menu-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        DB Management <span id="caret"></span>
                     </a>
+                    <div class="dropdown-menu">
+                        <a class="nav-link dropdown-item" href="/db-management/device-type?id=1">Device Type</a>
+                        <a class="nav-link dropdown-item" href="/db-management/other?id=1">Other</a>
+                    </div>
                 </li>
             </ul>
         </nav>

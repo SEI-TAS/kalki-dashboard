@@ -3,9 +3,10 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index()
+GET     /                           controllers.HomeController.devices()
 GET     /funcy-view                 controllers.FuncyController.funcyView()
-GET     /db-management              controllers.DBManagementController.dbManagementView(id: Integer ?= 1)
+GET     /db-management/device-type  controllers.DBManagementController.dbManagementDeviceTypeView(id: Integer ?= 1)
+GET     /db-management/other        controllers.DBManagementController.dbManagementOtherView(id: Integer ?= 1)
 GET     /info                       controllers.DeviceController.deviceInfo(id: String ?= "")
 
 POST    /funcy-monitoring-values    controllers.FuncyController.selectMonitoringValues()

@@ -4,7 +4,7 @@ jQuery(document).ready(($) => {
 
     $.fn.dataTable.moment(timeFormat);
 
-    let homeTable = $('#homeTable').DataTable(
+    let homeTable = $('#deviceTable').DataTable(
         {
             order: [[3, 'desc']],
             columnDefs: [
@@ -20,6 +20,77 @@ jQuery(document).ready(($) => {
     let currentState = null;
     let currentLatestAlert = null;
     let currentDeviceStatus = null;
+    let typeNameToIDMap = {};   //map to go from deviceType name in the table to typeID in the form select
+    let typeIdToNameMap = {};
+    let groupNameToIDMap = {};   //map to go from group name in the table to groupID in the form select
+    let tagIDtoNameMap = {};   //map to go from tag name in the table to tagID in the form select
+    let deviceIdToTagIdsMap = {}    //map to retrieve list of tagIds based on deviceID
+
+
+    $("#add-device-btn").click(() => {
+        let button = $("#add-device-btn");
+        let form = $("#deviceForm");
+        if(button.text() === "Add Device"){
+            getFormData();
+            button.text("Cancel");
+            form.attr("hidden", false);
+        } else {
+            button.text("Add Device");
+            form.attr("hidden", true);
+            // clear form
+        }
+    });
+
+    function getFormData() {
+        getDeviceTypes();
+        getGroups();
+        getTags();
+    }
+
+    //fill device types in form
+    async function getDeviceTypes() {
+        $("#deviceContent #type").empty();
+
+        return $.get("/device-types", (types) => {
+            $.each(JSON.parse(types), (id, type) => {
+                typeNameToIDMap[type.name] = type.id;
+                typeIdToNameMap[type.id] = type.name;
+                $("#deviceForm #type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
+            });
+        });
+    }
+
+    //fill groups in form
+    async function getGroups() {
+        $("#deviceForm #group").empty();
+
+        return $.get("/groups", (groups) => {
+            groupNameToIDMap[""] = -1;
+            groupNameToIDMap["N/A"] = -1;
+            $("#deviceForm #group").append("<option value='-1'></option>");   //assuming this is to allow an empty group
+
+            $.each(JSON.parse(groups), (id, group) => {
+                groupNameToIDMap[group.name] = group.id;
+                $("#deviceForm #group").append("<option id='groupOption" + group.id + "' value='" + group.id + "'>" + group.name + "</option>");
+            });
+        });
+    }
+
+    //fill tags in form
+    async function getTags() {
+        $("#deviceForm #formTags").empty();
+
+        return $.get("/tags", (tags) => {
+            $.each(JSON.parse(tags), (id, tag) => {
+                tagIDtoNameMap[tag.id] = tag.name;
+                $("#deviceForm #formTags").append("<div class='form-check col-2'>\n" +
+                    "    <input class='form-check-input' type='checkbox' id='tagCheckbox" + tag.id + "' name='tagIds[]' value='" + tag.id + "'>\n" +
+                    "    <label class='form-check-label' for='tagCheckBox" + tag.id + "'>" + tag.name + "</label>\n" +
+                    "</div>");
+            });
+            $("#deviceForm #formTags").append("<input class='form-check-input' id='hiddenChk' type='checkbox' name='tagIds[]' value='-1' hidden checked>");
+        });
+    }
 
     function makeAttributesString(attributes) {
         let resultString = "";
