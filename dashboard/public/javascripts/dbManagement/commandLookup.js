@@ -38,7 +38,6 @@ jQuery(document).ready(($) => {
 
         return $.get("/device-types", (deviceTypes) => {
             $.each(JSON.parse(deviceTypes), (id, type) => {
-                console.log("Type: ",type);
                 $(".form-control#deviceTypeSelect").append("<option id='deviceTypeOption" + type.id + "' value='" + type.id + "'>"
                     + type.name +
                     "</option>");
@@ -102,8 +101,8 @@ jQuery(document).ready(($) => {
 
                         $('html, body').animate({scrollTop: 0}, 'fast', function () {
                         });
-                        $("#commandLookupContent #submitFormButton").html("Update");
-                        $("#commandLookupContent #clearFormButton").html("Cancel Edit");
+                        $("#commandLookupContent #submitClFormButton").html("Update");
+                        $("#commandLookupContent #clearClFormButton").html("Cancel Edit");
                         $("#commandLookupContent .form-control#currentSecurityStateSelect").val(stateNameToIDMap[currentSecurityState]).change();
                         $("#commandLookupContent .form-control#previousSecurityStateSelect").val(stateNameToIDMap[previousSecurityState]).change();
                         $("#commandLookupContent .form-control#deviceTypeSelect").val(deviceTypeNametoIDMap[deviceType]).change();
@@ -125,15 +124,15 @@ jQuery(document).ready(($) => {
         });
     }
 
-    $("#commandLookupContent #clearFormButton").click(function () {
+    $("#commandLookupContent #clearClFormButton").click(function () {
         let currentSecurityStateSelect = $("#commandLookupContent .form-control#currentSecurityStateSelect");
         let previousSecurityStateSelect = $("#commandLookupContent .form-control#previousSecurityStateSelect");
         let deviceTypeSelect = $("#commandLookupContent .form-control#deviceTypeSelect");
         let deviceCommandSelect = $("#commandLookupContent .form-control#deviceCommandSelect");
 
         $.post("/clear-command-lookup-form", {}, function () {
-            $("#commandLookupContent #submitFormButton").html("Add");
-            $("#commandLookuContent #clearFormButton").html("Clear");
+            $("#commandLookupContent #submitClFormButton").html("Add");
+            $("#commandLookuContent #clearClFormButton").html("Clear");
             currentSecurityStateSelect.val(currentSecurityStateSelect.find("option:first").val()).change();
             previousSecurityStateSelect.val(previousSecurityStateSelect.find("option:first").val()).change();
             deviceTypeSelect.val(deviceTypeSelect.find("option:first").val()).change();

@@ -28,7 +28,7 @@ jQuery(document).ready(($) => {
                         $('html, body').animate({scrollTop: 0}, 'fast', function () {
                         });
                         $("#deviceTypeContent #submitFormButton").html("Update");
-                        $("#deviceTypeContent #clearFormButton").html("Cancel Edit");
+                        $("#deviceTypeContent #clearDtFormButton").html("Cancel Edit");
                         $("#deviceTypeContent .form-group #name").val($("#deviceTypeTableBody #name" + deviceType.id).html());
                     });
                 });
@@ -47,10 +47,10 @@ jQuery(document).ready(($) => {
         });
     }
 
-    $("#deviceTypeContent #clearFormButton").click(function () {
+    $("#deviceTypeContent #clearDtFormButton").click(function () {
         $.post("/clear-device-type-form", {}, function () {
             $("#deviceTypeContent #submitFormButton").html("Add");
-            $("#deviceTypeContent #clearFormButton").html("Clear");
+            $("#deviceTypeContent #clearDtFormButton").html("Clear");
             $("#deviceTypeContent .form-group #name").val("");
         });
     });

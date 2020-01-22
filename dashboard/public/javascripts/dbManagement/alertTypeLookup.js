@@ -150,7 +150,7 @@ jQuery(document).ready(($) => {
 
                         $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                         $("#alertTypeLookupContent #submitFormButton").html("Update");
-                        $("#alertTypeLookupContent #clearFormButton").html("Cancel Edit");
+                        $("#alertTypeLookupContent #clearAtlFormButton").html("Cancel Edit");
                         $("#alertTypeLookupContent .form-control#alertTypeSelect").val(alertTypeNameToIDMap[alertTypeName]).change();
                         $("#alertTypeLookupContent .form-control#deviceTypeSelect").val(deviceTypeNameToIDMap[deviceTypeName]).change();
                         $("#alertTypeLookupContent #variableTableBody").empty();
@@ -184,12 +184,12 @@ jQuery(document).ready(($) => {
         valueInput.val("");
     });
 
-    $("#alertTypeLookupContent #clearFormButton").click(function () {
+    $("#alertTypeLookupContent #clearAtlFormButton").click(function () {
         let alertTypeSelect = $("#alertTypeLookupContent .form-control#alertType");
         let typeSelect = $("#alertTypeLookupContent .form-control#deviceTypeSelect");
 
         $("#alertTypeLookupContent #submitFormButton").html("Add");
-        $("#alertTypeLookupContent #clearFormButton").html("Clear");
+        $("#alertTypeLookupContent #clearAtlFormButton").html("Clear");
         alertTypeSelect.val(alertTypeSelect.find("option:first").val());
         typeSelect.val(typeSelect.find("option:first").val());
         $("#alertTypeLookupContent .form-control#variableKey").val("");

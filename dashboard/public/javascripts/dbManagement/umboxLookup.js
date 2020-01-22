@@ -197,7 +197,7 @@ jQuery(document).ready(($) => {
                         $("#umboxLookupContent .form-control#securityState").val(stateNameToIdMap[$("#umboxLookupTable #securityState" + umboxLookup.id).html()]);
                         $("#umboxLookupContent .form-control#umboxImage").val(umboxImageId);
                         $("#umboxLookupContent .form-control#order").val(dagOrder);
-                        $("#alertConditionContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
+                        $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
 
                         editingDagOrder = dagOrder;
                         editingUmboxImageId = umboxImageId;

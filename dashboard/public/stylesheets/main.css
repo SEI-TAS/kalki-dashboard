@@ -49,6 +49,17 @@ iframe {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
+#caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid\9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
 /* Settings page */
 .facet-link-box .active {
     color: #b00;
@@ -162,6 +173,19 @@ select.form-control:not([size]):not([multiple]) {
     text-align: left;
 }
 
+.add-device-cont {
+    display: block;
+    margin: auto;
+    text-align: right;
+}
+
+.devicePage form {
+    padding: 10px;
+    border-style: outset;
+    border-width: 3px;
+    border-spacing: 15px 50px;
+    margin-bottom: 20px;
+}
 
 /* -------DBManagement page styling-------- */
 .dbManagementView .nav-item a {
@@ -244,6 +268,10 @@ table.dataTable thead .sorting_desc_disabled:before {
 
 /* Style the device info top section */
 #deviceInfoTextContainer {
+
+}
+
+.deviceContainer {
     padding: 0px 10px 10px 10px;
     outline: 5px outset lightgrey;
     margin-bottom: 20px;

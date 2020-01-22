@@ -2,6 +2,7 @@ var id = document.currentScript.getAttribute('data-id');
 
 jQuery(document).ready(($) => {
     const infoPollInterval = 1 * 1000;
+    let device = null;
 
     function createTagString(tags) {
         let tagNames = [];
@@ -17,7 +18,7 @@ jQuery(document).ready(($) => {
 
     async function getDevice() {
         $.get('/device', {"id": id}, (deviceString) => {
-            let device = JSON.parse(deviceString);
+            device = JSON.parse(deviceString);
             if(device === null) {
                 console.log("Invalid ID");
             }
@@ -84,6 +85,22 @@ jQuery(document).ready(($) => {
         $.get('/state-reset', {"id": id}, function() {
             window.location.reload();
         });
+    });
+
+    $("#editDeviceBtn").click(() => {
+        $("#deviceInfoTextContainer").attr("hidden", true);
+        $("#deviceEditForm").attr("hidden", false);
+    });
+
+    $("#cancelFormButton").click(() => {
+        $("#deviceInfoTextContainer").attr("hidden", false);
+        $("#deviceEditForm").attr("hidden", true);
+    });
+
+    $("#deleteDeviceBtn").click(() => {
+        $.post("/delete-device", {id: id}, function () {
+            window.location.replace("/");
+        })
     });
 
     main();

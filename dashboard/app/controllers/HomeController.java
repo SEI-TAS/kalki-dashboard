@@ -9,7 +9,7 @@ public class HomeController extends Controller {
     public HomeController() {
     }
 
-    public Result index() {
-        return ok(views.html.index.render());
+    public Result devices() {
+        return ok(views.html.devices.render());
     }
 }

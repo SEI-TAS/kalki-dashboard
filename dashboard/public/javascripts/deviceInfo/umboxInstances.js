@@ -3,7 +3,14 @@ let given_id_umbox = document.currentScript.getAttribute('data-id');
 jQuery(document).ready(($) => {
     const timeFormat = "MMM Do YY, h:mm:ss a";
 
-    let umboxInstancesTable = $("#umboxInstancesTable");
+    let umboxInstancesTable = $("#umboxInstancesTable").DataTable(
+        {
+            order: [[0, 'desc']],
+            language: {
+                "emptyTable": "No umbox instances"
+            }
+        }
+    );
 
     $.get("/umbox-instances", { id: given_id_umbox }, function(umboxInstances) {
         let arr = JSON.parse(umboxInstances);
@@ -18,7 +25,7 @@ jQuery(document).ready(($) => {
                         "   <td>" + moment(instance.startedAt).format(timeFormat) + "</td>" +
                         "   <td>" + JSON.parse(image).name + "</td>" +
                         "</tr>";
-                    umboxInstancesTable.append(newRow);
+                    umboxInstancesTable.row.add($(newRow)).draw();
                 });
             });
         }

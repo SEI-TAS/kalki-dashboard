@@ -72,7 +72,7 @@ public class DeviceTypeController extends Controller {
                 this.updatingId = -1;
 
                 int n = dt.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementView(n));
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(n));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

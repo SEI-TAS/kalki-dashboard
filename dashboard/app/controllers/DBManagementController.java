@@ -9,7 +9,11 @@ public class DBManagementController extends Controller {
 
     }
 
-    public Result dbManagementView(int insertId) {
+    public Result dbManagementOtherView(int insertId) {
         return ok(views.html.dbManagement.dbManagementScreen.render(insertId));
+    }
+
+    public Result dbManagementDeviceTypeView(int insertId) {
+        return ok(views.html.dbManagement.deviceTypeManagement.render(insertId));
     }
 }
