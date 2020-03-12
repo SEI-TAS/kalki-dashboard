@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.DeviceTypeDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -39,7 +39,7 @@ public class DeviceTypeController extends Controller {
 
     public CompletionStage<Result> getDeviceTypes() {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceType> deviceTypes = Postgres.findAllDeviceTypes();
+            List<DeviceType> deviceTypes = DeviceTypeDAO.findAllDeviceTypes();
             try {
                 return ok(ow.writeValueAsString(deviceTypes));
             } catch (JsonProcessingException e) {
@@ -86,7 +86,7 @@ public class DeviceTypeController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteDeviceType(idToInt);
+            Boolean isSuccess = DeviceTypeDAO.deleteDeviceType(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

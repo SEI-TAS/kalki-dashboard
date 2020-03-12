@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.GroupDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -39,7 +39,7 @@ public class GroupController extends Controller {
 
     public CompletionStage<Result> getGroups() {
         return CompletableFuture.supplyAsync(() -> {
-            List<Group> groups = Postgres.findAllGroups();
+            List<Group> groups = GroupDAO.findAllGroups();
             try {
                 return ok(ow.writeValueAsString(groups));
             } catch (JsonProcessingException e) {
@@ -86,7 +86,7 @@ public class GroupController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteGroup(idToInt);
+            Boolean isSuccess = GroupDAO.deleteGroup(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

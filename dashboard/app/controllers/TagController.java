@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.TagDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -39,7 +39,7 @@ public class TagController extends Controller {
 
     public CompletionStage<Result> getTags() {
         return CompletableFuture.supplyAsync(() -> {
-            List<Tag> tags = Postgres.findAllTags();
+            List<Tag> tags = TagDAO.findAllTags();
             try {
                 return ok(ow.writeValueAsString(tags));
             } catch (JsonProcessingException e) {
@@ -50,7 +50,7 @@ public class TagController extends Controller {
 
     public CompletionStage<Result> getTagsByDevice(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            List<Tag> tags = Postgres.findTagsByDevice(id);
+            List<Tag> tags = TagDAO.findTagsByDevice(id);
             try {
                 return ok(ow.writeValueAsString(tags));
             } catch (JsonProcessingException e) {
@@ -97,7 +97,7 @@ public class TagController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteTag(idToInt);
+            Boolean isSuccess = TagDAO.deleteTag(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

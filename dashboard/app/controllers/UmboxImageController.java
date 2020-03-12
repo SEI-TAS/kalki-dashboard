@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.UmboxImageDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -39,7 +39,7 @@ public class UmboxImageController extends Controller {
 
     public CompletionStage<Result> getUmboxImage(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            UmboxImage umboxImage = Postgres.findUmboxImage(id);
+            UmboxImage umboxImage = UmboxImageDAO.findUmboxImage(id);
             try {
                 return ok(ow.writeValueAsString(umboxImage));
             } catch (JsonProcessingException e) {
@@ -50,7 +50,7 @@ public class UmboxImageController extends Controller {
 
     public CompletionStage<Result> getUmboxImages() {
         return CompletableFuture.supplyAsync(() -> {
-            List<UmboxImage> umboxImages = Postgres.findAllUmboxImages();
+            List<UmboxImage> umboxImages = UmboxImageDAO.findAllUmboxImages();
             try {
                 return ok(ow.writeValueAsString(umboxImages));
             } catch (JsonProcessingException e) {
@@ -97,7 +97,7 @@ public class UmboxImageController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteUmboxImage(idToInt);
+            Boolean isSuccess = UmboxImageDAO.deleteUmboxImage(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

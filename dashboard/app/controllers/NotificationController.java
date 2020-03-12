@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.notifications.AsyncNotificationStorage;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -46,21 +46,21 @@ public class NotificationController extends Controller {
 
     public CompletionStage<Result> startListener() {
         return CompletableFuture.supplyAsync(() -> {
-            Postgres.startListener();
+            AsyncNotificationStorage.startListener();
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
     public CompletionStage<Result> stopListener() {
         return CompletableFuture.supplyAsync(() -> {
-            Postgres.stopListener();
+            AsyncNotificationStorage.stopListener();
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
     public CompletionStage<Result> getNewAlerts() {
         return CompletableFuture.supplyAsync(() -> {
-            List<Alert> newAlerts = Postgres.getNewAlerts();
+            List<Alert> newAlerts = AsyncNotificationStorage.getNewAlerts();
             try {
                 return ok(ow.writeValueAsString(newAlerts));
             } catch (JsonProcessingException e) {
@@ -71,7 +71,7 @@ public class NotificationController extends Controller {
 
     public CompletionStage<Result> getNewStates() {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceSecurityState> newStates = Postgres.getNewStates();
+            List<DeviceSecurityState> newStates = AsyncNotificationStorage.getNewStates();
             try {
                 return ok(ow.writeValueAsString(newStates));
             } catch (JsonProcessingException e) {
@@ -82,7 +82,7 @@ public class NotificationController extends Controller {
 
     public CompletionStage<Result> getNewStatuses() {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceStatus> newStatuses = Postgres.getNewStatuses();
+            List<DeviceStatus> newStatuses = AsyncNotificationStorage.getNewStatuses();
             try {
                 return ok(ow.writeValueAsString(newStatuses));
             } catch (JsonProcessingException e) {

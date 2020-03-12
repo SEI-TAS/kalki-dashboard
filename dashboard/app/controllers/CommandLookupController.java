@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.DeviceCommandLookupDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -38,7 +38,7 @@ public class CommandLookupController extends Controller {
 
     public CompletionStage<Result> getCommandLookups() {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceCommandLookup> commandLookups = Postgres.findAllCommandLookups();
+            List<DeviceCommandLookup> commandLookups = DeviceCommandLookupDAO.findAllCommandLookups();
             try {
                 return ok(ow.writeValueAsString(commandLookups));
             } catch (JsonProcessingException e) {
@@ -49,7 +49,7 @@ public class CommandLookupController extends Controller {
 
     public CompletionStage<Result> getCommandLookupsByDevice(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceCommandLookup> commandLookups = Postgres.findCommandLookupsByDevice(deviceId);
+            List<DeviceCommandLookup> commandLookups = DeviceCommandLookupDAO.findCommandLookupsByDevice(deviceId);
             try {
                 return ok(ow.writeValueAsString(commandLookups));
             } catch (JsonProcessingException e) {
@@ -99,7 +99,7 @@ public class CommandLookupController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteCommandLookup(idToInt);
+            Boolean isSuccess = DeviceCommandLookupDAO.deleteCommandLookup(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
