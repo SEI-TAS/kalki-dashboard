@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.*;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -56,7 +56,7 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> getDevices() {
         return CompletableFuture.supplyAsync(() -> {
-            List<Device> devices = Postgres.findAllDevices();
+            List<Device> devices = DeviceDAO.findAllDevices();
             try {
                 return ok(ow.writeValueAsString(devices));
             } catch (JsonProcessingException e) {
@@ -73,7 +73,7 @@ public class DeviceController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Device device = Postgres.findDevice(idToInt);
+            Device device = DeviceDAO.findDevice(idToInt);
             try {
                 return ok(ow.writeValueAsString(device));
             } catch (JsonProcessingException e) {
@@ -146,7 +146,7 @@ public class DeviceController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteDevice(idToInt);
+            Boolean isSuccess = DeviceDAO.deleteDevice(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
@@ -158,7 +158,7 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> getDeviceSecurityState(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            DeviceSecurityState state = Postgres.findDeviceSecurityStateByDevice(deviceId);
+            DeviceSecurityState state = DeviceSecurityStateDAO.findDeviceSecurityStateByDevice(deviceId);
             try {
                 return ok(ow.writeValueAsString(state));
             } catch (JsonProcessingException e) {
@@ -169,7 +169,7 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> getDeviceStatusHistory(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceStatus> deviceHistory = Postgres.findNDeviceStatuses(deviceId, 50);
+            List<DeviceStatus> deviceHistory = DeviceStatusDAO.findNDeviceStatuses(deviceId, 50);
             try {
                 return ok(ow.writeValueAsString(deviceHistory));
             } catch (JsonProcessingException e) {
@@ -180,7 +180,7 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> getNextDeviceStatusHistory(int deviceId, int lowestId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceStatus> deviceHistory = Postgres.findSubsetNDeviceStatuses(deviceId, 50, lowestId);
+            List<DeviceStatus> deviceHistory = DeviceStatusDAO.findSubsetNDeviceStatuses(deviceId, 50, lowestId);
             try {
                 return ok(ow.writeValueAsString(deviceHistory));
             } catch (JsonProcessingException e){
@@ -191,7 +191,7 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> getAlertHistory(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<Alert> alertHistory = Postgres.findAlertsByDevice(deviceId);
+            List<Alert> alertHistory = AlertDAO.findAlertsByDevice(deviceId);
             try {
                 return ok(ow.writeValueAsString(alertHistory));
             } catch (JsonProcessingException e) {
@@ -202,7 +202,7 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> getDeviceStatus(int deviceStatusId) {
         return CompletableFuture.supplyAsync(() -> {
-           DeviceStatus status = Postgres.findDeviceStatus(deviceStatusId);
+           DeviceStatus status = DeviceStatusDAO.findDeviceStatus(deviceStatusId);
             try {
                 return ok(ow.writeValueAsString(status));
             } catch (JsonProcessingException e) {
@@ -213,7 +213,7 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> getUmboxInstances(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<UmboxInstance> instances = Postgres.findUmboxInstances(deviceId);
+            List<UmboxInstance> instances = UmboxInstanceDAO.findUmboxInstances(deviceId);
             try {
                 return ok(ow.writeValueAsString(instances));
             } catch (JsonProcessingException e) {
@@ -246,7 +246,7 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> resetSecurityState(Integer deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            Postgres.resetSecurityState(deviceId);
+            DeviceDAO.resetSecurityState(deviceId);
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

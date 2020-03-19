@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.AlertTypeDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -38,7 +38,7 @@ public class AlertTypeController extends Controller {
 
     public CompletionStage<Result> getAlertType(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            AlertType alertType = Postgres.findAlertType(id);
+            AlertType alertType = AlertTypeDAO.findAlertType(id);
             try {
                 return ok(ow.writeValueAsString(alertType));
             } catch (JsonProcessingException e) {
@@ -49,7 +49,7 @@ public class AlertTypeController extends Controller {
 
     public CompletionStage<Result> getAlertTypes() {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertType> alertTypes = Postgres.findAllAlertTypes();
+            List<AlertType> alertTypes = AlertTypeDAO.findAllAlertTypes();
             try {
                 return ok(ow.writeValueAsString(alertTypes));
             } catch (JsonProcessingException e) {
@@ -96,7 +96,7 @@ public class AlertTypeController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteAlertType(idToInt);
+            Boolean isSuccess = AlertTypeDAO.deleteAlertType(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

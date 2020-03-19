@@ -1,7 +1,9 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.DeviceCommandDAO;
+import edu.cmu.sei.kalki.db.daos.DeviceCommandLookupDAO;
+import edu.cmu.sei.kalki.db.daos.DeviceDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -16,6 +18,7 @@ import javax.inject.Inject;
 
 import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -39,7 +42,7 @@ public class CommandController extends Controller {
 
     public CompletionStage<Result> getCommand(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            DeviceCommand command = Postgres.findCommand(id);
+            DeviceCommand command = DeviceCommandDAO.findCommand(id);
             try {
                 return ok(ow.writeValueAsString(command));
             } catch (JsonProcessingException e) {
@@ -50,7 +53,7 @@ public class CommandController extends Controller {
 
     public CompletionStage<Result> getCommands() {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceCommand> commands = Postgres.findAllCommands();
+            List<DeviceCommand> commands = DeviceCommandDAO.findAllCommands();
             try {
                 return ok(ow.writeValueAsString(commands));
             } catch (JsonProcessingException e) {
@@ -61,10 +64,13 @@ public class CommandController extends Controller {
 
     public CompletionStage<Result> getCommandsByDevice(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            Device device = Postgres.findDevice(id);
-            List<DeviceCommand> commands;
+            Device device = DeviceDAO.findDevice(id);
+            List<DeviceCommand> commands = new ArrayList<>();
             if(device != null) {
-                commands = Postgres.findCommandsByDevice(device);
+                List<DeviceCommandLookup> lookups = DeviceCommandLookupDAO.findCommandLookupsByDevice(device.getId());
+                for(DeviceCommandLookup cl: lookups){
+                    commands.add(DeviceCommandDAO.findCommand(cl.getCommandId()));
+                }
             }
             else {
                 commands = Collections.emptyList();
@@ -121,7 +127,7 @@ public class CommandController extends Controller {
                 idToInt = -1;
             }
 
-            Boolean isSuccess = Postgres.deleteCommand(idToInt);
+            Boolean isSuccess = DeviceCommandDAO.deleteCommand(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

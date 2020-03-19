@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.*;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -37,7 +37,7 @@ public class AlertConditionController extends Controller {
 
     public CompletionStage<Result> getAlertConditions() {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertCondition> alertConditions = Postgres.findAllAlertConditions();
+            List<AlertCondition> alertConditions = AlertConditionDAO.findAllAlertConditions();
             try {
                 return ok(ow.writeValueAsString(alertConditions));
             } catch (JsonProcessingException e) {
@@ -48,7 +48,7 @@ public class AlertConditionController extends Controller {
 
     public CompletionStage<Result> getAlertConditionsByDevice(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertCondition> alertConditions = Postgres.findAlertConditionsByDevice(id);
+            List<AlertCondition> alertConditions = AlertConditionDAO.findAlertConditionsByDevice(id);
             try {
                 return ok(ow.writeValueAsString(alertConditions));
             } catch (JsonProcessingException e) {
@@ -82,7 +82,7 @@ public class AlertConditionController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteAlertCondition(idToInt);
+            Boolean isSuccess = AlertConditionDAO.deleteAlertCondition(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
