@@ -29,6 +29,10 @@ GET     /get-new-statuses           controllers.NotificationController.getNewSta
 POST    /start-listener             controllers.NotificationController.startListener()
 POST    /stop-listener              controllers.NotificationController.stopListener()
 
+POST    /add-or-update-device-policy   controllers.DevicePolicyController.addOrUpdateDevicePolicy()
+
+POST    /add-or-update-policy-rule   controllers.PolicyRuleController.addOrUpdatePolicyRule()
+
 GET     /alert-type                 controllers.AlertTypeController.getAlertType(id: Integer ?= -1)
 GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
 POST    /edit-alert-type            controllers.AlertTypeController.editAlertType()

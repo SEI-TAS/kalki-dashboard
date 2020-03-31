@@ -1,0 +1,35 @@
+@()
+@*Column holds the form and table displayed vertically*@
+<div class="col" id="alertTypeContent">
+    @helper.form(action = routes.AlertTypeController.addOrUpdateAlertType()) {
+        <h4>Device Policies</h4>
+        @* DeviceType select*@
+        <div class="form-group row">
+            <label for="deviceTypeSelect" class="col-2 col-form-label" >Device Type<span hidden>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="deviceTypeSelect" name="deviceTypeId" required></select>
+            </div>
+        </div>
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
+
+<table id="devicePolicyTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>actions</th>
+            <th>id</th>
+            <th>device type</th>
+        </tr>
+    </thead>
+    <tbody id="devicePolicyTableBody"></tbody>
+</table>
+
+</div>

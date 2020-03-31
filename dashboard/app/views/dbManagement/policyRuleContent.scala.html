@@ -1,0 +1,115 @@
+@()
+@*Column holds the form and table displayed vertically*@
+<div class="col" id="policyRuleContent">
+    @helper.form(action = routes.PolicyRuleController.addOrUpdatePolicyRule(), 'enctype -> "multipart/form-data") {
+        <h4>Policy Rule</h4>
+
+        <div class="form-group row">
+            @* Alert Type *@
+            <label for="alertType" class="col-2 col-form-label">Alert Type</label>
+            <div class="col-3">
+                <select class="form-control" id="alertType">
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+
+            @* Order *@
+            <label for="order" class="col-1 col-form-label">Order</label>
+            <div class="col-1">
+                <input type="number" min="0" max="2147483647" class="form-control" id="orderAlertType" value="1">
+            </div>
+
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addOrderAlertTypeButton">+</button>
+            </div>
+        </div>
+        @* hidden image to order input *@
+        <input type="text" id="alertTypeOrderFormInput" name="imageIdDagOrderMap" value="" hidden required
+               oninvalid="alert('Please Add an Image and Order before Adding a PolicyRule')">
+        @* Variable table *@
+        <table id="alertTypeOrderTable" class="table col-6">
+            <thead>
+            <th></th>
+            <th>Alert Type<span>*</span></th>
+            <th>Order<span>*</span></th>
+            </thead>
+            <tbody id="alertTypeOrderTableBody"></tbody>
+        </table>
+
+        @* Start State *@
+        <div class="form-group row">
+            <label for="startState" class="col-2 col-form-label">Start State<span>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="startState" name="startState" required>
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+        </div>
+        @* End State *@
+        <div class="form-group row">
+            <label for="endState" class="col-2 col-form-label">End State<span>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="endState" name="endState" required>
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @* Actions *@
+            <label for="actions" class="col-2 col-form-label">Actions</label>
+            <div class="col-3">
+                <select class="form-control" id="actions">
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+
+            @* Order *@
+            <label for="order" class="col-1 col-form-label">Order</label>
+            <div class="col-1">
+                <input type="number" min="0" max="2147483647" class="form-control" id="order" value="1">
+            </div>
+
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addOrderButton">+</button>
+            </div>
+        </div>
+
+        @* hidden image to order input *@
+        <input type="text" id="orderFormInput" name="actionsDagOrderMap" value="" hidden required
+        oninvalid="alert('Please Add an Image and Order before Adding a PolicyRule')">
+        @* Variable table *@
+        <table id="actionsOrderTable" class="table col-6">
+            <thead>
+                <th></th>
+                <th>Actions<span>*</span></th>
+                <th>Order<span>*</span></th>
+            </thead>
+            <tbody id="actionsOrderTableBody"></tbody>
+        </table>
+
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
+
+<table id="policyRuleTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>actions</th>
+            <th>conditions</th>
+            <th>start state</th>
+            <th>end state</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody id="policyRuleTableBody"></tbody>
+</table>
+
+</div>
