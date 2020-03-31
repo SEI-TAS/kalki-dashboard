@@ -6,7 +6,11 @@
         @*The tabs of the db management screen*@
         <h4>Database Management</h4>
         <ul class="nav nav-tabs">
-            <li class="nav-item tab"><a class="nav-link default-tab" data-toggle="tab" href="#AlertTypeContent">
+            <li class="nav-item tab"><a class="nav-link default-tab" data-toggle="tab" href="#DevicePolicyContent">
+                DevicePolicy</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#PolicyRuleContent">
+                PolicyRule</a></li>
+            <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#AlertTypeContent">
                 AlertType</a></li>
             <li class="nav-item tab"><a class="nav-link" data-toggle="tab" href="#AlertTypeLookupContent">
                 AlertTypeLookup</a></li>
@@ -28,6 +32,12 @@
 
         @*The content in the db management tabs*@
         <div class="tab-content">
+            <div id="DevicePolicyContent" class="tab-pane fade">
+            @dbManagement.devicePolicyContent()
+            </div>
+            <div id="PolicyRuleContent" class="tab-pane fade">
+                @dbManagement.policyRuleContent()
+            </div>
             <div id="AlertTypeContent" class="tab-pane fade">
             @dbManagement.alertTypeContent()
             </div>
