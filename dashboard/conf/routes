@@ -29,8 +29,7 @@ GET     /get-new-statuses           controllers.NotificationController.getNewSta
 POST    /start-listener             controllers.NotificationController.startListener()
 POST    /stop-listener              controllers.NotificationController.stopListener()
 
-POST    /add-or-update-device-policy   controllers.DevicePolicyController.addOrUpdateDevicePolicy()
-
+GET     /policy-rules               controllers.PolicyRuleController.getPolicyRules()
 POST    /add-or-update-policy-rule   controllers.PolicyRuleController.addOrUpdatePolicyRule()
 
 GET     /alert-type                 controllers.AlertTypeController.getAlertType(id: Integer ?= -1)
@@ -64,6 +63,13 @@ POST    /edit-security-state            controllers.SecurityStateController.edit
 POST    /add-or-update-security-state   controllers.SecurityStateController.addOrUpdateSecurityState()
 POST    /delete-security-state          controllers.SecurityStateController.deleteSecurityState()
 POST    /clear-security-state-form      controllers.SecurityStateController.clearSecurityStateForm()
+
+GET     /data-node                  controllers.DataNodeController.getDataNode(id: Integer ?= -1)
+GET     /data-nodes                 controllers.DataNodeController.getDataNodes()
+POST    /edit-data-node             controllers.DataNodeController.editDataNode()
+POST    /add-or-update-data-node    controllers.DataNodeController.addOrUpdateDataNode()
+POST    /delete-data-node           controllers.DataNodeController.deleteDataNode()
+POST    /clear-data-node-form       controllers.DataNodeController.clearDataNodeForm()
 
 GET     /tags                       controllers.TagController.getTags()
 GET     /get-tags-by-device         controllers.TagController.getTagsByDevice(id: Integer ?= -1)
