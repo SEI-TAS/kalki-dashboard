@@ -64,6 +64,19 @@
                 <input type="text" maxlength="16" class="form-control" id="ipAddress" name="ip" placeholder="Enter IP">
             </div>
         </div>
+        @* Data Node *@
+        <div class="form-group row">
+            <div class="col">
+                <div class="row">
+                    <label for="dataNode" class="col-2 col-form-label">Data Node<span>*</span></label>
+                    <div class="col-4">
+                        <select class="form-control" id="dataNode" name="dataNode" required>
+                            @*Populated by device.js*@
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
         @* History Size *@
         <div class="form-group row">
             <label for="statusHistorySize" class="col-2 col-form-label">History Size<span>*</span></label>
@@ -74,10 +87,10 @@
         </div>
         @* Sampling Rate *@
         <div class="form-group row">
-            <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (milliseconds)<span>*</span></label>
+            <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
             <div class="col-8">
                 <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate" required
-                oninvalid="this.setCustomValidity('Please Enter Sampling Rate')" onchange="setCustomValidity('')">
+                oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')">
             </div>
         </div>
         @* Tags *@
@@ -109,11 +122,12 @@
             <th>id</th>
             <th>name</th>
             <th>description</th>
-            <th>DeviceType</th>
-            <th>DeviceGroup</th>
+            <th>device type</th>
+            <th>device group</th>
             <th>ip address</th>
+            <th>data node</th>
             <th>status history size</th>
-            <th>sampling rate</th>
+            <th>sampling rate factor</th>
             <th>tags</th>
         </tr>
     </thead>

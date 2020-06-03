@@ -12,7 +12,9 @@ jQuery(document).ready(($) => {
     let typeIdToNameMap = {};
     let groupNameToIDMap = {};   //map to go from group name in the table to groupID in the form select
     let tagIDtoNameMap = {};   //map to go from tag name in the table to tagID in the form select
-    let deviceIdToTagIdsMap = {}    //map to retrieve list of tagIds based on deviceID
+    let deviceIdToTagIdsMap = {};    //map to retrieve list of tagIds based on deviceID
+    let dataNodeNameToIdMap = {};    //map to go from dataNode name in the table to dataNodeID in the form select
+    let dataNodeIdToNameMap = {};
 
     //searches through the tags and checks each box given the list of tagIds
     function checkTags(tagIds) {
@@ -34,6 +36,7 @@ jQuery(document).ready(($) => {
         $("#deviceContent .form-group #description").val(device["description"]);
         $("#deviceContent .form-control#group").val(groupNameToIDMap[deviceGroupName]);
         $("#deviceContent .form-group #ipAddress").val(device["ip"]);
+        $("#deviceContent .form-group #dataNode").val(dataNodeNameToIdMap["name"]);
         $("#deviceContent .form-group #statusHistorySize").val(device["statusHistorySize"]).change();
         $("#deviceContent .form-group #samplingRate").val(device["samplingRate"]).change();
         checkTags(device["tagIds"]);
@@ -62,6 +65,19 @@ jQuery(document).ready(($) => {
                 typeNameToIDMap[type.name] = type.id;
                 typeIdToNameMap[type.id] = type.name;
                 $("#deviceContent #type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
+            });
+        });
+    }
+
+    //fill data nodes in form
+    async function getDataNodes() {
+        $("#deviceContent #dataNode").empty();
+
+        return $.get("/data-nodes", (dataNodes) => {
+            $.each(JSON.parse(dataNodes), (id, node) => {
+                dataNodeNameToIdMap[node.name] = node.id;
+                dataNodeIdToNameMap[node.id] = node.name;
+                $("#deviceContent #dataNode").append("<option id='dataNodeOption" + node.id + "' value='" + node.id + "'>" + node.name + " - " + node.ipAddress + "</option>");
             });
         });
     }
@@ -103,6 +119,7 @@ jQuery(document).ready(($) => {
         //must wait on these functions to complete otherwise the mappings might not be set in time
         await getDeviceTypes();
         await getGroups();
+        await getDataNodes();
         await getTags();
 
         deviceTable.clear();
@@ -124,6 +141,7 @@ jQuery(document).ready(($) => {
                     "    <td id='deviceType" + device.id + "'>" + device.type.name + "</td>\n" +
                     "    <td id='group" + device.id + "'>" + deviceGroupName + "</td>\n" +
                     "    <td id='ipAddress" + device.id + "'>" + device.ip + "</td>\n" +
+                    "    <td id='dataNode" + device.id + "'>" + device.dataNode.name + "</td>\n" +
                     "    <td id='statusHistorySize" + device.id + "'>" + device.statusHistorySize + "</td>\n" +
                     "    <td id='samplingRate" + device.id + "'>" + device.samplingRate + "</td>\n" +
                     "    <td id='tags" + device.id + "'>" + tagIdsToNames(device.tagIds) + "</td>\n" +
@@ -156,6 +174,7 @@ jQuery(document).ready(($) => {
                                 name: $("#deviceTableBody #group" + device.id).html()
                             },
                             ip: $("#deviceTableBody #ipAddress" + device.id).html(),
+                            dataNode: $("#deviceTableBody #dataNode" + device.id).html(),
                             statusHistorySize: $("#deviceTableBody #statusHistorySize" + device.id).html(),
                             samplingRate: $("#deviceTableBody #samplingRate" + device.id).html(),
                             tagIds: findTagIdsByDevice(device.id)
@@ -196,6 +215,7 @@ jQuery(document).ready(($) => {
                     name: ""
                 },
                 ip: "",
+                dataNode: "",
                 statusHistorySize: "",
                 samplingRate: "",
                 tagIds: []

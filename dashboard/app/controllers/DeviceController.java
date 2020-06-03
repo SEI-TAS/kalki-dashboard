@@ -82,32 +82,41 @@ public class DeviceController extends Controller {
 
     public CompletionStage<Result> addOrUpdateDevice() {
         return CompletableFuture.supplyAsync(() -> {
-            Form<Device> deviceForm = formFactory.form(Device.class);
-            Form<Device> filledForm = deviceForm.bindFromRequest();
+            DynamicForm deviceForm = formFactory.form();
+            DynamicForm filledForm = deviceForm.bindFromRequest();
+
             if (filledForm.hasErrors()) {
                 return badRequest(views.html.form.render(filledForm));
             } else {
-                Device d = filledForm.get();
-                // filledForm.get is not handling typeId and groupId correctly
-                // may have to map the form to the correct Device constructor that accepts the id's
+                String name = filledForm.get("name");
+                String description = filledForm.get("description");
+                String ip = filledForm.get("ip");
+                int typeId = Integer.parseInt(filledForm.get("typeId"));
+                int groupId = Integer.parseInt(filledForm.get("groupId"));
+                int statusHistorySize = Integer.parseInt(filledForm.get("statusHistorySize"));
+                int samplingRate = Integer.parseInt(filledForm.get("samplingRate"));
+                int dataNode = Integer.parseInt(filledForm.get("dataNode"));
 
-                d = new Device(d.getName(), d.getDescription(), Integer.valueOf(filledForm.field("typeId").getValue().get()), Integer.valueOf(filledForm.field("groupId").getValue().get()), d.getIp(), d.getStatusHistorySize(), d.getSamplingRate(), d.getSamplingRate());
+                Device d = new Device(name, description, typeId, groupId, ip, statusHistorySize, samplingRate, samplingRate, dataNode);
 
                 List<Integer> tagIdsList = new ArrayList<Integer>();
 
-                String tagIdsString = filledForm.field("tagIds").getValue().get();
+                String tagIdsString = filledForm.get("tagIds");
 
-                String[] tagIdsStringArray = tagIdsString.substring(1, tagIdsString.length() - 1).split(", ");
+                if (tagIdsString != null) {
+                    String[] tagIdsStringArray = tagIdsString.substring(1, tagIdsString.length() - 1).split(", ");
 
-                //convert array of strings to list of integer
+                    //convert array of strings to list of integer
 
-                for (String s : tagIdsStringArray) {
-                    if (!s.equals("-1")) {    //need to remove dummy -1 value
-                        tagIdsList.add(Integer.valueOf(s));
+                    for (String s : tagIdsStringArray) {
+                        if (!s.equals("-1")) {    //need to remove dummy -1 value
+                            tagIdsList.add(Integer.valueOf(s));
+                        }
                     }
+
+                    d.setTagIds(tagIdsList);
                 }
 
-                d.setTagIds(tagIdsList);
                 d.setId(this.updatingId);
 
                 this.updatingId = -1;
