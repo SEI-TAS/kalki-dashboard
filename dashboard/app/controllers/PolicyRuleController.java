@@ -1,5 +1,7 @@
 package controllers;
 
+import edu.cmu.sei.kalki.db.daos.AlertTypeDAO;
+import edu.cmu.sei.kalki.db.daos.PolicyConditionDAO;
 import edu.cmu.sei.kalki.db.models.*;
 import edu.cmu.sei.kalki.db.daos.PolicyRuleDAO;
 
@@ -40,8 +42,41 @@ public class PolicyRuleController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
+    public CompletionStage<Result> getPolicyConditions() {
+        return CompletableFuture.supplyAsync(() -> {
+            List<PolicyCondition> policyConditions = PolicyConditionDAO.findAllPolicyConditions();
+            try {
+                return ok(ow.writeValueAsString(policyConditions));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> addOrUpdatePolicyRule() {
         return CompletableFuture.supplyAsync(() -> {
+            Form<PolicyRule> policyRuleForm = formFactory.form(PolicyRule.class);
+            Form<PolicyRule> filledForm = policyRuleForm.bindFromRequest();
+
+            if (filledForm.hasErrors()) {
+                return badRequest(views.html.form.render(filledForm));
+            } else {
+                PolicyRule pr = filledForm.get();
+                pr.setId(this.updatingId);
+
+                pr.insert();
+                return redirect(routes.DBManagementController.dbManagementView(0));
+            }
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+    public CompletionStage<Result> getPolicyRules() {
+        return CompletableFuture.supplyAsync(() -> {
+            List<PolicyRule> policyRules = PolicyRuleDAO.findAllPolicyRules();
+            try {
+                return ok(ow.writeValueAsString(policyRules));
+            } catch (JsonProcessingException e) {
+            }
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

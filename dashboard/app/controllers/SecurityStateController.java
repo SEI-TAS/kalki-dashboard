@@ -1,5 +1,6 @@
 package controllers;
 
+import edu.cmu.sei.kalki.db.daos.StateTransitionDAO;
 import edu.cmu.sei.kalki.db.models.*;
 import edu.cmu.sei.kalki.db.daos.SecurityStateDAO;
 
@@ -9,14 +10,10 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.data.*;
-import play.api.mvc.*;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,6 +32,17 @@ public class SecurityStateController extends Controller {
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
+    }
+
+    public CompletionStage<Result> getSecurityStateTransitions() {
+        return CompletableFuture.supplyAsync(() -> {
+            List<StateTransition> stateTransitions = StateTransitionDAO.findAll();
+            try {
+                return ok(ow.writeValueAsString(stateTransitions));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
     public CompletionStage<Result> getSecurityState(int id) {

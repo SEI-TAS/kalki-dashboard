@@ -32,6 +32,8 @@ POST    /stop-listener              controllers.NotificationController.stopListe
 GET     /policy-rules               controllers.PolicyRuleController.getPolicyRules()
 POST    /add-or-update-policy-rule   controllers.PolicyRuleController.addOrUpdatePolicyRule()
 
+GET     /policy-conditions           controllers.PolicyRuleController.getPolicyConditions()
+
 GET     /alert-type                 controllers.AlertTypeController.getAlertType(id: Integer ?= -1)
 GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
 POST    /edit-alert-type            controllers.AlertTypeController.editAlertType()
@@ -63,6 +65,8 @@ POST    /edit-security-state            controllers.SecurityStateController.edit
 POST    /add-or-update-security-state   controllers.SecurityStateController.addOrUpdateSecurityState()
 POST    /delete-security-state          controllers.SecurityStateController.deleteSecurityState()
 POST    /clear-security-state-form      controllers.SecurityStateController.clearSecurityStateForm()
+
+GET     /state-transitions              controllers.SecurityStateController.getSecurityStateTransitions()
 
 GET     /data-node                  controllers.DataNodeController.getDataNode(id: Integer ?= -1)
 GET     /data-nodes                 controllers.DataNodeController.getDataNodes()
