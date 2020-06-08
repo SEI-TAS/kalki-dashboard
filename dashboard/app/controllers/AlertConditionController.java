@@ -66,7 +66,7 @@ public class AlertConditionController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 AlertCondition at = filledForm.get();
-                at.insertOrUpdate();
+                at.insert();
                 int deviceId = at.getDeviceId();
                 return redirect(routes.DeviceController.deviceInfo(String.valueOf(deviceId)));
             }

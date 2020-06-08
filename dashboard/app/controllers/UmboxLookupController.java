@@ -106,7 +106,8 @@ public class UmboxLookupController extends Controller {
                     //insert a umbox lookup for each relationship
                     for (String umboxImageId : imageIdToDagOrderMap.keySet()) {
                         String dagOrder = imageIdToDagOrderMap.get(umboxImageId);
-                        UmboxLookup newLookup = new UmboxLookup(1, Integer.parseInt(umboxImageId), Integer.parseInt(dagOrder));
+                        // TODO is the security state of 1 acceptable here? Had to add in devicetypeid as well to compile, which I think is also wrong.
+                        UmboxLookup newLookup = new UmboxLookup(1, 1, Integer.parseInt(umboxImageId), Integer.parseInt(dagOrder));
                         insertId = newLookup.insertOrUpdate();
                     }
                 } else {  //updating with only a single image and dag order
