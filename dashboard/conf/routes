@@ -64,6 +64,13 @@ POST    /add-or-update-security-state   controllers.SecurityStateController.addO
 POST    /delete-security-state          controllers.SecurityStateController.deleteSecurityState()
 POST    /clear-security-state-form      controllers.SecurityStateController.clearSecurityStateForm()
 
+GET     /data-node                  controllers.DataNodeController.getDataNode(id: Integer ?= -1)
+GET     /data-nodes                 controllers.DataNodeController.getDataNodes()
+POST    /edit-data-node             controllers.DataNodeController.editDataNode()
+POST    /add-or-update-data-node    controllers.DataNodeController.addOrUpdateDataNode()
+POST    /delete-data-node           controllers.DataNodeController.deleteDataNode()
+POST    /clear-data-node-form       controllers.DataNodeController.clearDataNodeForm()
+
 GET     /tags                       controllers.TagController.getTags()
 GET     /get-tags-by-device         controllers.TagController.getTagsByDevice(id: Integer ?= -1)
 POST    /edit-tag                   controllers.TagController.editTag()
