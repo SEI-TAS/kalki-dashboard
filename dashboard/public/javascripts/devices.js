@@ -24,8 +24,9 @@ jQuery(document).ready(($) => {
     let typeIdToNameMap = {};
     let groupNameToIDMap = {};   //map to go from group name in the table to groupID in the form select
     let tagIDtoNameMap = {};   //map to go from tag name in the table to tagID in the form select
-    let deviceIdToTagIdsMap = {}    //map to retrieve list of tagIds based on deviceID
-
+    let deviceIdToTagIdsMap = {};    //map to retrieve list of tagIds based on deviceID
+    let dataNodeNameToIdMap = {};    //map to go from dataNode name in the table to dataNodeID in the form select
+    let dataNodeIdToNameMap = {};
 
     $("#add-device-btn").click(() => {
         let button = $("#add-device-btn");
@@ -43,6 +44,7 @@ jQuery(document).ready(($) => {
 
     function getFormData() {
         getDeviceTypes();
+        getDataNodes();
         getGroups();
         getTags();
     }
@@ -72,6 +74,20 @@ jQuery(document).ready(($) => {
             $.each(JSON.parse(groups), (id, group) => {
                 groupNameToIDMap[group.name] = group.id;
                 $("#deviceForm #group").append("<option id='groupOption" + group.id + "' value='" + group.id + "'>" + group.name + "</option>");
+            });
+        });
+    }
+
+    //fill data nodes in form
+    async function getDataNodes() {
+        $("#dataNode").empty();
+        console.log("Getting data node.")
+
+        return $.get("/data-nodes", (dataNodes) => {
+            $.each(JSON.parse(dataNodes), (id, node) => {
+                dataNodeNameToIdMap[node.name] = node.id;
+                dataNodeIdToNameMap[node.id] = node.name;
+                $("#dataNode").append("<option id='dataNodeOption" + node.id + "' value='" + node.id + "'>" + node.name + " - " + node.ipAddress + "</option>");
             });
         });
     }
