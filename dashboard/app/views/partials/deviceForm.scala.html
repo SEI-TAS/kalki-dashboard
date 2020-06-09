@@ -1,4 +1,4 @@
-@(device: edu.cmu.sei.ttg.kalki.models.Device)
+@(device: edu.cmu.sei.kalki.db.models.Device)
 <div class="col">
     @helper.form(action = routes.DeviceController.addOrUpdateDevice(), 'enctype -> "multipart/form-data") {
     <h4>Device</h4>
@@ -75,20 +75,34 @@
             }
         </div>
     </div>
+
+    @* Data Node *@
+    <div class="form-group row">
+        <div class="col">
+            <div class="row">
+                <label for="dataNode" class="col-2 col-form-label">Data Node<span>*</span></label>
+                <div class="col-4">
+                    <select class="form-control" id="dataNode" name="dataNode" required>
+                        @*Populated by device.js*@
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
     @* History Size *@
     <div class="form-group row">
 
     </div>
     @* Sampling Rate *@
     <div class="form-group row">
-        <label for="samplingRate" class="col-2 col-form-label">Sampling Rate (milliseconds)<span>*</span></label>
+        <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
         <div class="col-4">
             @if(device != null) {
                 <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate" required
-                       oninvalid="this.setCustomValidity('Please Enter Sampling Rate')" onchange="setCustomValidity('')" value="@device.getSamplingRate()">
+                       oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')" value="@device.getSamplingRate()">
             } else {
                 <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate" required
-                       oninvalid="this.setCustomValidity('Please Enter Sampling Rate')" onchange="setCustomValidity('')">
+                       oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')">
             }
         </div>
     </div>
