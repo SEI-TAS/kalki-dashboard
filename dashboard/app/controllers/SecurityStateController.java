@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.SecurityStateDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -39,7 +39,7 @@ public class SecurityStateController extends Controller {
 
     public CompletionStage<Result> getSecurityState(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            SecurityState securityState = Postgres.findSecurityState(id);
+            SecurityState securityState = SecurityStateDAO.findSecurityState(id);
             try {
                 return ok(ow.writeValueAsString(securityState));
             } catch (JsonProcessingException e) {
@@ -50,7 +50,7 @@ public class SecurityStateController extends Controller {
 
     public CompletionStage<Result> getSecurityStates() {
         return CompletableFuture.supplyAsync(() -> {
-            List<SecurityState> securityStates = Postgres.findAllSecurityStates();
+            List<SecurityState> securityStates = SecurityStateDAO.findAllSecurityStates();
             try {
                 return ok(ow.writeValueAsString(securityStates));
             } catch (JsonProcessingException e) {
@@ -97,7 +97,7 @@ public class SecurityStateController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteSecurityState(idToInt);
+            Boolean isSuccess = SecurityStateDAO.deleteSecurityState(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

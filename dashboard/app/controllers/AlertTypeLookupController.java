@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.AlertTypeLookupDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -39,7 +39,7 @@ public class AlertTypeLookupController extends Controller {
 
     public CompletionStage<Result> getAlertTypeLookups() {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertTypeLookup> alertTypeLookups = Postgres.findAllAlertTypeLookups();
+            List<AlertTypeLookup> alertTypeLookups = AlertTypeLookupDAO.findAllAlertTypeLookups();
             try {
                 return ok(ow.writeValueAsString(alertTypeLookups));
             } catch (JsonProcessingException e) {
@@ -86,7 +86,7 @@ public class AlertTypeLookupController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteAlertTypeLookup(idToInt);
+            Boolean isSuccess = AlertTypeLookupDAO.deleteAlertTypeLookup(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

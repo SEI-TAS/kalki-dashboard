@@ -1,7 +1,7 @@
 package controllers;
 
-import edu.cmu.sei.ttg.kalki.models.*;
-import edu.cmu.sei.ttg.kalki.database.Postgres;
+import edu.cmu.sei.kalki.db.models.*;
+import edu.cmu.sei.kalki.db.daos.UmboxLookupDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -42,7 +42,7 @@ public class UmboxLookupController extends Controller {
 
     public CompletionStage<Result> getUmboxLookups() {
         return CompletableFuture.supplyAsync(() -> {
-            List<UmboxLookup> umboxLookups = Postgres.findAllUmboxLookups();
+            List<UmboxLookup> umboxLookups = UmboxLookupDAO.findAllUmboxLookups();
             try {
                 return ok(ow.writeValueAsString(umboxLookups));
             } catch (JsonProcessingException e) {
@@ -53,7 +53,7 @@ public class UmboxLookupController extends Controller {
 
     public CompletionStage<Result> getUmboxLookupsByDevice(int deviceId) {
         return CompletableFuture.supplyAsync(() -> {
-            List<UmboxLookup> umboxLookups = Postgres.findUmboxLookupsByDevice(deviceId);
+            List<UmboxLookup> umboxLookups = UmboxLookupDAO.findUmboxLookupsByDevice(deviceId);
             try {
                 return ok(ow.writeValueAsString(umboxLookups));
             } catch (JsonProcessingException e) {
@@ -74,6 +74,10 @@ public class UmboxLookupController extends Controller {
         return ok();
     }
 
+    /**
+     * THIS FUNCTION NEEDS FIXED FOR NEW POLICY RULE IMPLEMENTATION
+     * @return
+     */
     public CompletionStage<Result> addOrUpdateUmboxLookup() {
         return CompletableFuture.supplyAsync(() -> {
             Form<UmboxLookup> umboxLookupForm = formFactory.form(UmboxLookup.class);
@@ -95,13 +99,15 @@ public class UmboxLookupController extends Controller {
                         e.printStackTrace();
                     }
 
-                    Integer stateId = ul.getStateId();
-                    Integer deviceTypeId = ul.getDeviceTypeId();
+
+//                    Integer stateId = ul.getStateId();
+//                    Integer deviceTypeId = ul.getDeviceTypeId();
 
                     //insert a umbox lookup for each relationship
                     for (String umboxImageId : imageIdToDagOrderMap.keySet()) {
                         String dagOrder = imageIdToDagOrderMap.get(umboxImageId);
-                        UmboxLookup newLookup = new UmboxLookup(-1, stateId, deviceTypeId, Integer.parseInt(umboxImageId), Integer.parseInt(dagOrder));
+                        // TODO is the security state of 1 acceptable here? Had to add in devicetypeid as well to compile, which I think is also wrong.
+                        UmboxLookup newLookup = new UmboxLookup(1, 1, Integer.parseInt(umboxImageId), Integer.parseInt(dagOrder));
                         insertId = newLookup.insertOrUpdate();
                     }
                 } else {  //updating with only a single image and dag order
@@ -125,7 +131,7 @@ public class UmboxLookupController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = Postgres.deleteUmboxLookup(idToInt);
+            Boolean isSuccess = UmboxLookupDAO.deleteUmboxLookup(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

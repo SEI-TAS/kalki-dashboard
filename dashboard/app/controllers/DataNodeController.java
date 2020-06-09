@@ -1,64 +1,59 @@
 package controllers;
 
-import edu.cmu.sei.kalki.db.models.*;
-import edu.cmu.sei.kalki.db.daos.DeviceCommandLookupDAO;
-
-import models.DatabaseExecutionContext;
-import play.libs.concurrent.HttpExecution;
-
-import play.mvc.Controller;
-import play.mvc.Result;
-import play.data.*;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
-
-import javax.inject.Inject;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-import java.util.List;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import edu.cmu.sei.kalki.db.daos.DataNodeDAO;
+import edu.cmu.sei.kalki.db.models.DataNode;
+import models.DatabaseExecutionContext;
+import play.data.Form;
+import play.data.FormFactory;
+import play.libs.concurrent.HttpExecution;
+import play.mvc.Controller;
+import play.mvc.Result;
 
-public class CommandLookupController extends Controller {
+import javax.inject.Inject;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+
+public class DataNodeController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
     private int updatingId;
 
     @Inject
-    public CommandLookupController(FormFactory formFactory, DatabaseExecutionContext ec) {
+    public DataNodeController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
-    public CompletionStage<Result> getCommandLookups() {
+    public CompletionStage<Result> getDataNode(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceCommandLookup> commandLookups = DeviceCommandLookupDAO.findAllCommandLookups();
+            DataNode DataNode = DataNodeDAO.findDataNode(id);
             try {
-                return ok(ow.writeValueAsString(commandLookups));
+                return ok(ow.writeValueAsString(DataNode));
             } catch (JsonProcessingException e) {
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(id));
             }
-            return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public CompletionStage<Result> getCommandLookupsByDevice(int deviceId) {
+    public CompletionStage<Result> getDataNodes() {
         return CompletableFuture.supplyAsync(() -> {
-            List<DeviceCommandLookup> commandLookups = DeviceCommandLookupDAO.findCommandLookupsByDevice(deviceId);
+            List<DataNode> DataNodes = DataNodeDAO.findAllDataNodes();
             try {
-                return ok(ow.writeValueAsString(commandLookups));
+                return ok(ow.writeValueAsString(DataNodes));
             } catch (JsonProcessingException e) {
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(-1));
             }
-            return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result editCommandLookup() {
+    public Result editDataNode() {
         String id = formFactory.form().bindFromRequest().get("id");
         int idToInt;
         try {
@@ -66,31 +61,28 @@ public class CommandLookupController extends Controller {
         } catch (NumberFormatException e) {
             idToInt = -1;
         }
-
         this.updatingId = idToInt;
         return ok();
     }
 
-    public CompletionStage<Result> addOrUpdateCommandLookup() {
+    public CompletionStage<Result> addOrUpdateDataNode() {
         return CompletableFuture.supplyAsync(() -> {
-            Form<DeviceCommandLookup> commandLookupForm = formFactory.form(DeviceCommandLookup.class);
-            Form<DeviceCommandLookup> filledForm = commandLookupForm.bindFromRequest();
-
+            Form<DataNode> DataNodeForm = formFactory.form(DataNode.class);
+            Form<DataNode> filledForm = DataNodeForm.bindFromRequest();
             if (filledForm.hasErrors()) {
                 return badRequest(views.html.form.render(filledForm));
             } else {
-                DeviceCommandLookup cl = filledForm.get();
-
-                cl.setId(this.updatingId);
+                DataNode dt = filledForm.get();
+                dt.setId(this.updatingId);
                 this.updatingId = -1;
 
-                int n = cl.insertOrUpdate();
+                int n = dt.insertOrUpdate();
                 return redirect(routes.DBManagementController.dbManagementDeviceTypeView(n));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public CompletionStage<Result> deleteCommandLookup() {
+    public CompletionStage<Result> deleteDataNode() {
         return CompletableFuture.supplyAsync(() -> {
             String id = formFactory.form().bindFromRequest().get("id");
             int idToInt;
@@ -99,12 +91,12 @@ public class CommandLookupController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = DeviceCommandLookupDAO.deleteCommandLookup(idToInt);
+            Boolean isSuccess = DataNodeDAO.deleteDataNode(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result clearCommandLookupForm() {
+    public Result clearDataNodeForm() {
         this.updatingId = -1;
         return ok();
     }
