@@ -1,0 +1,121 @@
+@()
+@*Column holds the form and table displayed vertically*@
+<div class="col" id="devicePolicyContent">
+    @helper.form(action = routes.DevicePolicyController.addOrUpdateDevicePolicy(), 'enctype -> "multipart/form-data") {
+        <h4>Device Policies</h4>
+        @* DeviceType select*@
+        <div class="form-group row">
+            <label for="devicePolicyDeviceTypeSelect" class="col-2 col-form-label" >Device Type<span hidden>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="devicePolicyDeviceTypeSelect" name="deviceTypeId" required>
+                    @*Populated by devicePolicy.js*@
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @* Alert Type *@
+            <label for="devicePolicyAlertTypeSelect" class="col-2 col-form-label">Alert Type</label>
+            <div class="col-4">
+                <select class="form-control" id="devicePolicyAlertTypeSelect">
+                    @*Populated by devicePolicy.js*@
+                </select>
+            </div>
+
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addAlertButton">+</button>
+            </div>
+        </div>
+        @* hidden image to order input *@
+        <input type="text" id="alertTypeOrderFormInput" name="imageIdDagOrderMap" value="" hidden required
+        oninvalid="alert('Please add an Alert before adding a Policy Rule')">
+        @* Variable table *@
+        <table id="alertTypeOrderTable" class="table col-6">
+            <thead>
+                <th>@* For remove buttons *@</th>
+                <th>Alert Type<span>*</span></th>
+            </thead>
+            <tbody id="alertTypeOrderTableBody">
+                @*Populated by devicePolicy.js*@
+            </tbody>
+        </table>
+
+        @* State Transition select*@
+        <div class="form-group row">
+            <label for="devicePolicyStateTransitionSelect" class="col-2 col-form-label" >State Transition<span hidden>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="devicePolicyStateTransitionSelect" name="stateTransitionId" required>
+                    @*Populated by devicePolicy.js*@
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @* Actions *@
+            <label for="devicePolicyCommands" class="col-2 col-form-label">Commands</label>
+            <div class="col-3">
+                <select class="form-control" id="devicePolicyCommands">
+                    @*Populated by devicePolicy.js*@
+                </select>
+            </div>
+
+            @* Order *@
+            <label for="order" class="col-1 col-form-label">Order</label>
+            <div class="col-1">
+                <input type="number" min="0" max="2147483647" class="form-control" id="order" value="1">
+            </div>
+
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addCommandButton">+</button>
+            </div>
+        </div>
+
+        <input type="text" id="commandsOrderFormInput" name="actionsDagOrderMap" value="" hidden required
+        oninvalid="alert('Please Add an Image and Order before Adding a DevicePolicy')">
+        @* Variable table *@
+        <table id="commandsOrderTable" class="table col-6">
+            <thead>
+                <th></th>
+                <th>Commands<span>*</span></th>
+                <th>Order<span>*</span></th>
+            </thead>
+            <tbody id="commandsOrderTableBody">
+                @*Populated by devicePolicy.js*@
+            </tbody>
+        </table>
+
+        @* Sampling Rate *@
+        <div class="form-group row">
+            <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
+            <div class="col-8">
+                <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Sampling Rate Factor" required
+                oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')">
+            </div>
+        </div>
+
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
+
+<table id="devicePolicyTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>actions</th>
+            <th>device type</th>
+            <th>policy condition id</th>
+            <th>start state</th>
+            <th>end state</th>
+            <th>sampling rate</th>
+        </tr>
+    </thead>
+    <tbody id="devicePolicyTableBody"></tbody>
+</table>
+
+</div> 

@@ -92,6 +92,12 @@ POST    /add-or-update-device       controllers.DeviceController.addOrUpdateDevi
 POST    /delete-device              controllers.DeviceController.deleteDevice()
 POST    /clear-device-form          controllers.DeviceController.clearDeviceForm()
 
+GET     /policy-rules               controllers.DevicePolicyController.getPolicyRules()
+POST    /add-or-update-policy-rule  controllers.DevicePolicyController.addOrUpdateDevicePolicy()
+GET     /policy-conditions          controllers.DevicePolicyController.getPolicyConditions()
+
+GET     /state-transitions              controllers.SecurityStateController.getSecurityStateTransitions()
+
 GET     /alert-conditions                controllers.AlertConditionController.getAlertConditions()
 GET     /get-alert-conditions-by-device  controllers.AlertConditionController.getAlertConditionsByDevice(id: Integer ?= -1)
 POST    /add-alert-condition             controllers.AlertConditionController.addAlertCondition()
