@@ -1,7 +1,7 @@
 @()
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="devicePolicyContent">
-    @helper.form(action = routes.DevicePolicyController.addOrUpdateDevicePolicy(), 'enctype -> "multipart/form-data") {
+    @helper.form(action = routes.PolicyRuleController.addOrUpdatePolicyRule(), 'enctype -> "multipart/form-data") {
         <h4>Device Policies</h4>
         @* DeviceType select*@
         <div class="form-group row">
