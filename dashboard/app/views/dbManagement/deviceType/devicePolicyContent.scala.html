@@ -26,9 +26,11 @@
                 <button type="button" class="btn btn-sm btn-pill btn-primary" id="addAlertButton">+</button>
             </div>
         </div>
-        @* hidden image to order input *@
-        <input type="text" id="alertTypeOrderFormInput" name="imageIdDagOrderMap" value="" hidden required
-        oninvalid="alert('Please add an Alert before adding a Policy Rule')">
+        @* hidden alertTypes *@
+        @* stores alert types and returns an array when form interprets this.
+        see https://stackoverflow.com/questions/11331191/form-bindfromrequest-with-array-values *@
+        <select id="alertTypeOrderFormInput" name="alertTypeIds[]" multiple hidden required
+        oninvalid="alert('Please add an Alert before adding a Policy Rule')"></select>
         @* Variable table *@
         <table id="alertTypeOrderTable" class="table col-6">
             <thead>
@@ -40,6 +42,9 @@
             </tbody>
         </table>
 
+        @* hidden threshold *@
+        <input type="number" id="thresholdFormInput" name="threshold" value="3" hidden>
+
         @* State Transition select*@
         <div class="form-group row">
             <label for="devicePolicyStateTransitionSelect" class="col-2 col-form-label" >State Transition<span hidden>*</span></label>
@@ -50,45 +55,46 @@
             </div>
         </div>
 
-        <div class="form-group row">
-            @* Actions *@
-            <label for="devicePolicyCommands" class="col-2 col-form-label">Commands</label>
-            <div class="col-3">
-                <select class="form-control" id="devicePolicyCommands">
-                    @*Populated by devicePolicy.js*@
-                </select>
-            </div>
+@*        TODO Are commands needed here? Or is there another way these are supposed to be linked. *@
+@*        <div class="form-group row">*@
+@*            *@@* Actions *@
+@*            <label for="devicePolicyCommands" class="col-2 col-form-label">Commands</label>*@
+@*            <div class="col-3">*@
+@*                <select class="form-control" id="devicePolicyCommands">*@
+@*                    *@@*Populated by devicePolicy.js*@
+@*                </select>*@
+@*            </div>*@
 
-            @* Order *@
-            <label for="order" class="col-1 col-form-label">Order</label>
-            <div class="col-1">
-                <input type="number" min="0" max="2147483647" class="form-control" id="order" value="1">
-            </div>
+@*            *@@* Order *@
+@*            <label for="order" class="col-1 col-form-label">Order</label>*@
+@*            <div class="col-1">*@
+@*                <input type="number" min="0" max="2147483647" class="form-control" id="order" value="1">*@
+@*            </div>*@
 
-            <div class="col-4">
-                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addCommandButton">+</button>
-            </div>
-        </div>
+@*            <div class="col-4">*@
+@*                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addCommandButton">+</button>*@
+@*            </div>*@
+@*        </div>*@
 
-        <input type="text" id="commandsOrderFormInput" name="actionsDagOrderMap" value="" hidden required
-        oninvalid="alert('Please Add an Image and Order before Adding a DevicePolicy')">
-        @* Variable table *@
-        <table id="commandsOrderTable" class="table col-6">
-            <thead>
-                <th></th>
-                <th>Commands<span>*</span></th>
-                <th>Order<span>*</span></th>
-            </thead>
-            <tbody id="commandsOrderTableBody">
-                @*Populated by devicePolicy.js*@
-            </tbody>
-        </table>
+@*        <input type="text" id="commandsOrderFormInput" name="actionsDagOrderMap" value="" hidden required*@
+@*        oninvalid="alert('Please Add an Image and Order before Adding a DevicePolicy')">*@
+@*        *@@* Variable table *@
+@*        <table id="commandsOrderTable" class="table col-6">*@
+@*            <thead>*@
+@*                <th></th>*@
+@*                <th>Commands<span>*</span></th>*@
+@*                <th>Order<span>*</span></th>*@
+@*            </thead>*@
+@*            <tbody id="commandsOrderTableBody">*@
+@*                *@@*Populated by devicePolicy.js*@
+@*            </tbody>*@
+@*        </table>*@
 
         @* Sampling Rate *@
         <div class="form-group row">
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
-            <div class="col-8">
-                <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Sampling Rate Factor" required
+            <div class="col-4">
+                <input type="number" value="1" min="0" max="2147483647" class="form-control" id="samplingRateFactorFormInput" name="samplingRateFactor" placeholder="Enter Sampling Rate Factor" required
                 oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')">
             </div>
         </div>

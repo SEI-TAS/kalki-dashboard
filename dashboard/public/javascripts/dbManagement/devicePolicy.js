@@ -10,13 +10,14 @@ jQuery(document).ready(($) => {
 
     let alertTypeRowCounter = 0;
     let commandRowCounter = 0;
+    let currentDeviceTypeId = 0;
 
     let editing = false;
     let editingDagOrder = null;
     let editingUmboxImageId = null;
 
     // Various maps for ids and names
-    let currentAlertTypeIdToOrderNumberMap = {};
+    let currentAlertTypeIds = [];
     let currentCommandIdToOrderNumberMap = {};
 
     let deviceTypeNameToIdMap = {};
@@ -34,7 +35,11 @@ jQuery(document).ready(($) => {
     let alertTypeNameToIdMap = {};
 
     let commandIdToNameMap = {};
+    let commandIdToDeviceTypeIdMap = {};
     let commandNameToIdMap = {};
+
+    let alertTypeLookupIdToAlertTypeIdMap = {};
+    let alertTypeLookupIdToDeviceTypeIdMap = {};
 
     // Everything below this should be renamed
     let globalDeviceTypeAndStateOrderMap = {};
@@ -45,7 +50,9 @@ jQuery(document).ready(($) => {
 
     let currentUmboxImageIdDagOrderMap = {};
 
-    function addAlertTypeRow(alertTypeId) {
+    function addAlertTypeRow(alertTypeLookupId) {
+        let alertTypeId = alertTypeLookupIdToAlertTypeIdMap[alertTypeLookupId];
+
         if(alertTypeId == null) {
             alert("please select a valid alert type");
             return false;
@@ -53,14 +60,15 @@ jQuery(document).ready(($) => {
 
         // Check for duplicate alert types trying to be added
         let hasDuplicate = false;
-        Object.keys(currentAlertTypeIdToOrderNumberMap).forEach((uid) => {
-            let imageId = parseInt(uid);
+        Object.keys(currentAlertTypeIds).forEach((uid) => {
+            let alertId = parseInt(uid);
 
-            if (alertTypeId == imageId) {
+            if (alertTypeId == alertId) {
                 alert("cannot add duplicate image");
                 hasDuplicate = true;
             }
         });
+
 
         if (hasDuplicate) {
             return false;
@@ -73,14 +81,20 @@ jQuery(document).ready(($) => {
                 "</tr>"
             $("#alertTypeOrderTable").find("tbody").append($(newRow));
 
+            // Add it to internal counter
+            currentAlertTypeIds.push(alertTypeId);
+
             // Set hidden form input to current map (needed to pass form data to controller)
-            $("#alertTypeOrderFormInput").val(JSON.stringify(currentAlertTypeIdToOrderNumberMap));
+            $("#alertTypeOrderFormInput").append("<option id='alertTypeOrderFormInput" + alertTypeId + "' value='" + alertTypeId + "' selected></option>");
 
             // Set remove function for this alert type
             $("#alertTypeOrderTableBody #removeButton" + currentCount).click(function () {
                 $("#alertTypeOrderTableBody #alertTypeOrderTableRow" + currentCount).remove();
 
-                delete currentAlertTypeIdToOrderNumberMap[alertTypeId.toString()];
+                $("#alertTypeOrderFormInput" + alertTypeId).remove();
+
+                let indexToRemove = currentAlertTypeIds.indexOf(alertTypeId);
+                currentAlertTypeIds.splice(indexToRemove, 1);
             });
         }
         return true;
@@ -165,6 +179,11 @@ jQuery(document).ready(($) => {
                 deviceTypeIdToNameMap[type.id] = type.name;
                 deviceTypeNameToIdMap[type.name] = type.id;
 
+                // Set the first one on the list as the current selection
+                if (currentDeviceTypeId === 0) {
+                    currentDeviceTypeId = type.id;
+                }
+
                 $("#devicePolicyContent #devicePolicyDeviceTypeSelect").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
             });
         });
@@ -203,7 +222,7 @@ jQuery(document).ready(($) => {
     async function getPolicyConditions() {
         return $.get("/policy-conditions", (policyConditions) => {
             $.each(JSON.parse(policyConditions), (id, policyCondition) => {
-                console.log(policyCondition)
+                // TODO add this as a map so it can be used as a display
             });
         });
     }
@@ -215,8 +234,23 @@ jQuery(document).ready(($) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
                 alertTypeIdToNameMap[alertType.id] = alertType.name;
                 alertTypeNameToIdMap[alertType.name] = alertType.id;
+            });
+        });
+    }
 
-                $("#devicePolicyContent #devicePolicyAlertTypeSelect").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>" + alertType.name + "</option>")
+    async function getAlertTypeLookups() {
+        $("#devicePolicyContent #devicePolicyAlertTypeSelect").empty();
+
+        await getAlertTypes();
+
+        $.get("/alert-type-lookups", (alertTypeLookups) => {
+            $.each(JSON.parse(alertTypeLookups), (id, alertTypeLookup) => {
+                alertTypeLookupIdToAlertTypeIdMap[alertTypeLookup.id] = alertTypeLookup.alertTypeId;
+                alertTypeLookupIdToDeviceTypeIdMap[alertTypeLookup.id] = alertTypeLookup.deviceTypeId;
+
+                if (currentDeviceTypeId === alertTypeLookup.deviceTypeId) {
+                    $("#devicePolicyContent #devicePolicyAlertTypeSelect").append("<option id='alertTypeLookupOption" + alertTypeLookup.id + "' value='" + alertTypeLookup.id + "'>" + alertTypeIdToNameMap[alertTypeLookup.alertTypeId] + "</option>")
+                }
             });
         });
     }
@@ -227,9 +261,12 @@ jQuery(document).ready(($) => {
         $.get("/commands", (commands) => {
             $.each(JSON.parse(commands), (id, command) => {
                 commandIdToNameMap[command.id] = command.name;
+                commandIdToDeviceTypeIdMap[command.id] = command.deviceTypeId;
                 commandNameToIdMap[command.name] = command.id;
 
-                $("#devicePolicyContent #devicePolicyCommands").append("<option id='commandOption" + command.id + "' value='" + command.id + "'>" + command.name + " " + deviceTypeIdToNameMap[command.deviceTypeId] + "</option>");
+                if (currentDeviceTypeId === command.deviceTypeId) {
+                    $("#devicePolicyContent #devicePolicyCommands").append("<option id='commandOption" + command.id + "' value='" + command.id + "'>" + command.name + "</option>");
+                }
             });
         });
     }
@@ -237,7 +274,7 @@ jQuery(document).ready(($) => {
     async function getDevicePolicies() {
         // Need to get the various components to fill in the fields of the form
         await getDeviceTypes();
-        await getAlertTypes();
+        await getAlertTypeLookups();
         await getStateTransitions();
         await getPolicyConditions();
         await getCommands();
@@ -259,7 +296,7 @@ jQuery(document).ready(($) => {
                     "    <td id='policyCondition" + devicePolicy.id + "'>" + devicePolicy.policyCondId + "</td>\n" +
                     "    <td id='startSecurityState" + devicePolicy.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[devicePolicy.stateTransId]] + "</td>\n" +
                     "    <td id='finishSecurityState" + devicePolicy.id + "'>" + stateIdToNameMap[stateTransitionIdToFinishMap[devicePolicy.stateTransId]] + "</td>\n" +
-                    "    <td id='samplingRate" + devicePolicy.id + "'>" + devicePolicy.samplingRateFactor + "</td>\n" +
+                    "    <td id='samplingRateFactor" + devicePolicy.id + "'>" + devicePolicy.samplingRateFactor + "</td>\n" +
                     "</tr>"
                 devicePolicyTable.row.add($(newRow)).draw();
 
@@ -349,11 +386,40 @@ jQuery(document).ready(($) => {
         }
     });
 
+    async function addPolicyCondition () {
+        // TODO Need to create a policy condition, and get its ID. Then provide a form variable `policyCondId` which is set to that
+        $.post("/add-or-update-policy-condition", {
+            threshold: 3,
+            alertTypeIds: currentAlertTypeIds
+        }, function (policyConditionId) {
+            console.log(policyConditionId);
+            $("#policyConditionIdFormInput").val(policyConditionId);
+            console.log($("#policyConditionIdFormInput").val())
+        });
+
+    }
+
+    async function addPolicyRule () {
+        // await addPolicyCondition()
+    }
+
     //before submitting, ensure that an image or a dag order is not being repeated for the
     //device type and state compared to what is already in the database
     $('#devicePolicyContent form').on("submit", function () {
-        // TODO pre-submit validation
+
+        alert($("#alertTypeOrderFormInput").val());
+        addPolicyRule()
     });
+
+    $('#devicePolicyDeviceTypeSelect').on('change', function() {
+        currentDeviceTypeId = parseInt(this.value);
+        // TODO alert types should be stored locally, so there isnt extra calls to the db.
+        getAlertTypeLookups();
+        getCommands();
+        // TODO Clear alerts and commands
+    });
+
+
 
     // Only load data when tab is active
     $('a[href="#DevicePolicyContent"]').on('shown.bs.tab', function (e) {
