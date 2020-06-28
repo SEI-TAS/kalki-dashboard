@@ -306,40 +306,40 @@ jQuery(document).ready(($) => {
                 policyRuleTable.row.add($(newRow)).draw();
 
                 // TODO update edit and delete button
-                // policyRuleTable.on("click", "#editButton" + policyRule.id, function () {
-                //     editing = true;
+                policyRuleTable.on("click", "#editButton" + policyRule.id, function () {
+                    editing = true;
+
+                    $.post("/edit-policy-rule", {id: policyRule.id}, function () {
+                        // let dagOrder = parseInt($("#policyRuleTable #order" + policyRule.id).html());
+                        // let umboxImageId = umboxImageNameToIdMap[$("#policyRuleTable #umboxImage" + policyRule.id).html()];
+                        //
+                        // $('html, body').animate({scrollTop: 0}, 'fast', function () {
+                        // });
+                        // $("#policyRuleContent #submitFormButton").html("Update");
+                        // $("#policyRuleContent #clearFormButton").html("Cancel Edit");
+                        // $("#policyRuleContent .form-control#type").val(deviceTypeNameToIdMap[$("#policyRuleTable #deviceType" + policyRule.id).html()]);
+                        // $("#policyRuleContent .form-control#securityState").val(stateNameToIdMap[$("#policyRuleTable #securityState" + policyRule.id).html()]);
+                        // $("#policyRuleContent .form-control#umboxImage").val(umboxImageId);
+                        // $("#policyRuleContent .form-control#order").val(dagOrder);
+                        // $("#alertConditionContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
+                        //
+                        // editingDagOrder = dagOrder;
+                        // editingUmboxImageId = umboxImageId;
+                        //
+                        // switchToEditForm();
+                    });
+                });
                 //
-                //     $.post("/edit-umbox-lookup", {id: policyRule.id}, function () {
-                //         let dagOrder = parseInt($("#policyRuleTable #order" + policyRule.id).html());
-                //         let umboxImageId = umboxImageNameToIdMap[$("#policyRuleTable #umboxImage" + policyRule.id).html()];
-                //
-                //         $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                //         });
-                //         $("#policyRuleContent #submitFormButton").html("Update");
-                //         $("#policyRuleContent #clearFormButton").html("Cancel Edit");
-                //         $("#policyRuleContent .form-control#type").val(deviceTypeNameToIdMap[$("#policyRuleTable #deviceType" + policyRule.id).html()]);
-                //         $("#policyRuleContent .form-control#securityState").val(stateNameToIdMap[$("#policyRuleTable #securityState" + policyRule.id).html()]);
-                //         $("#policyRuleContent .form-control#umboxImage").val(umboxImageId);
-                //         $("#policyRuleContent .form-control#order").val(dagOrder);
-                //         $("#alertConditionContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
-                //
-                //         editingDagOrder = dagOrder;
-                //         editingUmboxImageId = umboxImageId;
-                //
-                //         switchToEditForm();
-                //     });
-                // });
-                //
-                // policyRuleTable.on("click", "#deleteButton" + policyRule.id, function () {
-                //     $.post("/delete-umbox-lookup", {id: policyRule.id}, function (isSuccess) {
-                //         if (isSuccess == "true") {
-                //             policyRuleTable.row("#tableRow" + policyRule.id).remove().draw();
-                //         } else {
-                //             alert("Delete was unsuccessful.  Please check that another table entry " +
-                //                 "does not rely on this Umbox Lookup");
-                //         }
-                //     });
-                // });
+                policyRuleTable.on("click", "#deleteButton" + policyRule.id, function () {
+                    $.post("/delete-policy-rule", {policyRuleId: policyRule.id, policyConditionId: policyRule.policyConditionId}, function (isSuccess) {
+                        if (isSuccess == "true") {
+                            policyRuleTable.row("#tableRow" + policyRule.id).remove().draw();
+                        } else {
+                            alert("Delete was unsuccessful.  Please check that another table entry " +
+                                "does not rely on this Policy Rule");
+                        }
+                    });
+                });
             });
         });
     }

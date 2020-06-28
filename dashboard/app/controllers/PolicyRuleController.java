@@ -112,14 +112,19 @@ public class PolicyRuleController extends Controller {
 
     public CompletionStage<Result> deletePolicyRule() {
         return CompletableFuture.supplyAsync(() -> {
-            String id = formFactory.form().bindFromRequest().get("id");
-            int idToInt;
+            String policyRuleIdString = formFactory.form().bindFromRequest().get("policyRuleId");
+            String policyConditionIdString = formFactory.form().bindFromRequest().get("policyConditionId");
+            int policyRuleId;
+            int policyConditionId;
             try {
-                idToInt = Integer.parseInt(id);
+                policyRuleId = Integer.parseInt(policyRuleIdString);
+                policyConditionId = Integer.parseInt(policyConditionIdString);
             } catch (NumberFormatException e) {
-                idToInt = -1;
+                policyRuleId = -1;
+                policyConditionId = -1;
             }
-            Boolean isSuccess = PolicyRuleDAO.deletePolicyRule(idToInt);
+            Boolean isSuccess = PolicyRuleDAO.deletePolicyRule(policyRuleId);
+            PolicyConditionDAO.deletePolicyCondition(policyConditionId);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
