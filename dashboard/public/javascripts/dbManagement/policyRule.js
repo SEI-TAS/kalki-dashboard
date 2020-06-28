@@ -39,8 +39,10 @@ jQuery(document).ready(($) => {
     let commandNameToIdMap = {};
 
     let policyConditionIdToAlertTypeIdsMap = {};
+    let policyConditionIdToThresholdMap = {};
 
     let alertTypeLookupIdToAlertTypeIdMap = {};
+    let alertTypeIdToAlertTypeLookupIdMap = {};
     let alertTypeLookupIdToDeviceTypeIdMap = {};
 
     // Everything below this should be renamed
@@ -154,23 +156,13 @@ jQuery(document).ready(($) => {
     }
 
     function switchToEditForm() {
-        // TODO update to fill in relevant fields
-
-        $("#umboxImageOrderTable").hide();
-        $("#addOrderButton").hide();
-
-        $(".form-control#command").attr("name", "commandId");
-        $(".form-control#order").attr("name", "dagOrder");
+        $("#policyRuleContent #policyRuleSubmitFormButton").html("Update");
+        $("#policyRuleContent #policyRuleClearFormButton").html("Cancel");
     }
 
     function switchToInsertForm() {
-        // TODO update to fill in relevant fields
-
-        $("#umboxImageOrderTable").show();
-        $("#addOrderButton").show();
-
-        $(".form-control#umboxImage").removeAttr("name");
-        $(".form-control#order").removeAttr("name");
+        $("#policyRuleContent #policyRuleSubmitFormButton").html("Add");
+        $("#policyRuleContent #policyRuleClearFormButton").html("Clear");
     }
 
     async function getDeviceTypes() {
@@ -225,6 +217,7 @@ jQuery(document).ready(($) => {
         return $.get("/policy-conditions", (policyConditions) => {
             $.each(JSON.parse(policyConditions), (id, policyCondition) => {
                 policyConditionIdToAlertTypeIdsMap[policyCondition.id] = policyCondition.alertTypeIds;
+                policyConditionIdToThresholdMap[policyCondition.id] = policyCondition.threshold;
             });
         });
     }
@@ -247,6 +240,7 @@ jQuery(document).ready(($) => {
 
         $.get("/alert-type-lookups", (alertTypeLookups) => {
             $.each(JSON.parse(alertTypeLookups), (id, alertTypeLookup) => {
+                alertTypeIdToAlertTypeLookupIdMap[alertTypeLookup.alertTypeId] = alertTypeLookup.id;
                 alertTypeLookupIdToAlertTypeIdMap[alertTypeLookup.id] = alertTypeLookup.alertTypeId;
                 alertTypeLookupIdToDeviceTypeIdMap[alertTypeLookup.id] = alertTypeLookup.deviceTypeId;
 
@@ -273,6 +267,11 @@ jQuery(document).ready(($) => {
         });
     }
 
+    /**
+     * The main starting point for the page, which gets all the related data from the database, then generates the
+     * Policy Rule table at the bottom of the page.
+     * @returns {Promise<void>}
+     */
     async function getDevicePolicies() {
         // Need to get the various components to fill in the fields of the form
         await getDeviceTypes();
@@ -284,12 +283,13 @@ jQuery(document).ready(($) => {
         policyRuleTable.clear();
 
         // Populate the table at the bottom of the page
-        // TODO Update the following for proper names
         $.get("/policy-rules", (policyRules) => {
             $.each(JSON.parse(policyRules), (index, policyRule) => {
+                // Create a custom strong for the alertTypeIds, which shows text instead of actual ids
                 let alertTypeArray = [];
                 policyConditionIdToAlertTypeIdsMap[policyRule.policyConditionId].forEach(element => alertTypeArray.push(alertTypeIdToNameMap[element]));
 
+                // Generate the table row and add it to the table
                 let newRow = "<tr id='tableRow" + policyRule.id + "'>\n" +
                     "    <td class='fit'>" +
                     "        <div class='editDeleteContainer' >" +
@@ -305,31 +305,39 @@ jQuery(document).ready(($) => {
                     "</tr>"
                 policyRuleTable.row.add($(newRow)).draw();
 
-                // TODO update edit and delete button
+                // Set edit button click function
                 policyRuleTable.on("click", "#editButton" + policyRule.id, function () {
                     editing = true;
 
-                    $.post("/edit-policy-rule", {id: policyRule.id}, function () {
-                        // let dagOrder = parseInt($("#policyRuleTable #order" + policyRule.id).html());
-                        // let umboxImageId = umboxImageNameToIdMap[$("#policyRuleTable #umboxImage" + policyRule.id).html()];
-                        //
-                        // $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                        // });
-                        // $("#policyRuleContent #submitFormButton").html("Update");
-                        // $("#policyRuleContent #clearFormButton").html("Cancel Edit");
-                        // $("#policyRuleContent .form-control#type").val(deviceTypeNameToIdMap[$("#policyRuleTable #deviceType" + policyRule.id).html()]);
-                        // $("#policyRuleContent .form-control#securityState").val(stateNameToIdMap[$("#policyRuleTable #securityState" + policyRule.id).html()]);
-                        // $("#policyRuleContent .form-control#umboxImage").val(umboxImageId);
-                        // $("#policyRuleContent .form-control#order").val(dagOrder);
-                        // $("#alertConditionContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
-                        //
-                        // editingDagOrder = dagOrder;
-                        // editingUmboxImageId = umboxImageId;
-                        //
-                        // switchToEditForm();
+                    $.post("/edit-policy-rule", {policyRuleId: policyRule.id, policyConditionId: policyRule.policyConditionId}, function () {
+                        let deviceType = $("#policyRuleContent .form-control#policyRuleDeviceTypeSelect");
+                        let stateTransition = $("#policyRuleContent .form-control#policyRuleStateTransitionSelect");
+                        let threshold = $("#policyRuleContent .form-control#policyRuleThresholdFormInput");
+                        let samplingRateFactor = $("#policyRuleContent .form-control#policyRuleSamplingRateFactorFormInput");
+
+                        $('html, body').animate({scrollTop: 0}, 'fast', function () {});
+
+                        // Update to the right device type, and then update the alert types availiable
+                        deviceType.val(policyRule.deviceTypeId);
+                        currentDeviceTypeId = policyRule.deviceTypeId;
+                        getAlertTypeLookups();
+
+                        // Update the alert types
+                        clearAlertTypes();
+                        $.each(policyConditionIdToAlertTypeIdsMap[policyRule.policyConditionId], (index, alertTypeId) => {
+                            addAlertTypeRow(alertTypeIdToAlertTypeLookupIdMap[alertTypeId]);
+                        });
+
+                        // Update other inputs
+                        stateTransition.val(policyRule.stateTransitionId);
+                        threshold.val(policyConditionIdToThresholdMap[policyRule.policyConditionId]);
+                        samplingRateFactor.val(policyRule.samplingRateFactor);
+
+                        switchToEditForm();
                     });
                 });
-                //
+
+                // Set delete button click function
                 policyRuleTable.on("click", "#deleteButton" + policyRule.id, function () {
                     $.post("/delete-policy-rule", {policyRuleId: policyRule.id, policyConditionId: policyRule.policyConditionId}, function (isSuccess) {
                         if (isSuccess == "true") {
@@ -344,34 +352,48 @@ jQuery(document).ready(($) => {
         });
     }
 
+    /**
+     * Removes all items in the alert types table
+     */
+    function clearAlertTypes() {
+        $("#policyRuleContent #alertTypeOrderTable").find("tr:gt(0)").remove();
+        currentAlertTypeIds = [];
+    }
 
-    $("#policyRuleContent #clearFormButton").click(function () {
-        // TODO update to reset relevant fields
+    /**
+     * Button which clears the form on the page, so the user can start over.
+     */
+    $("#policyRuleContent #policyRuleClearFormButton").click(function () {
         editing = false;
 
-        let typeSelect = $("#policyRuleContent .form-control#type");
-        let securityStateSelect = $("#policyRuleContent .form-control#securityState");
-        let umboxImageSelect = $("#policyRuleContent .form-control#umboxImage");
+        let deviceType = $("#policyRuleContent .form-control#policyRuleDeviceTypeSelect");
+        let stateTransition = $("#policyRuleContent .form-control#policyRuleStateTransitionSelect");
+        let threshold = $("#policyRuleContent .form-control#policyRuleThresholdFormInput");
+        let samplingRateFactor = $("#policyRuleContent .form-control#policyRuleSamplingRateFactorFormInput");
 
-        $.post("/clear-umbox-lookup-form", {}, function () {
-            $("#policyRuleContent #submitFormButton").html("Add");
-            $("#policyRuleContent #clearFormButton").html("Clear");
-            typeSelect.val(typeSelect.find("option:first").val());
-            securityStateSelect.val(securityStateSelect.find("option:first").val());
-            umboxImageSelect.val(umboxImageSelect.find("option:first").val());
-            $("#policyRuleContent .form-control#order").val(1);
-            $("#policyRuleContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
+        $.post("/clear-policy-rule-form", {}, function () {
+            // Reset device types
+            deviceType[0].selectedIndex = 0;
+            // For above, could also use deviceType.val(deviceType.find("option:first").val());
+            currentDeviceTypeId = parseInt(deviceType.val());
+            getAlertTypeLookups();
 
-            currentUmboxImageIdDagOrderMap = {};
-            editingDagOrder = null;
-            editingUmboxImageId = null;
+            // Reset alert types
+            clearAlertTypes();
+
+            // Reset other fields
+            stateTransition[0].selectedIndex = 0;
+            threshold.val(1);
+            samplingRateFactor.val(1);
 
             switchToInsertForm();
         });
     });
 
 
-    // Add the alert to the table when the add button is clicked.
+    /**
+     * Add the alert to the table when the add button is clicked.
+     */
     $("#policyRuleContent #addAlertButton").click(function () {
         let policyRuleAlertSelect = $(".form-control#policyRuleAlertTypeSelect");
 
@@ -380,7 +402,9 @@ jQuery(document).ready(($) => {
         }
     });
 
-    // Add the command to the table when the add button is clicked.
+    /**
+     * Add the command to the table when the add button is clicked.
+     */
     $("#policyRuleContent #addCommandButton").click(function () {
         let policyRuleAlertSelect = $(".form-control#policyRuleCommands");
         let orderNumber = $(".form-control#order");
@@ -391,17 +415,21 @@ jQuery(document).ready(($) => {
         }
     });
 
+    /**
+     * Change the table when the device type is changed.
+     */
     $('#policyRuleDeviceTypeSelect').on('change', function() {
         currentDeviceTypeId = parseInt(this.value);
         // TODO alert types should be stored locally, so there isnt extra calls to the db.
         getAlertTypeLookups();
         getCommands();
-        // TODO Clear alerts and commands
+
+        clearAlertTypes()
     });
 
-
-
-    // Only load data when tab is active
+    /**
+     * Only load data when tab is active
+     */
     $('a[href="#PolicyRuleContent"]').on('shown.bs.tab', function (e) {
         getDevicePolicies();
     });
