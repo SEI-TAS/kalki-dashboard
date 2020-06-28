@@ -92,6 +92,7 @@ POST    /add-or-update-device       controllers.DeviceController.addOrUpdateDevi
 POST    /delete-device              controllers.DeviceController.deleteDevice()
 POST    /clear-device-form          controllers.DeviceController.clearDeviceForm()
 
+GET     /policy-condition                   controllers.PolicyConditionController.getPolicyCondition(id: Int ?= -1)
 GET     /policy-conditions                  controllers.PolicyConditionController.getPolicyConditions()
 POST    /add-or-update-policy-condition     controllers.PolicyConditionController.addOrUpdatePolicyCondition()
 

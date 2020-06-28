@@ -33,6 +33,17 @@ public class PolicyConditionController extends Controller {
         this.updatingId = -1; //if the value is -1, it means there should be a new policy condition
     }
 
+    public CompletionStage<Result> getPolicyCondition(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            PolicyCondition policyCondition = PolicyConditionDAO.findPolicyCondition(id);
+            try {
+                return ok(ow.writeValueAsString(policyCondition));
+            } catch (JsonProcessingException ignored) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> getPolicyConditions() {
         return CompletableFuture.supplyAsync(() -> {
             List<PolicyCondition> policyConditions = PolicyConditionDAO.findAllPolicyConditions();
