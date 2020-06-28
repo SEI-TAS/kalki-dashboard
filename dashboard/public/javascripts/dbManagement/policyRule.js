@@ -38,6 +38,8 @@ jQuery(document).ready(($) => {
     let commandIdToDeviceTypeIdMap = {};
     let commandNameToIdMap = {};
 
+    let policyConditionIdToAlertTypeIdsMap = {};
+
     let alertTypeLookupIdToAlertTypeIdMap = {};
     let alertTypeLookupIdToDeviceTypeIdMap = {};
 
@@ -222,7 +224,7 @@ jQuery(document).ready(($) => {
     async function getPolicyConditions() {
         return $.get("/policy-conditions", (policyConditions) => {
             $.each(JSON.parse(policyConditions), (id, policyCondition) => {
-                // TODO add this as a map so it can be used as a display
+                policyConditionIdToAlertTypeIdsMap[policyCondition.id] = policyCondition.alertTypeIds;
             });
         });
     }
@@ -285,6 +287,9 @@ jQuery(document).ready(($) => {
         // TODO Update the following for proper names
         $.get("/policy-rules", (policyRules) => {
             $.each(JSON.parse(policyRules), (index, policyRule) => {
+                let alertTypeArray = [];
+                policyConditionIdToAlertTypeIdsMap[policyRule.policyConditionId].forEach(element => alertTypeArray.push(alertTypeIdToNameMap[element]));
+
                 let newRow = "<tr id='tableRow" + policyRule.id + "'>\n" +
                     "    <td class='fit'>" +
                     "        <div class='editDeleteContainer' >" +
@@ -292,10 +297,10 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + policyRule.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeIdToNameMap[policyRule.devTypeId] + "</td>\n" +
-                    "    <td id='policyCondition" + policyRule.id + "'>" + policyRule.policyCondId + "</td>\n" +
-                    "    <td id='startSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransId]] + "</td>\n" +
-                    "    <td id='finishSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToFinishMap[policyRule.stateTransId]] + "</td>\n" +
+                    "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeIdToNameMap[policyRule.deviceTypeId] + "</td>\n" +
+                    "    <td id='policyCondition" + policyRule.id + "'>" + alertTypeArray.join(", ") + "</td>\n" +
+                    "    <td id='startSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]] + "</td>\n" +
+                    "    <td id='finishSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToFinishMap[policyRule.stateTransitionId]] + "</td>\n" +
                     "    <td id='samplingRateFactor" + policyRule.id + "'>" + policyRule.samplingRateFactor + "</td>\n" +
                     "</tr>"
                 policyRuleTable.row.add($(newRow)).draw();
