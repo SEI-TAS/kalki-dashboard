@@ -26,6 +26,7 @@ public class PolicyRuleController extends Controller {
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
     private int updatingId;
+    private int policyConditionId;
 
     @Inject
     public PolicyRuleController(FormFactory formFactory, DatabaseExecutionContext ec) {
@@ -33,6 +34,7 @@ public class PolicyRuleController extends Controller {
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         this.updatingId = -1; //if the value is -1, it means there should be a new policy
+        this.policyConditionId = -1; // -1 until updating.
     }
 
     public CompletionStage<Result> getPolicyRule(int id) {
@@ -88,10 +90,19 @@ public class PolicyRuleController extends Controller {
                     PolicyRule pr = new PolicyRule(stateTransitionId, policyConditionId, deviceTypeId,
                             samplingRateFactor);
 
+                    // Update the id, so if this is an update it will trigger an update
                     pr.setId(this.updatingId);
                     this.updatingId = -1;
 
-                    int n = pr.insert();
+                    int n = pr.insertOrUpdate();
+
+                    // Remove old policy condition, since it should not be linked to anything now.
+                    // TODO deletes the old policy condition if it is being updated, should just update the policy cond.
+                    if (this.policyConditionId >= 0) {
+                        PolicyConditionDAO.deletePolicyCondition(this.policyConditionId);
+                        this.policyConditionId = -1;
+                    }
+
                     return redirect(routes.DBManagementController.dbManagementDeviceTypeView(n));
                 }
             }
@@ -99,14 +110,19 @@ public class PolicyRuleController extends Controller {
     }
 
     public Result editPolicyRule() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
+        String policyRuleIdString = formFactory.form().bindFromRequest().get("policyRuleId");
+        String policyConditionIdString = formFactory.form().bindFromRequest().get("policyConditionId");
+        int policyRuleId;
+        int policyConditionId;
         try {
-            idToInt = Integer.parseInt(id);
+            policyRuleId = Integer.parseInt(policyRuleIdString);
+            policyConditionId = Integer.parseInt(policyConditionIdString);
         } catch (NumberFormatException e) {
-            idToInt = -1;
+            policyRuleId = -1;
+            policyConditionId = -1;
         }
-        this.updatingId = idToInt;
+        this.updatingId = policyRuleId;
+        this.policyConditionId = policyConditionId;
         return ok();
     }
 
@@ -123,14 +139,15 @@ public class PolicyRuleController extends Controller {
                 policyRuleId = -1;
                 policyConditionId = -1;
             }
-            Boolean isSuccess = PolicyRuleDAO.deletePolicyRule(policyRuleId);
+            boolean isSuccess = PolicyRuleDAO.deletePolicyRule(policyRuleId);
             PolicyConditionDAO.deletePolicyCondition(policyConditionId);
-            return ok(isSuccess.toString());
+            return ok(Boolean.toString(isSuccess));
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
     public Result clearPolicyRuleForm() {
         this.updatingId = -1;
+        this.policyConditionId = -1;
         return ok();
     }
 }
