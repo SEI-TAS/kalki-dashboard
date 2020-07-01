@@ -107,8 +107,7 @@ jQuery(document).ready(($) => {
         return true;
     }
 
-    function addCommandsRow(commandId, order) {
-        console.log("Adding alert: " + commandId);
+    function addCommandsRow(commandId) {
         if(commandId == null) {
             alert("please select a valid alert type");
             return false;
@@ -119,7 +118,6 @@ jQuery(document).ready(($) => {
         Object.keys(currentCommandIdToOrderNumberMap).forEach((uid) => {
             let orderNumber = parseInt(currentCommandIdToOrderNumberMap[uid]);
             let imageId = parseInt(uid);
-            console.log("Dup check: " + imageId);
 
             if (commandId == imageId) {
                 hasDuplicate = true;
@@ -135,7 +133,6 @@ jQuery(document).ready(($) => {
             let newRow = "<tr id='policyRuleCommandsOrderTableRow" + currentCount + "'>\n" +
                 "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
                 "    <td id='command" + currentCount + "'>" + commandIdToNameMap[commandId] + "</td>\n" +
-                "    <td id='order" + currentCount + "'>" + order + "</td>\n" +
                 "</tr>"
 
             $("#policyRuleCommandsOrderTable").find("tbody").append($(newRow));
@@ -152,6 +149,8 @@ jQuery(document).ready(($) => {
             // Set remove function for this command
             $("#policyRuleCommandsOrderTableBody #removeButton" + currentCount).click(function () {
                 $("#policyRuleCommandsOrderTableBody #policyRuleCommandsOrderTableRow" + currentCount).remove();
+
+                $("#deviceCommandFormInput" + currentCount).remove();
 
                 delete currentCommandIdToOrderNumberMap[commandId.toString()];
             });
@@ -356,7 +355,13 @@ jQuery(document).ready(($) => {
                         threshold.val(policyConditionIdToThresholdMap[policyRule.policyConditionId]);
                         samplingRateFactor.val(policyRule.samplingRateFactor);
 
-                        // TODO need to update commands select, as well as the commands table
+                        clearCommands();
+                        $.each(commandLookupIdToPolicyRuleId, function (index, policyRuleId) {
+                            if (policyRuleId == policyRule.id) {
+                                addCommandsRow(commandLookupIdToCommandId[index])
+                            }
+                        });
+
 
                         switchToEditForm();
                     });
@@ -382,7 +387,17 @@ jQuery(document).ready(($) => {
      */
     function clearAlertTypes() {
         $("#policyRuleContent #alertTypeOrderTable").find("tr:gt(0)").remove();
+        $("#policyRuleContent #alertTypeOrderFormInput").find("option").remove();
         currentAlertTypeIds = [];
+
+    }
+
+    /**
+     * Removes all items in the commands table
+     */
+    function clearCommands() {
+        $("#policyRuleContent #policyRuleCommandsOrderTable").find("tr:gt(0)").remove();
+        $("#policyRuleContent #deviceCommandFormInput").find("option").remove();
     }
 
     /**
@@ -402,9 +417,11 @@ jQuery(document).ready(($) => {
             // For above, could also use deviceType.val(deviceType.find("option:first").val());
             currentDeviceTypeId = parseInt(deviceType.val());
             getAlertTypeLookups();
+            getCommands();
 
-            // Reset alert types
+            // Reset alert types and commands
             clearAlertTypes();
+            clearCommands()
 
             // Reset other fields
             stateTransition[0].selectedIndex = 0;
@@ -450,6 +467,7 @@ jQuery(document).ready(($) => {
         getCommands();
 
         clearAlertTypes()
+        clearCommands()
     });
 
     /**
