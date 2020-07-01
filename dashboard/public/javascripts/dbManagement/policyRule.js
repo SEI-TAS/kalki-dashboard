@@ -38,6 +38,9 @@ jQuery(document).ready(($) => {
     let commandIdToDeviceTypeIdMap = {};
     let commandNameToIdMap = {};
 
+    let commandLookupIdToPolicyRuleId = {};
+    let commandLookupIdToCommandId = {};
+
     let policyConditionIdToAlertTypeIdsMap = {};
     let policyConditionIdToThresholdMap = {};
 
@@ -270,6 +273,16 @@ jQuery(document).ready(($) => {
         });
     }
 
+    async function getCommandLookups() {
+        $.get("/command-lookups", (commands) => {
+            $.each(JSON.parse(commands), (id, commandLookup) => {
+                commandLookupIdToPolicyRuleId[commandLookup.id] = commandLookup.policyRuleId
+                commandLookupIdToCommandId[commandLookup.id] = commandLookup.commandId
+                console.log(commandLookup);
+            });
+        });
+    }
+
     /**
      * The main starting point for the page, which gets all the related data from the database, then generates the
      * Policy Rule table at the bottom of the page.
@@ -282,6 +295,7 @@ jQuery(document).ready(($) => {
         await getStateTransitions();
         await getPolicyConditions();
         await getCommands();
+        await getCommandLookups();
 
         policyRuleTable.clear();
 
@@ -291,6 +305,14 @@ jQuery(document).ready(($) => {
                 // Create a custom strong for the alertTypeIds, which shows text instead of actual ids
                 let alertTypeArray = [];
                 policyConditionIdToAlertTypeIdsMap[policyRule.policyConditionId].forEach(element => alertTypeArray.push(alertTypeIdToNameMap[element]));
+
+                // Get the associated device commands, and turn them into names
+                let deviceCommandArray = [];
+                $.each(commandLookupIdToPolicyRuleId, function (index, policyRuleId) {
+                    if (policyRuleId == policyRule.id) {
+                        deviceCommandArray.push(commandIdToNameMap[commandLookupIdToCommandId[index]])
+                    }
+                });
 
                 // Generate the table row and add it to the table
                 let newRow = "<tr id='tableRow" + policyRule.id + "'>\n" +
@@ -302,6 +324,7 @@ jQuery(document).ready(($) => {
                     "    </td>\n" +
                     "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeIdToNameMap[policyRule.deviceTypeId] + "</td>\n" +
                     "    <td id='policyCondition" + policyRule.id + "'>" + alertTypeArray.join(", ") + "</td>\n" +
+                    "    <td id='deviceCommand" + policyRule.id + "'>" + deviceCommandArray.join(", ") + "</td>\n" +
                     "    <td id='startSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]] + "</td>\n" +
                     "    <td id='finishSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToFinishMap[policyRule.stateTransitionId]] + "</td>\n" +
                     "    <td id='samplingRateFactor" + policyRule.id + "'>" + policyRule.samplingRateFactor + "</td>\n" +
