@@ -68,16 +68,16 @@ jQuery(document).ready(($) => {
         // Check for duplicate alert types trying to be added
         let hasDuplicate = false;
         Object.keys(currentAlertTypeIds).forEach((uid) => {
-            let alertId = parseInt(uid);
+            let alertId = parseInt(currentAlertTypeIds[uid]);
 
             if (alertTypeId == alertId) {
-                alert("cannot add duplicate image");
                 hasDuplicate = true;
             }
         });
 
 
         if (hasDuplicate) {
+            alert("cannot add duplicate alert");
             return false;
         } else {
             // No duplicates, so add this row to the form
@@ -108,6 +108,7 @@ jQuery(document).ready(($) => {
     }
 
     function addCommandsRow(commandId, order) {
+        console.log("Adding alert: " + commandId);
         if(commandId == null) {
             alert("please select a valid alert type");
             return false;
@@ -118,18 +119,15 @@ jQuery(document).ready(($) => {
         Object.keys(currentCommandIdToOrderNumberMap).forEach((uid) => {
             let orderNumber = parseInt(currentCommandIdToOrderNumberMap[uid]);
             let imageId = parseInt(uid);
+            console.log("Dup check: " + imageId);
 
             if (commandId == imageId) {
-                alert("cannot add duplicate image");
-                hasDuplicate = true;
-            }
-            if (orderNumber == order) {
-                alert("cannot add duplicate order number");
                 hasDuplicate = true;
             }
         });
 
         if (hasDuplicate) {
+            alert("cannot add duplicate command");
             return false;
         } else {
             // No duplicates, so add this row to the form
@@ -278,7 +276,6 @@ jQuery(document).ready(($) => {
             $.each(JSON.parse(commands), (id, commandLookup) => {
                 commandLookupIdToPolicyRuleId[commandLookup.id] = commandLookup.policyRuleId
                 commandLookupIdToCommandId[commandLookup.id] = commandLookup.commandId
-                console.log(commandLookup);
             });
         });
     }
@@ -358,6 +355,8 @@ jQuery(document).ready(($) => {
                         stateTransition.val(policyRule.stateTransitionId);
                         threshold.val(policyConditionIdToThresholdMap[policyRule.policyConditionId]);
                         samplingRateFactor.val(policyRule.samplingRateFactor);
+
+                        // TODO need to update commands select, as well as the commands table
 
                         switchToEditForm();
                     });
