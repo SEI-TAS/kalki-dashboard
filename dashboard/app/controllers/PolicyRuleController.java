@@ -1,6 +1,7 @@
 package controllers;
 
 import edu.cmu.sei.kalki.db.daos.AlertTypeDAO;
+import edu.cmu.sei.kalki.db.daos.DeviceCommandLookupDAO;
 import edu.cmu.sei.kalki.db.models.*;
 import edu.cmu.sei.kalki.db.daos.PolicyRuleDAO;
 import edu.cmu.sei.kalki.db.daos.PolicyConditionDAO;
@@ -13,6 +14,9 @@ import play.mvc.Result;
 import play.data.*;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.List;
@@ -65,46 +69,53 @@ public class PolicyRuleController extends Controller {
             Form<PolicyCondition> policyConditionForm = formFactory.form(PolicyCondition.class);
             Form<PolicyCondition> policyConditionFilledForm = policyConditionForm.bindFromRequest();
 
-            if (policyConditionFilledForm.hasErrors()) {
+            DynamicForm policyRuleForm = formFactory.form();
+            DynamicForm policyRuleFilledForm = policyRuleForm.bindFromRequest();
+
+            Form<DeviceCommandLookup> deviceCommandLookupForm = formFactory.form(DeviceCommandLookup.class);
+            Form<DeviceCommandLookup> deviceCommandLookupFilledForm = deviceCommandLookupForm.bindFromRequest();
+
+            if (policyConditionFilledForm.hasErrors() || policyRuleFilledForm.hasErrors() ||
+                    deviceCommandLookupFilledForm.hasErrors()) {
                 return badRequest(views.html.form.render(policyConditionFilledForm));
             } else {
-                // Form is good, so create the policy condition and insert it into the db
+                // Forms are good, so get the various form components, and create the objects
                 PolicyCondition pc = policyConditionFilledForm.get();
-
+                // Need to insert the policy condition immediately to get the id for the policy rule.
                 int policyConditionId = pc.insert();
 
-                // Policy condition created, so now lets make the policy rule
-                DynamicForm policyRuleForm = formFactory.form();
-                DynamicForm policyRuleFilledForm = policyRuleForm.bindFromRequest();
+                DeviceCommandLookup dcl = deviceCommandLookupFilledForm.get();
 
-                if (policyRuleFilledForm.hasErrors()) {
-                    // Remove the policy condition just made, because we cant convert it into a policy rule
-                    PolicyConditionDAO.deletePolicyCondition(policyConditionId);
-                    return badRequest(views.html.form.render(policyRuleFilledForm));
-                } else {
-                    // Form is good, so gather the components from the form, create the policy rule, and insert it
-                    int stateTransitionId = Integer.parseInt(policyRuleFilledForm.get("stateTransitionId"));
-                    int deviceTypeId = Integer.parseInt(policyRuleFilledForm.get("deviceTypeId"));
-                    int samplingRateFactor = Integer.parseInt(policyRuleFilledForm.get("samplingRateFactor"));
+                int stateTransitionId = Integer.parseInt(policyRuleFilledForm.get("stateTransitionId"));
+                int deviceTypeId = Integer.parseInt(policyRuleFilledForm.get("deviceTypeId"));
+                int samplingRateFactor = Integer.parseInt(policyRuleFilledForm.get("samplingRateFactor"));
+                PolicyRule pr = new PolicyRule(stateTransitionId, policyConditionId, deviceTypeId,
+                        samplingRateFactor);
 
-                    PolicyRule pr = new PolicyRule(stateTransitionId, policyConditionId, deviceTypeId,
-                            samplingRateFactor);
+                // Update the id, so if this is an update, it will trigger an update when we insert it
+                pr.setId(this.updatingId);
 
-                    // Update the id, so if this is an update it will trigger an update
-                    pr.setId(this.updatingId);
-                    this.updatingId = -1;
+                // Make policy rule
+                int policyRuleId = pr.insertOrUpdate();
 
-                    int n = pr.insertOrUpdate();
+                if (this.updatingId != -1) {
+                    // We know we are updating, so we need to remove the old references to this policy rule,
+                    //  so we have a clean slate. First, remove the old policy condition
+                    PolicyConditionDAO.deletePolicyCondition(this.policyConditionId);
+                    this.policyConditionId = -1;
 
-                    // Remove old policy condition, since it should not be linked to anything now.
-                    // TODO deletes the old policy condition if it is being updated, should just update the policy cond.
-                    if (this.policyConditionId >= 0) {
-                        PolicyConditionDAO.deletePolicyCondition(this.policyConditionId);
-                        this.policyConditionId = -1;
-                    }
-
-                    return redirect(routes.DBManagementController.dbManagementDeviceTypeView(n));
+                    // Now remove the old command lookup ids
+                    DeviceCommandLookupDAO.deleteCommandLookupsByPolicyRule(policyRuleId);
                 }
+
+                // Make commands in reference to the new policy rule
+                dcl.setPolicyRuleId(policyRuleId);
+                dcl.insertMultiple();
+
+                // Updated, so reset the updating flag.
+                this.updatingId = -1;
+
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(policyRuleId));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
@@ -139,6 +150,7 @@ public class PolicyRuleController extends Controller {
                 policyRuleId = -1;
                 policyConditionId = -1;
             }
+            DeviceCommandLookupDAO.deleteCommandLookupsByPolicyRule(policyRuleId);
             boolean isSuccess = PolicyRuleDAO.deletePolicyRule(policyRuleId);
             PolicyConditionDAO.deletePolicyCondition(policyConditionId);
             return ok(Boolean.toString(isSuccess));

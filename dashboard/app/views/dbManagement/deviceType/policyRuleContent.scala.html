@@ -13,17 +13,16 @@
             </div>
         </div>
 
+        @* Alert Types *@
         <div class="form-group row">
-            @* Alert Type *@
             <label for="policyRuleAlertTypeSelect" class="col-2 col-form-label">Alert Type</label>
             <div class="col-4">
                 <select class="form-control" id="policyRuleAlertTypeSelect">
                     @*Populated by policyRule.js*@
                 </select>
             </div>
-
             <div class="col-4">
-                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addAlertButton">+</button>
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="policyRuleAddAlertButton">+</button>
             </div>
         </div>
         @* hidden alertTypes *@
@@ -42,40 +41,30 @@
             </tbody>
         </table>
 
-@*        TODO Are commands needed here? Or is there another way these are supposed to be linked. *@
-@*        <div class="form-group row">*@
-@*            *@@* Actions *@
-@*            <label for="policyRuleCommands" class="col-2 col-form-label">Commands</label>*@
-@*            <div class="col-3">*@
-@*                <select class="form-control" id="policyRuleCommands">*@
-@*                    *@@*Populated by policyRule.js*@
-@*                </select>*@
-@*            </div>*@
-
-@*            *@@* Order *@
-@*            <label for="order" class="col-1 col-form-label">Order</label>*@
-@*            <div class="col-1">*@
-@*                <input type="number" min="0" max="2147483647" class="form-control" id="order" value="1">*@
-@*            </div>*@
-
-@*            <div class="col-4">*@
-@*                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addCommandButton">+</button>*@
-@*            </div>*@
-@*        </div>*@
-
-@*        <input type="text" id="commandsOrderFormInput" name="actionsDagOrderMap" value="" hidden required*@
-@*        oninvalid="alert('Please Add an Image and Order before Adding a PolicyRule')">*@
-@*        *@@* Variable table *@
-@*        <table id="commandsOrderTable" class="table col-6">*@
-@*            <thead>*@
-@*                <th></th>*@
-@*                <th>Commands<span>*</span></th>*@
-@*                <th>Order<span>*</span></th>*@
-@*            </thead>*@
-@*            <tbody id="commandsOrderTableBody">*@
-@*                *@@*Populated by policyRule.js*@
-@*            </tbody>*@
-@*        </table>*@
+        @* Device Commands *@
+        <div class="form-group row">
+            <label for="policyRuleCommands" class="col-2 col-form-label">Commands</label>
+            <div class="col-3">
+                <select class="form-control" id="policyRuleCommands">
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="policyRuleAddCommandButton">+</button>
+            </div>
+        </div>
+        <select id="deviceCommandFormInput" name="commandIds[]" multiple hidden
+        oninvalid="alert('Please add a Command before adding a Policy Rule')"></select>
+        @* Variable table *@
+        <table id="policyRuleCommandsOrderTable" class="table col-6">
+            <thead>
+                <th>@* For remove buttons *@</th>
+                <th>Commands<span>*</span></th>
+            </thead>
+            <tbody id="policyRuleCommandsOrderTableBody">
+                @*Populated by policyRule.js*@
+            </tbody>
+        </table>
 
         @* State Transition select*@
         <div class="form-group row">

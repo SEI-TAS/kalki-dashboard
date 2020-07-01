@@ -131,23 +131,26 @@ jQuery(document).ready(($) => {
         } else {
             // No duplicates, so add this row to the form
             let currentCount = ++commandRowCounter;
-            let newRow = "<tr id='commandsOrderTableRow" + currentCount + "'>\n" +
+            let newRow = "<tr id='policyRuleCommandsOrderTableRow" + currentCount + "'>\n" +
                 "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
-                "    <td id='umboxImage" + currentCount + "'>" + commandIdToNameMap[commandId] + "</td>\n" +
+                "    <td id='command" + currentCount + "'>" + commandIdToNameMap[commandId] + "</td>\n" +
                 "    <td id='order" + currentCount + "'>" + order + "</td>\n" +
                 "</tr>"
 
-            $("#commandsOrderTable").find("tbody").append($(newRow));
+            $("#policyRuleCommandsOrderTable").find("tbody").append($(newRow));
 
             // Add command and order number relationship to map
             currentCommandIdToOrderNumberMap[commandId] = order;
 
             // Set hidden form input to current map (needed to pass form data to controller)
-            $("#commandsOrderFormInput").val(JSON.stringify(currentCommandIdToOrderNumberMap));
+            $("#deviceCommandFormInput").append("<option id='deviceCommandFormInput" + commandId + "' value='" + commandId + "' selected></option>");
+
+            // Set hidden form input to current map (needed to pass form data to controller)
+            $("#policyRuleCommandsOrderFormInput").val(JSON.stringify(currentCommandIdToOrderNumberMap));
 
             // Set remove function for this command
-            $("#commandsOrderTableBody #removeButton" + currentCount).click(function () {
-                $("#commandsOrderTableBody #commandsOrderTableRow" + currentCount).remove();
+            $("#policyRuleCommandsOrderTableBody #removeButton" + currentCount).click(function () {
+                $("#policyRuleCommandsOrderTableBody #policyRuleCommandsOrderTableRow" + currentCount).remove();
 
                 delete currentCommandIdToOrderNumberMap[commandId.toString()];
             });
@@ -394,7 +397,7 @@ jQuery(document).ready(($) => {
     /**
      * Add the alert to the table when the add button is clicked.
      */
-    $("#policyRuleContent #addAlertButton").click(function () {
+    $("#policyRuleContent #policyRuleAddAlertButton").click(function () {
         let policyRuleAlertSelect = $(".form-control#policyRuleAlertTypeSelect");
 
         if (addAlertTypeRow(policyRuleAlertSelect.val())) { //if the add was successful
@@ -405,7 +408,7 @@ jQuery(document).ready(($) => {
     /**
      * Add the command to the table when the add button is clicked.
      */
-    $("#policyRuleContent #addCommandButton").click(function () {
+    $("#policyRuleContent #policyRuleAddCommandButton").click(function () {
         let policyRuleAlertSelect = $(".form-control#policyRuleCommands");
         let orderNumber = $(".form-control#order");
 
