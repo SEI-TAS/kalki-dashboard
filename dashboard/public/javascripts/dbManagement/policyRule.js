@@ -324,6 +324,7 @@ jQuery(document).ready(($) => {
                     "    <td id='startSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]] + "</td>\n" +
                     "    <td id='finishSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToFinishMap[policyRule.stateTransitionId]] + "</td>\n" +
                     "    <td id='samplingRateFactor" + policyRule.id + "'>" + policyRule.samplingRateFactor + "</td>\n" +
+                    "    <td id='threshold" + policyRule.id + "'>" + policyConditionIdToThresholdMap[policyRule.policyConditionId] + "</td>\n" +
                     "</tr>"
                 policyRuleTable.row.add($(newRow)).draw();
 
