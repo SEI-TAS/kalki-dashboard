@@ -132,7 +132,7 @@ jQuery(document).ready(($) => {
             let currentCount = ++commandRowCounter;
             let newRow = "<tr id='policyRuleCommandsOrderTableRow" + currentCount + "'>\n" +
                 "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
-                "    <td id='command" + currentCount + "'>" + commandIdToNameMap[commandId] + "</td>\n" +
+                "    <td id='command" + currentCount + "'>" + deviceTypeIdToNameMap[commandIdToDeviceTypeIdMap[commandId]] + " - " + commandIdToNameMap[commandId] + "</td>\n" +
                 "</tr>"
 
             $("#policyRuleCommandsOrderTable").find("tbody").append($(newRow));
@@ -263,9 +263,8 @@ jQuery(document).ready(($) => {
                 commandIdToDeviceTypeIdMap[command.id] = command.deviceTypeId;
                 commandNameToIdMap[command.name] = command.id;
 
-                if (currentDeviceTypeId === command.deviceTypeId) {
-                    $("#policyRuleContent #policyRuleCommands").append("<option id='commandOption" + command.id + "' value='" + command.id + "'>" + command.name + "</option>");
-                }
+                $("#policyRuleContent #policyRuleCommands").append("<option id='commandOption" + command.id + "' value='" + command.id + "'>" + deviceTypeIdToNameMap[command.deviceTypeId] + " - " + command.name + "</option>");
+
             });
         });
     }
@@ -306,7 +305,11 @@ jQuery(document).ready(($) => {
                 let deviceCommandArray = [];
                 $.each(commandLookupIdToPolicyRuleId, function (index, policyRuleId) {
                     if (policyRuleId == policyRule.id) {
-                        deviceCommandArray.push(commandIdToNameMap[commandLookupIdToCommandId[index]])
+                        deviceCommandArray.push(
+                            deviceTypeIdToNameMap[commandIdToDeviceTypeIdMap[commandLookupIdToCommandId[index]]]
+                            + " - " +
+                            commandIdToNameMap[commandLookupIdToCommandId[index]]
+                        )
                     }
                 });
 
@@ -465,10 +468,8 @@ jQuery(document).ready(($) => {
         currentDeviceTypeId = parseInt(this.value);
         // TODO alert types should be stored locally, so there isnt extra calls to the db.
         getAlertTypeLookups();
-        getCommands();
 
         clearAlertTypes()
-        clearCommands()
     });
 
     /**
