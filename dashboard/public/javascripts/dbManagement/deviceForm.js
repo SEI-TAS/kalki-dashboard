@@ -169,11 +169,23 @@ jQuery(document).ready(($) => {
 
     }
 
+    async function getDataNodes() {
+        $("#dataNode").empty();
+        console.log("Getting data node.")
+
+        return $.get("/data-nodes", (dataNodes) => {
+            $.each(JSON.parse(dataNodes), (id, node) => {
+                $("#dataNode").append("<option id='dataNodeOption" + node.id + "' value='" + node.id + "'>" + node.name + " - " + node.ipAddress + "</option>");
+            });
+        });
+    }
+
     async function loadData(device) {
         console.log("device", device);
         getDeviceTypes(device.type.id);
-        getGroups(device.group.id);
         getTags(device.tagIds);
+        getDataNodes();
+        getGroups(device.group.id);
     }
 
     $("#editDeviceBtn").click(()=>{
