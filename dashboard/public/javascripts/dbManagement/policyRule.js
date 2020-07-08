@@ -228,7 +228,7 @@ jQuery(document).ready(($) => {
     async function getAlertTypes() {
         $("#policyRuleContent #policyRuleAlertTypeSelect").empty();
 
-        $.get("/alert-types", (alertTypes) => {
+        return $.get("/alert-types", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
                 alertTypeIdToNameMap[alertType.id] = alertType.name;
                 alertTypeNameToIdMap[alertType.name] = alertType.id;
@@ -241,7 +241,7 @@ jQuery(document).ready(($) => {
 
         await getAlertTypes();
 
-        $.get("/alert-type-lookups", (alertTypeLookups) => {
+        return $.get("/alert-type-lookups", (alertTypeLookups) => {
             $.each(JSON.parse(alertTypeLookups), (id, alertTypeLookup) => {
                 alertTypeIdToAlertTypeLookupIdMap[alertTypeLookup.alertTypeId] = alertTypeLookup.id;
                 alertTypeLookupIdToAlertTypeIdMap[alertTypeLookup.id] = alertTypeLookup.alertTypeId;
@@ -257,7 +257,7 @@ jQuery(document).ready(($) => {
     async function getCommands() {
         $("#policyRuleContent #policyRuleCommands").empty();
 
-        $.get("/commands", (commands) => {
+        return $.get("/commands", (commands) => {
             $.each(JSON.parse(commands), (id, command) => {
                 commandIdToNameMap[command.id] = command.name;
                 commandIdToDeviceTypeIdMap[command.id] = command.deviceTypeId;
@@ -270,7 +270,7 @@ jQuery(document).ready(($) => {
     }
 
     async function getCommandLookups() {
-        $.get("/command-lookups", (commands) => {
+        return $.get("/command-lookups", (commands) => {
             $.each(JSON.parse(commands), (id, commandLookup) => {
                 commandLookupIdToPolicyRuleId[commandLookup.id] = commandLookup.policyRuleId
                 commandLookupIdToCommandId[commandLookup.id] = commandLookup.commandId
