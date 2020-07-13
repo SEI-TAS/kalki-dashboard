@@ -10,7 +10,6 @@ jQuery(document).ready(($) => {
     }
 
     $(".dbManagementView  .nav-link").click(function (e) {
-        console.log("Setting active tab");
         let tab_name = this.getAttribute('href');
 
         window.sessionStorage.setItem('activeTab', tab_name);
@@ -20,7 +19,6 @@ jQuery(document).ready(($) => {
     });
 
     $("#deviceInfoPage  .nav-link").click(function (e) {
-        console.log("Setting active tab");
         let tab_name = this.getAttribute('href');
 
         window.sessionStorage.setItem('activeTab', tab_name);
@@ -30,7 +28,6 @@ jQuery(document).ready(($) => {
     });
 
     $(".main-header  .nav-link").click(function (e) {
-        console.log("resetting active tab");
 
         window.sessionStorage.setItem('activeTab', "");
 
