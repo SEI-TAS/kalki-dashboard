@@ -6,7 +6,7 @@ jQuery(document).ready(($) => {
         $('a[href="' + activeTab + '"]').tab('show');
     }
     else {
-        $(".default-tab").tab('show');
+        $('#default-tab').tab('show');
     }
 
     $(".dbManagementView  .nav-link").click(function (e) {

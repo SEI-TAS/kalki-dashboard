@@ -171,7 +171,6 @@ jQuery(document).ready(($) => {
 
     async function getDataNodes() {
         $("#dataNode").empty();
-        console.log("Getting data node.")
 
         return $.get("/data-nodes", (dataNodes) => {
             $.each(JSON.parse(dataNodes), (id, node) => {
@@ -181,7 +180,6 @@ jQuery(document).ready(($) => {
     }
 
     async function loadData(device) {
-        console.log("device", device);
         getDeviceTypes(device.type.id);
         getTags(device.tagIds);
         getDataNodes();

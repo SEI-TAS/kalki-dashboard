@@ -54,15 +54,9 @@ jQuery(document).ready(($) => {
             $("#deviceTypeContent .form-group #name").val("");
         });
     });
-    var unit = $('a[href="#DeviceTypeContent"]').attr("class").split(" ")[1];
-    if(unit === 'active') {
-        console.log("INITIAL LOAD");
-        getDeviceTypes();
-    }
 
     //only load data when tab is active
     $('a[href="#DeviceTypeContent"]').on('shown.bs.tab', function (e) {
-        console.log("SECONDARY LOAD");
         getDeviceTypes();
     });
 });

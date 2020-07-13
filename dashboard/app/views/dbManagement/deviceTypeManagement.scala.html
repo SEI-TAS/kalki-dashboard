@@ -7,10 +7,10 @@
     <h4>Database Management</h4>
     <ul class="nav nav-tabs">
         <li class="nav-item tab">
-            <a class="nav-link active" data-toggle="tab" href="#DeviceTypeContent">DeviceType</a>
+            <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#DeviceTypeContent" id="default-tab">DeviceType</a>
         </li>
         <li class="nav-item tab">
-            <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#AlertTypeLookupContent">Alert Type Actions</a>
+            <a class="nav-link" data-toggle="tab" href="#AlertTypeLookupContent">Alert Type Actions</a>
         </li>
         <li class="nav-item tab">
             <a class="nav-link" data-toggle="tab" href="#CommandLookupContent">Command Actions</a>
@@ -25,10 +25,10 @@
 
     @*The content in the db management tabs*@
     <div class="tab-content">
-        <div id="DeviceTypeContent" class="tab-pane default-tab fade show active">
+        <div id="DeviceTypeContent" class="tab-pane fade show active" aria-expanded="true">
             @dbManagement.deviceType.deviceTypeContent()
         </div>
-        <div id="AlertTypeLookupContent" class="tab-pane fade" aria-expanded="true">
+        <div id="AlertTypeLookupContent" class="tab-pane fade">
             @dbManagement.deviceType.alertTypeLookupContent()
         </div>
         <div id="CommandLookupContent" class="tab-pane fade">
