@@ -1,5 +1,6 @@
 package controllers;
 
+import edu.cmu.sei.kalki.db.daos.StateTransitionDAO;
 import edu.cmu.sei.kalki.db.models.*;
 import edu.cmu.sei.kalki.db.daos.SecurityStateDAO;
 
@@ -101,6 +102,18 @@ public class SecurityStateController extends Controller {
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
+
+    public CompletionStage<Result> getSecurityStateTransitions() {
+        return CompletableFuture.supplyAsync(() -> {
+            List<StateTransition> stateTransitions = StateTransitionDAO.findAll();
+            try {
+                return ok(ow.writeValueAsString(stateTransitions));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
 
     public Result clearSecurityStateForm() {
         this.updatingId = -1;
