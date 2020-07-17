@@ -1,24 +1,23 @@
-# From https://semaphoreci.com/community/tutorials/dockerizing-a-java-play-application
-# See above for explaination of each line.
-FROM openjdk:8
+FROM kalki/kalki-db-env AS build_env
 
-ENV PROJECT_HOME /usr/src
-RUN mkdir -p $PROJECT_HOME/activator $PROJECT_HOME/app
+ENV SCALA_VERSION 2.12.6
+ENV SBT_VERSION 1.3.8
 
-WORKDIR $PROJECT_HOME/activator
+ENV BIN_FOLDER /usr/local
+ENV SCALA_FOLDER $BIN_FOLDER/scala-$SCALA_VERSION
+ENV SBT_FOLDER $BIN_FOLDER/sbt
 
-RUN wget http://downloads.typesafe.com/typesafe-activator/1.3.10/typesafe-activator-1.3.10.zip && \
-    unzip typesafe-activator-1.3.10.zip
+# Installing Scala and SBT, plus SBT dependencies.
+RUN wget -O - https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C $BIN_FOLDER && \
+    ln -s "${SCALA_FOLDER}/bin/"* "/usr/bin/" && \
+    wget -O - https://piccolo.link/sbt-$SBT_VERSION.tgz | tar xfz - -C $BIN_FOLDER && \
+    ln -s "${SBT_FOLDER}/bin/"* "/usr/bin/" && \
+    sbt sbtVersion
 
-ENV PATH $PROJECT_HOME/activator/activator-dist-1.3.10/bin:$PATH
-ENV PATH $PROJECT_HOME/build/target/universal/stage/bin:$PATH
-COPY . $PROJECT_HOME/app
-WORKDIR $PROJECT_HOME/app/dashboard
 EXPOSE 9000
+WORKDIR /
+COPY dashboard /dashboard
+WORKDIR /dashboard
 
-# Hacky way to download the activator dependencies.
-# The server gets terminated automatically because STDIN gets closed at EOF.
-# https://github.com/playframework/playframework/issues/4001
-RUN activator run
+ENTRYPOINT ["sbt", "run"]
 
-CMD ["activator", "run"]
