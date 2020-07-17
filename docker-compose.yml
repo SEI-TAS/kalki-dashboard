@@ -1,9 +1,6 @@
 version: '2.3'
 services:
   kalki-dashboard:
-    build:
-      context: .
-      network: host
     image: kalki/kalki-dashboard
     container_name: kalki-dashboard
     network_mode: "host"

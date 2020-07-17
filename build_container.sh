@@ -5,7 +5,7 @@ deployment="$1"
 
 # Check if we got the deployment.
 if [ -z $deployment ]; then
-  deployment = "default"
+  deployment="default"
 fi
 
 # Check if the given deployment exists.
@@ -18,4 +18,4 @@ fi
 echo "Copying configurations for deployment:"
 cp -r -v $deployment_path/application.conf temp.conf
 
-docker-compose build
+docker build --network=host -t kalki/kalki-dashboard .
