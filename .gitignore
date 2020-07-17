@@ -174,5 +174,4 @@ dashboard/.gradle
 dashboard/.g8/form/form.iml
 dashboard/dashboard.iml
 .idea/
-
-
+temp.conf

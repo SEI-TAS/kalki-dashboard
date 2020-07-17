@@ -17,6 +17,7 @@ RUN wget -O - https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_V
 EXPOSE 9000
 WORKDIR /
 COPY dashboard /dashboard
+COPY temp.conf /dashboard/conf/application.conf
 WORKDIR /dashboard
 
 ENTRYPOINT ["sbt", "run"]
