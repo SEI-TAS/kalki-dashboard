@@ -20,21 +20,17 @@ WORKDIR /dashboard
 COPY temp.conf /dashboard/conf/application.conf
 RUN sbt assembly
 
-ENTRYPOINT ["bash"]
-
 # Second stage: actual run environment.
 FROM openjdk:8-jre-alpine
 
-ENV SCALA_VERSION 2.12.4
+ARG SCALA_VERSION=2.12
 EXPOSE 9000
 
 ARG PROJECT_NAME=kalki-dashboard
 ARG PROJECT_VERSION=1.6.0
 
 RUN mkdir -p /dashboard
+COPY --from=build_env /dashboard/target/scala-$SCALA_VERSION/$PROJECT_NAME-assembly-$PROJECT_VERSION.jar /dashboard/kalki-dashboard.jar
+
 WORKDIR /dashboard
-
-COPY --from=build_env /dashboard/target/scala_${SCALA_VERSION}/${PROJECT_NAME}-assembly-${PROJECT_VERSION}.jar /dashboard/kalki-dashboard.jar
-
-WORKDIR /$PROJECT_NAME
-ENTRYPOINT ["java", "-jar", "kalki-dashboard.jar"]
+ENTRYPOINT ["java", "-Dplay.http.secret.key=ad31779d4ee49d5ad5162bf1429c32e2e9933f3b", "-jar", "kalki-dashboard.jar"]
