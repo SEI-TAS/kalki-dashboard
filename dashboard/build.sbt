@@ -1,7 +1,7 @@
 name := """kalki-dashboard"""
 organization := "edu.cmu.sei.ttg"
 
-version := "1.7.0"
+version := "1.6.0"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 enablePlugins(DockerPlugin)
