@@ -3,35 +3,36 @@ The Kalki Dashboard is a web application developed using the Java play! framewor
 
 ## Prerequisites
 
-The Kalki-db Postgres container has to be running for this program to work. You can find more details here: https://github.com/SEI-TTG/kalki-db
-
 ### Local Setup 
-To compile this application locally, Java JDK 8 and Scala is required. This application also uses sbt as its build system, so sbt will need to be installed in order to build and run the dashboard.
+To compile and run this application locally, the following are required:
 
-Kalki-db should be installed on a local Maven repo for this program to compile. You can find more details here: https://github.com/SEI-TTG/kalki-db/tree/dev
-
-sbt for macOS can be installed using `$ brew install sbt@1`. Also, see https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Mac.html
-
-sbt for Linux can installed by following the directions found at https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Linux.html.
+- Java JDK 8
+- Scala 
+- The sbt build system
+  - sbt for macOS can be installed using `$ brew install sbt@1`. Also, see https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Mac.html
+  - sbt for Linux can installed by following the directions found at https://www.scala-sbt.org/1.0/docs/Installing-sbt-on-Linux.html.
+- Kalki-db should be installed on a local Maven repo for this program to compile. You can find more details here: https://github.com/SEI-TTG/kalki-db/tree/dev
 
 ### Docker Setup
 Alternatively, this application can be built in a Docker container, and produce a Docker image as an output. In this case:
 
  - Docker is required to compile and run this program.
+   - Docker for macOS can be installed using `brew cask install docker`. Also, see https://docs.docker.com/docker-for-mac/install/.
+   - Docker for Linux can be installed by running `sudo apt-get install docker`.  Also, see https://docs.docker.com/install/linux/linux-postinstall/ for instructions on setting up a user group so that docker can be run without prefacing it with the sudo command.
+ 
  - The Kalki-db build env image should be created before compiling this program. You can find more details here: https://github.com/SEI-TTG/kalki-db
 
-Docker for macOS can be installed using `brew cask install docker`.
-Also, see https://docs.docker.com/docker-for-mac/install/.
-
-Docker for Linux can be installed by running `sudo apt-get install docker`.  Also, see https://docs.docker.com/install/linux/linux-postinstall/ for instructions on setting up a user group so that docker can be run without prefacing it with the sudo command.
 
 ## Usage
-Once it is running, the application can be viewed at `http://localhost:9000`
+The Kalki-db Postgres container has to be running for this program to work. You can find more details here: https://github.com/SEI-TTG/kalki-db
+
+Once this app is running, the application can be viewed at `http://localhost:9000`
+
+To build and run the application, follow either procedure below.
 
 ### Local Development
 To develop locally:
-1) Make sure the Postgres DB container is running.
-2) Run the application:
+- Run the application:
 ```
 cd dashboard/
 sbt run
@@ -46,7 +47,7 @@ To create the docker image for this program, execute the following command:
 
 Alternatively, a specific configuration present in the `deployments` folder can be passed with:
 
-`bash build_container.sh <name_folder_in_deployments>`
+`bash build_container.sh <deployment_folder_name>`
 
 To execute the program inside docker, execute the following command:
 
