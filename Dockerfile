@@ -1,25 +1,21 @@
 FROM kalki/kalki-db-env AS build_env
 
-ENV SCALA_VERSION 2.12.4
 ENV SBT_VERSION 1.3.8
 
 ENV BIN_FOLDER /home/gradle
-ENV SCALA_FOLDER $BIN_FOLDER/scala-$SCALA_VERSION
 ENV SBT_FOLDER $BIN_FOLDER/sbt
 
-# Installing Scala and SBT, plus SBT dependencies.
+# Installing SBT
 WORKDIR /home/gradle
-RUN wget -O scala.tgz https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz
-RUN tar -zxvf scala.tgz
 RUN wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz
 RUN tar -zxvf sbt.tgz
 
-#ENV PATH="${SCALA_FOLDER}/bin;${SBT_FOLDER}/bin;${PATH}"
-#RUN ${SBT_FOLDER}/bin/sbt sbtVersion
-
+# Copying code and conf
 COPY dashboard /dashboard
-WORKDIR /dashboard
 COPY temp.conf /dashboard/conf/application.conf
+
+# Getting deps, compiling and creating dist.
+WORKDIR /dashboard
 RUN ${SBT_FOLDER}/bin/sbt dist
 
 # Second stage: actual run environment.
