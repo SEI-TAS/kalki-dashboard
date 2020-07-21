@@ -8,7 +8,7 @@ FROM openjdk:8-jdk-alpine AS build_env
 RUN apk --no-cache add bash
 
 # Get deployed kalki-db from prev stage.
-COPY --from=kalki_db /root/.m2 /root/.m2
+COPY --from=kalki_db /home/gradle/.m2 /root/.m2
 
 ENV SBT_VERSION 1.3.8
 
