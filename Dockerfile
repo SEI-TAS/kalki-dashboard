@@ -8,7 +8,7 @@ ENV SCALA_FOLDER $BIN_FOLDER/scala-$SCALA_VERSION
 ENV SBT_FOLDER $BIN_FOLDER/sbt
 
 # Installing Scala and SBT, plus SBT dependencies.
-WORKDIR /
+WORKDIR /home/gradle
 RUN wget https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz && \
     tar -xvfz scala-$SCALA_VERSION.tgz -C $BIN_FOLDER && \
     ln -s "${SCALA_FOLDER}/bin/"* "/usr/bin/" && \
