@@ -15,6 +15,7 @@ ENV SBT_VERSION 1.3.8
 # Installing SBT
 RUN wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz
 RUN tar -zxvf sbt.tgz
+RUN /sbt/bin/sbt sbtVersion
 
 # Copying code and conf
 COPY dashboard /dashboard
@@ -22,6 +23,7 @@ COPY temp.conf /dashboard/conf/application.conf
 
 # Getting deps, compiling and creating dist.
 WORKDIR /dashboard
+RUN /sbt/bin/sbt update
 RUN /sbt/bin/sbt dist
 
 ################################################################################################
