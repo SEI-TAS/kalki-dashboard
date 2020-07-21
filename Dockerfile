@@ -1,12 +1,18 @@
-FROM kalki/kalki-db-env AS build_env
+# First stage: getting kalki-db
+FROM kalki/kalki-db-env AS kalki_db
+
+################################################################################################
+# Second stage: build env.
+FROM openjdk:8-jdk-alpine AS build_env
+
+RUN apk --no-cache add bash
+
+# Get deployed kalki-db from prev stage.
+COPY --from=kalki_db /root/.m2 /root/.m2
 
 ENV SBT_VERSION 1.3.8
 
-ENV BIN_FOLDER /home/gradle
-ENV SBT_FOLDER $BIN_FOLDER/sbt
-
 # Installing SBT
-WORKDIR /home/gradle
 RUN wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz
 RUN tar -zxvf sbt.tgz
 
@@ -16,14 +22,14 @@ COPY temp.conf /dashboard/conf/application.conf
 
 # Getting deps, compiling and creating dist.
 WORKDIR /dashboard
-RUN ${SBT_FOLDER}/bin/sbt dist
+RUN /sbt/bin/sbt dist
 
-# Second stage: actual run environment.
+################################################################################################
+# Third stage: actual run environment.
 FROM openjdk:8-jre-alpine
 
 RUN apk --no-cache add bash
 
-ARG SCALA_VERSION=2.12
 EXPOSE 9000
 
 ARG PROJECT_NAME=kalki-dashboard
