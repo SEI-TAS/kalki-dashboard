@@ -9,11 +9,11 @@ ENV SBT_FOLDER $BIN_FOLDER/sbt
 
 # Installing Scala and SBT, plus SBT dependencies.
 WORKDIR /home/gradle
-RUN wget https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz && \
-    tar -xvfz scala-$SCALA_VERSION.tgz -C $BIN_FOLDER && \
+RUN wget -O scala.tgz https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz && \
+    tar -zxvf scala.tgz -C $BIN_FOLDER && \
     ln -s "${SCALA_FOLDER}/bin/"* "/usr/bin/" && \
-    wget -O - https://piccolo.link/sbt-$SBT_VERSION.tgz && \
-    tar -xvfz sbt-$SBT_VERSION.tgz -C $BIN_FOLDER && \
+    wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz && \
+    tar -xvfz sbt.tgz -C $BIN_FOLDER && \
     ln -s "${SBT_FOLDER}/bin/"* "/usr/bin/" && \
     sbt sbtVersion
 
