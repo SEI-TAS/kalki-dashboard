@@ -14,13 +14,13 @@ RUN tar -zxvf scala.tgz
 RUN wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz
 RUN tar -zxvf sbt.tgz
 
-ENV PATH="${SCALA_FOLDER}/bin;${SBT_FOLDER}/bin;${PATH}"
-RUN sbt sbtVersion
+#ENV PATH="${SCALA_FOLDER}/bin;${SBT_FOLDER}/bin;${PATH}"
+#RUN ${SBT_FOLDER}/bin/sbt sbtVersion
 
 COPY dashboard /dashboard
 WORKDIR /dashboard
 COPY temp.conf /dashboard/conf/application.conf
-RUN sbt dist
+RUN ${SBT_FOLDER}/bin/ dist
 
 # Second stage: actual run environment.
 FROM openjdk:8-jre-alpine
