@@ -20,7 +20,7 @@ RUN tar -zxvf sbt.tgz
 COPY dashboard /dashboard
 WORKDIR /dashboard
 COPY temp.conf /dashboard/conf/application.conf
-RUN ${SBT_FOLDER}/bin/ dist
+RUN ${SBT_FOLDER}/bin/sbt dist
 
 # Second stage: actual run environment.
 FROM openjdk:8-jre-alpine
