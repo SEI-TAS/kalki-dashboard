@@ -12,7 +12,7 @@ WORKDIR /home/gradle
 RUN wget -O scala.tgz https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz
 RUN tar -zxvf scala.tgz
 RUN wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz
-RUN tar -xvfz sbt.tgz
+RUN tar -zxvf sbt.tgz
 
 ENV PATH="${SCALA_FOLDER}/bin;${SBT_FOLDER}/bin;${PATH}"
 RUN sbt sbtVersion
