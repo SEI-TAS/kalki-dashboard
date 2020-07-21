@@ -7,9 +7,8 @@ FROM openjdk:8-jdk-alpine AS build_env
 
 RUN apk --no-cache add bash
 
-ENV SBT_VERSION 1.3.8
-
 # Installing SBT
+ENV SBT_VERSION 1.3.8
 RUN wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz
 RUN tar -zxvf sbt.tgz
 RUN /sbt/bin/sbt sbtVersion
