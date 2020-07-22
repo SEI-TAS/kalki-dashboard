@@ -1,3 +1,5 @@
+
+
 # Created by https://www.gitignore.io/api/osx,linux,windows,intellij,java
 
 ### Intellij ###
@@ -164,6 +166,7 @@ dashboard/logs
 dashboard/project/project
 dashboard/project/target
 dashboard/target
+dashboard/output
 dashboard/tmp
 dashboard/dist
 dashboard/.cache
@@ -171,5 +174,4 @@ dashboard/.gradle
 dashboard/.g8/form/form.iml
 dashboard/dashboard.iml
 .idea/
-
-
+temp.conf

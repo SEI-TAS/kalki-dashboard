@@ -1,0 +1,155 @@
+@*
+ * Kalki - A Software-Defined IoT Security Platform
+ * Copyright 2020 Carnegie Mellon University.
+ * NO WARRANTY. THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING INSTITUTE MATERIAL IS FURNISHED ON AN "AS-IS" BASIS. CARNEGIE MELLON UNIVERSITY MAKES NO WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED, AS TO ANY MATTER INCLUDING, BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR PURPOSE OR MERCHANTABILITY, EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF THE MATERIAL. CARNEGIE MELLON UNIVERSITY DOES NOT MAKE ANY WARRANTY OF ANY KIND WITH RESPECT TO FREEDOM FROM PATENT, TRADEMARK, OR COPYRIGHT INFRINGEMENT.
+ * Released under a MIT (SEI)-style license, please see license.txt or contact permission@sei.cmu.edu for full terms.
+ * [DISTRIBUTION STATEMENT A] This material has been approved for public release and unlimited distribution.  Please see Copyright notice for non-US Government use and distribution.
+ * This Software includes and@or makes use of the following Third-Party Software subject to its own license:
+ * 1. Google Guava (https:@@github.com@google@guava) Copyright 2007 The Guava Authors.
+ * 2. JSON.simple (https:@@code.google.com@archive@p@json-simple@) Copyright 2006-2009 Yidong Fang, Chris Nokleberg.
+ * 3. JUnit (https:@@junit.org@junit5@docs@5.0.1@api@overview-summary.html) Copyright 2020 The JUnit Team.
+ * 4. Play Framework (https:@@www.playframework.com@) Copyright 2020 Lightbend Inc..
+ * 5. PostgreSQL (https:@@opensource.org@licenses@postgresql) Copyright 1996-2020 The PostgreSQL Global Development Group.
+ * 6. Jackson (https:@@github.com@FasterXML@jackson-core) Copyright 2013 FasterXML.
+ * 7. JSON (https:@@www.json.org@license.html) Copyright 2002 JSON.org.
+ * 8. Apache Commons (https:@@commons.apache.org@) Copyright 2004 The Apache Software Foundation.
+ * 9. RuleBook (https:@@github.com@deliveredtechnologies@rulebook@blob@develop@LICENSE.txt) Copyright 2020 Delivered Technologies.
+ * 10. SLF4J (http:@@www.slf4j.org@license.html) Copyright 2004-2017 QOS.ch.
+ * 11. Eclipse Jetty (https:@@www.eclipse.org@jetty@licenses.html) Copyright 1995-2020 Mort Bay Consulting Pty Ltd and others..
+ * 12. Mockito (https:@@github.com@mockito@mockito@wiki@License) Copyright 2007 Mockito contributors.
+ * 13. SubEtha SMTP (https:@@github.com@voodoodyne@subethasmtp) Copyright 2006-2007 SubEthaMail.org.
+ * 14. JSch - Java Secure Channel (http:@@www.jcraft.com@jsch@) Copyright 2002-2015 Atsuhiko Yamanaka, JCraft,Inc. .
+ * 15. ouimeaux (https:@@github.com@iancmcc@ouimeaux) Copyright 2014 Ian McCracken.
+ * 16. Flask (https:@@github.com@pallets@flask) Copyright 2010 Pallets.
+ * 17. Flask-RESTful (https:@@github.com@flask-restful@flask-restful) Copyright 2013 Twilio, Inc..
+ * 18. libvirt-python (https:@@github.com@libvirt@libvirt-python) Copyright 2016 RedHat, Fedora project.
+ * 19. Requests: HTTP for Humans (https:@@github.com@psf@requests) Copyright 2019 Kenneth Reitz.
+ * 20. netifaces (https:@@github.com@al45tair@netifaces) Copyright 2007-2018 Alastair Houghton.
+ * 21. ipaddress (https:@@github.com@phihag@ipaddress) Copyright 2001-2014 Python Software Foundation.
+ * DM20-0543
+ *
+ *@
+@()
+@*Column holds the form and table displayed vertically*@
+<div class="col" id="policyRuleContent">
+    @helper.form(action = routes.PolicyRuleController.addOrUpdatePolicyRule(), 'enctype -> "multipart/form-data") {
+        <h4>Device Policies</h4>
+        @* DeviceType select*@
+        <div class="form-group row">
+            <label for="policyRuleDeviceTypeSelect" class="col-2 col-form-label" >Device Type<span hidden>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="policyRuleDeviceTypeSelect" name="deviceTypeId" required>
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+        </div>
+
+        @* Alert Types *@
+        <div class="form-group row">
+            <label for="policyRuleAlertTypeSelect" class="col-2 col-form-label">Alert Type</label>
+            <div class="col-4">
+                <select class="form-control" id="policyRuleAlertTypeSelect">
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="policyRuleAddAlertButton">+</button>
+            </div>
+        </div>
+        @* hidden alertTypes *@
+        @* stores alert types and returns an array when form interprets this.
+        see https://stackoverflow.com/questions/11331191/form-bindfromrequest-with-array-values *@
+        <select id="alertTypeOrderFormInput" name="alertTypeIds[]" multiple hidden required
+        oninvalid="alert('Please add an Alert before adding a Policy Rule')"></select>
+        @* Variable table *@
+        <table id="alertTypeOrderTable" class="table col-6">
+            <thead>
+                <th>@* For remove buttons *@</th>
+                <th>Alert Type<span>*</span></th>
+            </thead>
+            <tbody id="alertTypeOrderTableBody">
+                @*Populated by policyRule.js*@
+            </tbody>
+        </table>
+
+        @* Device Commands *@
+        <div class="form-group row">
+            <label for="policyRuleCommands" class="col-2 col-form-label">Commands</label>
+            <div class="col-3">
+                <select class="form-control" id="policyRuleCommands">
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="policyRuleAddCommandButton">+</button>
+            </div>
+        </div>
+        <select id="deviceCommandFormInput" name="commandIds[]" multiple hidden
+        oninvalid="alert('Please add a Command before adding a Policy Rule')"></select>
+        @* Variable table *@
+        <table id="policyRuleCommandsOrderTable" class="table col-6">
+            <thead>
+                <th>@* For remove buttons *@</th>
+                <th>Commands</th>
+            </thead>
+            <tbody id="policyRuleCommandsOrderTableBody">
+                @*Populated by policyRule.js*@
+            </tbody>
+        </table>
+
+        @* State Transition select*@
+        <div class="form-group row">
+            <label for="policyRuleStateTransitionSelect" class="col-2 col-form-label" >State Transition<span hidden>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="policyRuleStateTransitionSelect" name="stateTransitionId" required>
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+        </div>
+
+        @* Threshold *@
+        <div class="form-group row">
+            <label for="threshold" class="col-2 col-form-label">Policy Condition Threshold<span>*</span></label>
+            <div class="col-4">
+                <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleThresholdFormInput" name="threshold" placeholder="Enter a threshold" required
+                oninvalid="this.setCustomValidity('Please Enter a Threshold')" onchange="setCustomValidity('')">
+            </div>
+        </div>
+
+        @* Sampling Rate Factor *@
+        <div class="form-group row">
+            <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
+            <div class="col-4">
+                <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleSamplingRateFactorFormInput" name="samplingRateFactor" placeholder="Enter Sampling Rate Factor" required
+                oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')">
+            </div>
+        </div>
+
+        @* Submit *@
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <button type="submit" id="policyRuleSubmitFormButton" class="btn btn-primary btn-block">Add</button>
+            </div>
+            <div class="col-2">
+                <button type="button" id="policyRuleClearFormButton" class="btn btn-secondary btn-block">Clear</button>
+            </div>
+        </div>
+    }
+
+<table id="policyRuleTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>actions</th>
+            <th>device type</th>
+            <th>policy condition(s)</th>
+            <th>device command(s)</th>
+            <th>start state</th>
+            <th>end state</th>
+            <th>sampling rate</th>
+            <th>threshold</th>
+        </tr>
+    </thead>
+    <tbody id="policyRuleTableBody"></tbody>
+</table>
+
+</div> 

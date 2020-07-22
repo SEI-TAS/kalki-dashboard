@@ -1,24 +1,44 @@
-# From https://semaphoreci.com/community/tutorials/dockerizing-a-java-play-application
-# See above for explaination of each line.
-FROM openjdk:8
+# First stage: getting kalki-db
+FROM kalki/kalki-db-env AS kalki_db
 
-ENV PROJECT_HOME /usr/src
-RUN mkdir -p $PROJECT_HOME/activator $PROJECT_HOME/app
+################################################################################################
+# Second stage: build env.
+FROM openjdk:8-jdk-alpine AS build_env
 
-WORKDIR $PROJECT_HOME/activator
+RUN apk --no-cache add bash
 
-RUN wget http://downloads.typesafe.com/typesafe-activator/1.3.10/typesafe-activator-1.3.10.zip && \
-    unzip typesafe-activator-1.3.10.zip
+# Installing SBT
+ENV SBT_VERSION 1.3.8
+RUN wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz
+RUN tar -zxvf sbt.tgz
+RUN /sbt/bin/sbt sbtVersion
 
-ENV PATH $PROJECT_HOME/activator/activator-dist-1.3.10/bin:$PATH
-ENV PATH $PROJECT_HOME/build/target/universal/stage/bin:$PATH
-COPY . $PROJECT_HOME/app
-WORKDIR $PROJECT_HOME/app/dashboard
+# Get deployed kalki-db from prev stage.
+COPY --from=kalki_db /home/gradle/.m2 /root/.m2
+
+# Copying code and conf
+COPY dashboard /dashboard
+COPY temp.conf /dashboard/conf/application.conf
+
+# Getting deps, compiling and creating dist.
+WORKDIR /dashboard
+RUN /sbt/bin/sbt update
+RUN /sbt/bin/sbt dist
+
+################################################################################################
+# Third stage: actual run environment.
+FROM openjdk:8-jre-alpine
+
+RUN apk --no-cache add bash
+
 EXPOSE 9000
 
-# Hacky way to download the activator dependencies.
-# The server gets terminated automatically because STDIN gets closed at EOF.
-# https://github.com/playframework/playframework/issues/4001
-RUN activator run
+ARG PROJECT_NAME=kalki-dashboard
+ARG PROJECT_VERSION=1.6.0
 
-CMD ["activator", "run"]
+COPY --from=build_env /dashboard/target/universal/$PROJECT_NAME-$PROJECT_VERSION.zip /$PROJECT_NAME.zip
+RUN unzip $PROJECT_NAME.zip && \
+    rm $PROJECT_NAME.zip
+
+WORKDIR /$PROJECT_NAME-$PROJECT_VERSION
+ENTRYPOINT ["bin/kalki-dashboard"]
