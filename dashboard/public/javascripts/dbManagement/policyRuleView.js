@@ -188,6 +188,7 @@ jQuery(document).ready(($) => {
             return svg.node();
         }
 
+        $("#svg").empty()
         // Make the call to actually draw the chart
         chart()
     }
