@@ -115,6 +115,7 @@ public class DeviceController extends Controller {
     }
 
     public CompletionStage<Result> addOrUpdateDevice() {
+
         return CompletableFuture.supplyAsync(() -> {
             DynamicForm deviceForm = formFactory.form();
             DynamicForm filledForm = deviceForm.bindFromRequest();
@@ -125,7 +126,13 @@ public class DeviceController extends Controller {
                 String description = filledForm.get("description");
                 String ip = filledForm.get("ip");
                 int typeId = Integer.parseInt(filledForm.get("typeId"));
-                int groupId = Integer.parseInt(filledForm.get("groupId"));
+                int groupId;
+                if(filledForm.get("groupId") == null) {
+                    groupId = 0;
+                }
+                else {
+                    groupId = Integer.parseInt(filledForm.get("groupId"));
+                }
                 int statusHistorySize = Integer.parseInt(filledForm.get("statusHistorySize"));
                 int samplingRate = Integer.parseInt(filledForm.get("samplingRate"));
                 int dataNode = Integer.parseInt(filledForm.get("dataNode"));
@@ -150,8 +157,8 @@ public class DeviceController extends Controller {
                     d.setTagIds(tagIdsList);
                 }
 
+                editDevice();
                 d.setId(this.updatingId);
-
                 this.updatingId = -1;
 
                 int n = d.insertOrUpdate();
