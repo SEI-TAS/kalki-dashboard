@@ -69,7 +69,7 @@ To execute the program inside docker, execute the following command:
 
 Alternatively, to run the container development environment (ignoring any already running containers with Kalki DB), which will also start a local container with the Kalki DB, execute:
 
-`bash run_compose.sh docker-compose-dev.yml`
+`bash run_compose.sh dev`
 
 You can stop viewing the logs with `<Ctrl+C>`, and the app will continue running on the background.
 
@@ -80,6 +80,11 @@ To see the logs:
 To stop it:
 
 `bash stop_compose.sh`
+
+Alternatively, if running the container development environment, execute:
+
+`bash stop_compose.sh dev`
+
 
 ## Debugging Tips
 * Always check dev tools console for javascript errors first since these are the most common (probably obvious)
