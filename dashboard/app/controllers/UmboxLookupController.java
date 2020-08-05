@@ -119,35 +119,30 @@ public class UmboxLookupController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 UmboxLookup ul = filledForm.get();
-                if (ul.getUmboxImageId() == null) {  //adding multiple image to dag order relationships
-                    //convert imageId to dag order map JSON to java map
+                // Editing
+                if(this.updatingId > -1) {
+                    UmboxLookup editLookup = new UmboxLookup(this.updatingId, ul.getSecurityStateId(),ul.getDeviceTypeId(), ul.getUmboxImageId(), ul.getDagOrder());
+                    insertId = editLookup.insertOrUpdate();
+                }
+                else {
                     String dagOrderJsonString = filledForm.field("imageIdDagOrderMap").getValue().get();
-                    ObjectMapper mapper = new ObjectMapper();
-                    Map<String, String> imageIdToDagOrderMap = new HashMap<String, String>();
 
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    Map<String, String> imageIdToDagOrderMap = new HashMap<String, String>();
                     try {
                         imageIdToDagOrderMap = mapper.readValue(dagOrderJsonString, Map.class);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
-//                    Integer stateId = ul.getStateId();
-//                    Integer deviceTypeId = ul.getDeviceTypeId();
-
-                    //insert a umbox lookup for each relationship
                     for (String umboxImageId : imageIdToDagOrderMap.keySet()) {
                         String dagOrder = imageIdToDagOrderMap.get(umboxImageId);
-                        // TODO is the security state of 1 acceptable here? Had to add in devicetypeid as well to compile, which I think is also wrong.
-                        UmboxLookup newLookup = new UmboxLookup(1, 1, Integer.parseInt(umboxImageId), Integer.parseInt(dagOrder));
+                        UmboxLookup newLookup = new UmboxLookup(ul.getSecurityStateId(), ul.getDeviceTypeId(), Integer.parseInt(umboxImageId), Integer.parseInt(dagOrder));
                         insertId = newLookup.insertOrUpdate();
                     }
-                } else {  //updating with only a single image and dag order
-                    ul.setId(this.updatingId);
-                    insertId = ul.insertOrUpdate();
                 }
             }
-
+            
             this.updatingId = -1;
 
             return redirect(routes.DBManagementController.dbManagementDeviceTypeView(insertId));
