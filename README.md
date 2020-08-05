@@ -61,9 +61,15 @@ Alternatively, a specific configuration present in the `deployments` folder can 
 
 `bash build_container.sh <deployment_folder_name>`
 
+NOTE: The "dev" configuration can be used along with the docker-compose-dev.yml configuration to run a fully contained Dashboard plus database. This can be especially useful on MacOS, where host networking doesn't work properly.
+
 To execute the program inside docker, execute the following command:
 
 `bash run_compose.sh`
+
+Alternatively, to run the container development environment (ignoring any already running containers with Kalki DB), which will also start a local container with the Kalki DB, execute:
+
+`bash run_compose.sh docker-compose-dev.yml`
 
 You can stop viewing the logs with `<Ctrl+C>`, and the app will continue running on the background.
 
