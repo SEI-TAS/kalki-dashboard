@@ -171,7 +171,6 @@ jQuery(document).ready(($) => {
             $.each(JSON.parse(umboxImages), (id, umboxImage) => {
                 umboxImageIDtoNameMap[umboxImage.id] = umboxImage.name;
                 umboxImageNameToIdMap[umboxImage.name] = umboxImage.id;
-
                 $("#umboxLookupContent #umboxImage").append("<option id='umboxImageOption" + umboxImage.id + "' value='" + umboxImage.id + "'>"
                     + umboxImage.name + "</option>");
             });
@@ -188,7 +187,7 @@ jQuery(document).ready(($) => {
 
         $.get("/umbox-lookups", (umboxLookups) => {
             $.each(JSON.parse(umboxLookups), (index, umboxLookup) => {
-                let key = umboxLookup.deviceTypeId.toString() + umboxLookup.stateId.toString();
+                let key = umboxLookup.deviceTypeId.toString() + umboxLookup.securityStateId.toString();
 
                 if (globalDeviceTypeAndStateOrderMap[key] == null) {
                     globalDeviceTypeAndStateOrderMap[key] = new Set();
@@ -208,7 +207,7 @@ jQuery(document).ready(($) => {
                     "        </div>" +
                     "    </td>\n" +
                     "    <td id='deviceType" + umboxLookup.id + "'>" + deviceTypeIdToNameMap[umboxLookup.deviceTypeId] + "</td>\n" +
-                    "    <td id='securityState" + umboxLookup.id + "'>" + stateIdToNameMap[umboxLookup.stateId] + "</td>\n" +
+                    "    <td id='securityState" + umboxLookup.id + "'>" + stateIdToNameMap[umboxLookup.securityStateId] + "</td>\n" +
                     "    <td id='umboxImage" + umboxLookup.id + "'>" + umboxImageIDtoNameMap[umboxLookup.umboxImageId] + "</td>\n" +
                     "    <td class='fit' id='order" + umboxLookup.id + "'>" + umboxLookup.dagOrder + "</td>\n" +
                     "</tr>"
@@ -216,7 +215,6 @@ jQuery(document).ready(($) => {
 
                 umboxLookupTable.on("click", "#editButton" + umboxLookup.id, function () {
                     editing = true;
-
                     $.post("/edit-umbox-lookup", {id: umboxLookup.id}, function () {
                         let dagOrder = parseInt($("#umboxLookupTable #order" + umboxLookup.id).html());
                         let umboxImageId = umboxImageNameToIdMap[$("#umboxLookupTable #umboxImage" + umboxLookup.id).html()];
@@ -229,6 +227,7 @@ jQuery(document).ready(($) => {
                         $("#umboxLookupContent .form-control#securityState").val(stateNameToIdMap[$("#umboxLookupTable #securityState" + umboxLookup.id).html()]);
                         $("#umboxLookupContent .form-control#umboxImage").val(umboxImageId);
                         $("#umboxLookupContent .form-control#order").val(dagOrder);
+                        $("#umboxLookupContent #orderFormInput").val("{\"" + umboxImageId + "\":\"" + dagOrder + "\"}");
                         $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
 
                         editingDagOrder = dagOrder;
@@ -279,8 +278,8 @@ jQuery(document).ready(($) => {
     $("#umboxLookupContent #addOrderButton").click(function () {
         let umboxImageInput = $(".form-control#umboxImage");
         let orderInput = $(".form-control#order");
-
         if (addOrderRow(umboxImageInput.val(), orderInput.val())) { //if the add was successful
+
             umboxImageInput.val(umboxImageInput.find("option:first").val());
             orderInput.val(1);
         }
@@ -313,6 +312,7 @@ jQuery(document).ready(($) => {
         if (usedDagOrders) {
             let duplicateImageIds = new Set();
             let duplicateOrders = new Set();
+            
             Object.keys(currentUmboxImageIdDagOrderMap).forEach((umboxImageId) => {
                 let dagOrder = parseInt(currentUmboxImageIdDagOrderMap[umboxImageId]);
                 let imageId = parseInt(umboxImageId);
@@ -328,7 +328,6 @@ jQuery(document).ready(($) => {
             });
 
             retVal = !(areDupImgIds || areDupOrders);
-            console.log(retVal);
 
             if (retVal == false) {
                 let alertMessage = "Error adding umboxLookup:\n";
@@ -356,3 +355,4 @@ jQuery(document).ready(($) => {
         getUmboxLookups();
     });
 });
+
