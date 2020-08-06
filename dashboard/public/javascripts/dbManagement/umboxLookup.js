@@ -312,7 +312,7 @@ jQuery(document).ready(($) => {
         if (usedDagOrders) {
             let duplicateImageIds = new Set();
             let duplicateOrders = new Set();
-            console.log("HA");
+            
             Object.keys(currentUmboxImageIdDagOrderMap).forEach((umboxImageId) => {
                 let dagOrder = parseInt(currentUmboxImageIdDagOrderMap[umboxImageId]);
                 let imageId = parseInt(umboxImageId);
