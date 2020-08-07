@@ -144,7 +144,7 @@ public class CommandController extends Controller {
                 this.updatingId = -1;
 
                 int n = command.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementOtherView(n));
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(n));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
