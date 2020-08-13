@@ -43,16 +43,18 @@ jQuery(document).ready(($) => {
     let deviceTypeNametoIDMap = {};
 
     async function getDeviceTypes() {
-        $(".form-control#deviceTypeSelect").empty();
+        $("#CommandContent #deviceTypeSelect").empty();
 
         return $.get("/device-types", (deviceTypes) => {
             $.each(JSON.parse(deviceTypes), (id, deviceType) => {
-                $(".form-control#deviceTypeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
+                $("#CommandContent #deviceTypeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
                     + deviceType.name +
                     "</option>")
                 deviceTypeIDtoNameMap[deviceType.id] = deviceType.name;
                 deviceTypeNametoIDMap[deviceType.name] = deviceType.id;
             });
+            let type = $("#type").val(); 
+            $("#CommandContent #deviceTypeSelect").val(type);
         });
     }
 
@@ -61,8 +63,9 @@ jQuery(document).ready(($) => {
         await getDeviceTypes();
 
         commandTable.clear();
+        commandTable.draw();
 
-        $.get("/commands", (commands) => {
+        $.get("/commands-device-type/?id="+$("#type").val(), (commands) => {
             $.each(JSON.parse(commands), (index, command) => {
                 let newRow = "<tr id='tableRow" + command.id + "'>\n" +
                     "    <td class='fit'>" +
@@ -112,12 +115,16 @@ jQuery(document).ready(($) => {
             $("#commandContent #submitFormButton").html("Add");
             $("#commandContent #clearFormButton").html("Clear");
             $("#commandContent .form-group #name").val("");
-            deviceTypeSelect.val(deviceTypeSelect.find("option:first").val()).change();
+            //deviceTypeSelect.val(deviceTypeSelect.find("option:first").val()).change();
         });
     });
 
     //only load data when tab is active
     $('a[href="#CommandContent"]').on('shown.bs.tab', function (e) {
+        getCommands();
+    });
+
+    $("#type").change(function() {
         getCommands();
     });
 });

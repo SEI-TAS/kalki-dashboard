@@ -94,9 +94,21 @@ public class CommandController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getCommandsByDeviceType(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<DeviceCommand> commands = DeviceCommandDAO.findAllCommandsByDeviceType(id);
+            try {
+                return ok(ow.writeValueAsString(commands));
+            } catch (JsonProcessingException e) {
+                return ok();
+            }
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> getCommandsByDevice(int id) {
         return CompletableFuture.supplyAsync(() -> {
             Device device = DeviceDAO.findDevice(id);
+            System.out.println(device);
             List<DeviceCommand> commands = new ArrayList<>();
             if(device != null) {
                 List<DeviceCommandLookup> lookups = DeviceCommandLookupDAO.findCommandLookupsByDevice(device.getId());

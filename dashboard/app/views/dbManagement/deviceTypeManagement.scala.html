@@ -36,18 +36,20 @@
 
     @*The tabs of the db management screen*@
     <h4>Device Type Configuration</h4>
+    <div class="form-group row">
+        <label for="type" class="col-2 col-form-label">Device Type</label>
+        <div class="col-4">
+            <select class="form-control" id="type" name="deviceTypeId" required  onchange="changeDevice(this)">
+                @*Populated by dbManagement.js*@
+            </select>
+        </div>
+    </div>
     <ul class="nav nav-tabs">
         <li class="nav-item tab">
-            <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#DeviceTypeContent" id="default-tab">Device Type</a>
-        </li>
-        <li class="nav-item tab">
-        	<a class="nav-link" data-toggle="tab" href="#CommandContent">Command</a>
+        	<a class="nav-link" data-toggle="tab" aria-expanded="true" id="default-tab" href="#CommandContent">Command</a>
 		</li>
         <li class="nav-item tab">
             <a class="nav-link" data-toggle="tab" href="#AlertTypeLookupContent">Alert Type</a>
-        </li>
-        <li class="nav-item tab">
-            <a class="nav-link" data-toggle="tab" href="#CommandLookupContent">Command Actions</a>
         </li>
         <li class="nav-item tab">
             <a class="nav-link" data-toggle="tab" href="#UmboxLookupContent">Umbox Actions</a>
@@ -71,9 +73,6 @@
         <div id="AlertTypeLookupContent" class="tab-pane fade">
             @dbManagement.deviceType.alertTypeLookupContent()
         </div>
-        <div id="CommandLookupContent" class="tab-pane fade">
-            @dbManagement.deviceType.commandLookupContent()
-        </div>
         <div id="UmboxLookupContent" class="tab-pane fade">
             @dbManagement.deviceType.umboxLookupContent()
         </div>
@@ -88,7 +87,6 @@
 } {
 <script>if(@insertId == -1) alert("insert was unsuccessful")</script>
 <script src="@routes.Assets.versioned("javascripts/dbManagement/alertTypeLookup.js")" type="text/javascript"></script>
-<script src="@routes.Assets.versioned("javascripts/dbManagement/deviceType.js")" type="text/javascript"></script>
 <script src="@routes.Assets.versioned("javascripts/dbManagement/commandLookup.js")" type="text/javascript"></script>
 <script src="@routes.Assets.versioned("javascripts/dbManagement/umboxLookup.js")" type="text/javascript"></script>
 <script src="@routes.Assets.versioned("javascripts/dbManagement/policyRule.js")" type="text/javascript"></script>

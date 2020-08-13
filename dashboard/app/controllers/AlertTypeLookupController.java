@@ -80,6 +80,17 @@ public class AlertTypeLookupController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getAlertTypeLookupsByDeviceType(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<AlertTypeLookup> alertTypeLookups = AlertTypeLookupDAO.findAlertTypeLookupsByDeviceType(id);
+            try {
+                return ok(ow.writeValueAsString(alertTypeLookups));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> addOrUpdateAlertTypeLookup() {
         return CompletableFuture.supplyAsync(() -> {
             Form<AlertTypeLookup> alertTypeLookupForm = formFactory.form(AlertTypeLookup.class);

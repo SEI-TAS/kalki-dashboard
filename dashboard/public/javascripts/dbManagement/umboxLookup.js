@@ -145,6 +145,8 @@ jQuery(document).ready(($) => {
 
                 $("#umboxLookupContent #type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
             });
+            let type = $("#type").val();
+            $("#umboxLookupContent #type").val(type);
         });
     }
 
@@ -261,7 +263,7 @@ jQuery(document).ready(($) => {
         $.post("/clear-umbox-lookup-form", {}, function () {
             $("#umboxLookupContent #submitFormButton").html("Add");
             $("#umboxLookupContent #clearFormButton").html("Clear");
-            typeSelect.val(typeSelect.find("option:first").val());
+            //typeSelect.val(typeSelect.find("option:first").val());
             securityStateSelect.val(securityStateSelect.find("option:first").val());
             umboxImageSelect.val(umboxImageSelect.find("option:first").val());
             $("#umboxLookupContent .form-control#order").val(1);

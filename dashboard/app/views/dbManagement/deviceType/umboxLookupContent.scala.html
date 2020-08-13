@@ -35,7 +35,7 @@
     @helper.form(action = routes.UmboxLookupController.addOrUpdateUmboxLookup(), 'enctype -> "multipart/form-data") {
         <h4>Umbox Actions</h4>
         @* Type *@
-        <div class="form-group row">
+        <div class="form-group row" hidden>
             <label for="type" class="col-2 col-form-label">Device Type<span>*</span></label>
             <div class="col-4">
                 <select class="form-control" id="type" name="deviceTypeId" required>

@@ -215,6 +215,8 @@ jQuery(document).ready(($) => {
 
                 $("#policyRuleContent #policyRuleDeviceTypeSelect").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
             });
+            let type = $("#type").val(); 
+            $("#policyRuleContent #policyRuleDeviceTypeSelect").val(type);
         });
     }
 
@@ -449,9 +451,9 @@ jQuery(document).ready(($) => {
 
         $.post("/clear-policy-rule-form", {}, function () {
             // Reset device types
-            deviceType[0].selectedIndex = 0;
+            //deviceType[0].selectedIndex = 0;
             // For above, could also use deviceType.val(deviceType.find("option:first").val());
-            currentDeviceTypeId = parseInt(deviceType.val());
+            //currentDeviceTypeId = parseInt(deviceType.val());
             getAlertTypeLookups();
             getCommands();
 

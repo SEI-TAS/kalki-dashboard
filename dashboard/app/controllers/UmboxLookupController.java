@@ -114,6 +114,7 @@ public class UmboxLookupController extends Controller {
         return CompletableFuture.supplyAsync(() -> {
             Form<UmboxLookup> umboxLookupForm = formFactory.form(UmboxLookup.class);
             Form<UmboxLookup> filledForm = umboxLookupForm.bindFromRequest();
+
             int insertId = -1;
             if (filledForm.hasErrors()) {
                 return badRequest(views.html.form.render(filledForm));

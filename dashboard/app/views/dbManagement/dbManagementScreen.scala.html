@@ -37,8 +37,11 @@
         @*The tabs of the db management screen*@
         <h4>General Configuration</h4>
         <ul class="nav nav-tabs">
+            <li class="nav-item tab">
+                <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#DeviceTypeContent" id="default-tab">Device Type</a>
+            </li>
             <li role="presentation" class="nav-item tab">
-                <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#AlertTypeContent" id="default-tab">AlertType</a>
+                <a class="nav-link" data-toggle="tab" href="#AlertTypeContent">AlertType</a>
             </li>
             <li class="nav-item tab">
                 <a class="nav-link" data-toggle="tab" href="#DeviceGroupContent">Group</a>
@@ -59,7 +62,10 @@
 
         @*The content in the db management tabs*@
         <div class="tab-content">
-            <div id="AlertTypeContent" class="tab-pane fade active show" aria-expanded="true">
+            <div id="DeviceTypeContent" class="tab-pane fade show active" aria-expanded="true">
+                @dbManagement.deviceType.deviceTypeContent()
+            </div>
+            <div id="AlertTypeContent" class="tab-pane fade">
                 @dbManagement.other.alertTypeContent()
             </div>
             <div id="DeviceGroupContent" class="tab-pane fade">
@@ -82,6 +88,7 @@
 } {
     <script>if(@insertId == -1) alert("insert was unsuccessful")</script>
     <script src="@routes.Assets.versioned("javascripts/dbManagement/alertType.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/dbManagement/deviceType.js")" type="text/javascript"></script>
     <script src="@routes.Assets.versioned("javascripts/dbManagement/group.js")" type="text/javascript"></script>
     <script src="@routes.Assets.versioned("javascripts/dbManagement/securityState.js")" type="text/javascript"></script>
     <script src="@routes.Assets.versioned("javascripts/dbManagement/tag.js")" type="text/javascript"></script>
