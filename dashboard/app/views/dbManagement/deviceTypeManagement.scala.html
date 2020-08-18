@@ -64,11 +64,8 @@
 
     @*The content in the db management tabs*@
     <div class="tab-content">
-        <div id="DeviceTypeContent" class="tab-pane fade show active" aria-expanded="true">
-            @dbManagement.deviceType.deviceTypeContent()
-        </div>
-        <div id="CommandContent" class="tab-pane fade">
-        	@dbManagement.other.commandContent()
+        <div id="CommandContent" class="tab-pane fade show active" aria-expanded="true">
+        	@dbManagement.deviceType.commandContent()
 		</div>
         <div id="AlertTypeLookupContent" class="tab-pane fade">
             @dbManagement.deviceType.alertTypeLookupContent()

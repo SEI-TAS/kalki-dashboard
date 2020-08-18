@@ -98,6 +98,7 @@ GET     /policy-conditions                  controllers.PolicyConditionControlle
 POST    /add-or-update-policy-condition     controllers.PolicyConditionController.addOrUpdatePolicyCondition()
 
 GET     /policy-rule                        controllers.PolicyRuleController.getPolicyRule(id: Int ?= -1)
+GET     /policy-rules-by-id                 controllers.PolicyRuleController.getPolicyRulesByDeviceId(id: Int ?= -1)
 GET     /policy-rules                       controllers.PolicyRuleController.getPolicyRules()
 POST    /edit-policy-rule                   controllers.PolicyRuleController.editPolicyRule()
 POST    /add-or-update-policy-rule          controllers.PolicyRuleController.addOrUpdatePolicyRule()

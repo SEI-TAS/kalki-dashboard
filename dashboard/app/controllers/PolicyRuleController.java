@@ -95,6 +95,17 @@ public class PolicyRuleController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getPolicyRulesByDeviceId(int deviceId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<PolicyRule> policyRules = PolicyRuleDAO.findPolicyRules(deviceId);
+            try {
+                return ok(ow.writeValueAsString(policyRules));
+            } catch (JsonProcessingException ignored) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> addOrUpdatePolicyRule() {
         return CompletableFuture.supplyAsync(() -> {
             // We need to create a policy condition which will be used in the policy rule

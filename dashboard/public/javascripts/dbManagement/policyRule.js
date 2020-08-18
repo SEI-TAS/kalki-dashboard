@@ -327,9 +327,10 @@ jQuery(document).ready(($) => {
         await getCommandLookups();
 
         policyRuleTable.clear();
+        policyRuleTable.draw()
 
         // Populate the table at the bottom of the page
-        $.get("/policy-rules", (policyRules) => {
+        $.get("/policy-rules-by-id?id="+$("#type").val(), (policyRules) => {
             $.each(JSON.parse(policyRules), (index, policyRule) => {
                 // Create a custom strong for the alertTypeIds, which shows text instead of actual ids
                 let alertTypeArray = [];
@@ -512,4 +513,9 @@ jQuery(document).ready(($) => {
     $('a[href="#PolicyRuleContent"]').on('shown.bs.tab', function (e) {
         getDevicePolicies();
     });
+
+    $("#type").change(function() {
+        getDevicePolicies();
+    });
+
 }); 

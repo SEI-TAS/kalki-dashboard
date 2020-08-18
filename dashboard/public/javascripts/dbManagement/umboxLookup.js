@@ -186,8 +186,9 @@ jQuery(document).ready(($) => {
         await getUmboxImages();
 
         umboxLookupTable.clear();
+        umboxLookupTable.draw();
 
-        $.get("/umbox-lookups", (umboxLookups) => {
+        $.get("/get-umbox-lookups-by-device?id="+$("#type").val(), (umboxLookups) => {
             $.each(JSON.parse(umboxLookups), (index, umboxLookup) => {
                 let key = umboxLookup.deviceTypeId.toString() + umboxLookup.securityStateId.toString();
 
@@ -354,6 +355,10 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#UmboxLookupContent"]').on('shown.bs.tab', function (e) {
+        getUmboxLookups();
+    });
+
+    $("#type").change(function() {
         getUmboxLookups();
     });
 });
