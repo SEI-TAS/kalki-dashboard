@@ -283,10 +283,16 @@ jQuery(document).ready(($) => {
      */
     async function getPolicyRuleData() {
         links = []
-        return $.get("/policy-rules", (policyRules) => {
+        return $.get("/policy-rules-by-id?id="+$("#type").val(), (policyRules) => {
             $.each(JSON.parse(policyRules), (index, policyRule) => {
                 // Get the string names using the provided maps
-                let deviceTypeName = deviceTypeIdToNameMap[policyRule.deviceTypeId];
+                let deviceTypeName;
+                if(policyRule.deviceTypeId) {
+                    deviceTypeName = deviceTypeIdToNameMap[policyRule.deviceTypeId];
+                }
+                else {
+                    deviceTypeName = "All";
+                }
                 let stateSource = stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]];
                 let stateTarget = stateIdToNameMap[stateTransitionIdToFinishMap[policyRule.stateTransitionId]];
 
@@ -330,6 +336,9 @@ jQuery(document).ready(($) => {
      * Only load data when tab is active
      */
     $('a[href="#PolicyRuleViewContent"]').on('shown.bs.tab', function (e) {
+        getPolicyRuleView();
+    });
+    $("#type").change(function() {
         getPolicyRuleView();
     });
 });
