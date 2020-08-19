@@ -46,25 +46,32 @@
     </div>
     <ul class="nav nav-tabs">
         <li class="nav-item tab">
-        	<a class="nav-link" data-toggle="tab" aria-expanded="true" id="default-tab" href="#CommandContent">Command</a>
-		</li>
-        <li class="nav-item tab">
-            <a class="nav-link" data-toggle="tab" href="#AlertTypeLookupContent">Alert Type</a>
-        </li>
-        <li class="nav-item tab">
-            <a class="nav-link" data-toggle="tab" href="#UmboxLookupContent">Umbox Actions</a>
-        </li>
-        <li class="nav-item tab">
-            <a class="nav-link" data-toggle="tab" href="#PolicyRuleContent">Policy Rule</a>
+            <a class="nav-link" data-toggle="tab" aria-expanded="true" id="default-tab"  href="#PolicyRuleContent">Policy Rules</a>
         </li>
         <li class="nav-item tab">
             <a class="nav-link" data-toggle="tab" href="#PolicyRuleViewContent">Policy Rule View</a>
         </li>
+        <li class="nav-item tab">
+        	<a class="nav-link" data-toggle="tab" href="#CommandContent">Commands</a>
+		</li>
+        <li class="nav-item tab">
+            <a class="nav-link" data-toggle="tab" href="#AlertTypeLookupContent">Alert Types</a>
+        </li>
+        <li class="nav-item tab">
+            <a class="nav-link" data-toggle="tab" href="#UmboxLookupContent">Umbox Actions</a>
+        </li>
+        
     </ul>
 
     @*The content in the db management tabs*@
     <div class="tab-content">
-        <div id="CommandContent" class="tab-pane fade show active" aria-expanded="true">
+        <div id="PolicyRuleContent" class="tab-pane fade show active" aria-expanded="true">
+            @dbManagement.deviceType.policyRuleContent()
+        </div>
+        <div id="PolicyRuleViewContent" class="tab-pane fade">
+            @dbManagement.deviceType.policyRuleView()
+        </div>
+        <div id="CommandContent" class="tab-pane fade" >
         	@dbManagement.deviceType.commandContent()
 		</div>
         <div id="AlertTypeLookupContent" class="tab-pane fade">
@@ -72,12 +79,6 @@
         </div>
         <div id="UmboxLookupContent" class="tab-pane fade">
             @dbManagement.deviceType.umboxLookupContent()
-        </div>
-        <div id="PolicyRuleContent" class="tab-pane fade">
-            @dbManagement.deviceType.policyRuleContent()
-        </div>
-        <div id="PolicyRuleViewContent" class="tab-pane fade">
-            @dbManagement.deviceType.policyRuleView()
         </div>
     </div>
 </div>

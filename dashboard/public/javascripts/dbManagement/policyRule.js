@@ -348,6 +348,14 @@ jQuery(document).ready(($) => {
                     }
                 });
 
+                var deviceTypeName;
+                if(policyRule.deviceTypeId) { 
+                    deviceTypeName =  deviceTypeIdToNameMap[policyRule.deviceTypeId];
+                }
+                else {
+                    deviceTypeName = "All";
+                }
+
                 // Generate the table row and add it to the table
                 let newRow = "<tr id='tableRow" + policyRule.id + "'>\n" +
                     "    <td class='fit'>" +
@@ -356,7 +364,7 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + policyRule.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeIdToNameMap[policyRule.deviceTypeId] + "</td>\n" +
+                    "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeName + "</td>\n" +
                     "    <td id='policyCondition" + policyRule.id + "'>" + alertTypeArray.join(", ") + "</td>\n" +
                     "    <td id='deviceCommand" + policyRule.id + "'>" + deviceCommandArray.join(", ") + "</td>\n" +
                     "    <td id='startSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]] + "</td>\n" +

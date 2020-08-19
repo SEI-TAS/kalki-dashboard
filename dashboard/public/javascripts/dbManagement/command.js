@@ -74,9 +74,9 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + command.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
+                    "    <td id='deviceType" + command.id + "'>" + deviceTypeIDtoNameMap[command.deviceTypeId] + "</td>\n" +
                     "    <td class='fit' id='id" + command.id + "'>" + command.id + "</td>\n" +
                     "    <td id='name" + command.id + "'>" + command.name + "</td>\n" +
-                    "    <td id='deviceType" + command.id + "'>" + deviceTypeIDtoNameMap[command.deviceTypeId] + "</td>\n" +
                     "</tr>";
                 commandTable.row.add($(newRow)).draw();
 

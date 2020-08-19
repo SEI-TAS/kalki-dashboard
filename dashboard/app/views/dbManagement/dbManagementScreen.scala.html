@@ -38,25 +38,25 @@
         <h4>General Configuration</h4>
         <ul class="nav nav-tabs">
             <li class="nav-item tab">
-                <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#DeviceTypeContent" id="default-tab">Device Type</a>
+                <a class="nav-link" data-toggle="tab" aria-expanded="true" href="#DeviceTypeContent" id="default-tab">Device Types</a>
+            </li>
+            <li class="nav-item tab">
+                <a class="nav-link" data-toggle="tab" href="#DataNodeContent">Data Nodes</a>
+            </li>
+            <li class="nav-item tab">
+                <a class="nav-link" data-toggle="tab" href="#SecurityStateContent">Security States</a>
+            </li>
+            <li class="nav-item tab">
+                <a class="nav-link" data-toggle="tab" href="#UmboxImageContent">Umbox Images</a>
             </li>
             <li role="presentation" class="nav-item tab">
-                <a class="nav-link" data-toggle="tab" href="#AlertTypeContent">AlertType</a>
+                <a class="nav-link" data-toggle="tab" href="#AlertTypeContent">Alert Types</a>
             </li>
             <li class="nav-item tab">
-                <a class="nav-link" data-toggle="tab" href="#DeviceGroupContent">Group</a>
+                <a class="nav-link" data-toggle="tab" href="#DeviceGroupContent">Groups</a>
             </li>
             <li class="nav-item tab">
-                <a class="nav-link" data-toggle="tab" href="#SecurityStateContent">SecurityState</a>
-            </li>
-            <li class="nav-item tab">
-                <a class="nav-link" data-toggle="tab" href="#TagContent">Tag</a>
-            </li>
-            <li class="nav-item tab">
-                <a class="nav-link" data-toggle="tab" href="#UmboxImageContent">UmboxImage</a>
-            </li>
-            <li class="nav-item tab">
-                <a class="nav-link" data-toggle="tab" href="#DataNodeContent">Data Node</a>
+                <a class="nav-link" data-toggle="tab" href="#TagContent">Tags</a>
             </li>
         </ul>
 
@@ -65,23 +65,23 @@
             <div id="DeviceTypeContent" class="tab-pane fade show active" aria-expanded="true">
                 @dbManagement.other.deviceTypeContent()
             </div>
+            <div id="DataNodeContent" class="tab-pane fade">
+                @dbManagement.other.dataNodeContent()
+            </div>
+            <div id="SecurityStateContent" class="tab-pane fade">
+                @dbManagement.other.securityStateContent()
+            </div>
+            <div id="UmboxImageContent" class="tab-pane fade">
+                @dbManagement.other.umboxImageContent()
+            </div>
             <div id="AlertTypeContent" class="tab-pane fade">
                 @dbManagement.other.alertTypeContent()
             </div>
             <div id="DeviceGroupContent" class="tab-pane fade">
                 @dbManagement.other.groupContent()
             </div>
-            <div id="SecurityStateContent" class="tab-pane fade">
-                @dbManagement.other.securityStateContent()
-            </div>
             <div id="TagContent" class="tab-pane fade">
                 @dbManagement.other.tagContent()
-            </div>
-            <div id="UmboxImageContent" class="tab-pane fade">
-                @dbManagement.other.umboxImageContent()
-            </div>
-            <div id="DataNodeContent" class="tab-pane fade">
-                @dbManagement.other.dataNodeContent()
             </div>
         </div>
     </div>
