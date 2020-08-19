@@ -215,6 +215,8 @@ jQuery(document).ready(($) => {
 
                 $("#policyRuleContent #policyRuleDeviceTypeSelect").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
             });
+            let type = $("#type").val(); 
+            $("#policyRuleContent #policyRuleDeviceTypeSelect").val(type);
         });
     }
 
@@ -242,7 +244,15 @@ jQuery(document).ready(($) => {
                 stateTransitionStartToIdMap[transition.startStateId] = transition.id;
                 stateTransitionFinishToIdMap[transition.finishStateId] = transition.id;
 
-                $("#policyRuleContent #policyRuleStateTransitionSelect").append("<option id='typeOption" + transition.id + "' value='" + transition.id + "'>" + stateIdToNameMap[transition.startStateId] + " -> " + stateIdToNameMap[transition.finishStateId] + "</option>");
+                var startState;
+                if(transition.startStateId) {
+                	startState = stateIdToNameMap[transition.startStateId];
+                }
+                else {
+                	startState = "All";
+                }
+
+                $("#policyRuleContent #policyRuleStateTransitionSelect").append("<option id='typeOption" + transition.id + "' value='" + transition.id + "'>" + startState + " -> " + stateIdToNameMap[transition.finishStateId] + "</option>");
             });
         });
     }
@@ -325,9 +335,10 @@ jQuery(document).ready(($) => {
         await getCommandLookups();
 
         policyRuleTable.clear();
+        policyRuleTable.draw()
 
         // Populate the table at the bottom of the page
-        $.get("/policy-rules", (policyRules) => {
+        $.get("/policy-rules-by-id?id="+$("#type").val(), (policyRules) => {
             $.each(JSON.parse(policyRules), (index, policyRule) => {
                 // Create a custom strong for the alertTypeIds, which shows text instead of actual ids
                 let alertTypeArray = [];
@@ -345,6 +356,14 @@ jQuery(document).ready(($) => {
                     }
                 });
 
+                var deviceTypeName;
+                if(policyRule.deviceTypeId) { 
+                    deviceTypeName =  deviceTypeIdToNameMap[policyRule.deviceTypeId];
+                }
+                else {
+                    deviceTypeName = "All";
+                }
+
                 // Generate the table row and add it to the table
                 let newRow = "<tr id='tableRow" + policyRule.id + "'>\n" +
                     "    <td class='fit'>" +
@@ -353,7 +372,7 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + policyRule.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeIdToNameMap[policyRule.deviceTypeId] + "</td>\n" +
+                    "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeName + "</td>\n" +
                     "    <td id='policyCondition" + policyRule.id + "'>" + alertTypeArray.join(", ") + "</td>\n" +
                     "    <td id='deviceCommand" + policyRule.id + "'>" + deviceCommandArray.join(", ") + "</td>\n" +
                     "    <td id='startSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]] + "</td>\n" +
@@ -449,9 +468,9 @@ jQuery(document).ready(($) => {
 
         $.post("/clear-policy-rule-form", {}, function () {
             // Reset device types
-            deviceType[0].selectedIndex = 0;
+            //deviceType[0].selectedIndex = 0;
             // For above, could also use deviceType.val(deviceType.find("option:first").val());
-            currentDeviceTypeId = parseInt(deviceType.val());
+            //currentDeviceTypeId = parseInt(deviceType.val());
             getAlertTypeLookups();
             getCommands();
 
@@ -510,4 +529,9 @@ jQuery(document).ready(($) => {
     $('a[href="#PolicyRuleContent"]').on('shown.bs.tab', function (e) {
         getDevicePolicies();
     });
+
+    $("#type").change(function() {
+        getDevicePolicies();
+    });
+
 }); 

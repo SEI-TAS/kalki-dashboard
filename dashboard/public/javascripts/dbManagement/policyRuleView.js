@@ -147,6 +147,10 @@ jQuery(document).ready(($) => {
                 .attr("viewBox", [-width / 2, -height / 2, width, height])
                 .style("font", "12px sans-serif");
 
+            var div = d3.select("#svg").append("div")	
+			    .attr("class", "tooltip")				
+			    
+
             // Per-type markers, as they don't inherit styles.
             svg.append("defs").selectAll("marker")
                 .data(deviceTypes)
@@ -170,7 +174,7 @@ jQuery(document).ready(($) => {
                 .data(links)
                 .join("path")
                 .attr("stroke", d => deviceColors(d.deviceType))
-                .attr("marker-end", d => `url(${new URL(`#arrow-${d.deviceType}`, location)})`);
+                .attr("marker-end", d => `url(${new URL(`#arrow-${d.deviceType}`, location)})`)
 
             // For getting text on links, see the second part of this answer:
             //  https://stackoverflow.com/questions/33165265/show-tool-tip-on-links-of-force-directed-graph-in-d3js
@@ -195,7 +199,7 @@ jQuery(document).ready(($) => {
             node.append("circle")
                 .attr("stroke", "white")
                 .attr("stroke-width", 1.5)
-                .attr("r", 4);
+                .attr("r", 4)
 
             node.append("text")
                 .style("fill", "black")  // Set the text to be black
@@ -279,10 +283,16 @@ jQuery(document).ready(($) => {
      */
     async function getPolicyRuleData() {
         links = []
-        return $.get("/policy-rules", (policyRules) => {
+        return $.get("/policy-rules-by-id?id="+$("#type").val(), (policyRules) => {
             $.each(JSON.parse(policyRules), (index, policyRule) => {
                 // Get the string names using the provided maps
-                let deviceTypeName = deviceTypeIdToNameMap[policyRule.deviceTypeId];
+                let deviceTypeName;
+                if(policyRule.deviceTypeId) {
+                    deviceTypeName = deviceTypeIdToNameMap[policyRule.deviceTypeId];
+                }
+                else {
+                    deviceTypeName = "All";
+                }
                 let stateSource = stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]];
                 let stateTarget = stateIdToNameMap[stateTransitionIdToFinishMap[policyRule.stateTransitionId]];
 
@@ -326,6 +336,9 @@ jQuery(document).ready(($) => {
      * Only load data when tab is active
      */
     $('a[href="#PolicyRuleViewContent"]').on('shown.bs.tab', function (e) {
+        getPolicyRuleView();
+    });
+    $("#type").change(function() {
         getPolicyRuleView();
     });
 });

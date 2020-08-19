@@ -145,6 +145,8 @@ jQuery(document).ready(($) => {
 
                 $("#umboxLookupContent #type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
             });
+            let type = $("#type").val();
+            $("#umboxLookupContent #type").val(type);
         });
     }
 
@@ -184,8 +186,9 @@ jQuery(document).ready(($) => {
         await getUmboxImages();
 
         umboxLookupTable.clear();
+        umboxLookupTable.draw();
 
-        $.get("/umbox-lookups", (umboxLookups) => {
+        $.get("/get-umbox-lookups-by-device-type?id="+$("#type").val(), (umboxLookups) => {
             $.each(JSON.parse(umboxLookups), (index, umboxLookup) => {
                 let key = umboxLookup.deviceTypeId.toString() + umboxLookup.securityStateId.toString();
 
@@ -261,7 +264,7 @@ jQuery(document).ready(($) => {
         $.post("/clear-umbox-lookup-form", {}, function () {
             $("#umboxLookupContent #submitFormButton").html("Add");
             $("#umboxLookupContent #clearFormButton").html("Clear");
-            typeSelect.val(typeSelect.find("option:first").val());
+            //typeSelect.val(typeSelect.find("option:first").val());
             securityStateSelect.val(securityStateSelect.find("option:first").val());
             umboxImageSelect.val(umboxImageSelect.find("option:first").val());
             $("#umboxLookupContent .form-control#order").val(1);
@@ -352,6 +355,10 @@ jQuery(document).ready(($) => {
 
     //only load data when tab is active
     $('a[href="#UmboxLookupContent"]').on('shown.bs.tab', function (e) {
+        getUmboxLookups();
+    });
+
+    $("#type").change(function() {
         getUmboxLookups();
     });
 });

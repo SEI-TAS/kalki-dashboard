@@ -39,11 +39,12 @@ POST    /add-or-update-alert-type   controllers.AlertTypeController.addOrUpdateA
 POST    /delete-alert-type          controllers.AlertTypeController.deleteAlertType()
 POST    /clear-alert-type-form      controllers.AlertTypeController.clearAlertTypeForm()
 
-GET     /alert-type-lookups                controllers.AlertTypeLookupController.getAlertTypeLookups()
-POST    /edit-alert-type-lookup            controllers.AlertTypeLookupController.editAlertTypeLookup()
-POST    /add-or-update-alert-type-lookup   controllers.AlertTypeLookupController.addOrUpdateAlertTypeLookup()
-POST    /delete-alert-type-lookup          controllers.AlertTypeLookupController.deleteAlertTypeLookup()
-POST    /clear-alert-type-lookup-form      controllers.AlertTypeLookupController.clearAlertTypeLookupForm()
+GET     /alert-type-lookups                	controllers.AlertTypeLookupController.getAlertTypeLookups()
+GET     /alert-type-lookups-by-device-type/	controllers.AlertTypeLookupController.getAlertTypeLookupsByDeviceType(id: Int ?= -1)
+POST    /edit-alert-type-lookup            	controllers.AlertTypeLookupController.editAlertTypeLookup()
+POST    /add-or-update-alert-type-lookup   	controllers.AlertTypeLookupController.addOrUpdateAlertTypeLookup()
+POST    /delete-alert-type-lookup          	controllers.AlertTypeLookupController.deleteAlertTypeLookup()
+POST    /clear-alert-type-lookup-form      	controllers.AlertTypeLookupController.clearAlertTypeLookupForm()
 
 GET     /device-types               controllers.DeviceTypeController.getDeviceTypes()
 POST    /edit-device-type           controllers.DeviceTypeController.editDeviceType()
@@ -97,6 +98,7 @@ GET     /policy-conditions                  controllers.PolicyConditionControlle
 POST    /add-or-update-policy-condition     controllers.PolicyConditionController.addOrUpdatePolicyCondition()
 
 GET     /policy-rule                        controllers.PolicyRuleController.getPolicyRule(id: Int ?= -1)
+GET     /policy-rules-by-id                 controllers.PolicyRuleController.getPolicyRulesByDeviceId(id: Int ?= -1)
 GET     /policy-rules                       controllers.PolicyRuleController.getPolicyRules()
 POST    /edit-policy-rule                   controllers.PolicyRuleController.editPolicyRule()
 POST    /add-or-update-policy-rule          controllers.PolicyRuleController.addOrUpdatePolicyRule()
@@ -119,6 +121,7 @@ POST    /clear-command-lookup-form      controllers.CommandLookupController.clea
 
 GET     /umbox-lookups               controllers.UmboxLookupController.getUmboxLookups()
 GET     /get-umbox-lookups-by-device controllers.UmboxLookupController.getUmboxLookupsByDevice(id: Int ?= -1)
+GET     /get-umbox-lookups-by-device-type controllers.UmboxLookupController.getUmboxLookupsByDeviceType(id: Int ?= -1)
 POST    /edit-umbox-lookup           controllers.UmboxLookupController.editUmboxLookup()
 POST    /add-or-update-umbox-lookup  controllers.UmboxLookupController.addOrUpdateUmboxLookup()
 POST    /delete-umbox-lookup         controllers.UmboxLookupController.deleteUmboxLookup()
@@ -126,7 +129,8 @@ POST    /clear-umbox-lookup-form     controllers.UmboxLookupController.clearUmbo
 
 GET     /command                    controllers.CommandController.getCommand(id: Int ?= -1)
 GET     /commands                   controllers.CommandController.getCommands()
-GET     /get-commands-by-device     controllers.CommandController.getCommandsByDevice(id: Int ?= -1)
+GET     /commands-device-type/      controllers.CommandController.getCommandsByDeviceType(id: Int ?= -1)
+GET     /get-commands-by-device/    controllers.CommandController.getCommandsByDevice(id: Int ?= -1)
 POST    /edit-command               controllers.CommandController.editCommand()
 POST    /add-or-update-command      controllers.CommandController.addOrUpdateCommand()
 POST    /delete-command             controllers.CommandController.deleteCommand()
