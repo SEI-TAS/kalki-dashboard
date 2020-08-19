@@ -244,7 +244,15 @@ jQuery(document).ready(($) => {
                 stateTransitionStartToIdMap[transition.startStateId] = transition.id;
                 stateTransitionFinishToIdMap[transition.finishStateId] = transition.id;
 
-                $("#policyRuleContent #policyRuleStateTransitionSelect").append("<option id='typeOption" + transition.id + "' value='" + transition.id + "'>" + stateIdToNameMap[transition.startStateId] + " -> " + stateIdToNameMap[transition.finishStateId] + "</option>");
+                var startState;
+                if(transition.startStateId) {
+                	startState = stateIdToNameMap[transition.startStateId];
+                }
+                else {
+                	startState = "All";
+                }
+
+                $("#policyRuleContent #policyRuleStateTransitionSelect").append("<option id='typeOption" + transition.id + "' value='" + transition.id + "'>" + startState + " -> " + stateIdToNameMap[transition.finishStateId] + "</option>");
             });
         });
     }
