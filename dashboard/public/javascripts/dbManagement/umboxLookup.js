@@ -188,7 +188,7 @@ jQuery(document).ready(($) => {
         umboxLookupTable.clear();
         umboxLookupTable.draw();
 
-        $.get("/get-umbox-lookups-by-device?id="+$("#type").val(), (umboxLookups) => {
+        $.get("/get-umbox-lookups-by-device-type?id="+$("#type").val(), (umboxLookups) => {
             $.each(JSON.parse(umboxLookups), (index, umboxLookup) => {
                 let key = umboxLookup.deviceTypeId.toString() + umboxLookup.securityStateId.toString();
 

@@ -121,6 +121,7 @@ POST    /clear-command-lookup-form      controllers.CommandLookupController.clea
 
 GET     /umbox-lookups               controllers.UmboxLookupController.getUmboxLookups()
 GET     /get-umbox-lookups-by-device controllers.UmboxLookupController.getUmboxLookupsByDevice(id: Int ?= -1)
+GET     /get-umbox-lookups-by-device-type controllers.UmboxLookupController.getUmboxLookupsByDeviceType(id: Int ?= -1)
 POST    /edit-umbox-lookup           controllers.UmboxLookupController.editUmboxLookup()
 POST    /add-or-update-umbox-lookup  controllers.UmboxLookupController.addOrUpdateUmboxLookup()
 POST    /delete-umbox-lookup         controllers.UmboxLookupController.deleteUmboxLookup()
