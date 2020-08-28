@@ -123,7 +123,6 @@ jQuery(document).ready(($) => {
   		cy.layout({ name: 'circle'}).run();
   		cy.zoomingEnabled( false );
   		cy.nodes().ungrabify();
-  		cy.center();
 
   		cy.edges('edge').style({
 		    "curve-style": "bezier",
@@ -229,7 +228,11 @@ jQuery(document).ready(($) => {
         });
     }
 
-
+    /**
+     * Get policy conditions and saves them into two dictionaries to use
+     *
+     * @returns {Promise<*>} Return nothing when done
+     */
     async function getPolicyConditions() {
         return $.get("/policy-conditions", (policyConditions) => {
             $.each(JSON.parse(policyConditions), (id, policyCondition) => {
@@ -239,6 +242,11 @@ jQuery(document).ready(($) => {
         });
     }
 
+    /**
+     * Get alert types and saves them into three dictionaries to use
+     *
+     * @returns {Promise<*>} Return nothing when done
+     */
     async function getAlertTypes() {
         $("#policyRuleContent #policyRuleAlertTypeSelect").empty();
 
@@ -251,6 +259,11 @@ jQuery(document).ready(($) => {
         });
     }
 
+     /**
+     * Get umbox images and saves them into two dictionaries to use
+     *
+     * @returns {Promise<*>} Return nothing when done
+     */
     async function getUmboxImages() {
         return $.get("/umbox-images", (umboxImages) => {
             $.each(JSON.parse(umboxImages), (id, umboxImage) => {
@@ -260,6 +273,9 @@ jQuery(document).ready(($) => {
         });
     }
 
+    /**
+     * Get umbox lookups and creates a dictionary that has security states as keys and a list of umboxes associated as values
+     */
     async function getUmboxLookups() {
         await getSecurityStates();
         await getUmboxImages();
@@ -276,6 +292,11 @@ jQuery(document).ready(($) => {
         });
     }
 
+    /**
+     * Get commands and saves them into three dictionaries to use
+     *
+     * @returns {Promise<*>} Return nothing when done
+     */
     async function getCommands() {
         return $.get("/commands", (commands) => {
             $.each(JSON.parse(commands), (id, command) => {
@@ -286,7 +307,11 @@ jQuery(document).ready(($) => {
         });
     }
 
-
+    /**
+     * Get command lookups and saves them into three dictionaries to use
+     *
+     * @returns {Promise<*>} Return nothing when done
+     */
     async function getCommandLookups() {
         return $.get("/command-lookups", (commands) => {
             $.each(JSON.parse(commands), (id, commandLookup) => {
@@ -316,15 +341,6 @@ jQuery(document).ready(($) => {
                 let alertTypeArray = [];
                 policyConditionIdToAlertTypeIdsMap[policyRule.policyConditionId].forEach(element => alertTypeArray.push(alertTypeIdToNameMap[element]));
 
-                /*
-                if(policyRule.deviceTypeId) {
-                    deviceTypeName = deviceTypeIdToNameMap[policyRule.deviceTypeId];
-                }
-                else {
-                    deviceTypeName = deviceTypeIdToNameMap[$("#type").val()];
-                }
-                */
-                
                 let deviceCommandArray = [];
                 $.each(commandLookupIdToPolicyRuleId, function (index, policyRuleId) {
                     if (policyRuleId == policyRule.id) {
@@ -353,14 +369,8 @@ jQuery(document).ready(($) => {
                 else {
                   stateToLinksDict[key] = [[policyConditionName, policyRule.samplingRateFactor, deviceCommandArray.join(", ")]]
                 }
-                /*
-                links.push({"source": stateSource,
-                    "target": stateTarget,
-                    "deviceType": deviceTypeName,
-                    "policyCondition" : policyConditionName,
-                    "samplingRate" : policyRule.samplingRateFactor,
-                });*/
             });
+            // After collecting all the necessary data, format it for the viewer to present
             for(var key in stateToLinksDict) {
               var item = stateToLinksDict[key];
               var stateSource = key.split("|")[0];
