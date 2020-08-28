@@ -56,7 +56,7 @@
 
         @* Alert Types *@
         <div class="form-group row">
-        	<label class="col-12 col-form-label">Policy Condition</label>
+        	<label class="col-12 col-form-label"><strong><u>Policy Condition</u></strong></label>
             <label for="policyRuleAlertTypeSelect" class="col-2 col-form-label">Alert Type</label>
             <div class="col-4">
                 <select class="form-control" id="policyRuleAlertTypeSelect">
@@ -80,6 +80,10 @@
             </thead>
             <tbody id="alertTypeOrderTableBody">
                 @*Populated by policyRule.js*@
+                <tr id="defaultAlertRow">
+                	<td></td>
+                	<td>No Alerts Added</td>
+                </tr>
             </tbody>
         </table>
 		<br><br>
@@ -104,7 +108,7 @@
 
         @* Device Commands *@
         <div class="form-group row">
-        	<label class="col-12 col-form-label">Commands</label>
+        	<label class="col-12 col-form-label"><strong><u>Commands</u></strong></label>
             <label for="policyRuleCommands" class="col-2 col-form-label">Commands</label>
             <div class="col-3">
                 <select class="form-control" id="policyRuleCommands">
@@ -125,6 +129,10 @@
             </thead>
             <tbody id="policyRuleCommandsOrderTableBody">
                 @*Populated by policyRule.js*@
+                <tr id="defaultCommandRow">
+                	<td></td>
+                	<td>No Commands Added</td>
+                </tr>
             </tbody>
         </table>
 
