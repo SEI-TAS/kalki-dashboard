@@ -33,7 +33,7 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="policyRuleContent">
     @helper.form(action = routes.PolicyRuleController.addOrUpdatePolicyRule(), 'enctype -> "multipart/form-data") {
-        <h4>Device Policies</h4>
+        <h4>Policy Rule</h4>
         @* DeviceType select*@
         <div class="form-group row" hidden>
             <label for="policyRuleDeviceTypeSelect" class="col-2 col-form-label" >Device Type<span hidden>*</span></label>
@@ -44,8 +44,19 @@
             </div>
         </div>
 
+        @* State Transition select*@
+        <div class="form-group row">
+            <label for="policyRuleStateTransitionSelect" class="col-2 col-form-label" >State Transition<span hidden>*</span></label>
+            <div class="col-4">
+                <select class="form-control" id="policyRuleStateTransitionSelect" name="stateTransitionId" required>
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+        </div>
+
         @* Alert Types *@
         <div class="form-group row">
+        	<label class="col-12 col-form-label">Policy Condition</label>
             <label for="policyRuleAlertTypeSelect" class="col-2 col-form-label">Alert Type</label>
             <div class="col-4">
                 <select class="form-control" id="policyRuleAlertTypeSelect">
@@ -71,9 +82,29 @@
                 @*Populated by policyRule.js*@
             </tbody>
         </table>
+		<br><br>
+
+        @* Threshold *@
+        <div class="form-group row">
+            <label for="threshold" class="col-2 col-form-label">Policy Condition Threshold<span>*</span></label>
+            <div class="col-4">
+                <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleThresholdFormInput" name="threshold" placeholder="Enter a threshold" required
+                oninvalid="this.setCustomValidity('Please Enter a Threshold')" onchange="setCustomValidity('')">
+            </div>
+        </div>
+
+        @* Sampling Rate Factor *@
+        <div class="form-group row">
+            <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
+            <div class="col-4">
+                <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleSamplingRateFactorFormInput" name="samplingRateFactor" placeholder="Enter Sampling Rate Factor" required
+                oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')">
+            </div>
+        </div>
 
         @* Device Commands *@
         <div class="form-group row">
+        	<label class="col-12 col-form-label">Commands</label>
             <label for="policyRuleCommands" class="col-2 col-form-label">Commands</label>
             <div class="col-3">
                 <select class="form-control" id="policyRuleCommands">
@@ -97,34 +128,6 @@
             </tbody>
         </table>
 
-        @* State Transition select*@
-        <div class="form-group row">
-            <label for="policyRuleStateTransitionSelect" class="col-2 col-form-label" >State Transition<span hidden>*</span></label>
-            <div class="col-4">
-                <select class="form-control" id="policyRuleStateTransitionSelect" name="stateTransitionId" required>
-                    @*Populated by policyRule.js*@
-                </select>
-            </div>
-        </div>
-
-        @* Threshold *@
-        <div class="form-group row">
-            <label for="threshold" class="col-2 col-form-label">Policy Condition Threshold<span>*</span></label>
-            <div class="col-4">
-                <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleThresholdFormInput" name="threshold" placeholder="Enter a threshold" required
-                oninvalid="this.setCustomValidity('Please Enter a Threshold')" onchange="setCustomValidity('')">
-            </div>
-        </div>
-
-        @* Sampling Rate Factor *@
-        <div class="form-group row">
-            <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
-            <div class="col-4">
-                <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleSamplingRateFactorFormInput" name="samplingRateFactor" placeholder="Enter Sampling Rate Factor" required
-                oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')">
-            </div>
-        </div>
-
         @* Submit *@
         <div class="row justify-content-end">
             <div class="col-2">
@@ -141,7 +144,7 @@
         <tr>
             <th>actions</th>
             <th>device type</th>
-            <th>policy condition(s)</th>
+            <th>policy condition</th>
             <th>device command(s)</th>
             <th>start state</th>
             <th>end state</th>
