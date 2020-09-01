@@ -54,9 +54,18 @@
             </div>
         </div>
 
+        @* Threshold *@
+        <div class="form-group row">
+            <label class="col-12 col-form-label"><strong><u>Policy Condition</u></strong></label>
+            <label for="threshold" class="col-2 col-form-label">Policy Condition Threshold<span>*</span></label>
+            <div class="col-4">
+                <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleThresholdFormInput" name="threshold" placeholder="Enter a threshold" required
+                oninvalid="this.setCustomValidity('Please Enter a Threshold')" onchange="setCustomValidity('')">
+            </div>
+        </div>
+
         @* Alert Types *@
         <div class="form-group row">
-        	<label class="col-12 col-form-label"><strong><u>Policy Condition</u></strong></label>
             <label for="policyRuleAlertTypeSelect" class="col-2 col-form-label">Alert Type</label>
             <div class="col-4">
                 <select class="form-control" id="policyRuleAlertTypeSelect">
@@ -88,17 +97,9 @@
         </table>
 		<br><br>
 
-        @* Threshold *@
-        <div class="form-group row">
-            <label for="threshold" class="col-2 col-form-label">Policy Condition Threshold<span>*</span></label>
-            <div class="col-4">
-                <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleThresholdFormInput" name="threshold" placeholder="Enter a threshold" required
-                oninvalid="this.setCustomValidity('Please Enter a Threshold')" onchange="setCustomValidity('')">
-            </div>
-        </div>
-
         @* Sampling Rate Factor *@
         <div class="form-group row">
+            <label class="col-12 col-form-label"><strong><u>Commands</u></strong></label>
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
             <div class="col-4">
                 <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleSamplingRateFactorFormInput" name="samplingRateFactor" placeholder="Enter Sampling Rate Factor" required
@@ -108,7 +109,6 @@
 
         @* Device Commands *@
         <div class="form-group row">
-        	<label class="col-12 col-form-label"><strong><u>Commands</u></strong></label>
             <label for="policyRuleCommands" class="col-2 col-form-label">Commands</label>
             <div class="col-3">
                 <select class="form-control" id="policyRuleCommands">
