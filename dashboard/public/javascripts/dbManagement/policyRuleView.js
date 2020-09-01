@@ -95,8 +95,12 @@ jQuery(document).ready(($) => {
     }
 
     function drawGraph(links, deviceColors, deviceTypes, nodeColors) {
+      var stateNamesList = Object.keys(stateNameToIdMap).map(function (state) {
+                                  return {"id": state}
+                        });
 
-    	let data = ({nodes: Array.from(new Set(links.flatMap(l => [l.source, l.target])), id => ({id})), links})
+    	let data = ({nodes: stateNamesList, links})
+
     	var cy = cytoscape({
   		  container: document.getElementById('cy')
   		});
@@ -133,8 +137,6 @@ jQuery(document).ready(($) => {
   		  var node = evt.target;
         var htmlString = "";
         var umboxes = stateNameToUmboxes[node.data("name")];
-        console.log(links)
-
 
         htmlString += "Name: " + node.data("name")  + "<br>";
         htmlString += "Umboxes: ";
@@ -150,9 +152,9 @@ jQuery(document).ready(($) => {
   		  var htmlString = "";
         var listOfPolicyConditions = edge.data("policyConditionsAndRatesAndCommands");
         for(var i = 0; i < listOfPolicyConditions.length; i++) {
-          var content = "<strong>Sampling Rate</strong>: " + listOfPolicyConditions[i][1] + "<br>";
+          var content = "<strong>Sampling Rate Factor</strong>: " + listOfPolicyConditions[i][1] + "<br>";
           content += "<strong>Commands</strong>: " + listOfPolicyConditions[i][2] + "<br>";
-          var row = '<button class="accordion">'+listOfPolicyConditions[i][0]+
+          var row = '<button class="accordion">Policy Rule: '+listOfPolicyConditions[i][0]+
                 '</button><div class="panel"><p>'+ content +'</p></div>'
           htmlString += row;
         }
@@ -356,7 +358,6 @@ jQuery(document).ready(($) => {
                 let stateSource = stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]];
                 let stateTarget = stateIdToNameMap[stateTransitionIdToFinishMap[policyRule.stateTransitionId]];
                 let policyConditionName = alertTypeArray.join(" && ");
-                console.log(policyRule)
 
                 // Add the links to the object using the special format
                 // Have to be a little tricky here, and put the device name in front of the state. This lets us
@@ -405,7 +406,8 @@ jQuery(document).ready(($) => {
 
         // Get all the colors to be used with the various device types, and nodes
         let deviceColors = d3.scaleOrdinal(deviceTypes, d3.schemeCategory10);
-        let nodeColors = d3.scaleOrdinal(stateNameToIdMap,
+
+        let nodeColors = d3.scaleOrdinal(Object.keys(stateNameToIdMap),
             ["#4daf4a","#dec100","#e41a1c","#999999","#377eb8","#984ea3","#ff7f00","#a65628","#f781bf"]);
 
         // Make the graph and the legend
