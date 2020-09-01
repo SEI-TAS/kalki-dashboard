@@ -57,7 +57,7 @@
         @* Threshold *@
         <div class="form-group row">
             <label class="col-12 col-form-label"><strong><u>Policy Condition</u></strong></label>
-            <label for="threshold" class="col-2 col-form-label">Policy Condition Threshold<span>*</span></label>
+            <label for="threshold" class="col-2 col-form-label">Policy Condition Threshold (sec)<span>*</span></label>
             <div class="col-4">
                 <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleThresholdFormInput" name="threshold" placeholder="Enter a threshold" required
                 oninvalid="this.setCustomValidity('Please Enter a Threshold')" onchange="setCustomValidity('')">
@@ -66,14 +66,13 @@
 
         @* Alert Types *@
         <div class="form-group row">
-            <label for="policyRuleAlertTypeSelect" class="col-2 col-form-label">Alert Type</label>
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-primary" id="policyRuleAddAlertButton">Add Alert Type</button>
+            </div>
             <div class="col-4">
                 <select class="form-control" id="policyRuleAlertTypeSelect">
                     @*Populated by policyRule.js*@
                 </select>
-            </div>
-            <div class="col-4">
-                <button type="button" class="btn btn-sm btn-pill btn-primary" id="policyRuleAddAlertButton">+</button>
             </div>
         </div>
         @* hidden alertTypes *@
@@ -95,11 +94,10 @@
                 </tr>
             </tbody>
         </table>
-		<br><br>
 
         @* Sampling Rate Factor *@
         <div class="form-group row">
-            <label class="col-12 col-form-label"><strong><u>Commands</u></strong></label>
+            <label class="col-12 col-form-label"><strong><u>Actions</u></strong></label>
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
             <div class="col-4">
                 <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleSamplingRateFactorFormInput" name="samplingRateFactor" placeholder="Enter Sampling Rate Factor" required
@@ -109,15 +107,15 @@
 
         @* Device Commands *@
         <div class="form-group row">
-            <label for="policyRuleCommands" class="col-2 col-form-label">Commands</label>
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-primary" id="policyRuleAddCommandButton">Add Command</button>
+            </div>
             <div class="col-3">
                 <select class="form-control" id="policyRuleCommands">
                     @*Populated by policyRule.js*@
                 </select>
             </div>
-            <div class="col-4">
-                <button type="button" class="btn btn-sm btn-pill btn-primary" id="policyRuleAddCommandButton">+</button>
-            </div>
+            
         </div>
         <select id="deviceCommandFormInput" name="commandIds[]" multiple hidden
         oninvalid="alert('Please add a Command before adding a Policy Rule')"></select>
