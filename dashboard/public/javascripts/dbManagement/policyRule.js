@@ -113,6 +113,7 @@ jQuery(document).ready(($) => {
             return false;
         } else {
             // No duplicates, so add this row to the form
+            $("#defaultAlertRow").remove();
             let currentCount = ++alertTypeRowCounter;
             let newRow = "<tr id='alertTypeOrderTableRow" + currentCount + "'>\n" +
                 "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
@@ -161,6 +162,7 @@ jQuery(document).ready(($) => {
             return false;
         } else {
             // No duplicates, so add this row to the form
+            $("#defaultCommandRow").remove();
             let currentCount = ++commandRowCounter;
             let newRow = "<tr id='policyRuleCommandsOrderTableRow" + currentCount + "'>\n" +
                 "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
@@ -373,7 +375,7 @@ jQuery(document).ready(($) => {
                     "        </div>" +
                     "    </td>\n" +
                     "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeName + "</td>\n" +
-                    "    <td id='policyCondition" + policyRule.id + "'>" + alertTypeArray.join(", ") + "</td>\n" +
+                    "    <td id='policyCondition" + policyRule.id + "'>" + alertTypeArray.join(" && ") + "</td>\n" +
                     "    <td id='deviceCommand" + policyRule.id + "'>" + deviceCommandArray.join(", ") + "</td>\n" +
                     "    <td id='startSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]] + "</td>\n" +
                     "    <td id='finishSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToFinishMap[policyRule.stateTransitionId]] + "</td>\n" +
