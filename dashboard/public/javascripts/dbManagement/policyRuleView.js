@@ -133,7 +133,9 @@ jQuery(document).ready(($) => {
 		    "target-arrow-shape": "triangle"
 		  })
 
-  		cy.on('tap', 'node', function(evt){
+      var cyWidth = $("#cy").width();
+
+  		cy.on('mouseover', 'node', function(evt){
   		  var node = evt.target;
         var htmlString = "";
         var umboxes = stateNameToUmboxes[node.data("name")];
@@ -141,11 +143,24 @@ jQuery(document).ready(($) => {
         htmlString += "Name: " + node.data("name")  + "<br>";
         htmlString += "Umboxes: ";
         for(var i = 0; i < umboxes.length-1; i++) {
-          htmlString += umboxes[i] + ", ";
+          htmlString += umboxes[i] + "-->";
         }
         htmlString += umboxes[umboxes.length-1];
-  		  $("#selectedElement").html(htmlString);
+  		  $("#tooltip").html(htmlString);
+        var pos = node.position();
+        var offset = 10;
+        if(pos.x >= cyWidth/2 - 50) {
+          $("#tooltip").css({top: pos.y, left: pos.x + node.width()+offset});
+        }
+        else {
+          $("#tooltip").css({top: pos.y, left: pos.x - $("#tooltip").width()-offset});
+        }
   		});
+
+      cy.on('mouseout', 'node', function(evt){
+        var node = evt.target;
+        $("#tooltip").html("");
+      });
 
   		cy.on('tap', 'edge', function(evt){
   		  var edge = evt.target;

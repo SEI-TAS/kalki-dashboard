@@ -53,6 +53,7 @@
                 </select>
             </div>
         </div>
+        <hr>
 
         @* Threshold *@
         <div class="form-group row">
@@ -81,7 +82,7 @@
         <select id="alertTypeOrderFormInput" name="alertTypeIds[]" multiple hidden required
         oninvalid="alert('Please add an Alert before adding a Policy Rule')"></select>
         @* Variable table *@
-        <table id="alertTypeOrderTable" class="table col-6">
+        <table id="alertTypeOrderTable" class="table col-6" style="width: 50%;">
             <thead>
                 <th>@* For remove buttons *@</th>
                 <th>Alert Type<span>*</span></th>
@@ -94,6 +95,7 @@
                 </tr>
             </tbody>
         </table>
+        <hr>
 
         @* Sampling Rate Factor *@
         <div class="form-group row">
@@ -120,7 +122,7 @@
         <select id="deviceCommandFormInput" name="commandIds[]" multiple hidden
         oninvalid="alert('Please add a Command before adding a Policy Rule')"></select>
         @* Variable table *@
-        <table id="policyRuleCommandsOrderTable" class="table col-6">
+        <table id="policyRuleCommandsOrderTable" class="table col-6" style="width: 50%;">
             <thead>
                 <th>@* For remove buttons *@</th>
                 <th>Commands</th>
