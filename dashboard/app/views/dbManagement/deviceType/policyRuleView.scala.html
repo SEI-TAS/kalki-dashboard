@@ -31,23 +31,21 @@
  *@
 @()
 @*Column holds the form and table displayed vertically*@
-<div class="col" id="policyRuleContent">
-    <div id="cy" style="width: 100%; height: 300px"></div>
-    <div id="legend" class="row m-2">
-        <div class="col-12">
+<div class="row" id="policyRuleContent" style="position: relative;">
+    <div id="cy" class="col-7" style="height: 300px"></div>
+    <div id="legend" class="col-5" style="border-left: 1px solid lightgray;">
+        <div>
             <h4>Selected Policy Rules</h4>
             <div class="row" id="selectedElement">
-
+              <!--When selecting a policy condition, this is filled by policyRuleView.js-->
             </div>
         </div>
     </div>
-    <div id="tooltip">
-      
-    </div>
+    <div id="tooltip"></div>
 </div> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.15.2/cytoscape.min.js" integrity="sha512-PqivlaNWoXvHYlvku80fbWO/yBiRmGhISj5uVdAodyqsGprDcVZy6aecJDVNE0fIIE/YeiOzp5yJTR5ZjFlR4Q==" crossorigin="anonymous"></script>
 <style type="text/css">
-  	/* Style the buttons that are used to open and close the accordion panel */
+  /*The following Styles the drop down menus for the selected policy conditions*/
   .accordion {
     background-color: #eee;
     color: #444;
@@ -60,12 +58,10 @@
     transition: 0.4s;
   }
 
-  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
   .activeRow, .accordion:hover {
     background-color: #ccc;
   }
 
-  /* Style the accordion panel. Note: hidden by default */
   .panel {
     padding: 18px 18px;
     background-color: white;
@@ -73,8 +69,12 @@
     overflow: hidden;
   }
 
+  /*The following styles the tooltip for the umbox nodes*/
   #tooltip {
     position: absolute;
     background-color: lightgray;
+    width: 10em;
+    padding: 0.5em;
+    border-radius: 1em;
   }
 </style>

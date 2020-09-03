@@ -135,33 +135,39 @@ jQuery(document).ready(($) => {
 
       var cyWidth = $("#cy").width();
 
+      // Creates tooltip when hovering on a node
   		cy.on('mouseover', 'node', function(evt){
   		  var node = evt.target;
         var htmlString = "";
         var umboxes = stateNameToUmboxes[node.data("name")];
-
+        console.log(stateNameToUmboxes);
         htmlString += "Name: " + node.data("name")  + "<br>";
         htmlString += "Umboxes: ";
         for(var i = 0; i < umboxes.length-1; i++) {
-          htmlString += umboxes[i] + "-->";
+          htmlString += umboxes[i] + " > ";
         }
         htmlString += umboxes[umboxes.length-1];
   		  $("#tooltip").html(htmlString);
         var pos = node.position();
-        var offset = 10;
-        if(pos.x >= cyWidth/2 - 50) {
+        console.log(pos)
+        console.log($("#cy").width());
+        var offset = 15;
+        if(pos.x >= cyWidth/2 - node.width()) {
           $("#tooltip").css({top: pos.y, left: pos.x + node.width()+offset});
         }
         else {
-          $("#tooltip").css({top: pos.y, left: pos.x - $("#tooltip").width()-offset});
+          $("#tooltip").css({top: pos.y, left: pos.x - $("#tooltip").width() - node.width()/2 -offset});
         }
+        $("#tooltip").show();
   		});
 
+      // Hides tooltip if node is not hovered
       cy.on('mouseout', 'node', function(evt){
         var node = evt.target;
-        $("#tooltip").html("");
+        $("#tooltip").hide();
       });
 
+      // When clicking on an edge, it populates the 'Selected Policy Condition' section
   		cy.on('tap', 'edge', function(evt){
   		  var edge = evt.target;
   		  var htmlString = "";
@@ -188,8 +194,7 @@ jQuery(document).ready(($) => {
         }
   		});
 
-
-
+      // When tapping on the canvas, it unselects the policy rule
       cy.on('tap', function(event){
         var evtTarget = event.target;
         if( evtTarget === cy ){
@@ -408,6 +413,10 @@ jQuery(document).ready(($) => {
      * @returns {Promise<*>} Return nothing when done
      */
     async function getPolicyRuleView() {
+        //Reset the umbox list
+        stateNameToUmboxes = {};
+        $("#tooltip").hide();
+
         // Get the data needed to generate this graph
         await getDeviceTypes();
         await getStateTransitions();
@@ -434,12 +443,15 @@ jQuery(document).ready(($) => {
      * Only load data when tab is active
      */
     $('a[href="#PolicyRuleViewContent"]').on('shown.bs.tab', function (e) {
+        $("#selectedElement").html("");
         getPolicyRuleView();
     });
+
     $("#type").change(function() {
-        getPolicyRuleView();
         $("#selectedElement").html("");
         stateNameToUmboxes = {};
+        getPolicyRuleView();
+        
     });
 
 });
