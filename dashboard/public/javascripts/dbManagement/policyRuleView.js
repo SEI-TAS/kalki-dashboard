@@ -140,17 +140,19 @@ jQuery(document).ready(($) => {
   		  var node = evt.target;
         var htmlString = "";
         var umboxes = stateNameToUmboxes[node.data("name")];
-        console.log(stateNameToUmboxes);
         htmlString += "Name: " + node.data("name")  + "<br>";
         htmlString += "Umboxes: ";
-        for(var i = 0; i < umboxes.length-1; i++) {
-          htmlString += umboxes[i] + " > ";
+        if(umboxes === undefined) {
+          htmlString += "None";
         }
-        htmlString += umboxes[umboxes.length-1];
+        else {
+          for(var i = 0; i < umboxes.length-1; i++) {
+            htmlString += umboxes[i] + " > ";
+          }
+          htmlString += umboxes[umboxes.length-1];
+        }
   		  $("#tooltip").html(htmlString);
         var pos = node.position();
-        console.log(pos)
-        console.log($("#cy").width());
         var offset = 15;
         if(pos.x >= cyWidth/2 - node.width()) {
           $("#tooltip").css({top: pos.y, left: pos.x + node.width()+offset});
