@@ -51,6 +51,7 @@ jQuery(document).ready(($) => {
     async function getDevice() {
         $.get('/device', {"id": id}, (deviceString) => {
             device = JSON.parse(deviceString);
+            console.log(device);
             if(device === null) {
                 console.log("Invalid ID");
             }
@@ -64,6 +65,18 @@ jQuery(document).ready(($) => {
                     $("#deviceInfoPage #group").text("N/A");
                 }
                 $("#deviceInfoPage #ipAddress").text(device.ip);
+                if(device.credentials === "") {
+                    $("#deviceInfoPage #credentials").text("None");
+                }
+                else {
+                    $("#deviceInfoPage #credentials").text('****');
+                    $("#deviceInfoPage #credentials").on( "mouseover", function() {
+                        $("#deviceInfoPage #credentials").text(device.credentials);
+                    });
+                    $("#deviceInfoPage #credentials").on( "mouseout", function() {
+                        $("#deviceInfoPage #credentials").text('****');
+                    });
+                }
             }
         });
     }
