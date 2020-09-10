@@ -31,18 +31,49 @@
  *@
 @()
 @*Column holds the form and table displayed vertically*@
-<div class="col" id="policyRuleContent">
-    <div id="legend" class="row m-2">
-        <div class="col-6">
-            <h4>Arrow Colors</h4>
-            <div class="row" id="arrowColors">
-            </div>
-        </div>
-        <div class="col-6">
-            <h4>Node Colors</h4>
-            <div class="row" id="nodeColors">
+<div class="row" id="policyRuleContent" style="position: relative;">
+    <div id="cy" class="col-6" style="height: 300px"></div>
+    <div id="legend" class="col-6" style="border-left: 1px solid lightgray;">
+        <div>
+            <h4>Selected Policy Rules</h4>
+            <div class="row" id="selectedElement">
+              <!--When selecting a policy condition, this is filled by policyRuleView.js-->
             </div>
         </div>
     </div>
-    <div id="svg" class="border" style="width: 100%; height: 600px"></div>
+    <div id="tooltip"></div>
 </div> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.15.2/cytoscape.min.js" integrity="sha512-PqivlaNWoXvHYlvku80fbWO/yBiRmGhISj5uVdAodyqsGprDcVZy6aecJDVNE0fIIE/YeiOzp5yJTR5ZjFlR4Q==" crossorigin="anonymous"></script>
+<style type="text/css">
+  /*The following Styles the drop down menus for the selected policy conditions*/
+  .accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+  }
+
+  .activeRow, .accordion:hover {
+    background-color: #ccc;
+  }
+
+  .panel {
+    padding: 18px 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
+  }
+
+  /*The following styles the tooltip for the umbox nodes*/
+  #tooltip {
+    position: absolute;
+    background-color: lightgray;
+    padding: 0.5em;
+    border-radius: 1em;
+  }
+</style>

@@ -89,6 +89,9 @@ jQuery(document).ready(($) => {
 
     let currentUmboxImageIdDagOrderMap = {};
 
+    let totalAlertsAdded = 0;
+    let totalCommandsAdded = 0;
+
     function addAlertTypeRow(alertTypeLookupId) {
         let alertTypeId = alertTypeLookupIdToAlertTypeIdMap[alertTypeLookupId];
 
@@ -113,6 +116,7 @@ jQuery(document).ready(($) => {
             return false;
         } else {
             // No duplicates, so add this row to the form
+            totalAlertsAdded++;
             let currentCount = ++alertTypeRowCounter;
             let newRow = "<tr id='alertTypeOrderTableRow" + currentCount + "'>\n" +
                 "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
@@ -131,10 +135,18 @@ jQuery(document).ready(($) => {
                 $("#alertTypeOrderTableBody #alertTypeOrderTableRow" + currentCount).remove();
 
                 $("#alertTypeOrderFormInput" + alertTypeId).remove();
+                totalAlertsAdded--;
+
+                if(totalAlertsAdded === 0) {
+                    $("#defaultAlertRow").attr("hidden",false);
+                }
 
                 let indexToRemove = currentAlertTypeIds.indexOf(alertTypeId);
                 currentAlertTypeIds.splice(indexToRemove, 1);
             });
+        }
+        if(totalAlertsAdded > 0) {
+            $("#defaultAlertRow").attr("hidden",true);
         }
         return true;
     }
@@ -161,6 +173,7 @@ jQuery(document).ready(($) => {
             return false;
         } else {
             // No duplicates, so add this row to the form
+            totalCommandsAdded++;
             let currentCount = ++commandRowCounter;
             let newRow = "<tr id='policyRuleCommandsOrderTableRow" + currentCount + "'>\n" +
                 "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
@@ -183,9 +196,16 @@ jQuery(document).ready(($) => {
                 $("#policyRuleCommandsOrderTableBody #policyRuleCommandsOrderTableRow" + currentCount).remove();
 
                 $("#deviceCommandFormInput" + currentCount).remove();
+                totalCommandsAdded--;
 
+                if(totalCommandsAdded === 0) {
+                    $("#defaultCommandRow").attr("hidden",false);
+                }
                 delete currentCommandIdToOrderNumberMap[commandId.toString()];
             });
+        }
+        if(totalCommandsAdded > 0) {
+            $("#defaultCommandRow").attr("hidden",true);
         }
         return true;
     }
@@ -373,7 +393,7 @@ jQuery(document).ready(($) => {
                     "        </div>" +
                     "    </td>\n" +
                     "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeName + "</td>\n" +
-                    "    <td id='policyCondition" + policyRule.id + "'>" + alertTypeArray.join(", ") + "</td>\n" +
+                    "    <td id='policyCondition" + policyRule.id + "'>" + alertTypeArray.join(" && ") + "</td>\n" +
                     "    <td id='deviceCommand" + policyRule.id + "'>" + deviceCommandArray.join(", ") + "</td>\n" +
                     "    <td id='startSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]] + "</td>\n" +
                     "    <td id='finishSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToFinishMap[policyRule.stateTransitionId]] + "</td>\n" +
