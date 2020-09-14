@@ -54,6 +54,12 @@ public class ApplicationStart {
         } );
 
         // Initializes the database
-        Postgres.initialize(config.getString("db_host"), "5432", "kalkidb", "kalkiuser", "kalkipass");
+        String dbHost = config.getString("db_host");
+        String dbUser = config.getString("db.default.username");
+        String dbPass = config.getString("db.default.password");
+        String dbName = config.getString("db.default.db_name");
+        String dbPort = config.getString("db.default.db_port");
+
+        Postgres.initialize(dbHost, dbPort, dbName, dbUser, dbPass);
     }
 }
