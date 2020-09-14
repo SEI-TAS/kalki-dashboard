@@ -70,12 +70,6 @@ jQuery(document).ready(($) => {
                 }
                 else {
                     $("#deviceInfoPage #credentials").text('****');
-                    $("#deviceInfoPage #credentials").on( "mouseover", function() {
-                        $("#deviceInfoPage #credentials").text(device.credentials);
-                    });
-                    $("#deviceInfoPage #credentials").on( "mouseout", function() {
-                        $("#deviceInfoPage #credentials").text('****');
-                    });
                 }
             }
         });
