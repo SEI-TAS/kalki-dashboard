@@ -53,19 +53,11 @@ public class ApplicationStart {
             return CompletableFuture.completedFuture(null);
         } );
         try {
-            edu.cmu.sei.kalki.db.utils.Config.load("config.json");
+            edu.cmu.sei.kalki.db.utils.Config.load("../config.json");
+            Postgres.initializeFromConfig();
         }
         catch(Exception e) {
             System.out.println(e);
-        }
-        
-        // Initializes the database
-        String dbHost = config.getString("db_host");
-        String dbUser = config.getString("db.default.username");
-        String dbPass = config.getString("db.default.password");
-        String dbName = config.getString("db.default.db_name");
-        String dbPort = config.getString("db.default.db_port");
-    
-        Postgres.initialize(dbHost, dbPort, dbName, dbUser, dbPass);
+        }    	
     }
 }
