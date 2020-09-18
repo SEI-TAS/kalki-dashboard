@@ -1,5 +1,6 @@
 # First stage: getting kalki-db
-FROM kalki/kalki-db-env AS kalki_db
+ARG KALKI_DB_VER="latest"
+FROM kalki/kalki-db-env:$KALKI_DB_VER AS kalki_db
 
 ################################################################################################
 # Second stage: build env.
@@ -34,7 +35,7 @@ RUN apk --no-cache add bash
 EXPOSE 9000
 
 ARG PROJECT_NAME=kalki-dashboard
-ARG PROJECT_VERSION=1.6.0
+ARG PROJECT_VERSION=1.7.0
 
 COPY --from=build_env /dashboard/target/universal/$PROJECT_NAME-$PROJECT_VERSION.zip /$PROJECT_NAME.zip
 RUN unzip $PROJECT_NAME.zip && \

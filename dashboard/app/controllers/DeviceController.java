@@ -137,7 +137,7 @@ public class DeviceController extends Controller {
                 int samplingRate = Integer.parseInt(filledForm.get("samplingRate"));
                 int dataNode = Integer.parseInt(filledForm.get("dataNode"));
 
-                Device d = new Device(name, description, typeId, groupId, ip, statusHistorySize, samplingRate, samplingRate, dataNode);
+                Device d = new Device(name, description, typeId, groupId, ip, statusHistorySize, samplingRate, samplingRate, dataNode, "");
 
                 List<Integer> tagIdsList = new ArrayList<Integer>();
 
