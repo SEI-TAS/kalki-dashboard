@@ -148,6 +148,18 @@
             </div>
         </div>
     </div>
+    @* Credential *@
+    <div class="form-group row">
+        <label for="samplingRate" class="col-2 col-form-label">Credential</label>
+        <div class="col-4">
+            @if(device != null) {
+                <input type="text" class="form-control" id="credentials" name="credentials" placeholder="Enter Credential"
+                       value="@device.getCredentials()">
+            } else {
+                <input type="text" class="form-control" id="credentials" name="credentials" placeholder="Enter Credential">
+            }
+        </div>
+    </div>
     @* Submit *@
     @if(device == null){
     <div class="row justify-content-end">
