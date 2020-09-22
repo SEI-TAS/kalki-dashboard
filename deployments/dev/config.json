@@ -1,0 +1,6 @@
+ {
+    "db_host": "kalki-postgres-dev",
+    "db_name": "kalkidb",
+    "db_user": "kalkiuser",
+    "db_password": "kalkipass"
+ }
