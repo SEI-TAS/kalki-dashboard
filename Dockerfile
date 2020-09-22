@@ -19,7 +19,7 @@ COPY --from=kalki_db /home/gradle/.m2 /root/.m2
 
 # Copying code and conf
 COPY dashboard /dashboard
-COPY temp.json /dashboard/config.json
+COPY temp.json /config.json
 
 # Getting deps, compiling and creating dist.
 WORKDIR /dashboard

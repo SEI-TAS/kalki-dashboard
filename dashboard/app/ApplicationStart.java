@@ -58,6 +58,7 @@ public class ApplicationStart {
         }
         catch(Exception e) {
             System.out.println(e);
+            throw new RuntimeException(e);
         }    	
     }
 }
