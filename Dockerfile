@@ -40,6 +40,7 @@ ARG PROJECT_VERSION=1.7.0
 COPY --from=build_env /dashboard/target/universal/$PROJECT_NAME-$PROJECT_VERSION.zip /$PROJECT_NAME.zip
 RUN unzip $PROJECT_NAME.zip && \
     rm $PROJECT_NAME.zip
+COPY temp.json /config.json
 
 WORKDIR /$PROJECT_NAME-$PROJECT_VERSION
 ENTRYPOINT ["bin/kalki-dashboard"]
