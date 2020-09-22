@@ -39,7 +39,7 @@ import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
 
 import play.mvc.Controller;
-import play.db.*;
+//import play.db.*;
 import play.mvc.Result;
 import play.data.*;
 import play.mvc.Http.MultipartFormData;
