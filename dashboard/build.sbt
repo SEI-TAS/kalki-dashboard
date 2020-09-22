@@ -15,7 +15,6 @@ resolvers += Resolver.mavenLocal
 
 libraryDependencies += guice
 libraryDependencies += filters
-libraryDependencies += javaJdbc
 libraryDependencies += "javax.xml.bind" % "jaxb-api" % "2.3.0"
 libraryDependencies += "org.postgresql" % "postgresql" % "42.2.2"
 libraryDependencies += "edu.cmu.sei.ttg" % "kalki-db" % "1.6.0" exclude("commons-logging", "commons-logging")
