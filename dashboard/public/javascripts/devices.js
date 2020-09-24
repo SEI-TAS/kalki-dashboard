@@ -78,7 +78,7 @@ jQuery(document).ready(($) => {
         getDeviceTypes();
         getDataNodes();
         getGroups();
-        getTags();
+        //getTags();
     }
 
     //fill device types in form
@@ -101,7 +101,7 @@ jQuery(document).ready(($) => {
         return $.get("/groups", (groups) => {
             groupNameToIDMap[""] = -1;
             groupNameToIDMap["N/A"] = -1;
-            $("#deviceForm #group").append("<option value='-1'></option>");   //assuming this is to allow an empty group
+            $("#deviceForm #group").append("<option value='-1'>None</option>");   //assuming this is to allow an empty group
 
             $.each(JSON.parse(groups), (id, group) => {
                 groupNameToIDMap[group.name] = group.id;
@@ -113,7 +113,6 @@ jQuery(document).ready(($) => {
     //fill data nodes in form
     async function getDataNodes() {
         $("#dataNode").empty();
-        console.log("Getting data node.")
 
         return $.get("/data-nodes", (dataNodes) => {
             $.each(JSON.parse(dataNodes), (id, node) => {
@@ -127,16 +126,15 @@ jQuery(document).ready(($) => {
     //fill tags in form
     async function getTags() {
         $("#deviceForm #formTags").empty();
-
         return $.get("/tags", (tags) => {
             $.each(JSON.parse(tags), (id, tag) => {
                 tagIDtoNameMap[tag.id] = tag.name;
                 $("#deviceForm #formTags").append("<div class='form-check col-2'>\n" +
                     "    <input class='form-check-input' type='checkbox' id='tagCheckbox" + tag.id + "' name='tagIds[]' value='" + tag.id + "'>\n" +
                     "    <label class='form-check-label' for='tagCheckBox" + tag.id + "'>" + tag.name + "</label>\n" +
-                    "</div>");
+                    "</div>");  
             });
-            $("#deviceForm #formTags").append("<input class='form-check-input' id='hiddenChk' type='checkbox' name='tagIds[]' value='-1' hidden checked>");
+            //$("#deviceForm #formTags").append("<input class='form-check-input' id='hiddenChk' type='checkbox' name='tagIds[]' value='-1' hidden checked>");
         });
     }
 

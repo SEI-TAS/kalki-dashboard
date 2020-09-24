@@ -126,37 +126,32 @@ public class DeviceController extends Controller {
                 String description = filledForm.get("description");
                 String ip = filledForm.get("ip");
                 int typeId = Integer.parseInt(filledForm.get("typeId"));
-                int groupId;
-                if(filledForm.get("groupId") == null) {
-                    groupId = 0;
-                }
-                else {
-                    groupId = Integer.parseInt(filledForm.get("groupId"));
-                }
+                int groupId = Integer.parseInt(filledForm.get("groupId"));
                 int statusHistorySize = Integer.parseInt(filledForm.get("statusHistorySize"));
                 int samplingRate = Integer.parseInt(filledForm.get("samplingRate"));
                 int dataNode = Integer.parseInt(filledForm.get("dataNode"));
                 String credentials = filledForm.get("credentials");
 
                 Device d = new Device(name, description, typeId, groupId, ip, statusHistorySize, samplingRate, samplingRate, dataNode, credentials);
-
+                /*
                 List<Integer> tagIdsList = new ArrayList<Integer>();
 
                 String tagIdsString = filledForm.get("tagIds");
 
                 if (tagIdsString != null) {
-                    String[] tagIdsStringArray = tagIdsString.substring(1, tagIdsString.length() - 1).split(", ");
+                    //String[] tagIdsStringArray = tagIdsString.substring(1, tagIdsString.length() - 1).split(", ");
 
                     //convert array of strings to list of integer
 
-                    for (String s : tagIdsStringArray) {
+                    //for (String s : tagIdsStringArray) {
                         if (!s.equals("-1")) {    //need to remove dummy -1 value
                             tagIdsList.add(Integer.valueOf(s));
                         }
-                    }
-
+                    }//
+                    
                     d.setTagIds(tagIdsList);
                 }
+                */
 
                 editDevice();
                 d.setId(this.updatingId);

@@ -87,14 +87,25 @@
     </div>
     @* IP Address *@
     <div class="form-group row">
-        <label for="ipAddress" class="col-2 col-form-label">IP Address</label>
+        <label for="ipAddress" class="col-2 col-form-label">IP Address*</label>
         <div class="col-4">
             @if(device != null) {
-            <input type="text" maxlength="16" class="form-control" id="ipAddress" name="ip" placeholder="Enter IP" value="@device.getIp()">
+            <input type="text" maxlength="16" class="form-control" id="ipAddress" name="ip" placeholder="Enter IP" value="@device.getIp()" required>
             } else {
-            <input type="text" maxlength="16" class="form-control" id="ipAddress" name="ip" placeholder="Enter IP">
+            <input type="text" maxlength="16" class="form-control" id="ipAddress" name="ip" placeholder="Enter IP" required>
             }
         </div>
+        @* Data Node *@
+        <label for="dataNode" class="col-2 col-form-label">Data Node<span>*</span></label>
+        <div class="col-4">
+            <select class="form-control" id="dataNode" name="dataNode" required>
+                @*Populated by device.js*@
+            </select>
+        </div>
+    </div>
+
+    @* History Size *@
+    <div class="form-group row">
         <label for="statusHistorySize" class="col-2 col-form-label">History Size<span>*</span></label>
         <div class="col-4">
             @if(device != null) {
@@ -102,30 +113,10 @@
                    oninvalid="this.setCustomValidity('Please Enter History Size')" onchange="setCustomValidity('')" value="@device.getStatusHistorySize()">
             } else {
             <input type="number" min="0" max="2147483647" class="form-control" id="statusHistorySize" name="statusHistorySize" placeholder="Enter Size" required
-                   oninvalid="this.setCustomValidity('Please Enter History Size')" onchange="setCustomValidity('')">
+                   oninvalid="this.setCustomValidity('Please Enter History Size')" onchange="setCustomValidity('')" value=1>
             }
         </div>
-    </div>
-
-    @* Data Node *@
-    <div class="form-group row">
-        <div class="col">
-            <div class="row">
-                <label for="dataNode" class="col-2 col-form-label">Data Node<span>*</span></label>
-                <div class="col-4">
-                    <select class="form-control" id="dataNode" name="dataNode" required>
-                        @*Populated by device.js*@
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-    @* History Size *@
-    <div class="form-group row">
-
-    </div>
-    @* Sampling Rate *@
-    <div class="form-group row">
+        @* Sampling Rate *@
         <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
         <div class="col-4">
             @if(device != null) {
@@ -133,30 +124,31 @@
                        oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')" value="@device.getSamplingRate()">
             } else {
                 <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate" required
-                       oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')">
+                       oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')" value=1>
             }
         </div>
     </div>
     @* Tags *@
+    <!--
     <div class="form-group row">
         <div class="col-2">
             <label>Tags</label>
         </div>
         <div class="col-8">
-            <div id="formTags" class="row">
-                @*Populated by device.js*@
+            <div id="formTags" class="row" id="formTags">
+                @*Populated by devices.js*@
             </div>
         </div>
-    </div>
-    @* Credential *@
+    </div>-->
+    @* Credentials *@
     <div class="form-group row">
-        <label for="samplingRate" class="col-2 col-form-label">Credential</label>
+        <label for="samplingRate" class="col-2 col-form-label">Credentials</label>
         <div class="col-4">
             @if(device != null) {
-                <input type="text" class="form-control" id="credentials" name="credentials" placeholder="Enter Credential"
+                <input type="text" class="form-control" id="credentials" name="credentials" placeholder="Enter Credentials"
                        value="@device.getCredentials()">
             } else {
-                <input type="text" class="form-control" id="credentials" name="credentials" placeholder="Enter Credential">
+                <input type="text" class="form-control" id="credentials" name="credentials" placeholder="Enter Credentials">
             }
         </div>
     </div>

@@ -62,7 +62,7 @@ jQuery(document).ready(($) => {
                 if(device.group != null) {
                     $("#deviceInfoPage #group").text(device.group.name);
                 } else {
-                    $("#deviceInfoPage #group").text("N/A");
+                    $("#deviceInfoPage #group").text("None");
                 }
                 $("#deviceInfoPage #ipAddress").text(device.ip);
                 if(device.credentials === "") {

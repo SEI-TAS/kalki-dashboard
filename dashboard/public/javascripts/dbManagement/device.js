@@ -47,7 +47,7 @@ jQuery(document).ready(($) => {
 
         $.get("/devices", (devices) => {
             $.each(JSON.parse(devices), (index, device) => {
-                let deviceGroupName = device.group ? device.group.name : "N/A";
+                let deviceGroupName = device.group ? device.group.name : "None";
 
                 let newRow = "<tr id='tableRow" + device.id + "'>\n" +
                     "    <td class='fit'>" +
