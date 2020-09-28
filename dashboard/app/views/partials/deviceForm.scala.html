@@ -113,7 +113,7 @@
                    oninvalid="this.setCustomValidity('Please Enter History Size')" onchange="setCustomValidity('')" value="@device.getStatusHistorySize()">
             } else {
             <input type="number" min="0" max="2147483647" class="form-control" id="statusHistorySize" name="statusHistorySize" placeholder="Enter Size" required
-                   oninvalid="this.setCustomValidity('Please Enter History Size')" onchange="setCustomValidity('')" value=1>
+                   oninvalid="this.setCustomValidity('Please Enter History Size')" onchange="setCustomValidity('')" value=1000>
             }
         </div>
         @* Sampling Rate *@
@@ -124,7 +124,7 @@
                        oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')" value="@device.getSamplingRate()">
             } else {
                 <input type="number" min="0" max="2147483647" class="form-control" id="samplingRate" name="samplingRate" placeholder="Enter Rate" required
-                       oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')" value=1>
+                       oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')" value=5>
             }
         </div>
     </div>
