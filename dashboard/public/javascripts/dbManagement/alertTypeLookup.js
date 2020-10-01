@@ -140,16 +140,18 @@ jQuery(document).ready(($) => {
 
     //query the database for all device types
     async function getAllDeviceTypes() {
-        $("#alertTypeLookupContent .form-control#deviceTypeSelect").empty();
+        $("#AlertTypeLookupContent #deviceTypeSelect").empty();
 
         return $.get("/device-types", (deviceTypes) => {
             $.each(JSON.parse(deviceTypes), (id, deviceType) => {
-                $("#alertTypeLookupContent .form-control#deviceTypeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
+                $("#AlertTypeLookupContent #deviceTypeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
                     + deviceType.name +
                     "</option>")
                 deviceTypeIDtoNameMap[deviceType.id] = deviceType.name;
                 deviceTypeNameToIDMap[deviceType.name] = deviceType.id;
             });
+            let type = $("#type").val(); 
+            $("#AlertTypeLookupContent #deviceTypeSelect").val(type);
         });
     }
 
@@ -159,8 +161,9 @@ jQuery(document).ready(($) => {
         await getAllDeviceTypes();
 
         alertTypeLookupTable.clear();
-
-        $.get("/alert-type-lookups", (alertTypeLookups) => {
+        alertTypeLookupTable.draw();
+        
+        $.get("/alert-type-lookups-by-device-type/?id="+$("#type").val(), (alertTypeLookups) => {
             $.each(JSON.parse(alertTypeLookups), (index, alertTypeLookup) => {
                 let newRow = "<tr id='tableRow" + alertTypeLookup.id + "'>\n" +
                     "    <td class='fit'>" +
@@ -223,7 +226,7 @@ jQuery(document).ready(($) => {
         $("#alertTypeLookupContent #submitFormButton").html("Add");
         $("#alertTypeLookupContent #clearAtlFormButton").html("Clear");
         alertTypeSelect.val(alertTypeSelect.find("option:first").val());
-        typeSelect.val(typeSelect.find("option:first").val());
+        //typeSelect.val(typeSelect.find("option:first").val());
         $("#alertTypeLookupContent .form-control#variableKey").val("");
         $("#alertTypeLookupContent .form-control#variableValue").val("");
         $("#alertTypeLookupContent #variableTable").find("tr:gt(0)").remove();   //remove all rows except header
@@ -231,6 +234,10 @@ jQuery(document).ready(($) => {
 
     //only load content if the tab is active
     $('a[href="#AlertTypeLookupContent"]').on('shown.bs.tab', function (e) {
+        getAllAlertTypeLookups();
+    });
+
+    $("#type").change(function() {
         getAllAlertTypeLookups();
     });
 });

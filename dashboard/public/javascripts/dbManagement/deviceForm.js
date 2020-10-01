@@ -166,7 +166,7 @@ jQuery(document).ready(($) => {
         return $.get("/groups", (groups) => {
             groupNameToIDMap[""] = -1;
             groupNameToIDMap["N/A"] = -1;
-            $("#group").append("<option value='-1'></option>");   //assuming this is to allow an empty group
+            $("#group").append("<option value='-1'>None</option>");   //assuming this is to allow an empty group
 
             $.each(JSON.parse(groups), (id, group) => {
                 groupNameToIDMap[group.name] = group.id;
@@ -185,17 +185,18 @@ jQuery(document).ready(($) => {
 
         return $.get("/tags", (tags) => {
             $.each(JSON.parse(tags), (id, tag) => {
+                console.log(tagIds);
                 tagIDtoNameMap[tag.id] = tag.name;
                 $("#formTags").append("<div class='form-check col-2'>\n" +
                     "    <input class='form-check-input' type='checkbox' id='tagCheckbox" + tag.id + "' name='tagIds[]' value='" + tag.id + "'>\n" +
                     "    <label class='form-check-label' for='tagCheckBox" + tag.id + "'>" + tag.name + "</label>\n" +
                     "</div>");
-                if(tagIds.includes(tag.id)){
+                /*if(tagIds.includes(tag.id)){
                     $("#formTags").append("<input class='form-check-input' id='' type='checkbox' name='tagIds[]' value='-1' checked>");
 
                 } else {
                     $("#formTags").append("<input class='form-check-input' id='' type='checkbox' name='tagIds[]' value='-1'>");
-                }
+                }*/
             });
         });
 
@@ -213,9 +214,14 @@ jQuery(document).ready(($) => {
 
     async function loadData(device) {
         getDeviceTypes(device.type.id);
-        getTags(device.tagIds);
+        //getTags(device.tagIds);
         getDataNodes();
-        getGroups(device.group.id);
+        if(device.group === null) {
+            getGroups(-1);
+        }
+        else {
+            getGroups(device.group.id);
+        }
     }
 
     $("#editDeviceBtn").click(()=>{

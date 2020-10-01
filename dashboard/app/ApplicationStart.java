@@ -52,8 +52,13 @@ public class ApplicationStart {
         lifecycle.addStopHook( () -> {
             return CompletableFuture.completedFuture(null);
         } );
-
-        // Initializes the database
-        Postgres.initialize(config.getString("db_host"), "5432", "kalkidb", "kalkiuser", "kalkipass");
+        try {
+            edu.cmu.sei.kalki.db.utils.Config.load("../config.json");
+            Postgres.initializeFromConfig();
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            throw new RuntimeException(e);
+        }    	
     }
 }

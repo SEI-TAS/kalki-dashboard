@@ -1,0 +1,25 @@
+version: '2.3'
+services:
+  kalki-dashboard:
+    image: kalki/kalki-dashboard
+    container_name: kalki-dashboard
+    stdin_open: true
+    tty: true
+    ports:
+      - 9000:9000
+    environment:
+      - TZ=${HOST_TZ}
+    depends_on:
+      kalki-postgres-dev:
+        condition: service_healthy
+  kalki-postgres-dev:
+    image: kalki/kalki-postgres
+    container_name: kalki-postgres-dev
+    environment:
+      - TZ=${HOST_TZ}
+    healthcheck:
+      test: "pg_isready -q -h kalki-postgres-dev"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 60s

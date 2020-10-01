@@ -6,7 +6,5 @@ services:
     network_mode: "host"
     stdin_open: true
     tty: true
-    #ports:
-    #  - 9000:9000
     environment:
       - TZ=${HOST_TZ}

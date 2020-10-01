@@ -35,7 +35,7 @@
     @helper.form(action = routes.UmboxLookupController.addOrUpdateUmboxLookup(), 'enctype -> "multipart/form-data") {
         <h4>Umbox Actions</h4>
         @* Type *@
-        <div class="form-group row">
+        <div class="form-group row" hidden>
             <label for="type" class="col-2 col-form-label">Device Type<span>*</span></label>
             <div class="col-4">
                 <select class="form-control" id="type" name="deviceTypeId" required>
@@ -47,7 +47,7 @@
         <div class="form-group row">
             <label for="type" class="col-2 col-form-label">Security State<span>*</span></label>
             <div class="col-4">
-                <select class="form-control" id="securityState" name="stateId" required>
+                <select class="form-control" id="securityState" name="securityStateId" required>
                     @*Populated by umboxLookup.js*@
                 </select>
             </div>
@@ -57,7 +57,7 @@
             @* UmboxImage *@
             <label for="type" class="col-2 col-form-label">Umbox Image</label>
             <div class="col-3">
-                <select class="form-control" id="umboxImage">
+                <select class="form-control" id="umboxImage" name="umboxImageId" required>
                     @*Populated by umboxLookup.js*@
                 </select>
             </div>
@@ -65,7 +65,7 @@
             @* Order *@
             <label for="order" class="col-1 col-form-label">Order</label>
             <div class="col-1">
-                <input type="number" min="0" max="2147483647" class="form-control" id="order" value="1">
+                <input type="number" min="0" max="2147483647" class="form-control" id="order" name="dagOrder" value="1">
             </div>
 
             <div class="col-4">

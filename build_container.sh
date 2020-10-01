@@ -16,6 +16,7 @@ if [ ! -d $deployment_path ]; then
 fi
 
 echo "Copying configurations for deployment:"
-cp -r -v $deployment_path/application.conf temp.conf
+cp -r -v $deployment_path/config.json temp.json
 
-docker build --network=host -t kalki/kalki-dashboard .
+KALKI_DB_VER="1.7.0"
+docker build --network=host --build-arg KALKI_DB_VER="${KALKI_DB_VER}" -t kalki/kalki-dashboard .

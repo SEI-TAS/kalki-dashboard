@@ -39,11 +39,11 @@ jQuery(document).ready(($) => {
     }
     else {
         $('#default-tab').tab('show');
+        
     }
 
     $(".dbManagementView  .nav-link").click(function (e) {
         let tab_name = this.getAttribute('href');
-
         window.sessionStorage.setItem('activeTab', tab_name);
 
         $(this).tab('show');

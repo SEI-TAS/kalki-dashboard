@@ -39,7 +39,6 @@ import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
 
 import play.mvc.Controller;
-import play.db.*;
 import play.mvc.Result;
 import play.data.*;
 import play.mvc.Http.MultipartFormData;
@@ -72,6 +71,17 @@ public class AlertTypeLookupController extends Controller {
     public CompletionStage<Result> getAlertTypeLookups() {
         return CompletableFuture.supplyAsync(() -> {
             List<AlertTypeLookup> alertTypeLookups = AlertTypeLookupDAO.findAllAlertTypeLookups();
+            try {
+                return ok(ow.writeValueAsString(alertTypeLookups));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+    public CompletionStage<Result> getAlertTypeLookupsByDeviceType(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<AlertTypeLookup> alertTypeLookups = AlertTypeLookupDAO.findAlertTypeLookupsByDeviceType(id);
             try {
                 return ok(ow.writeValueAsString(alertTypeLookups));
             } catch (JsonProcessingException e) {

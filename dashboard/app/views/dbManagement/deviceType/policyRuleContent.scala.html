@@ -33,9 +33,9 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="policyRuleContent">
     @helper.form(action = routes.PolicyRuleController.addOrUpdatePolicyRule(), 'enctype -> "multipart/form-data") {
-        <h4>Device Policies</h4>
+        <h4>Policy Rule</h4>
         @* DeviceType select*@
-        <div class="form-group row">
+        <div class="form-group row" hidden>
             <label for="policyRuleDeviceTypeSelect" class="col-2 col-form-label" >Device Type<span hidden>*</span></label>
             <div class="col-4">
                 <select class="form-control" id="policyRuleDeviceTypeSelect" name="deviceTypeId" required>
@@ -43,59 +43,6 @@
                 </select>
             </div>
         </div>
-
-        @* Alert Types *@
-        <div class="form-group row">
-            <label for="policyRuleAlertTypeSelect" class="col-2 col-form-label">Alert Type</label>
-            <div class="col-4">
-                <select class="form-control" id="policyRuleAlertTypeSelect">
-                    @*Populated by policyRule.js*@
-                </select>
-            </div>
-            <div class="col-4">
-                <button type="button" class="btn btn-sm btn-pill btn-primary" id="policyRuleAddAlertButton">+</button>
-            </div>
-        </div>
-        @* hidden alertTypes *@
-        @* stores alert types and returns an array when form interprets this.
-        see https://stackoverflow.com/questions/11331191/form-bindfromrequest-with-array-values *@
-        <select id="alertTypeOrderFormInput" name="alertTypeIds[]" multiple hidden required
-        oninvalid="alert('Please add an Alert before adding a Policy Rule')"></select>
-        @* Variable table *@
-        <table id="alertTypeOrderTable" class="table col-6">
-            <thead>
-                <th>@* For remove buttons *@</th>
-                <th>Alert Type<span>*</span></th>
-            </thead>
-            <tbody id="alertTypeOrderTableBody">
-                @*Populated by policyRule.js*@
-            </tbody>
-        </table>
-
-        @* Device Commands *@
-        <div class="form-group row">
-            <label for="policyRuleCommands" class="col-2 col-form-label">Commands</label>
-            <div class="col-3">
-                <select class="form-control" id="policyRuleCommands">
-                    @*Populated by policyRule.js*@
-                </select>
-            </div>
-            <div class="col-4">
-                <button type="button" class="btn btn-sm btn-pill btn-primary" id="policyRuleAddCommandButton">+</button>
-            </div>
-        </div>
-        <select id="deviceCommandFormInput" name="commandIds[]" multiple hidden
-        oninvalid="alert('Please add a Command before adding a Policy Rule')"></select>
-        @* Variable table *@
-        <table id="policyRuleCommandsOrderTable" class="table col-6">
-            <thead>
-                <th>@* For remove buttons *@</th>
-                <th>Commands</th>
-            </thead>
-            <tbody id="policyRuleCommandsOrderTableBody">
-                @*Populated by policyRule.js*@
-            </tbody>
-        </table>
 
         @* State Transition select*@
         <div class="form-group row">
@@ -106,24 +53,88 @@
                 </select>
             </div>
         </div>
+        <hr>
 
         @* Threshold *@
         <div class="form-group row">
-            <label for="threshold" class="col-2 col-form-label">Policy Condition Threshold<span>*</span></label>
+            <label class="col-12 col-form-label"><strong><u>Policy Condition</u></strong></label>
+            <label for="threshold" class="col-2 col-form-label">Policy Condition Threshold (sec)<span>*</span></label>
             <div class="col-4">
                 <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleThresholdFormInput" name="threshold" placeholder="Enter a threshold" required
                 oninvalid="this.setCustomValidity('Please Enter a Threshold')" onchange="setCustomValidity('')">
             </div>
         </div>
 
+        @* Alert Types *@
+        <div class="form-group row">
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-primary" id="policyRuleAddAlertButton">Add Alert Type</button>
+            </div>
+            <div class="col-4">
+                <select class="form-control" id="policyRuleAlertTypeSelect">
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+        </div>
+        @* hidden alertTypes *@
+        @* stores alert types and returns an array when form interprets this.
+        see https://stackoverflow.com/questions/11331191/form-bindfromrequest-with-array-values *@
+        <select id="alertTypeOrderFormInput" name="alertTypeIds[]" multiple hidden required
+        oninvalid="alert('Please add an Alert before adding a Policy Rule')"></select>
+        @* Variable table *@
+        <table id="alertTypeOrderTable" class="table col-6" style="width: 50%;">
+            <thead>
+                <th>@* For remove buttons *@</th>
+                <th>Alert Type<span>*</span></th>
+            </thead>
+            <tbody id="alertTypeOrderTableBody">
+                @*Populated by policyRule.js*@
+                <tr id="defaultAlertRow">
+                	<td></td>
+                	<td>No Alerts Added</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+
         @* Sampling Rate Factor *@
         <div class="form-group row">
+            <label class="col-12 col-form-label"><strong><u>Actions</u></strong></label>
             <label for="samplingRate" class="col-2 col-form-label">Sampling Rate Factor<span>*</span></label>
             <div class="col-4">
                 <input type="number" value="1" min="0" max="2147483647" class="form-control" id="policyRuleSamplingRateFactorFormInput" name="samplingRateFactor" placeholder="Enter Sampling Rate Factor" required
                 oninvalid="this.setCustomValidity('Please Enter a Sampling Rate Factor')" onchange="setCustomValidity('')">
             </div>
         </div>
+
+        @* Device Commands *@
+        <div class="form-group row">
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-primary" id="policyRuleAddCommandButton">Add Command</button>
+            </div>
+            <div class="col-3">
+                <select class="form-control" id="policyRuleCommands">
+                    @*Populated by policyRule.js*@
+                </select>
+            </div>
+            
+        </div>
+        <select id="deviceCommandFormInput" name="commandIds[]" multiple hidden
+        oninvalid="alert('Please add a Command before adding a Policy Rule')"></select>
+        @* Variable table *@
+        <table id="policyRuleCommandsOrderTable" class="table col-6" style="width: 50%;">
+            <thead>
+                <th>@* For remove buttons *@</th>
+                <th>Commands</th>
+            </thead>
+            <tbody id="policyRuleCommandsOrderTableBody">
+                @*Populated by policyRule.js*@
+                <tr id="defaultCommandRow">
+                	<td></td>
+                	<td>No Commands Added</td>
+                </tr>
+            </tbody>
+        </table>
 
         @* Submit *@
         <div class="row justify-content-end">
@@ -141,7 +152,7 @@
         <tr>
             <th>actions</th>
             <th>device type</th>
-            <th>policy condition(s)</th>
+            <th>policy condition</th>
             <th>device command(s)</th>
             <th>start state</th>
             <th>end state</th>

@@ -32,6 +32,27 @@
 
 jQuery(document).ready(($) => {
 
+    let deviceTypeIdToNameMap = {};
+    let deviceTypeNameToIdMap = {};
+
+    async function getDeviceTypes() {
+        $("#type").empty();
+
+        return $.get("/device-types", (types) => {
+            $.each(JSON.parse(types), (id, type) => {
+                deviceTypeIdToNameMap[type.id] = type.name;
+                deviceTypeNameToIdMap[type.name] = type.id;
+
+                $("#type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
+            });
+            var selectedDevice = sessionStorage.getItem('selectedDevice');
+            if(selectedDevice) { 
+                $("#type").val(selectedDevice);
+            }
+        });
+    }
+
+    getDeviceTypes();
 });
 
 //clear all edits on page load
@@ -50,3 +71,12 @@ $(window).on('load', function(){
     $.post("/clear-umbox-lookup-form", {}, function () {});
     $.post("/clear-command-form", {}, function () {});
 });
+
+function changeDevice(selectObject) {
+    var value = selectObject.value;  
+    sessionStorage.setItem('selectedDevice', value);
+    $("#umboxLookupContent #type").val(value);
+    $("#CommandContent #deviceTypeSelect").val(value);
+    $("#AlertTypeLookupContent #deviceTypeSelect").val(value);
+    $("#policyRuleContent #policyRuleDeviceTypeSelect").val(value);
+}
