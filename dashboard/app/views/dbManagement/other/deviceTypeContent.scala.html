@@ -42,6 +42,33 @@
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">
             </div>
         </div>
+        <h4>Device Sensors</h4>
+        
+        @* Device Sensors Table *@
+        <div class="form-group row">
+        	@* Name *@
+        	<label for="name" class="col-2 col-form-label">Name</label>
+            <div class="col-4">
+                <input type="text" maxlength="200" class="form-control" id="sensorName" name="sensorName" placeholder="Enter Sensor Name">
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-primary" id="addSensorButton">Add Sensor</button>
+            </div>
+        </div>
+        @* Device Sensors Table *@
+        <table id="deviceSensorTable" class="table col-6" style="width: 50%;">
+            <thead>
+                <th>@* For remove buttons *@</th>
+                <th>Device Sensors<span>*</span></th>
+            </thead>
+            <tbody id="deviceSensorTableBody">
+                @*Populated by deviceType.js*@
+                <tr id="defaultAlertRow">
+                	<td></td>
+                	<td>No Device Sensors Added</td>
+                </tr>
+            </tbody>
+        </table>
         @* Submit *@
         <div class="row justify-content-end">
             <div class="col-2">

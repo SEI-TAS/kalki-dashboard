@@ -31,6 +31,9 @@
  */
 
 jQuery(document).ready(($) => {
+    let totalSensorsAdded = 0;
+    let deviceSensorRowCounter = 0;
+
     let deviceTypeTable = $('#deviceTypeTable').DataTable({
         order: [[1, 'asc']],
         columnDefs: [
@@ -78,6 +81,75 @@ jQuery(document).ready(($) => {
             });
         });
     }
+
+    function addSensorRow(alertTypeLookupId) {
+        /*let alertTypeId = alertTypeLookupIdToAlertTypeIdMap[alertTypeLookupId];
+
+        if(alertTypeId == null) {
+            alert("please select a valid alert type");
+            return false;
+        }
+
+        // Check for duplicate alert types trying to be added
+        let hasDuplicate = false;
+        Object.keys(currentAlertTypeIds).forEach((uid) => {
+            let alertId = parseInt(currentAlertTypeIds[uid]);
+
+            if (alertTypeId == alertId) {
+                hasDuplicate = true;
+            }
+        });*/
+        let hasDuplicate = false;
+        let deviceSensorName = $(".form-control#sensorName").val();
+
+        if (hasDuplicate) {
+            alert("cannot add duplicate alert");
+            return false;
+        } else {
+            // No duplicates, so add this row to the form
+            totalSensorsAdded++;
+            let currentCount = ++deviceSensorRowCounter;
+            let newRow = "<tr id='deviceSensorTableRow" + currentCount + "'>\n" +
+                "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
+                "    <td id='alertType" + currentCount + "'>" + deviceSensorName + "</td>\n" +
+                "</tr>"
+            $("#deviceSensorTable").find("tbody").append($(newRow));
+
+            // Add it to internal counter
+            //currentAlertTypeIds.push(alertTypeId);
+
+            // Set hidden form input to current map (needed to pass form data to controller)
+            //$("#alertTypeOrderFormInput").append("<option id='alertTypeOrderFormInput" + alertTypeId + "' value='" + alertTypeId + "' selected></option>");
+
+            // Set remove function for this alert type
+            $("#deviceSensorTableBody #removeButton" + currentCount).click(function () {
+                $("#deviceSensorTableBody #deviceSensorTableRow" + currentCount).remove();
+
+                //$("#alertTypeOrderFormInput" + alertTypeId).remove();
+                totalSensorsAdded--;
+
+                if(totalSensorsAdded === 0) {
+                    $("#defaultAlertRow").attr("hidden",false);
+                }
+
+                //let indexToRemove = currentAlertTypeIds.indexOf(alertTypeId);
+                //currentAlertTypeIds.splice(indexToRemove, 1);
+            });
+        }
+        if(totalSensorsAdded > 0) {
+            $("#defaultAlertRow").attr("hidden",true);
+        }
+        return true;
+    }
+
+    $("#deviceTypeContent #addSensorButton").click(function () {
+        let sensorToAdd = $(".form-control#sensorName");
+
+        if (addSensorRow(sensorToAdd.val())) { //if the add was successful
+            sensorToAdd.val("");
+        }
+    });
+
 
     $("#deviceTypeContent #clearDtFormButton").click(function () {
         $.post("/clear-device-type-form", {}, function () {
