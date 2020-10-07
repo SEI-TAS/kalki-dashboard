@@ -10,7 +10,7 @@ RUN apk --no-cache add bash wget
 
 # Installing SBT
 ENV SBT_VERSION 1.3.8
-RUN wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz
+RUN wget -O sbt.tgz https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz
 RUN tar -zxvf sbt.tgz
 RUN /sbt/bin/sbt sbtVersion
 
