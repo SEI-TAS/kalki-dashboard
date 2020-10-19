@@ -44,7 +44,7 @@
         </div>
         <h4>Device Sensors</h4>
         
-        @* Device Sensors Table *@
+        @* Device Sensors Input *@
         <div class="form-group row">
         	@* Name *@
         	<label for="name" class="col-2 col-form-label">Name</label>
@@ -63,12 +63,14 @@
             </thead>
             <tbody id="deviceSensorTableBody">
                 @*Populated by deviceType.js*@
-                <tr id="defaultAlertRow">
+                <tr id="noSensorsRow">
                 	<td></td>
                 	<td>No Device Sensors Added</td>
                 </tr>
             </tbody>
         </table>
+        <select id="deviceSensorsFormInput" name="sensors[]" multiple hidden></select>
+
         @* Submit *@
         <div class="row justify-content-end">
             <div class="col-2">

@@ -31,8 +31,8 @@
  */
 
 jQuery(document).ready(($) => {
-    let totalSensorsAdded = 0;
-    let deviceSensorRowCounter = 0;
+    let totalSensors = 0;
+    let nextSensorPosId = 0;
 
     let deviceTypeTable = $('#deviceTypeTable').DataTable({
         order: [[1, 'asc']],
@@ -82,62 +82,39 @@ jQuery(document).ready(($) => {
         });
     }
 
-    function addSensorRow(alertTypeLookupId) {
-        /*let alertTypeId = alertTypeLookupIdToAlertTypeIdMap[alertTypeLookupId];
+    function addSensorRow(deviceSensorName) {
+        // Sensor information will be in 3 locations:
+        // 1. The visual HTML table row
+        // 2. A hidden select option for submitting
+        // 3. A JS array for easily checking for repeated sensor names
 
-        if(alertTypeId == null) {
-            alert("please select a valid alert type");
-            return false;
-        }
+        // No duplicates, so add this row to the form (both visual table and hidden input).
+        // We need to keep count of total, and assign temp unique positional ids (in case one intermediate is deleted,
+        // temp ids have to be always increasing, and will not always be the same as table position).
+        totalSensors++;
+        let sensorTempId = ++nextSensorPosId;
+        let newRow = "<tr id='deviceSensorTableRow" + sensorTempId + "'>\n" +
+            "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + sensorTempId + "'>Remove</button></td>" +
+            "    <td id='sensor" + sensorTempId + "'>" + deviceSensorName + "</td>\n" +
+            "</tr>"
+        $("#deviceSensorTable").find("tbody").append($(newRow));
 
-        // Check for duplicate alert types trying to be added
-        let hasDuplicate = false;
-        Object.keys(currentAlertTypeIds).forEach((uid) => {
-            let alertId = parseInt(currentAlertTypeIds[uid]);
+        // Set hidden form input to current map (needed to pass form data to controller)
+        $("#deviceSensorsFormInput").append("<option id='deviceSensorsFormInput" + sensorTempId + "' value='" + deviceSensorName + "' selected></option>");
 
-            if (alertTypeId == alertId) {
-                hasDuplicate = true;
+        // Set remove function for this sensor
+        $("#deviceSensorTableBody #removeButton" + sensorTempId).click(function () {
+            $("#deviceSensorTableBody #deviceSensorTableRow" + sensorTempId).remove();
+            $("#deviceSensorsFormInput" + sensorTempId).remove();
+            totalSensors--;
+
+            if(totalSensors === 0) {
+                $("#noSensorsRow").attr("hidden",false);
             }
-        });*/
-        let hasDuplicate = false;
-        let deviceSensorName = $(".form-control#sensorName").val();
+        });
 
-        if (hasDuplicate) {
-            alert("cannot add duplicate alert");
-            return false;
-        } else {
-            // No duplicates, so add this row to the form
-            totalSensorsAdded++;
-            let currentCount = ++deviceSensorRowCounter;
-            let newRow = "<tr id='deviceSensorTableRow" + currentCount + "'>\n" +
-                "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
-                "    <td id='alertType" + currentCount + "'>" + deviceSensorName + "</td>\n" +
-                "</tr>"
-            $("#deviceSensorTable").find("tbody").append($(newRow));
-
-            // Add it to internal counter
-            //currentAlertTypeIds.push(alertTypeId);
-
-            // Set hidden form input to current map (needed to pass form data to controller)
-            //$("#alertTypeOrderFormInput").append("<option id='alertTypeOrderFormInput" + alertTypeId + "' value='" + alertTypeId + "' selected></option>");
-
-            // Set remove function for this alert type
-            $("#deviceSensorTableBody #removeButton" + currentCount).click(function () {
-                $("#deviceSensorTableBody #deviceSensorTableRow" + currentCount).remove();
-
-                //$("#alertTypeOrderFormInput" + alertTypeId).remove();
-                totalSensorsAdded--;
-
-                if(totalSensorsAdded === 0) {
-                    $("#defaultAlertRow").attr("hidden",false);
-                }
-
-                //let indexToRemove = currentAlertTypeIds.indexOf(alertTypeId);
-                //currentAlertTypeIds.splice(indexToRemove, 1);
-            });
-        }
-        if(totalSensorsAdded > 0) {
-            $("#defaultAlertRow").attr("hidden",true);
+        if(totalSensors > 0) {
+            $("#noSensorsRow").attr("hidden",true);
         }
         return true;
     }
