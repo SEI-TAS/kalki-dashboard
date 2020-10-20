@@ -31,6 +31,10 @@
  */
 
 jQuery(document).ready(($) => {
+    // Store device sensors for all device types found.
+    let deviceSensorsByDeviceTypeId = {};
+
+    // Track currently displayed sensor info.
     let totalSensors = 0;
     let nextSensorPosId = 0;
 
@@ -58,13 +62,21 @@ jQuery(document).ready(($) => {
                     "</tr>";
                 deviceTypeTable.row.add($(newRow)).draw();
 
+                // Store device type info.
+                deviceSensorsByDeviceTypeId[deviceType.id] = deviceType.sensors;
+
                 deviceTypeTable.on("click", "#editButton" + deviceType.id, function () {
                     $.post("/edit-device-type", {id: deviceType.id}, function () {
-                        $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                        });
+                        $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                         $("#deviceTypeContent #submitFormButton").html("Update");
                         $("#deviceTypeContent #clearDtFormButton").html("Cancel Edit");
                         $("#deviceTypeContent .form-group #name").val($("#deviceTypeTableBody #name" + deviceType.id).html());
+
+                        // Update the alert types
+                        clearSensors();
+                        $.each(deviceSensorsByDeviceTypeId[deviceType.id], (index, sensor) => {
+                            addSensorRow(sensor.name);
+                        });
                     });
                 });
 
@@ -121,8 +133,13 @@ jQuery(document).ready(($) => {
 
     $("#deviceTypeContent #addSensorButton").click(function () {
         let sensorToAdd = $(".form-control#sensorName");
+        let sensorName = sensorToAdd.val();
+        if(sensorName === "") {
+            alert("Can't add empty sensor name.");
+            return;
+        }
 
-        if (addSensorRow(sensorToAdd.val())) { //if the add was successful
+        if (addSensorRow(sensorName)) { //if the add was successful
             sensorToAdd.val("");
         }
     });
@@ -140,4 +157,14 @@ jQuery(document).ready(($) => {
     $('a[href="#DeviceTypeContent"]').on('shown.bs.tab', function (e) {
         getDeviceTypes();
     });
+
+    /**
+     * Removes all items in the sensors table
+     */
+    function clearSensors() {
+        $("#deviceSensorTable").find("tr:gt(0)").remove();
+        $("#deviceSensorsFormInput").find("option").remove();
+        totalSensors = 0;
+        nextSensorPosId = 0;
+    }
 });
