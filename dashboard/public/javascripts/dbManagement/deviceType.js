@@ -75,7 +75,7 @@ jQuery(document).ready(($) => {
                         // Update the alert types
                         clearSensors();
                         $.each(deviceSensorsByDeviceTypeId[deviceType.id], (index, sensor) => {
-                            addSensorRow(sensor.name);
+                            addSensorRow(sensor.name, sensor.id);
                         });
                     });
                 });
@@ -94,7 +94,7 @@ jQuery(document).ready(($) => {
         });
     }
 
-    function addSensorRow(deviceSensorName) {
+    function addSensorRow(deviceSensorName, deviceSensorId) {
         // Sensor information will be in 3 locations:
         // 1. The visual HTML table row
         // 2. A hidden select option for submitting
@@ -112,12 +112,14 @@ jQuery(document).ready(($) => {
         $("#deviceSensorTable").find("tbody").append($(newRow));
 
         // Set hidden form input to current map (needed to pass form data to controller)
-        $("#deviceSensorsFormInput").append("<option id='deviceSensorsFormInput" + sensorTempId + "' value='" + deviceSensorName + "' selected></option>");
+        $("#deviceSensorNamesFormInput").append("<option id='deviceSensorNamesFormInput" + sensorTempId + "' value='" + deviceSensorName + "' selected></option>");
+        $("#deviceSensorIdsFormInput").append("<option id='deviceSensorIdsFormInput" + sensorTempId + "' value='" + deviceSensorId + "' selected></option>");
 
         // Set remove function for this sensor
         $("#deviceSensorTableBody #removeButton" + sensorTempId).click(function () {
             $("#deviceSensorTableBody #deviceSensorTableRow" + sensorTempId).remove();
-            $("#deviceSensorsFormInput" + sensorTempId).remove();
+            $("#deviceSensorNamesFormInput" + sensorTempId).remove();
+            $("#deviceSensorIdsFormInput" + sensorTempId).remove();
             totalSensors--;
 
             if(totalSensors === 0) {
@@ -139,7 +141,8 @@ jQuery(document).ready(($) => {
             return;
         }
 
-        if (addSensorRow(sensorName)) { //if the add was successful
+        // 0 since it is a new sensor, it does not have an id yet.
+        if (addSensorRow(sensorName, 0)) { //if the add was successful
             sensorToAdd.val("");
         }
     });
@@ -163,7 +166,8 @@ jQuery(document).ready(($) => {
      */
     function clearSensors() {
         $("#deviceSensorTable").find("tr:gt(0)").remove();
-        $("#deviceSensorsFormInput").find("option").remove();
+        $("#deviceSensorNamesFormInput").find("option").remove();
+        $("#deviceSensorIdsFormInput").find("option").remove();
         totalSensors = 0;
         nextSensorPosId = 0;
     }
