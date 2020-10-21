@@ -34,6 +34,11 @@
 <div class="col" id="deviceSensorContent">
     @helper.form(action = routes.DeviceSensorController.addOrUpdateDeviceSensor()) {
         <h4>Device Sensor</h4>
+        @* DeviceType *@
+        <div class="form-group row" hidden>
+            <input type="hidden" class="form-control hiddenDeviceTypeId" id="deviceTypeIdHidden" name="typeId" required>
+            <input type="hidden" class="form-control hiddenDeviceTypeName" id="deviceTypeNameHidden" name="typeName" >
+        </div>
         @* DeviceSensorId *@
         <div class="form-group row" hidden>
             <input type="hidden" class="form-control" id="deviceSensorIdHidden" name="id" value="0" required>
@@ -45,10 +50,6 @@
                 <input type="text" maxlength="200" class="form-control" id="name" name="name" placeholder="Enter Name" required
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">
             </div>
-        </div>
-        @* DeviceType *@
-        <div class="form-group row" hidden>
-            <input type="hidden" class="form-control" id="deviceTypeHidden" name="typeId" required>
         </div>
         @* Submit *@
         <div class="row justify-content-end">

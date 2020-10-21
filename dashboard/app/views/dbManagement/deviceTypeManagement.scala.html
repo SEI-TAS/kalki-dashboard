@@ -39,7 +39,7 @@
     <div class="form-group row">
         <label for="type" class="col-2 col-form-label">Device Type</label>
         <div class="col-4">
-            <select class="form-control" id="type" name="deviceTypeId" required  onchange="changeDevice(this)">
+            <select class="form-control" id="type" name="deviceTypeId" required  onchange="changeDeviceType(this.value)">
                 @*Populated by dbManagement.js*@
             </select>
         </div>

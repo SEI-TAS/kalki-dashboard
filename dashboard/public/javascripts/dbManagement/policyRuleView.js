@@ -450,9 +450,11 @@ jQuery(document).ready(($) => {
     });
 
     $("#type").change(function() {
-        $("#selectedElement").html("");
-        stateNameToUmboxes = {};
-        getPolicyRuleView();
+        if($('a[href="#PolicyRuleViewContent"]').hasClass("active")) {
+            $("#selectedElement").html("");
+            stateNameToUmboxes = {};
+            getPolicyRuleView();
+        }
         
     });
 

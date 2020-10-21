@@ -99,8 +99,8 @@ public class DeviceSensorController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 DeviceSensor deviceSensor = filledForm.get();
-                int n = deviceSensor.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(n));
+                deviceSensor.insertOrUpdate();
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(deviceSensor.getTypeId()));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

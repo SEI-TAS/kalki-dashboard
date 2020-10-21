@@ -38,23 +38,12 @@ jQuery(document).ready(($) => {
         ]
     });
 
-    // Currently selected device type id.
-    let deviceTypeId = 0;
-
-    // Loads the selected device type.
-    function getCurrentDeviceType() {
-        deviceTypeId = $("#type").val();
-        $("#deviceSensorContent #deviceTypeHidden").val(deviceTypeId);
-    }
-
     // Load the device sensors for the currently selected device type.
     async function getDeviceSensors() {
-        getCurrentDeviceType();
-
         deviceSensorTable.clear();
         deviceSensorTable.draw();
 
-        $.get("/device-sensors-device-type/?id="+$("#type").val(), (sensors) => {
+        $.get("/device-sensors-device-type/?id="+$("#deviceTypeIdHidden").val(), (sensors) => {
             $.each(JSON.parse(sensors), (index, sensor) => {
                 let newRow = "<tr id='tableRow" + sensor.id + "'>\n" +
                     "    <td class='fit'>" +
@@ -63,7 +52,7 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + sensor.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + sensor.id + "'>" + sensor.typeId + "</td>\n" +
+                    "    <td id='deviceType" + sensor.id + "'>" + $("#deviceSensorContent .form-group #deviceTypeNameHidden").val() + "</td>\n" +
                     "    <td class='fit' id='id" + sensor.id + "'>" + sensor.id + "</td>\n" +
                     "    <td id='name" + sensor.id + "'>" + sensor.name + "</td>\n" +
                     "</tr>";
@@ -78,15 +67,16 @@ jQuery(document).ready(($) => {
                 });
 
                 deviceSensorTable.on("click", "#deleteButton" +sensor.id, function () {
-                    $.post("/delete-device-sensor", {id: sensor.id}, function (isSuccess) {
-                        if(isSuccess == "true") {
-                            deviceSensorTable.row("#tableRow" + sensor.id).remove().draw();
-                        }
-                        else {
-                            alert("Delete was unsuccessful. Please check that another table entry " +
-                                "does not rely on this Device Sensor.");
-                        }
-                    });
+                    if(confirm("Are you sure you want to delete sensor " + sensor.name + "?") === true) {
+                        $.post("/delete-device-sensor", {id: sensor.id}, function (isSuccess) {
+                            if (isSuccess === "true") {
+                                deviceSensorTable.row("#tableRow" + sensor.id).remove().draw();
+                            } else {
+                                alert("Delete was unsuccessful. Please check that another table entry " +
+                                    "does not rely on this Device Sensor.");
+                            }
+                        });
+                    }
                 });
             });
         });
@@ -99,13 +89,8 @@ jQuery(document).ready(($) => {
         $("#deviceSensorContent .form-group #name").val("");
     });
 
-    // Load data when tab is active
-    $('a[href="#DeviceSensorContent"]').on('shown.bs.tab', function (e) {
-        getDeviceSensors();
-    });
-
     // Reload sensors when selected device type changes.
-    $("#type").change(function() {
+    $("#deviceTypeIdHidden").change(function() {
         getDeviceSensors();
     });
 });

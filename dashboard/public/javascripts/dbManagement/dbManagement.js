@@ -30,24 +30,40 @@
  *
  */
 
-jQuery(document).ready(($) => {
+let deviceTypeIdToNameMap = {};
 
-    let deviceTypeIdToNameMap = {};
-    let deviceTypeNameToIdMap = {};
+jQuery(document).ready(($) => {
+    $.urlParam = function(name){
+        let results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results==null) {
+            return null;
+        }
+        return decodeURI(results[1]) || 0;
+    }
 
     async function getDeviceTypes() {
         $("#type").empty();
 
+        // Get device types from DB.
         return $.get("/device-types", (types) => {
             $.each(JSON.parse(types), (id, type) => {
                 deviceTypeIdToNameMap[type.id] = type.name;
-                deviceTypeNameToIdMap[type.name] = type.id;
 
                 $("#type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
             });
-            var selectedDevice = sessionStorage.getItem('selectedDevice');
-            if(selectedDevice) { 
-                $("#type").val(selectedDevice);
+
+            // Get currently selected device type id from URL or session storage (in that priority order).
+            let selectedDeviceFromUrl = $.urlParam('id');
+            if(selectedDeviceFromUrl) {
+                $("#type").val(selectedDeviceFromUrl);
+                changeDeviceType(selectedDeviceFromUrl);
+            }
+            else {
+                let selectedDevice = sessionStorage.getItem('selectedDeviceType');
+                if (selectedDevice) {
+                    $("#type").val(selectedDevice);
+                    changeDeviceType(selectedDevice);
+                }
             }
         });
     }
@@ -72,11 +88,12 @@ $(window).on('load', function(){
     $.post("/clear-command-form", {}, function () {});
 });
 
-function changeDevice(selectObject) {
-    var value = selectObject.value;  
-    sessionStorage.setItem('selectedDevice', value);
-    $("#umboxLookupContent #type").val(value);
-    $("#CommandContent #deviceTypeSelect").val(value);
-    $("#AlertTypeLookupContent #deviceTypeSelect").val(value);
-    $("#policyRuleContent #policyRuleDeviceTypeSelect").val(value);
+function changeDeviceType(selectedDeviceTypeId) {
+    sessionStorage.setItem('selectedDeviceType', selectedDeviceTypeId);
+    $(".hiddenDeviceTypeName").val(deviceTypeIdToNameMap[selectedDeviceTypeId]);
+    $(".hiddenDeviceTypeId").val(selectedDeviceTypeId).trigger('change');
+    $("#umboxLookupContent #type").val(selectedDeviceTypeId);
+    $("#CommandContent #deviceTypeSelect").val(selectedDeviceTypeId);
+    $("#AlertTypeLookupContent #deviceTypeSelect").val(selectedDeviceTypeId);
+    $("#policyRuleContent #policyRuleDeviceTypeSelect").val(selectedDeviceTypeId);
 }
