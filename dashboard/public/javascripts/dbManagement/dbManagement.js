@@ -30,8 +30,6 @@
  *
  */
 
-let deviceTypeIdToNameMap = {};
-
 jQuery(document).ready(($) => {
     $.urlParam = function(name){
         let results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -47,8 +45,6 @@ jQuery(document).ready(($) => {
         // Get device types from DB.
         return $.get("/device-types", (types) => {
             $.each(JSON.parse(types), (id, type) => {
-                deviceTypeIdToNameMap[type.id] = type.name;
-
                 $("#type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
             });
 
@@ -85,15 +81,12 @@ $(window).on('load', function(){
     $.post("/clear-device-form", {}, function () {});
     $.post("/clear-command-lookup-form", {}, function () {});
     $.post("/clear-umbox-lookup-form", {}, function () {});
-    $.post("/clear-command-form", {}, function () {});
 });
 
 function changeDeviceType(selectedDeviceTypeId) {
     sessionStorage.setItem('selectedDeviceType', selectedDeviceTypeId);
-    $(".hiddenDeviceTypeName").val(deviceTypeIdToNameMap[selectedDeviceTypeId]);
     $(".hiddenDeviceTypeId").val(selectedDeviceTypeId).trigger('change');
     $("#umboxLookupContent #type").val(selectedDeviceTypeId);
-    $("#CommandContent #deviceTypeSelect").val(selectedDeviceTypeId);
     $("#AlertTypeLookupContent #deviceTypeSelect").val(selectedDeviceTypeId);
     $("#policyRuleContent #policyRuleDeviceTypeSelect").val(selectedDeviceTypeId);
 }

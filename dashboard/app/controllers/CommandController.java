@@ -62,14 +62,12 @@ public class CommandController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
-    private int updatingId;
 
     @Inject
     public CommandController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
     public CompletionStage<Result> getCommand(int id) {
@@ -128,20 +126,6 @@ public class CommandController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result editCommand() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        }
-        catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-
-        this.updatingId = idToInt;
-        return ok();
-    }
-
     public CompletionStage<Result> addOrUpdateCommand() {
         return  CompletableFuture.supplyAsync(() -> {
             Form<DeviceCommand> commandForm = formFactory.form(DeviceCommand.class);
@@ -151,12 +135,8 @@ public class CommandController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 DeviceCommand command = filledForm.get();
-
-                command.setId(this.updatingId);
-                this.updatingId = -1;
-
-                int n = command.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(n));
+                command.insertOrUpdate();
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(command.getDeviceTypeId()));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
@@ -174,10 +154,5 @@ public class CommandController extends Controller {
             Boolean isSuccess = DeviceCommandDAO.deleteCommand(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result clearCommandForm() {
-        this.updatingId = -1;
-        return ok();
     }
 }

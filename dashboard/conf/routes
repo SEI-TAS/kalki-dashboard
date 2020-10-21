@@ -131,10 +131,8 @@ GET     /command                    controllers.CommandController.getCommand(id:
 GET     /commands                   controllers.CommandController.getCommands()
 GET     /commands-device-type/      controllers.CommandController.getCommandsByDeviceType(id: Int ?= -1)
 GET     /get-commands-by-device/    controllers.CommandController.getCommandsByDevice(id: Int ?= -1)
-POST    /edit-command               controllers.CommandController.editCommand()
 POST    /add-or-update-command      controllers.CommandController.addOrUpdateCommand()
 POST    /delete-command             controllers.CommandController.deleteCommand()
-POST    /clear-command-form         controllers.CommandController.clearCommandForm()
 
 GET     /device-sensor                    controllers.DeviceSensorController.getDeviceSensor(id: Int ?= -1)
 GET     /device-sensors-device-type/      controllers.DeviceSensorController.getDeviceSensorsByDeviceType(id: Int ?= -1)

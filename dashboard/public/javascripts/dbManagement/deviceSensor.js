@@ -43,7 +43,7 @@ jQuery(document).ready(($) => {
         deviceSensorTable.clear();
         deviceSensorTable.draw();
 
-        $.get("/device-sensors-device-type/?id="+$("#deviceTypeIdHidden").val(), (sensors) => {
+        $.get("/device-sensors-device-type/?id="+$("#sensorDeviceTypeIdHidden").val(), (sensors) => {
             $.each(JSON.parse(sensors), (index, sensor) => {
                 let newRow = "<tr id='tableRow" + sensor.id + "'>\n" +
                     "    <td class='fit'>" +
@@ -52,7 +52,6 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + sensor.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + sensor.id + "'>" + $("#deviceSensorContent .form-group #deviceTypeNameHidden").val() + "</td>\n" +
                     "    <td class='fit' id='id" + sensor.id + "'>" + sensor.id + "</td>\n" +
                     "    <td id='name" + sensor.id + "'>" + sensor.name + "</td>\n" +
                     "</tr>";
@@ -90,7 +89,7 @@ jQuery(document).ready(($) => {
     });
 
     // Reload sensors when selected device type changes.
-    $("#deviceTypeIdHidden").change(function() {
+    $("#sensorDeviceTypeIdHidden").change(function() {
         getDeviceSensors();
     });
 });
