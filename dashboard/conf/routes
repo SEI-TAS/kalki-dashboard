@@ -136,5 +136,10 @@ POST    /add-or-update-command      controllers.CommandController.addOrUpdateCom
 POST    /delete-command             controllers.CommandController.deleteCommand()
 POST    /clear-command-form         controllers.CommandController.clearCommandForm()
 
+GET     /device-sensor                    controllers.DeviceSensorController.getDeviceSensor(id: Int ?= -1)
+GET     /device-sensors-device-type/      controllers.DeviceSensorController.getDeviceSensorsByDeviceType(id: Int ?= -1)
+POST    /add-or-update-device-sensor      controllers.DeviceSensorController.addOrUpdateDeviceSensor()
+POST    /delete-device-sensor             controllers.DeviceSensorController.deleteDeviceSensor()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
