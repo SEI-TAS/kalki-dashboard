@@ -135,9 +135,9 @@ public class UmboxLookupController extends Controller {
                         insertId = newLookup.insertOrUpdate();
                     }
                 }
-            }
 
-            return redirect(routes.DBManagementController.dbManagementDeviceTypeView(ul.getDeviceTypeId()));
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(ul.getDeviceTypeId()));
+            }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
