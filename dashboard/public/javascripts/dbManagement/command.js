@@ -58,8 +58,8 @@ jQuery(document).ready(($) => {
 
                 commandTable.on("click", "#editButton" +command.id, function () {
                     $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
-                    $("#commandContent #submitFormButton").html("Update");
-                    $("#commandContent #clearFormButton").html("Cancel Edit");
+                    $("#commandContent #cSubmitFormButton").html("Update");
+                    $("#commandContent #cClearFormButton").html("Cancel Edit");
                     $("#commandContent .form-group #deviceCommandIdHidden").val(command.id);
                     $("#commandContent .form-group #name").val($("#commandTableBody #name" +command.id).html());
                 });
@@ -81,8 +81,8 @@ jQuery(document).ready(($) => {
     }
 
     $("#commandContent #clearFormButton").click(function () {
-        $("#commandContent #submitFormButton").html("Add");
-        $("#commandContent #clearFormButton").html("Clear");
+        $("#commandContent #cSubmitFormButton").html("Add");
+        $("#commandContent #cClearFormButton").html("Clear");
         $("#deviceSensorContent .form-group #deviceCommandIdHidden").val(0);
         $("#commandContent .form-group #name").val("");
     });

@@ -59,8 +59,8 @@ jQuery(document).ready(($) => {
 
                 deviceSensorTable.on("click", "#editButton" +sensor.id, function () {
                     $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
-                    $("#deviceSensorContent #submitFormButton").html("Update");
-                    $("#deviceSensorContent #clearFormButton").html("Cancel Edit");
+                    $("#deviceSensorContent #dsSubmitFormButton").html("Update");
+                    $("#deviceSensorContent #dsClearFormButton").html("Cancel Edit");
                     $("#deviceSensorContent .form-group #deviceSensorIdHidden").val(sensor.id);
                     $("#deviceSensorContent .form-group #name").val($("#deviceSensorTableBody #name" +sensor.id).html());
                 });
@@ -82,8 +82,8 @@ jQuery(document).ready(($) => {
     }
 
     $("#deviceSensorContent #clearFormButton").click(function () {
-        $("#deviceSensorContent #submitFormButton").html("Add");
-        $("#deviceSensorContent #clearFormButton").html("Clear");
+        $("#deviceSensorContent #dsSubmitFormButton").html("Add");
+        $("#deviceSensorContent #dsClearFormButton").html("Clear");
         $("#deviceSensorContent .form-group #deviceSensorIdHidden").val(0);
         $("#deviceSensorContent .form-group #name").val("");
     });

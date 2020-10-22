@@ -79,14 +79,11 @@ $(window).on('load', function(){
     $.post("/clear-tag-form", {}, function () {});
     $.post("/clear-umbox-image-form", {}, function () {});
     $.post("/clear-device-form", {}, function () {});
-    $.post("/clear-command-lookup-form", {}, function () {});
-    $.post("/clear-umbox-lookup-form", {}, function () {});
 });
 
 function changeDeviceType(selectedDeviceTypeId) {
     sessionStorage.setItem('selectedDeviceType', selectedDeviceTypeId);
     $(".hiddenDeviceTypeId").val(selectedDeviceTypeId).trigger('change');
-    $("#umboxLookupContent #type").val(selectedDeviceTypeId);
     $("#AlertTypeLookupContent #deviceTypeSelect").val(selectedDeviceTypeId);
     $("#policyRuleContent #policyRuleDeviceTypeSelect").val(selectedDeviceTypeId);
 }

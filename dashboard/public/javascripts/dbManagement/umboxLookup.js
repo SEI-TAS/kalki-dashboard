@@ -56,7 +56,6 @@ jQuery(document).ready(($) => {
     let stateIdToNameMap = {};
     let stateNameToIdMap = {};
 
-    let deviceTypeIdToNameMap = {};
     let deviceTypeNameToIdMap = {};
 
     let umboxImageIDtoNameMap = {};
@@ -134,22 +133,6 @@ jQuery(document).ready(($) => {
         $(".form-control#order").removeAttr("name");
     }
 
-    //fill device types in form
-    async function getDeviceTypes() {
-        $("#umboxLookupContent #type").empty();
-
-        return $.get("/device-types", (types) => {
-            $.each(JSON.parse(types), (id, type) => {
-                deviceTypeIdToNameMap[type.id] = type.name;
-                deviceTypeNameToIdMap[type.name] = type.id;
-
-                $("#umboxLookupContent #type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
-            });
-            let type = $("#type").val();
-            $("#umboxLookupContent #type").val(type);
-        });
-    }
-
     //fill security states in form
     async function getSecurityStates() {
         $("#umboxLookupContent #securityState").empty();
@@ -181,14 +164,13 @@ jQuery(document).ready(($) => {
 
     async function getUmboxLookups() {
         //must wait for these functions to complete otherwise the mappings may not be set
-        await getDeviceTypes();
         await getSecurityStates();
         await getUmboxImages();
 
         umboxLookupTable.clear();
         umboxLookupTable.draw();
 
-        $.get("/get-umbox-lookups-by-device-type?id="+$("#type").val(), (umboxLookups) => {
+        $.get("/get-umbox-lookups-by-device-type?id="+$("#umboxDeviceTypeIdHidden").val(), (umboxLookups) => {
             $.each(JSON.parse(umboxLookups), (index, umboxLookup) => {
                 let key = umboxLookup.deviceTypeId.toString() + umboxLookup.securityStateId.toString();
 
@@ -209,7 +191,6 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + umboxLookup.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + umboxLookup.id + "'>" + deviceTypeIdToNameMap[umboxLookup.deviceTypeId] + "</td>\n" +
                     "    <td id='securityState" + umboxLookup.id + "'>" + stateIdToNameMap[umboxLookup.securityStateId] + "</td>\n" +
                     "    <td id='umboxImage" + umboxLookup.id + "'>" + umboxImageIDtoNameMap[umboxLookup.umboxImageId] + "</td>\n" +
                     "    <td class='fit' id='order" + umboxLookup.id + "'>" + umboxLookup.dagOrder + "</td>\n" +
@@ -218,37 +199,36 @@ jQuery(document).ready(($) => {
 
                 umboxLookupTable.on("click", "#editButton" + umboxLookup.id, function () {
                     editing = true;
-                    $.post("/edit-umbox-lookup", {id: umboxLookup.id}, function () {
-                        let dagOrder = parseInt($("#umboxLookupTable #order" + umboxLookup.id).html());
-                        let umboxImageId = umboxImageNameToIdMap[$("#umboxLookupTable #umboxImage" + umboxLookup.id).html()];
+                    let dagOrder = parseInt($("#umboxLookupTable #order" + umboxLookup.id).html());
+                    let umboxImageId = umboxImageNameToIdMap[$("#umboxLookupTable #umboxImage" + umboxLookup.id).html()];
 
-                        $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                        });
-                        $("#umboxLookupContent #submitFormButton").html("Update");
-                        $("#umboxLookupContent #clearFormButton").html("Cancel Edit");
-                        $("#umboxLookupContent .form-control#type").val(deviceTypeNameToIdMap[$("#umboxLookupTable #deviceType" + umboxLookup.id).html()]);
-                        $("#umboxLookupContent .form-control#securityState").val(stateNameToIdMap[$("#umboxLookupTable #securityState" + umboxLookup.id).html()]);
-                        $("#umboxLookupContent .form-control#umboxImage").val(umboxImageId);
-                        $("#umboxLookupContent .form-control#order").val(dagOrder);
-                        $("#umboxLookupContent #orderFormInput").val("{\"" + umboxImageId + "\":\"" + dagOrder + "\"}");
-                        $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {});
+                    $("#umboxLookupContent #ulSubmitFormButton").html("Update");
+                    $("#umboxLookupContent #ulClearFormButton").html("Cancel Edit");
+                    $("#umboxLookupContent .form-group #umboxLookupIdHidden").val(umboxLookup.id);
+                    $("#umboxLookupContent .form-control#securityState").val(stateNameToIdMap[$("#umboxLookupTable #securityState" + umboxLookup.id).html()]);
+                    $("#umboxLookupContent .form-control#umboxImage").val(umboxImageId);
+                    $("#umboxLookupContent .form-control#order").val(dagOrder);
+                    $("#umboxLookupContent #orderFormInput").val("{\"" + umboxImageId + "\":\"" + dagOrder + "\"}");
+                    $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
 
-                        editingDagOrder = dagOrder;
-                        editingUmboxImageId = umboxImageId;
+                    editingDagOrder = dagOrder;
+                    editingUmboxImageId = umboxImageId;
 
-                        switchToEditForm();
-                    });
+                    switchToEditForm();
                 });
 
                 umboxLookupTable.on("click", "#deleteButton" + umboxLookup.id, function () {
-                    $.post("/delete-umbox-lookup", {id: umboxLookup.id}, function (isSuccess) {
-                        if (isSuccess == "true") {
-                            umboxLookupTable.row("#tableRow" + umboxLookup.id).remove().draw();
-                        } else {
-                            alert("Delete was unsuccessful.  Please check that another table entry " +
-                                "does not rely on this Umbox Lookup");
-                        }
-                    });
+                    if(confirm("Are you sure you want to delete this association?") === true) {
+                        $.post("/delete-umbox-lookup", {id: umboxLookup.id}, function (isSuccess) {
+                            if (isSuccess === "true") {
+                                umboxLookupTable.row("#tableRow" + umboxLookup.id).remove().draw();
+                            } else {
+                                alert("Delete was unsuccessful.  Please check that another table entry " +
+                                    "does not rely on this Umbox association");
+                            }
+                        });
+                    }
                 });
             });
         });
@@ -257,25 +237,22 @@ jQuery(document).ready(($) => {
     $("#umboxLookupContent #clearFormButton").click(function () {
         editing = false;
 
-        let typeSelect = $("#umboxLookupContent .form-control#type");
         let securityStateSelect = $("#umboxLookupContent .form-control#securityState");
         let umboxImageSelect = $("#umboxLookupContent .form-control#umboxImage");
 
-        $.post("/clear-umbox-lookup-form", {}, function () {
-            $("#umboxLookupContent #submitFormButton").html("Add");
-            $("#umboxLookupContent #clearFormButton").html("Clear");
-            //typeSelect.val(typeSelect.find("option:first").val());
-            securityStateSelect.val(securityStateSelect.find("option:first").val());
-            umboxImageSelect.val(umboxImageSelect.find("option:first").val());
-            $("#umboxLookupContent .form-control#order").val(1);
-            $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
+        $("#umboxLookupContent #ulSubmitFormButton").html("Add");
+        $("#umboxLookupContent #ulClearFormButton").html("Clear");
+        $("#umboxLookupContent .form-group #umboxLookupIdHidden").val(0);
+        securityStateSelect.val(securityStateSelect.find("option:first").val());
+        umboxImageSelect.val(umboxImageSelect.find("option:first").val());
+        $("#umboxLookupContent .form-control#order").val(1);
+        $("#umboxLookupContent #umboxImageOrderTable").find("tr:gt(0)").remove();   //remove all rows except header
 
-            currentUmboxImageIdDagOrderMap = {};
-            editingDagOrder = null;
-            editingUmboxImageId = null;
+        currentUmboxImageIdDagOrderMap = {};
+        editingDagOrder = null;
+        editingUmboxImageId = null;
 
-            switchToInsertForm();
-        });
+        switchToInsertForm();
     });
 
     $("#umboxLookupContent #addOrderButton").click(function () {
@@ -353,12 +330,7 @@ jQuery(document).ready(($) => {
         return retVal;
     });
 
-    //only load data when tab is active
-    $('a[href="#UmboxLookupContent"]').on('shown.bs.tab', function (e) {
-        getUmboxLookups();
-    });
-
-    $("#type").change(function() {
+    $("#umboxDeviceTypeIdHidden").change(function() {
         getUmboxLookups();
     });
 });
