@@ -56,10 +56,8 @@ POST    /delete-group               controllers.GroupController.deleteGroup()
 
 GET     /security-state                 controllers.SecurityStateController.getSecurityState(id: Int ?= -1)
 GET     /security-states                controllers.SecurityStateController.getSecurityStates()
-POST    /edit-security-state            controllers.SecurityStateController.editSecurityState()
 POST    /add-or-update-security-state   controllers.SecurityStateController.addOrUpdateSecurityState()
 POST    /delete-security-state          controllers.SecurityStateController.deleteSecurityState()
-POST    /clear-security-state-form      controllers.SecurityStateController.clearSecurityStateForm()
 
 GET     /data-node                  controllers.DataNodeController.getDataNode(id: Int ?= -1)
 GET     /data-nodes                 controllers.DataNodeController.getDataNodes()

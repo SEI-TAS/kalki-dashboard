@@ -34,11 +34,14 @@
 //This needs to be done to clear the updating IDs of each controller
 $(window).on('load', function(){
     $.post("/clear-alert-type-form", {}, function () {});
-    $.post("/clear-security-state-form", {}, function () {});
     $.post("/clear-data-node-form", {}, function () {});
     $.post("/clear-umbox-image-form", {}, function () {});
     $.post("/clear-device-form", {}, function () {});
 });
+
+function camelToHyphen(word) {
+    return word.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+}
 
 function initItemTable(itemTypeName) {
     let itemTable = $('#' + itemTypeName + 'Table').DataTable({
@@ -53,7 +56,7 @@ function initItemTable(itemTypeName) {
 function setupFormAndTable(itemTypeName, itemTable) {
     itemTable.clear();
 
-    $.get("/" + itemTypeName + "s", (items) => {
+    $.get("/" + camelToHyphen(itemTypeName) + "s", (items) => {
         $.each(JSON.parse(items), (index, item) => {
             let newRow = "<tr id='tableRow" + item.id + "'>\n" +
                 "    <td class='fit'>" +
@@ -77,7 +80,7 @@ function setupFormAndTable(itemTypeName, itemTable) {
 
             itemTable.on("click", "#" + itemTypeName + "DeleteButton" + item.id, function () {
                 if(confirm("Are you sure you want to delete " + itemTypeName + " " + item.name + "?") === true) {
-                    $.post("/delete-" + itemTypeName, {id: item.id}, function (isSuccess) {
+                    $.post("/delete-" + camelToHyphen(itemTypeName), {id: item.id}, function (isSuccess) {
                         if (isSuccess === "true") {
                             itemTable.row("#tableRow" + item.id).remove().draw();
                         } else {
@@ -98,4 +101,3 @@ function setupFormAndTable(itemTypeName, itemTable) {
         $("#" + itemTypeName + "Name").val("");
     });
 }
-
