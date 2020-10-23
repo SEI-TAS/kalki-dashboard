@@ -43,13 +43,10 @@ jQuery(document).ready(($) => {
     let alertTypeRowCounter = 0;
     let commandRowCounter = 0;
 
-    let editing = false;
-
     // Various maps for ids and names
     let currentAlertTypeIds = [];
     let currentCommandIdToOrderNumberMap = {};
 
-    let deviceTypeNameToIdMap = {};
     let deviceTypeIdToNameMap = {};
 
     let stateIdToNameMap = {};
@@ -98,9 +95,8 @@ jQuery(document).ready(($) => {
             }
         });
 
-
         if (hasDuplicate) {
-            alert("cannot add duplicate alert");
+            alert("Cannot add duplicate alert");
             return false;
         } else {
             // No duplicates, so add this row to the form
@@ -337,11 +333,7 @@ jQuery(document).ready(($) => {
                 let deviceCommandArray = [];
                 $.each(commandLookupIdToPolicyRuleId, function (index, policyRuleId) {
                     if (policyRuleId == policyRule.id) {
-                        deviceCommandArray.push(
-                            deviceTypeIdToNameMap[commandIdToDeviceTypeIdMap[commandLookupIdToCommandId[index]]]
-                            + " - " +
-                            commandIdToNameMap[commandLookupIdToCommandId[index]]
-                        )
+                        deviceCommandArray.push(commandIdToNameMap[commandLookupIdToCommandId[index]]);
                     }
                 });
 
@@ -364,41 +356,33 @@ jQuery(document).ready(($) => {
 
                 // Set edit button click function
                 policyRuleTable.on("click", "#editButton" + policyRule.id, function () {
-                    editing = true;
+                    let stateTransition = $("#policyRuleContent .form-control#policyRuleStateTransitionSelect");
+                    let threshold = $("#policyRuleContent .form-control#policyRuleThresholdFormInput");
+                    let samplingRateFactor = $("#policyRuleContent .form-control#policyRuleSamplingRateFactorFormInput");
 
-                    $.post("/edit-policy-rule", {policyRuleId: policyRule.id, policyConditionId: policyRule.policyConditionId}, function () {
-                        let stateTransition = $("#policyRuleContent .form-control#policyRuleStateTransitionSelect");
-                        let threshold = $("#policyRuleContent .form-control#policyRuleThresholdFormInput");
-                        let samplingRateFactor = $("#policyRuleContent .form-control#policyRuleSamplingRateFactorFormInput");
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {});
 
-                        $('html, body').animate({scrollTop: 0}, 'fast', function () {});
-
-                        // Update to the right device type, and then update the alert types availiable
-                        getAlertTypeLookups();
-
-                        // Update the alert types
-                        clearAlertTypes();
-                        $.each(policyConditionIdToAlertTypeIdsMap[policyRule.policyConditionId], (index, alertTypeId) => {
-                            addAlertTypeRow(alertTypeIdToAlertTypeLookupIdMap[alertTypeId]);
-                        });
-
-                        // Update other inputs
-                        stateTransition.val(policyRule.stateTransitionId);
-                        threshold.val(policyConditionIdToThresholdMap[policyRule.policyConditionId]);
-                        samplingRateFactor.val(policyRule.samplingRateFactor);
-                        $("#policyRuleIdHidden").val(policyRule.id);
-                        $("#policyRuleConditionIdHidden").val(policyRule.policyConditionId);
-
-                        clearCommands();
-                        $.each(commandLookupIdToPolicyRuleId, function (index, policyRuleId) {
-                            if (policyRuleId == policyRule.id) {
-                                addCommandsRow(commandLookupIdToCommandId[index])
-                            }
-                        });
-
-
-                        switchToEditForm();
+                    // Update the alert types
+                    clearAlertTypes();
+                    $.each(policyConditionIdToAlertTypeIdsMap[policyRule.policyConditionId], (index, alertTypeId) => {
+                        addAlertTypeRow(alertTypeIdToAlertTypeLookupIdMap[alertTypeId]);
                     });
+
+                    // Update other inputs
+                    stateTransition.val(policyRule.stateTransitionId);
+                    threshold.val(policyConditionIdToThresholdMap[policyRule.policyConditionId]);
+                    samplingRateFactor.val(policyRule.samplingRateFactor);
+                    $("#policyRuleIdHidden").val(policyRule.id);
+                    $("#policyRuleConditionIdHidden").val(policyRule.policyConditionId);
+
+                    clearCommands();
+                    $.each(commandLookupIdToPolicyRuleId, function (index, policyRuleId) {
+                        if (policyRuleId == policyRule.id) {
+                            addCommandsRow(commandLookupIdToCommandId[index])
+                        }
+                    });
+
+                    switchToEditForm();
                 });
 
                 // Set delete button click function
@@ -443,29 +427,22 @@ jQuery(document).ready(($) => {
      * Button which clears the form on the page, so the user can start over.
      */
     $("#policyRuleContent #policyRuleClearFormButton").click(function () {
-        editing = false;
-
         let stateTransition = $("#policyRuleContent .form-control#policyRuleStateTransitionSelect");
         let threshold = $("#policyRuleContent .form-control#policyRuleThresholdFormInput");
         let samplingRateFactor = $("#policyRuleContent .form-control#policyRuleSamplingRateFactorFormInput");
 
-        $.post("/clear-policy-rule-form", {}, function () {
-            getAlertTypeLookups();
-            getCommands();
+        // Reset alert types and commands
+        clearAlertTypes();
+        clearCommands()
 
-            // Reset alert types and commands
-            clearAlertTypes();
-            clearCommands()
+        // Reset other fields
+        stateTransition[0].selectedIndex = 0;
+        threshold.val(1);
+        samplingRateFactor.val(1);
+        $("#policyRuleIdHidden").val(0);
+        $("#policyRuleConditionIdHidden").val(0);
 
-            // Reset other fields
-            stateTransition[0].selectedIndex = 0;
-            threshold.val(1);
-            samplingRateFactor.val(1);
-            $("#policyRuleIdHidden").val(0);
-            $("#policyRuleConditionIdHidden").val(0);
-
-            switchToInsertForm();
-        });
+        switchToInsertForm();
     });
 
 

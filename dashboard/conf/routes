@@ -90,10 +90,8 @@ POST    /add-or-update-policy-condition     controllers.PolicyConditionControlle
 GET     /policy-rule                        controllers.PolicyRuleController.getPolicyRule(id: Int ?= -1)
 GET     /policy-rules-by-id                 controllers.PolicyRuleController.getPolicyRulesByDeviceId(id: Int ?= -1)
 GET     /policy-rules                       controllers.PolicyRuleController.getPolicyRules()
-POST    /edit-policy-rule                   controllers.PolicyRuleController.editPolicyRule()
 POST    /add-or-update-policy-rule          controllers.PolicyRuleController.addOrUpdatePolicyRule()
 POST    /delete-policy-rule                 controllers.PolicyRuleController.deletePolicyRule()
-POST    /clear-policy-rule-form             controllers.PolicyRuleController.clearPolicyRuleForm()
 
 GET     /state-transitions              controllers.SecurityStateController.getSecurityStateTransitions()
 
