@@ -42,7 +42,7 @@ jQuery(document).ready(($) => {
         commandTable.clear();
         commandTable.draw();
 
-        $.get("/commands-device-type/?id="+$("#commandDeviceTypeIdHidden").val(), (commands) => {
+        $.get("/commands-device-type?id="+$("#commandDeviceTypeIdHidden").val(), (commands) => {
             $.each(JSON.parse(commands), (index, command) => {
                 let newRow = "<tr id='tableRow" + command.id + "'>\n" +
                     "    <td class='fit'>" +
