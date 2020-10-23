@@ -36,7 +36,6 @@ $(window).on('load', function(){
     $.post("/clear-alert-type-form", {}, function () {});
     $.post("/clear-security-state-form", {}, function () {});
     $.post("/clear-data-node-form", {}, function () {});
-    $.post("/clear-tag-form", {}, function () {});
     $.post("/clear-umbox-image-form", {}, function () {});
     $.post("/clear-device-form", {}, function () {});
 });

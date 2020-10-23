@@ -70,10 +70,8 @@ POST    /clear-data-node-form       controllers.DataNodeController.clearDataNode
 
 GET     /tags                       controllers.TagController.getTags()
 GET     /get-tags-by-device         controllers.TagController.getTagsByDevice(id: Int ?= -1)
-POST    /edit-tag                   controllers.TagController.editTag()
 POST    /add-or-update-tag          controllers.TagController.addOrUpdateTag()
 POST    /delete-tag                 controllers.TagController.deleteTag()
-POST    /clear-tag-form             controllers.TagController.clearTagForm()
 
 GET     /umbox-image                controllers.UmboxImageController.getUmboxImage(id: Int ?= -1)
 GET     /umbox-images               controllers.UmboxImageController.getUmboxImages()
