@@ -62,7 +62,7 @@ jQuery(document).ready(($) => {
                     $("#deviceSensorContent #dsSubmitFormButton").html("Update");
                     $("#deviceSensorContent #dsClearFormButton").html("Cancel Edit");
                     $("#deviceSensorContent .form-group #deviceSensorIdHidden").val(sensor.id);
-                    $("#deviceSensorContent .form-group #name").val($("#deviceSensorTableBody #name" +sensor.id).html());
+                    $("#deviceSensorContent .form-group #dsName").val($("#deviceSensorTableBody #name" +sensor.id).html());
                 });
 
                 deviceSensorTable.on("click", "#deleteButton" +sensor.id, function () {
@@ -85,7 +85,7 @@ jQuery(document).ready(($) => {
         $("#deviceSensorContent #dsSubmitFormButton").html("Add");
         $("#deviceSensorContent #dsClearFormButton").html("Clear");
         $("#deviceSensorContent .form-group #deviceSensorIdHidden").val(0);
-        $("#deviceSensorContent .form-group #name").val("");
+        $("#deviceSensorContent .form-group #dsName").val("");
     });
 
     // Reload sensors when selected device type changes.
