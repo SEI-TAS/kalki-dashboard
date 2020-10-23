@@ -34,6 +34,11 @@
 <div class="col" id="deviceTypeContent">
     @helper.form(action = routes.DeviceTypeController.addOrUpdateDeviceType()) {
         <h4>Device Type</h4>
+        @* DeviceTypeId *@
+        <div class="form-group row" hidden>
+            <input type="hidden" class="form-control" id="deviceTypeIdHidden" name="id" value="0" required>
+        </div>
+
         @* Name *@
         <div class="form-group row">
             <label for="name" class="col-2 col-form-label">Name<span>*</span></label>
@@ -43,34 +48,6 @@
             </div>
         </div>
         <h4>Device Sensors</h4>
-        
-        @* Device Sensors Input *@
-        <div class="form-group row">
-        	@* Name *@
-        	<label for="name" class="col-2 col-form-label">Name</label>
-            <div class="col-4">
-                <input type="text" maxlength="200" class="form-control" id="sensorName" name="sensorName" placeholder="Enter Sensor Name">
-            </div>
-            <div class="col-2">
-                <button type="button" class="btn btn-sm btn-primary" id="addSensorButton">Add Sensor</button>
-            </div>
-        </div>
-        @* Device Sensors Table *@
-        <table id="deviceSensorTable" class="table col-6" style="width: 50%;">
-            <thead>
-                <th>@* For remove buttons *@</th>
-                <th>Device Sensors<span>*</span></th>
-            </thead>
-            <tbody id="deviceSensorTableBody">
-                @*Populated by deviceType.js*@
-                <tr id="noSensorsRow">
-                	<td></td>
-                	<td>No Device Sensors Added</td>
-                </tr>
-            </tbody>
-        </table>
-        <select id="deviceSensorNamesFormInput" name="sensors[]" multiple hidden></select>
-        <select id="deviceSensorIdsFormInput" name="sensors[]" multiple hidden></select>
 
         @* Submit *@
         <div class="row justify-content-end">

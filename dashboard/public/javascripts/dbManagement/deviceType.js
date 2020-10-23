@@ -31,13 +31,6 @@
  */
 
 jQuery(document).ready(($) => {
-    // Store device sensors for all device types found.
-    let deviceSensorsByDeviceTypeId = {};
-
-    // Track currently displayed sensor info.
-    let totalSensors = 0;
-    let nextSensorPosId = 0;
-
     let deviceTypeTable = $('#deviceTypeTable').DataTable({
         order: [[1, 'asc']],
         columnDefs: [
@@ -62,98 +55,35 @@ jQuery(document).ready(($) => {
                     "</tr>";
                 deviceTypeTable.row.add($(newRow)).draw();
 
-                // Store device type info.
-                deviceSensorsByDeviceTypeId[deviceType.id] = deviceType.sensors;
-
                 deviceTypeTable.on("click", "#editButton" + deviceType.id, function () {
-                    $.post("/edit-device-type", {id: deviceType.id}, function () {
-                        $('html, body').animate({scrollTop: 0}, 'fast', function () {});
-                        $("#deviceTypeContent #submitFormButton").html("Update");
-                        $("#deviceTypeContent #clearDtFormButton").html("Cancel Edit");
-                        $("#deviceTypeContent .form-group #name").val($("#deviceTypeTableBody #name" + deviceType.id).html());
-
-                        // Update the alert types
-                        clearSensors();
-                        $.each(deviceSensorsByDeviceTypeId[deviceType.id], (index, sensor) => {
-                            addSensorRow(sensor.name, sensor.id);
-                        });
-                    });
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {});
+                    $("#deviceTypeContent #submitFormButton").html("Update");
+                    $("#deviceTypeContent #clearDtFormButton").html("Cancel Edit");
+                    $("#deviceTypeContent .form-group #deviceTypeIdHidden").val(deviceType.id);
+                    $("#deviceTypeContent .form-group #name").val($("#deviceTypeTableBody #name" + deviceType.id).html());
                 });
 
                 deviceTypeTable.on("click", "#deleteButton" + deviceType.id, function () {
-                    $.post("/delete-device-type", {id: deviceType.id}, function (isSuccess) {
-                        if (isSuccess == "true") {
-                            deviceTypeTable.row("#tableRow" + deviceType.id).remove().draw();
-                        } else {
-                            alert("Delete was unsuccessful.  Please check that another table entry " +
-                                "does not rely on this Device Type");
-                        }
-                    });
+                    if(confirm("Are you sure you want to delete device type " + deviceType.name + "?") === true) {
+                        $.post("/delete-device-type", {id: deviceType.id}, function (isSuccess) {
+                            if (isSuccess === "true") {
+                                deviceTypeTable.row("#tableRow" + deviceType.id).remove().draw();
+                            } else {
+                                alert("Delete was unsuccessful.  Please check that another table entry " +
+                                    "does not rely on this Device Type");
+                            }
+                        });
+                    }
                 });
             });
         });
     }
 
-    function addSensorRow(deviceSensorName, deviceSensorId) {
-        // Sensor information will be in 3 locations:
-        // 1. The visual HTML table row
-        // 2. A hidden select option for submitting
-        // 3. A JS array for easily checking for repeated sensor names
-
-        // No duplicates, so add this row to the form (both visual table and hidden input).
-        // We need to keep count of total, and assign temp unique positional ids (in case one intermediate is deleted,
-        // temp ids have to be always increasing, and will not always be the same as table position).
-        totalSensors++;
-        let sensorTempId = ++nextSensorPosId;
-        let newRow = "<tr id='deviceSensorTableRow" + sensorTempId + "'>\n" +
-            "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + sensorTempId + "'>Remove</button></td>" +
-            "    <td id='sensor" + sensorTempId + "'>" + deviceSensorName + "</td>\n" +
-            "</tr>"
-        $("#deviceSensorTable").find("tbody").append($(newRow));
-
-        // Set hidden form input to current map (needed to pass form data to controller)
-        $("#deviceSensorNamesFormInput").append("<option id='deviceSensorNamesFormInput" + sensorTempId + "' value='" + deviceSensorName + "' selected></option>");
-        $("#deviceSensorIdsFormInput").append("<option id='deviceSensorIdsFormInput" + sensorTempId + "' value='" + deviceSensorId + "' selected></option>");
-
-        // Set remove function for this sensor
-        $("#deviceSensorTableBody #removeButton" + sensorTempId).click(function () {
-            $("#deviceSensorTableBody #deviceSensorTableRow" + sensorTempId).remove();
-            $("#deviceSensorNamesFormInput" + sensorTempId).remove();
-            $("#deviceSensorIdsFormInput" + sensorTempId).remove();
-            totalSensors--;
-
-            if(totalSensors === 0) {
-                $("#noSensorsRow").attr("hidden",false);
-            }
-        });
-
-        if(totalSensors > 0) {
-            $("#noSensorsRow").attr("hidden",true);
-        }
-        return true;
-    }
-
-    $("#deviceTypeContent #addSensorButton").click(function () {
-        let sensorToAdd = $(".form-control#sensorName");
-        let sensorName = sensorToAdd.val();
-        if(sensorName === "") {
-            alert("Can't add empty sensor name.");
-            return;
-        }
-
-        // 0 since it is a new sensor, it does not have an id yet.
-        if (addSensorRow(sensorName, 0)) { //if the add was successful
-            sensorToAdd.val("");
-        }
-    });
-
-
     $("#deviceTypeContent #clearDtFormButton").click(function () {
-        $.post("/clear-device-type-form", {}, function () {
-            $("#deviceTypeContent #submitFormButton").html("Add");
-            $("#deviceTypeContent #clearDtFormButton").html("Clear");
-            $("#deviceTypeContent .form-group #name").val("");
-        });
+        $("#deviceTypeContent #submitFormButton").html("Add");
+        $("#deviceTypeContent #clearDtFormButton").html("Clear");
+        $("#deviceTypeContent .form-group #deviceTypeIdHidden").val(0);
+        $("#deviceTypeContent .form-group #name").val("");
     });
 
     //only load data when tab is active
@@ -161,14 +91,4 @@ jQuery(document).ready(($) => {
         getDeviceTypes();
     });
 
-    /**
-     * Removes all items in the sensors table
-     */
-    function clearSensors() {
-        $("#deviceSensorTable").find("tr:gt(0)").remove();
-        $("#deviceSensorNamesFormInput").find("option").remove();
-        $("#deviceSensorIdsFormInput").find("option").remove();
-        totalSensors = 0;
-        nextSensorPosId = 0;
-    }
 });

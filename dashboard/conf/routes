@@ -47,10 +47,8 @@ POST    /delete-alert-type-lookup          	controllers.AlertTypeLookupControlle
 POST    /clear-alert-type-lookup-form      	controllers.AlertTypeLookupController.clearAlertTypeLookupForm()
 
 GET     /device-types               controllers.DeviceTypeController.getDeviceTypes()
-POST    /edit-device-type           controllers.DeviceTypeController.editDeviceType()
 POST    /add-or-update-device-type  controllers.DeviceTypeController.addOrUpdateDeviceType()
 POST    /delete-device-type         controllers.DeviceTypeController.deleteDeviceType()
-POST    /clear-device-type-form     controllers.DeviceTypeController.clearDeviceTypeForm()
 
 GET     /groups                     controllers.GroupController.getGroups()
 POST    /edit-group                 controllers.GroupController.editGroup()
