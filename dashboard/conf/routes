@@ -51,10 +51,8 @@ POST    /add-or-update-device-type  controllers.DeviceTypeController.addOrUpdate
 POST    /delete-device-type         controllers.DeviceTypeController.deleteDeviceType()
 
 GET     /groups                     controllers.GroupController.getGroups()
-POST    /edit-group                 controllers.GroupController.editGroup()
 POST    /add-or-update-group        controllers.GroupController.addOrUpdateGroup()
 POST    /delete-group               controllers.GroupController.deleteGroup()
-POST    /clear-group-form           controllers.GroupController.clearGroupForm()
 
 GET     /security-state                 controllers.SecurityStateController.getSecurityState(id: Int ?= -1)
 GET     /security-states                controllers.SecurityStateController.getSecurityStates()

@@ -30,50 +30,10 @@
  *
  */
 
-jQuery(document).ready(($) => {
-    $.urlParam = function(name){
-        let results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-        if (results==null) {
-            return null;
-        }
-        return decodeURI(results[1]) || 0;
-    }
-
-    async function getDeviceTypes() {
-        $("#type").empty();
-
-        // Get device types from DB.
-        return $.get("/device-types", (types) => {
-            $.each(JSON.parse(types), (id, type) => {
-                $("#type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
-            });
-
-            // Get currently selected device type id from URL or session storage (in that priority order).
-            let selectedDeviceFromUrl = $.urlParam('id');
-            if(selectedDeviceFromUrl) {
-                $("#type").val(selectedDeviceFromUrl);
-                changeDeviceType(selectedDeviceFromUrl);
-            }
-            else {
-                let selectedDevice = sessionStorage.getItem('selectedDeviceType');
-                if (selectedDevice) {
-                    $("#type").val(selectedDevice);
-                    changeDeviceType(selectedDevice);
-                }
-            }
-        });
-    }
-
-    getDeviceTypes();
-});
-
 //clear all edits on page load
 //This needs to be done to clear the updating IDs of each controller
 $(window).on('load', function(){
     $.post("/clear-alert-type-form", {}, function () {});
-    $.post("/clear-alert-type-lookup-form", {}, function () {});
-    $.post("/clear-device-type-form", {}, function () {});
-    $.post("/clear-group-form", {}, function () {});
     $.post("/clear-security-state-form", {}, function () {});
     $.post("/clear-data-node-form", {}, function () {});
     $.post("/clear-tag-form", {}, function () {});
@@ -81,9 +41,63 @@ $(window).on('load', function(){
     $.post("/clear-device-form", {}, function () {});
 });
 
-function changeDeviceType(selectedDeviceTypeId) {
-    sessionStorage.setItem('selectedDeviceType', selectedDeviceTypeId);
-    $(".hiddenDeviceTypeId").val(selectedDeviceTypeId).trigger('change');
-    $("#AlertTypeLookupContent #deviceTypeSelect").val(selectedDeviceTypeId);
-    $("#policyRuleContent #policyRuleDeviceTypeSelect").val(selectedDeviceTypeId);
+function setupFormAndTable(itemTypeName) {
+    let itemTable = $('#' + itemTypeName + 'Table').DataTable({
+        order: [[1, 'asc']],
+        columnDefs: [
+            {"orderable": false, "targets": 0}
+        ]
+    });
+    itemTable.clear();
+
+    $.get("/" + itemTypeName + "s", (items) => {
+        $.each(JSON.parse(items), (index, item) => {
+            let newRow = "<tr id='tableRow" + item.id + "'>\n" +
+                "    <td class='fit'>" +
+                "        <div class='editDeleteContainer'>" +
+                "           <button type='button' class='btn btn-primary btn-sm' id='" + itemTypeName + "EditButton" + item.id + "'>Edit</button>" +
+                "           <button type='button' class='btn btn-secondary btn-sm' id='" + itemTypeName + "DeleteButton" + item.id + "'>Delete</button>" +
+                "        </div>" +
+                "    </td>\n" +
+                "    <td class='fit' id=" + itemTypeName + "'Id" + item.id + "'>" + item.id + "</td>\n" +
+                "    <td id=" + itemTypeName + "'Name" + item.id + "'>" + item.name + "</td>\n" +
+                "</tr>";
+            itemTable.row.add($(newRow)).draw();
+
+            itemTable.on("click", "#" + itemTypeName + "EditButton" + item.id, function () {
+                $('html, body').animate({scrollTop: 0}, 'fast', function () {});
+                $("#" + itemTypeName + "SubmitFormButton").html("Update");
+                $("#" + itemTypeName + "ClearFormButton").html("Cancel Edit");
+                $("#" + itemTypeName + "IdHidden").val(item.id);
+                $("#" + itemTypeName + "Name").val($("#" + itemTypeName + "Name" + item.id).html());
+            });
+
+            itemTable.on("click", "#" + itemTypeName + "DeleteButton" + item.id, function () {
+                if(confirm("Are you sure you want to delete " + itemTypeName + " " + item.name + "?") === true) {
+                    $.post("/delete-" + itemTypeName, {id: item.id}, function (isSuccess) {
+                        if (isSuccess === "true") {
+                            itemTable.row("#tableRow" + item.id).remove().draw();
+                        } else {
+                            alert("Delete was unsuccessful. Please check that another table entry " +
+                                "does not rely on this " + itemTypeName);
+                        }
+                    });
+                }
+            });
+
+        });
+    });
+
+    $("#" + itemTypeName + "ClearFormButton").click(function () {
+        $("#" + itemTypeName + "SubmitFormButton").html("Add");
+        $("#" + itemTypeName + "ClearFormButton").html("Clear");
+        $("#" + itemTypeName + "IdHidden").val(0);
+        $("#" + itemTypeName + "Name").val("");
+    });
+
+    // Load data when tab finished showing.
+    $("a[href='#" + itemTypeName + "ContentTab']").on('shown.bs.tab', function (e) {
+        setupFormAndTable(itemTypeName);
+    });
 }
+

@@ -30,79 +30,53 @@
  *
  */
 
-package controllers;
-
-import edu.cmu.sei.kalki.db.models.*;
-import edu.cmu.sei.kalki.db.daos.GroupDAO;
-
-import models.DatabaseExecutionContext;
-import play.libs.concurrent.HttpExecution;
-
-import play.mvc.Controller;
-import play.mvc.Result;
-import play.data.*;
-import play.api.mvc.*;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
-
-import javax.inject.Inject;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-import java.util.List;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-public class GroupController extends Controller {
-    private final FormFactory formFactory;
-    private final DatabaseExecutionContext ec;
-    private final ObjectWriter ow;
-
-    @Inject
-    public GroupController(FormFactory formFactory, DatabaseExecutionContext ec) {
-        this.formFactory = formFactory;
-        this.ec = ec;
-        this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+jQuery(document).ready(($) => {
+    $.urlParam = function(name){
+        let results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results==null) {
+            return null;
+        }
+        return decodeURI(results[1]) || 0;
     }
 
-    public CompletionStage<Result> getGroups() {
-        return CompletableFuture.supplyAsync(() -> {
-            List<Group> groups = GroupDAO.findAllGroups();
-            try {
-                return ok(ow.writeValueAsString(groups));
-            } catch (JsonProcessingException e) {
+    async function getDeviceTypes() {
+        $("#type").empty();
+
+        // Get device types from DB.
+        return $.get("/device-types", (types) => {
+            $.each(JSON.parse(types), (id, type) => {
+                $("#type").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
+            });
+
+            // Get currently selected device type id from URL or session storage (in that priority order).
+            let selectedDeviceFromUrl = $.urlParam('id');
+            if(selectedDeviceFromUrl) {
+                $("#type").val(selectedDeviceFromUrl);
+                changeDeviceType(selectedDeviceFromUrl);
             }
-            return ok();
-        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+            else {
+                let selectedDevice = sessionStorage.getItem('selectedDeviceType');
+                if (selectedDevice) {
+                    $("#type").val(selectedDevice);
+                    changeDeviceType(selectedDevice);
+                }
+            }
+        });
     }
 
-    public CompletionStage<Result> addOrUpdateGroup() {
-        return CompletableFuture.supplyAsync(() -> {
-            Form<Group> deviceGroupForm = formFactory.form(Group.class);
-            Form<Group> filledForm = deviceGroupForm.bindFromRequest();
-            if (filledForm.hasErrors()) {
-                return badRequest(views.html.form.render(filledForm));
-            } else {
-                Group dg = filledForm.get();
-                int n = dg.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementOtherView(n));
-            }
-        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
+    // Load device types.
+    getDeviceTypes();
+});
 
-    public CompletionStage<Result> deleteGroup() {
-        return CompletableFuture.supplyAsync(() -> {
-            String id = formFactory.form().bindFromRequest().get("id");
-            int idToInt;
-            try {
-                idToInt = Integer.parseInt(id);
-            } catch (NumberFormatException e) {
-                idToInt = -1;
-            }
-            Boolean isSuccess = GroupDAO.deleteGroup(idToInt);
-            return ok(isSuccess.toString());
-        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
+function changeDeviceType(selectedDeviceTypeId) {
+    sessionStorage.setItem('selectedDeviceType', selectedDeviceTypeId);
+    $(".hiddenDeviceTypeId").val(selectedDeviceTypeId).trigger('change');
+    $("#AlertTypeLookupContent #deviceTypeSelect").val(selectedDeviceTypeId);
+    $("#policyRuleContent #policyRuleDeviceTypeSelect").val(selectedDeviceTypeId);
 }
+
+//clear all edits on page load
+//This needs to be done to clear the updating IDs of each controller
+$(window).on('load', function(){
+    $.post("/clear-alert-type-lookup-form", {}, function () {});
+});
