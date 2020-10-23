@@ -42,11 +42,8 @@ jQuery(document).ready(($) => {
 
     let alertTypeRowCounter = 0;
     let commandRowCounter = 0;
-    let currentDeviceTypeId = 0;
 
     let editing = false;
-    let editingDagOrder = null;
-    let editingUmboxImageId = null;
 
     // Various maps for ids and names
     let currentAlertTypeIds = [];
@@ -79,15 +76,6 @@ jQuery(document).ready(($) => {
     let alertTypeLookupIdToAlertTypeIdMap = {};
     let alertTypeIdToAlertTypeLookupIdMap = {};
     let alertTypeLookupIdToDeviceTypeIdMap = {};
-
-    // Everything below this should be renamed
-    let globalDeviceTypeAndStateOrderMap = {};
-    let globalDeviceTypeAndStateImageMap = {};
-
-    let umboxImageIDtoNameMap = {};
-    let umboxImageNameToIdMap = {};
-
-    let currentUmboxImageIdDagOrderMap = {};
 
     let totalAlertsAdded = 0;
     let totalCommandsAdded = 0;
@@ -177,7 +165,7 @@ jQuery(document).ready(($) => {
             let currentCount = ++commandRowCounter;
             let newRow = "<tr id='policyRuleCommandsOrderTableRow" + currentCount + "'>\n" +
                 "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
-                "    <td id='command" + currentCount + "'>" + deviceTypeIdToNameMap[commandIdToDeviceTypeIdMap[commandId]] + " - " + commandIdToNameMap[commandId] + "</td>\n" +
+                "    <td id='command" + currentCount + "'>" + commandIdToNameMap[commandId] + "</td>\n" +
                 "</tr>"
 
             $("#policyRuleCommandsOrderTable").find("tbody").append($(newRow));
@@ -218,26 +206,6 @@ jQuery(document).ready(($) => {
     function switchToInsertForm() {
         $("#policyRuleContent #policyRuleSubmitFormButton").html("Add");
         $("#policyRuleContent #policyRuleClearFormButton").html("Clear");
-    }
-
-    async function getDeviceTypes() {
-        $("#policyRuleContent #policyRuleDeviceTypeSelect").empty();
-
-        return $.get("/device-types", (types) => {
-            $.each(JSON.parse(types), (id, type) => {
-                deviceTypeIdToNameMap[type.id] = type.name;
-                deviceTypeNameToIdMap[type.name] = type.id;
-
-                // Set the first one on the list as the current selection
-                if (currentDeviceTypeId === 0) {
-                    currentDeviceTypeId = type.id;
-                }
-
-                $("#policyRuleContent #policyRuleDeviceTypeSelect").append("<option id='typeOption" + type.id + "' value='" + type.id + "'>" + type.name + "</option>");
-            });
-            let type = $("#type").val(); 
-            $("#policyRuleContent #policyRuleDeviceTypeSelect").val(type);
-        });
     }
 
     async function getSecurityStates() {
@@ -309,7 +277,9 @@ jQuery(document).ready(($) => {
                 alertTypeLookupIdToAlertTypeIdMap[alertTypeLookup.id] = alertTypeLookup.alertTypeId;
                 alertTypeLookupIdToDeviceTypeIdMap[alertTypeLookup.id] = alertTypeLookup.deviceTypeId;
 
-                if (currentDeviceTypeId === alertTypeLookup.deviceTypeId) {
+                // Equality has to be == to allow automatic type conversion.
+                let currentDeviceTypeId = $("#policyRuleDeviceTypeIdHidden").val();
+                if (currentDeviceTypeId == alertTypeLookup.deviceTypeId) {
                     $("#policyRuleContent #policyRuleAlertTypeSelect").append("<option id='alertTypeLookupOption" + alertTypeLookup.id + "' value='" + alertTypeLookup.id + "'>" + alertTypeIdToNameMap[alertTypeLookup.alertTypeId] + "</option>")
                 }
             });
@@ -319,13 +289,13 @@ jQuery(document).ready(($) => {
     async function getCommands() {
         $("#policyRuleContent #policyRuleCommands").empty();
 
-        return $.get("/commands", (commands) => {
+        return $.get("/commands-device-type?id="+$("#policyRuleDeviceTypeIdHidden").val(), (commands) => {
             $.each(JSON.parse(commands), (id, command) => {
                 commandIdToNameMap[command.id] = command.name;
                 commandIdToDeviceTypeIdMap[command.id] = command.deviceTypeId;
                 commandNameToIdMap[command.name] = command.id;
 
-                $("#policyRuleContent #policyRuleCommands").append("<option id='commandOption" + command.id + "' value='" + command.id + "'>" + deviceTypeIdToNameMap[command.deviceTypeId] + " - " + command.name + "</option>");
+                $("#policyRuleContent #policyRuleCommands").append("<option id='commandOption" + command.id + "' value='" + command.id + "'>" + command.name + "</option>");
 
             });
         });
@@ -347,7 +317,6 @@ jQuery(document).ready(($) => {
      */
     async function getDevicePolicies() {
         // Need to get the various components to fill in the fields of the form
-        await getDeviceTypes();
         await getAlertTypeLookups();
         await getStateTransitions();
         await getPolicyConditions();
@@ -376,14 +345,6 @@ jQuery(document).ready(($) => {
                     }
                 });
 
-                var deviceTypeName;
-                if(policyRule.deviceTypeId) { 
-                    deviceTypeName =  deviceTypeIdToNameMap[policyRule.deviceTypeId];
-                }
-                else {
-                    deviceTypeName = "All";
-                }
-
                 // Generate the table row and add it to the table
                 let newRow = "<tr id='tableRow" + policyRule.id + "'>\n" +
                     "    <td class='fit'>" +
@@ -392,7 +353,6 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + policyRule.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + policyRule.id + "'>" + deviceTypeName + "</td>\n" +
                     "    <td id='policyCondition" + policyRule.id + "'>" + alertTypeArray.join(" && ") + "</td>\n" +
                     "    <td id='deviceCommand" + policyRule.id + "'>" + deviceCommandArray.join(", ") + "</td>\n" +
                     "    <td id='startSecurityState" + policyRule.id + "'>" + stateIdToNameMap[stateTransitionIdToStartMap[policyRule.stateTransitionId]] + "</td>\n" +
@@ -407,7 +367,6 @@ jQuery(document).ready(($) => {
                     editing = true;
 
                     $.post("/edit-policy-rule", {policyRuleId: policyRule.id, policyConditionId: policyRule.policyConditionId}, function () {
-                        let deviceType = $("#policyRuleContent .form-control#policyRuleDeviceTypeSelect");
                         let stateTransition = $("#policyRuleContent .form-control#policyRuleStateTransitionSelect");
                         let threshold = $("#policyRuleContent .form-control#policyRuleThresholdFormInput");
                         let samplingRateFactor = $("#policyRuleContent .form-control#policyRuleSamplingRateFactorFormInput");
@@ -415,8 +374,6 @@ jQuery(document).ready(($) => {
                         $('html, body').animate({scrollTop: 0}, 'fast', function () {});
 
                         // Update to the right device type, and then update the alert types availiable
-                        deviceType.val(policyRule.deviceTypeId);
-                        currentDeviceTypeId = policyRule.deviceTypeId;
                         getAlertTypeLookups();
 
                         // Update the alert types
@@ -429,6 +386,8 @@ jQuery(document).ready(($) => {
                         stateTransition.val(policyRule.stateTransitionId);
                         threshold.val(policyConditionIdToThresholdMap[policyRule.policyConditionId]);
                         samplingRateFactor.val(policyRule.samplingRateFactor);
+                        $("#policyRuleIdHidden").val(policyRule.id);
+                        $("#policyRuleConditionIdHidden").val(policyRule.policyConditionId);
 
                         clearCommands();
                         $.each(commandLookupIdToPolicyRuleId, function (index, policyRuleId) {
@@ -444,14 +403,19 @@ jQuery(document).ready(($) => {
 
                 // Set delete button click function
                 policyRuleTable.on("click", "#deleteButton" + policyRule.id, function () {
-                    $.post("/delete-policy-rule", {policyRuleId: policyRule.id, policyConditionId: policyRule.policyConditionId}, function (isSuccess) {
-                        if (isSuccess == "true") {
-                            policyRuleTable.row("#tableRow" + policyRule.id).remove().draw();
-                        } else {
-                            alert("Delete was unsuccessful.  Please check that another table entry " +
-                                "does not rely on this Policy Rule");
-                        }
-                    });
+                    if(confirm("Are you sure you want to delete sensor " + sensor.name + "?") === true) {
+                        $.post("/delete-policy-rule", {
+                            policyRuleId: policyRule.id,
+                            policyConditionId: policyRule.policyConditionId
+                        }, function (isSuccess) {
+                            if (isSuccess == "true") {
+                                policyRuleTable.row("#tableRow" + policyRule.id).remove().draw();
+                            } else {
+                                alert("Delete was unsuccessful.  Please check that another table entry " +
+                                    "does not rely on this Policy Rule");
+                            }
+                        });
+                    }
                 });
             });
         });
@@ -481,16 +445,11 @@ jQuery(document).ready(($) => {
     $("#policyRuleContent #policyRuleClearFormButton").click(function () {
         editing = false;
 
-        let deviceType = $("#policyRuleContent .form-control#policyRuleDeviceTypeSelect");
         let stateTransition = $("#policyRuleContent .form-control#policyRuleStateTransitionSelect");
         let threshold = $("#policyRuleContent .form-control#policyRuleThresholdFormInput");
         let samplingRateFactor = $("#policyRuleContent .form-control#policyRuleSamplingRateFactorFormInput");
 
         $.post("/clear-policy-rule-form", {}, function () {
-            // Reset device types
-            //deviceType[0].selectedIndex = 0;
-            // For above, could also use deviceType.val(deviceType.find("option:first").val());
-            //currentDeviceTypeId = parseInt(deviceType.val());
             getAlertTypeLookups();
             getCommands();
 
@@ -502,6 +461,8 @@ jQuery(document).ready(($) => {
             stateTransition[0].selectedIndex = 0;
             threshold.val(1);
             samplingRateFactor.val(1);
+            $("#policyRuleIdHidden").val(0);
+            $("#policyRuleConditionIdHidden").val(0);
 
             switchToInsertForm();
         });
@@ -532,25 +493,9 @@ jQuery(document).ready(($) => {
         }
     });
 
-    /**
-     * Change the table when the device type is changed.
-     */
-    $('#policyRuleDeviceTypeSelect').on('change', function() {
-        currentDeviceTypeId = parseInt(this.value);
-        // TODO alert types should be stored locally, so there isnt extra calls to the db.
-        getAlertTypeLookups();
-
+    // Reload when selected device type changes.
+    $("#policyRuleDeviceTypeIdHidden").change(function() {
         clearAlertTypes()
-    });
-
-    /**
-     * Only load data when tab is active
-     */
-    $('a[href="#PolicyRuleContent"]').on('shown.bs.tab', function (e) {
-        getDevicePolicies();
-    });
-
-    $("#type").change(function() {
         getDevicePolicies();
     });
 

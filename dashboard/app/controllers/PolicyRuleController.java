@@ -158,7 +158,7 @@ public class PolicyRuleController extends Controller {
                 // Updated, so reset the updating flag.
                 this.updatingId = -1;
 
-                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(policyRuleId));
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(pr.getDeviceTypeId()));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

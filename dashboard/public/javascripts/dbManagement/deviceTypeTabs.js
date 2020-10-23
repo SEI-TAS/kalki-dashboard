@@ -72,7 +72,6 @@ function changeDeviceType(selectedDeviceTypeId) {
     sessionStorage.setItem('selectedDeviceType', selectedDeviceTypeId);
     $(".hiddenDeviceTypeId").val(selectedDeviceTypeId).trigger('change');
     $("#AlertTypeLookupContent #deviceTypeSelect").val(selectedDeviceTypeId);
-    $("#policyRuleContent #policyRuleDeviceTypeSelect").val(selectedDeviceTypeId);
 }
 
 //clear all edits on page load
