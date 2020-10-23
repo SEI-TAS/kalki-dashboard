@@ -59,14 +59,12 @@ public class UmboxImageController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
-    private int updatingId;
 
     @Inject
     public UmboxImageController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
     public CompletionStage<Result> getUmboxImage(int id) {
@@ -91,18 +89,6 @@ public class UmboxImageController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result editUmboxImage() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-        this.updatingId = idToInt;
-        return ok();
-    }
-
     public CompletionStage<Result> addOrUpdateUmboxImage() {
         return CompletableFuture.supplyAsync(() -> {
             Form<UmboxImage> umboxImageForm = formFactory.form(UmboxImage.class);
@@ -111,9 +97,6 @@ public class UmboxImageController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 UmboxImage dt = filledForm.get();
-                dt.setId(this.updatingId);
-                this.updatingId = -1;
-
                 int n = dt.insertOrUpdate();
                 return redirect(routes.DBManagementController.dbManagementOtherView(n));
             }
@@ -132,10 +115,5 @@ public class UmboxImageController extends Controller {
             Boolean isSuccess = UmboxImageDAO.deleteUmboxImage(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result clearUmboxImageForm() {
-        this.updatingId = -1;
-        return ok();
     }
 }

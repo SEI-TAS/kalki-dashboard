@@ -73,10 +73,8 @@ POST    /delete-tag                 controllers.TagController.deleteTag()
 
 GET     /umbox-image                controllers.UmboxImageController.getUmboxImage(id: Int ?= -1)
 GET     /umbox-images               controllers.UmboxImageController.getUmboxImages()
-POST    /edit-umbox-image           controllers.UmboxImageController.editUmboxImage()
 POST    /add-or-update-umbox-image  controllers.UmboxImageController.addOrUpdateUmboxImage()
 POST    /delete-umbox-image         controllers.UmboxImageController.deleteUmboxImage()
-POST    /clear-umbox-image-form     controllers.UmboxImageController.clearUmboxImageForm()
 
 GET     /device                     controllers.DeviceController.getDevice(id: String ?= "")
 GET     /devices                    controllers.DeviceController.getDevices()

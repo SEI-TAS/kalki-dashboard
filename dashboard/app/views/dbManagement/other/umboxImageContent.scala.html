@@ -34,20 +34,24 @@
 <div class="col" id="umboxImageContent">
     @helper.form(action = routes.UmboxImageController.addOrUpdateUmboxImage()) {
         <h4>Umbox Image</h4>
+        @* UmboxId *@
+        <div class="form-group row" hidden>
+            <input type="hidden" class="form-control" id="umboxImageIdHidden" name="id" value="0" required>
+        </div>
         @* Name *@
         <div class="form-group row">
             <label for="name" class="col-2 col-form-label">Name<span>*</span></label>
             <div class="col-4">
-                <input type="text" maxlength="200" class="form-control" id="name" name="name" placeholder="Enter Name" required
+                <input type="text" maxlength="200" class="form-control" id="umboxImageName" name="name" placeholder="Enter Name" required
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">
             </div>
         </div>
 
         @* Path *@
-        <div class="form-group row">
+        <div class="form-group row" hidden>
             <label for="fileName" class="col-2 col-form-label">File Name</label>
             <div class="col-4">
-                <input type="text" maxlength="200" class="form-control" id="fileName" name="fileName" placeholder="Enter File Name"
+                <input type="text" maxlength="200" class="form-control" id="umboxImageFileName" name="fileName" placeholder="Enter File Name"
                 oninvalid="this.setCustomValidity('Please Enter File Name')" oninput="setCustomValidity('')">
             </div>
         </div>
@@ -55,22 +59,21 @@
         @* Submit *@
         <div class="row justify-content-end">
             <div class="col-2">
-                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+                <button type="submit" id="umboxImageSubmitFormButton" class="btn btn-primary btn-block">Add</button>
             </div>
             <div class="col-2">
-                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+                <button type="button" id="umboxImageClearFormButton" class="btn btn-secondary btn-block">Clear</button>
             </div>
         </div>
     }
-<table id="umboxImageTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
-    <thead>
-        <tr>
-            <th>actions</th>
-            <th>id</th>
-            <th>name</th>
-            <th>file name</th>
-        </tr>
-    </thead>
-    <tbody id="umboxImageTableBody"></tbody>
-</table>
+    <table id="umboxImageTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th>Id</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody id="umboxImageTableBody"></tbody>
+    </table>
 </div>
