@@ -41,13 +41,17 @@ $(window).on('load', function(){
     $.post("/clear-device-form", {}, function () {});
 });
 
-function setupFormAndTable(itemTypeName) {
+function initItemTable(itemTypeName) {
     let itemTable = $('#' + itemTypeName + 'Table').DataTable({
         order: [[1, 'asc']],
         columnDefs: [
             {"orderable": false, "targets": 0}
         ]
     });
+    return itemTable;
+}
+
+function setupFormAndTable(itemTypeName, itemTable) {
     itemTable.clear();
 
     $.get("/" + itemTypeName + "s", (items) => {
@@ -69,7 +73,7 @@ function setupFormAndTable(itemTypeName) {
                 $("#" + itemTypeName + "SubmitFormButton").html("Update");
                 $("#" + itemTypeName + "ClearFormButton").html("Cancel Edit");
                 $("#" + itemTypeName + "IdHidden").val(item.id);
-                $("#" + itemTypeName + "Name").val($("#" + itemTypeName + "Name" + item.id).html());
+                $("#" + itemTypeName + "Name").val(item.name);
             });
 
             itemTable.on("click", "#" + itemTypeName + "DeleteButton" + item.id, function () {
@@ -93,11 +97,6 @@ function setupFormAndTable(itemTypeName) {
         $("#" + itemTypeName + "ClearFormButton").html("Clear");
         $("#" + itemTypeName + "IdHidden").val(0);
         $("#" + itemTypeName + "Name").val("");
-    });
-
-    // Load data when tab finished showing.
-    $("a[href='#" + itemTypeName + "ContentTab']").on('shown.bs.tab', function (e) {
-        setupFormAndTable(itemTypeName);
     });
 }
 

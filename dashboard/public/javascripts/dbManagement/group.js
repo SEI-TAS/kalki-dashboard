@@ -31,5 +31,6 @@
  */
 
 jQuery(document).ready(($) => {
-    setupFormAndTable("group");
+    let groupTable = initItemTable("group");
+    setupFormAndTable("group", groupTable);
 });
