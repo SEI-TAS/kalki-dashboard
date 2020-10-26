@@ -81,7 +81,19 @@ public class AlertTypeController extends Controller {
 
     public CompletionStage<Result> getAlertTypes() {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertType> alertTypes = AlertTypeDAO.findAllAlertTypes();
+            List<AlertType> alertTypes = AlertTypeDAO.findAlertTypesForSource(AlertType.AlertSource.Dashboard);
+            alertTypes.addAll(AlertTypeDAO.findAlertTypesForSource(AlertType.AlertSource.Network));
+            try {
+                return ok(ow.writeValueAsString(alertTypes));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+    public CompletionStage<Result> getDeviceAlertTypes() {
+        return CompletableFuture.supplyAsync(() -> {
+            List<AlertType> alertTypes = AlertTypeDAO.findAlertTypesForSource(AlertType.AlertSource.Device);
             try {
                 return ok(ow.writeValueAsString(alertTypes));
             } catch (JsonProcessingException e) {

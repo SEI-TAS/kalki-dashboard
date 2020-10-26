@@ -41,14 +41,12 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.data.*;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -68,7 +66,7 @@ public class AlertConditionController extends Controller {
 
     public CompletionStage<Result> getAlertConditions() {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertCondition> alertConditions = AlertConditionDAO.findAllAlertConditions();
+            List<AlertCondition> alertConditions = new ArrayList<>();// = AlertConditionDAO.findAllAlertConditions();
             try {
                 return ok(ow.writeValueAsString(alertConditions));
             } catch (JsonProcessingException e) {
@@ -79,7 +77,7 @@ public class AlertConditionController extends Controller {
 
     public CompletionStage<Result> getAlertConditionsByDevice(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertCondition> alertConditions = AlertConditionDAO.findAlertConditionsByDevice(id);
+            List<AlertCondition> alertConditions = new ArrayList<>();// = AlertConditionDAO.findAlertConditionsForDevice(id);
             try {
                 return ok(ow.writeValueAsString(alertConditions));
             } catch (JsonProcessingException e) {
@@ -98,7 +96,7 @@ public class AlertConditionController extends Controller {
             } else {
                 AlertCondition at = filledForm.get();
                 at.insert();
-                int deviceId = at.getDeviceId();
+                int deviceId = 0;//at.getDeviceId();
                 return redirect(routes.DeviceController.deviceInfo(String.valueOf(deviceId)));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));

@@ -33,7 +33,7 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="alertTypeContent">
     @helper.form(action = routes.AlertTypeController.addOrUpdateAlertType()) {
-        <h4>Alert Type</h4>
+        <h4>Network/Dashboard Alert Type</h4>
         @* Name *@
         <div class="form-group row">
             <label for="name" class="col-2 col-form-label">Name<span>*</span></label>
@@ -45,8 +45,8 @@
         @* Description *@
         <div class="form-group row">
             <label for="description" class="col-2 col-form-label">Description</label>
-            <div class="col-4">
-                <input type="text" maxlength="10" class="form-control" id="description"
+            <div class="col-7">
+                <input type="text" maxlength="100" class="form-control" id="description"
                 name="description" placeholder="Enter Description">
             </div>
         </div>
@@ -55,8 +55,7 @@
             <label for="source" class="col-2 col-form-label">Source<span>*</span></label>
             <div class="col-4">
                 <select class="form-control" id="source" name="source" required>
-                    <option value="IoT Interface">IoT Monitor</option>
-                    <option value="umbox">umbox</option>
+                    <option value="Network">Network</option>
                     <option value="Dashboard">Dashboard</option>
                 </select>
             </div>

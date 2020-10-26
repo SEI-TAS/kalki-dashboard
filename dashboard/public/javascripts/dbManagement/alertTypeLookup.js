@@ -127,7 +127,7 @@ jQuery(document).ready(($) => {
     async function getAllAlertTypes() {
         $("#alertTypeLookupContent .form-control#alertType").empty();
 
-        return $.get("/alert-types", (alertTypes) => {
+        return $.get("/alert-types-devices", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
                 $("#alertTypeLookupContent .form-control#alertTypeSelect").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
                     + alertType.name +
