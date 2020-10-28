@@ -52,9 +52,17 @@ function initItemTable(itemTypeName) {
 }
 
 function setupFormAndTable(itemTypeName, itemTable) {
+    return setupFormAndTableWithDeviceType(itemTypeName, itemTable, 0)
+}
+
+function setupFormAndTableWithDeviceType(itemTypeName, itemTable, deviceType) {
     itemTable.clear();
 
-    $.get("/" + camelToHyphen(itemTypeName) + "s", (items) => {
+    let getURL = "/" + camelToHyphen(itemTypeName) + "s";
+    if(deviceType > 0) {
+        getURL = getURL + "-device-type?id=" + deviceType;
+    }
+    $.get(getURL, (items) => {
         $.each(JSON.parse(items), (index, item) => {
             let newRow = "<tr id='tableRow" + item.id + "'>\n" +
                 "    <td class='fit'>" +

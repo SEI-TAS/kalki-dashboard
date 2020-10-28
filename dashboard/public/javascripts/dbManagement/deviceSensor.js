@@ -31,65 +31,10 @@
  */
 
 jQuery(document).ready(($) => {
-    let deviceSensorTable = $('#deviceSensorTable').DataTable({
-        order: [[1, 'asc']],
-        columnDefs: [
-            {"orderable": false, "targets": 0}
-        ]
-    });
+    let itemTable = initItemTable("deviceSensor");
 
-    // Load the device sensors for the currently selected device type.
-    async function getDeviceSensors() {
-        deviceSensorTable.clear();
-        deviceSensorTable.draw();
-
-        $.get("/device-sensors-device-type/?id="+$("#sensorDeviceTypeIdHidden").val(), (sensors) => {
-            $.each(JSON.parse(sensors), (index, sensor) => {
-                let newRow = "<tr id='tableRow" + sensor.id + "'>\n" +
-                    "    <td class='fit'>" +
-                    "        <div class='editDeleteContainer'>" +
-                    "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + sensor.id + "'>Edit</button>" +
-                    "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + sensor.id + "'>Delete</button>" +
-                    "        </div>" +
-                    "    </td>\n" +
-                    "    <td class='fit' id='id" + sensor.id + "'>" + sensor.id + "</td>\n" +
-                    "    <td id='name" + sensor.id + "'>" + sensor.name + "</td>\n" +
-                    "</tr>";
-                deviceSensorTable.row.add($(newRow)).draw();
-
-                deviceSensorTable.on("click", "#editButton" +sensor.id, function () {
-                    $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
-                    $("#deviceSensorContent #dsSubmitFormButton").html("Update");
-                    $("#deviceSensorContent #dsClearFormButton").html("Cancel Edit");
-                    $("#deviceSensorContent .form-group #deviceSensorIdHidden").val(sensor.id);
-                    $("#deviceSensorContent .form-group #dsName").val($("#deviceSensorTableBody #name" +sensor.id).html());
-                });
-
-                deviceSensorTable.on("click", "#deleteButton" +sensor.id, function () {
-                    if(confirm("Are you sure you want to delete sensor " + sensor.name + "?") === true) {
-                        $.post("/delete-device-sensor", {id: sensor.id}, function (isSuccess) {
-                            if (isSuccess === "true") {
-                                deviceSensorTable.row("#tableRow" + sensor.id).remove().draw();
-                            } else {
-                                alert("Delete was unsuccessful. Please check that another table entry " +
-                                    "does not rely on this Device Sensor.");
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    }
-
-    $("#deviceSensorContent #clearFormButton").click(function () {
-        $("#deviceSensorContent #dsSubmitFormButton").html("Add");
-        $("#deviceSensorContent #dsClearFormButton").html("Clear");
-        $("#deviceSensorContent .form-group #deviceSensorIdHidden").val(0);
-        $("#deviceSensorContent .form-group #dsName").val("");
-    });
-
-    // Reload sensors when selected device type changes.
-    $("#sensorDeviceTypeIdHidden").change(function() {
-        getDeviceSensors();
+    // Reload when selected device type changes.
+    $("#deviceSensorDeviceTypeIdHidden").change(function() {
+        setupFormAndTableWithDeviceType("deviceSensor", itemTable, $("#deviceSensorDeviceTypeIdHidden").val());
     });
 });

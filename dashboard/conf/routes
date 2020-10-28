@@ -118,7 +118,7 @@ POST    /add-or-update-command      controllers.CommandController.addOrUpdateCom
 POST    /delete-command             controllers.CommandController.deleteCommand()
 
 GET     /device-sensor                    controllers.DeviceSensorController.getDeviceSensor(id: Int ?= -1)
-GET     /device-sensors-device-type/      controllers.DeviceSensorController.getDeviceSensorsByDeviceType(id: Int ?= -1)
+GET     /device-sensors-device-type       controllers.DeviceSensorController.getDeviceSensorsByDeviceType(id: Int ?= -1)
 POST    /add-or-update-device-sensor      controllers.DeviceSensorController.addOrUpdateDeviceSensor()
 POST    /delete-device-sensor             controllers.DeviceSensorController.deleteDeviceSensor()
 

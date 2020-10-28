@@ -36,7 +36,7 @@
         <h4>Sensors</h4>
         @* DeviceType *@
         <div class="form-group row" hidden>
-            <input type="hidden" class="form-control hiddenDeviceTypeId" id="sensorDeviceTypeIdHidden" name="typeId" required>
+            <input type="hidden" class="form-control hiddenDeviceTypeId" id="deviceSensorDeviceTypeIdHidden" name="typeId" required>
         </div>
         @* DeviceSensorId *@
         <div class="form-group row" hidden>
@@ -46,17 +46,17 @@
         <div class="form-group row">
             <label for="name" class="col-3 col-form-label">Name<span>*</span></label>
             <div class="col-4">
-                <input type="text" maxlength="200" class="form-control" id="dsName" name="name" placeholder="Enter Name" required
+                <input type="text" maxlength="200" class="form-control" id="deviceSensorName" name="name" placeholder="Enter Name" required
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">
             </div>
         </div>
         @* Submit *@
         <div class="row justify-content-end">
             <div class="col-2">
-                <button type="submit" id="dsSubmitFormButton" class="btn btn-primary btn-block">Add</button>
+                <button type="submit" id="deviceSensorSubmitFormButton" class="btn btn-primary btn-block">Add</button>
             </div>
             <div class="col-2">
-                <button type="button" id="dsClearFormButton" class="btn btn-secondary btn-block">Clear</button>
+                <button type="button" id="deviceSensorClearFormButton" class="btn btn-secondary btn-block">Clear</button>
             </div>
         </div>
     }
