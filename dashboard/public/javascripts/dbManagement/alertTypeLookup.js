@@ -43,14 +43,17 @@ jQuery(document).ready(($) => {
     //query the database for all alert types
     let alertTypeIDtoNameMap = {};
     async function getAllAlertTypes() {
-        $("#alertTypeLookupContent .form-control#alertType").empty();
+        $("#alertTypeSelect").empty();
 
         return $.get("/alert-types", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
-                $("#alertTypeLookupContent .form-control#alertTypeSelect").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
-                    + alertType.name +
-                    "</option>")
-                alertTypeIDtoNameMap[alertType.id] = alertType.name;
+                // Ignore non-device-alerts.
+                if(alertType.source == "Device") {
+                    $("#alertTypeSelect").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
+                        + alertType.name +
+                        "</option>")
+                    alertTypeIDtoNameMap[alertType.id] = alertType.name;
+                }
             });
         });
     }

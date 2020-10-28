@@ -34,11 +34,8 @@ POST    /stop-listener              controllers.NotificationController.stopListe
 
 GET     /alert-type                 controllers.AlertTypeController.getAlertType(id: Int ?= -1)
 GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
-#GET     /alert-types-devices        controllers.AlertTypeController.getDeviceAlertTypes()
-POST    /edit-alert-type            controllers.AlertTypeController.editAlertType()
 POST    /add-or-update-alert-type   controllers.AlertTypeController.addOrUpdateAlertType()
 POST    /delete-alert-type          controllers.AlertTypeController.deleteAlertType()
-POST    /clear-alert-type-form      controllers.AlertTypeController.clearAlertTypeForm()
 
 GET     /alert-type-lookups                	controllers.AlertTypeLookupController.getAlertTypeLookups()
 GET     /alert-type-lookups-by-device-type	controllers.AlertTypeLookupController.getAlertTypeLookupsByDeviceType(id: Int ?= -1)

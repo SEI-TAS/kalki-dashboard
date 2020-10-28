@@ -33,7 +33,6 @@
 //clear all edits on page load
 //This needs to be done to clear the updating IDs of each controller
 $(window).on('load', function(){
-    $.post("/clear-alert-type-form", {}, function () {});
     $.post("/clear-data-node-form", {}, function () {});
 });
 

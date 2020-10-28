@@ -58,14 +58,12 @@ public class AlertTypeController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
-    private int updatingId;
 
     @Inject
     public AlertTypeController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
     public CompletionStage<Result> getAlertType(int id) {
@@ -81,37 +79,13 @@ public class AlertTypeController extends Controller {
 
     public CompletionStage<Result> getAlertTypes() {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertType> alertTypes = AlertTypeDAO.findAlertTypesForSource(AlertType.AlertSource.Dashboard);
-            alertTypes.addAll(AlertTypeDAO.findAlertTypesForSource(AlertType.AlertSource.Network));
+            List<AlertType> alertTypes = AlertTypeDAO.findAllAlertTypes();
             try {
                 return ok(ow.writeValueAsString(alertTypes));
             } catch (JsonProcessingException e) {
             }
             return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public CompletionStage<Result> getDeviceAlertTypes() {
-        return CompletableFuture.supplyAsync(() -> {
-            List<AlertType> alertTypes = AlertTypeDAO.findAlertTypesForSource(AlertType.AlertSource.Device);
-            try {
-                return ok(ow.writeValueAsString(alertTypes));
-            } catch (JsonProcessingException e) {
-            }
-            return ok();
-        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result editAlertType() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-        this.updatingId = idToInt;
-        return ok();
     }
 
     public CompletionStage<Result> addOrUpdateAlertType() {
@@ -122,9 +96,6 @@ public class AlertTypeController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 AlertType at = filledForm.get();
-                at.setId(this.updatingId);
-                this.updatingId = -1;
-
                 int n = at.insertOrUpdate();
                 return redirect(routes.DBManagementController.dbManagementOtherView(n));
             }
@@ -143,10 +114,5 @@ public class AlertTypeController extends Controller {
             Boolean isSuccess = AlertTypeDAO.deleteAlertType(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result clearAlertTypeForm() {
-        this.updatingId = -1;
-        return ok();
     }
 }
