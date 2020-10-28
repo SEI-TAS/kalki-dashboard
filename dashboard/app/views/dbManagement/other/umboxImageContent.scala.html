@@ -42,7 +42,6 @@
         @* UmboxId *@
         <div class="form-group row" hidden>
             <input type="hidden" class="form-control" id="umboxImageIdHidden" name="id" value="0" required>
-            <span class=""help-block>Full name of the Docker image to use for this umbox.</span>
         </div>
         @* Name *@
         <div class="form-group row">
@@ -50,6 +49,7 @@
             <div class="col-4">
                 <input type="text" maxlength="200" class="form-control" id="umboxImageName" name="name" placeholder="Enter Name" required
                 oninvalid="this.setCustomValidity('Please Enter Name')" oninput="setCustomValidity('')">
+                <span class="help-block">Full name of the Docker image to use for this umbox.</span>
             </div>
         </div>
 

@@ -31,64 +31,10 @@
  */
 
 jQuery(document).ready(($) => {
-    let commandTable = $('#commandTable').DataTable({
-        order: [[1, 'asc']],
-        columnDefs: [
-            {"orderable": false, "targets": 0}
-        ]
-    });
+    let itemTable = initItemTable("command");
 
-    async function getCommands() {
-        commandTable.clear();
-        commandTable.draw();
-
-        $.get("/commands-device-type?id="+$("#commandDeviceTypeIdHidden").val(), (commands) => {
-            $.each(JSON.parse(commands), (index, command) => {
-                let newRow = "<tr id='tableRow" + command.id + "'>\n" +
-                    "    <td class='fit'>" +
-                    "        <div class='editDeleteContainer'>" +
-                    "           <button type='button' class='btn btn-primary btn-sm' id='editButton" + command.id + "'>Edit</button>" +
-                    "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + command.id + "'>Delete</button>" +
-                    "        </div>" +
-                    "    </td>\n" +
-                    "    <td class='fit' id='id" + command.id + "'>" + command.id + "</td>\n" +
-                    "    <td id='name" + command.id + "'>" + command.name + "</td>\n" +
-                    "</tr>";
-                commandTable.row.add($(newRow)).draw();
-
-                commandTable.on("click", "#editButton" +command.id, function () {
-                    $('html, body').animate({ scrollTop: 0 }, 'fast', function () {});
-                    $("#commandContent #cSubmitFormButton").html("Update");
-                    $("#commandContent #cClearFormButton").html("Cancel Edit");
-                    $("#commandContent .form-group #deviceCommandIdHidden").val(command.id);
-                    $("#commandContent .form-group #cName").val($("#commandTableBody #name" +command.id).html());
-                });
-
-                commandTable.on("click", "#deleteButton" +command.id, function () {
-                    if(confirm("Are you sure you want to delete command " + command.name + "?") === true) {
-                        $.post("/delete-command", {id: command.id}, function (isSuccess) {
-                            if (isSuccess === "true") {
-                                commandTable.row("#tableRow" + command.id).remove().draw();
-                            } else {
-                                alert("Delete was unsuccessful.  Please check that another table entry " +
-                                    "does not rely on this Command");
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    }
-
-    $("#commandContent #clearFormButton").click(function () {
-        $("#commandContent #cSubmitFormButton").html("Add");
-        $("#commandContent #cClearFormButton").html("Clear");
-        $("#deviceSensorContent .form-group #deviceCommandIdHidden").val(0);
-        $("#commandContent .form-group #cName").val("");
-    });
-
-    // Reload sensors when selected device type changes.
+    // Reload when selected device type changes.
     $("#commandDeviceTypeIdHidden").change(function() {
-        getCommands();
+        setupFormAndTableWithDeviceType("command", itemTable, $("#commandDeviceTypeIdHidden").val());
     });
 });
