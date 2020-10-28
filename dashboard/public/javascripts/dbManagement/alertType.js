@@ -69,7 +69,7 @@ jQuery(document).ready(($) => {
                     $("#alertTypeContent #submitFormButton").html("Update");
                     $("#alertTypeContent #clearFormButton").html("Cancel Edit");
                     $("#alertTypeIdHidden").val(alertType.id);
-                    $("#alertTypeContent .form-group #alertTypeName").val($("#alertTypeTableBody #alertTypeName" + alertType.id).html());
+                    $("#alertTypeName").val(alertType.name).html());
                     $("#alertTypeContent .form-group #description").val($("#alertTypeTableBody #description" + alertType.id).html());
                     $("#alertTypeContent .form-control#source").val($("#alertTypeTableBody #source" + alertType.id).html()).change();
                 });

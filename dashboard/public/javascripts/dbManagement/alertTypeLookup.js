@@ -42,17 +42,19 @@ jQuery(document).ready(($) => {
 
     //query the database for all alert types
     let alertTypeIDtoNameMap = {};
+    let alertTypeIDtoSourceMap = {};
     async function getAllAlertTypes() {
         $("#alertTypeSelect").empty();
 
         return $.get("/alert-types", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
                 // Ignore non-device-alerts.
-                if(alertType.source == "Device") {
+                if(alertType.source != "Device") {
                     $("#alertTypeSelect").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
                         + alertType.name +
                         "</option>")
                     alertTypeIDtoNameMap[alertType.id] = alertType.name;
+                    alertTypeIDtoSourceMap[alertType.id] = alertType.source;
                 }
             });
         });
@@ -66,6 +68,9 @@ jQuery(document).ready(($) => {
 
         $.get("/alert-type-lookups-by-device-type?id="+$("#alertTypeLookupDeviceTypeIdHidden").val(), (alertTypeLookups) => {
             $.each(JSON.parse(alertTypeLookups), (index, alertTypeLookup) => {
+                if(alertTypeIDtoSourceMap[alertTypeLookups.alertTypeId] == "Device") {
+                    return;
+                }
                 let newRow = "<tr id='tableRow" + alertTypeLookup.id + "'>\n" +
                     "    <td class='fit'>" +
                     "        <div class='editDeleteContainer' >" +
