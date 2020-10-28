@@ -73,9 +73,3 @@ function changeDeviceType(selectedDeviceTypeId) {
     $(".hiddenDeviceTypeId").val(selectedDeviceTypeId).trigger('change');
     $("#AlertTypeLookupContent #deviceTypeSelect").val(selectedDeviceTypeId);
 }
-
-//clear all edits on page load
-//This needs to be done to clear the updating IDs of each controller
-$(window).on('load', function(){
-    $.post("/clear-alert-type-lookup-form", {}, function () {});
-});
