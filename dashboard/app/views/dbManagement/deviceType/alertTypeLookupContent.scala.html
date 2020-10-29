@@ -44,11 +44,60 @@
         </div>
         @* Alert Type *@
         <div class="form-group row">
-            <label for="alertTypeSelect" class="col-2 col-form-label">General Alert Type<span>*</span></label>
+            <label for="alertTypeSelect" class="col-2 col-form-label">Alert Type<span>*</span></label>
             <div class="col-4">
                 <select class="form-control" id="alertTypeSelect" name="alertTypeId" required></select>
             </div>
+            @* Source *@
+            <div class="col-1">
+                <label>Source: </label>
+            </div>
+            <div class="col-2">
+                <label id="alertTypeSource"></label>
+            </div>
         </div>
+
+        <div id="alertConditionContent">
+            @* AlertContextId *@
+            <div class="form-group row" hidden>
+                <input type="hidden" class="form-control" id="alertContextIdHidden" name="id" value="0" required>
+            </div>
+            @* AlertContext *@
+            <div class="form-group row">
+                <label class="col-12 col-form-label"><strong><u>Alert Conditions</u></strong></label>
+                <label for="threshold" class="col-2 col-form-label">Logical Operator<span>*</span></label>
+                <div class="col-4">
+                    <select class="form-control" id="alertContextLogicalOperator">
+                        <option value="AND">AND</option>
+                        <option value="OR">OR</option>
+                        <option value="NONE">NONE</option>
+                    </select>
+                </div>
+            </div>
+
+            <table id="alertConditionsTable" class="table col-6" style="width: 50%;">
+                <thead>
+                    <th>@* For remove buttons *@</th>
+                    <th>Sensor</th>
+                    <th>Num Statuses</th>
+                    <th>Calculation</th>
+                    <th>Comparison</th>
+                    <th>Threshold</th>
+                </thead>
+                <tbody id="alertTypeOrderTableBody">
+                    @*Populated by policyRule.js*@
+                    <tr id="defaultAlertRow">
+                        <td></td>
+                        <td>No conditions found</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         @* Submit *@
         <div class="row justify-content-end">
             <div class="col-2">

@@ -54,6 +54,7 @@ jQuery(document).ready(($) => {
                 alertTypeIDtoNameMap[alertType.id] = alertType.name;
                 alertTypeIDtoSourceMap[alertType.id] = alertType.source;
             });
+            $("#alertTypeSource").html(alertTypeIDtoSourceMap[$("#alertTypeSelect").find("option:first").val()]);
         });
     }
 
@@ -83,6 +84,8 @@ jQuery(document).ready(($) => {
                     $("#alertTypeLookupContent #atlClearFormButton").html("Cancel Edit");
                     $("#alertTypeLookupIdHidden").val(alertTypeLookup.id);
                     $("#alertTypeLookupContent #alertTypeSelect").val(alertTypeLookup.alertTypeId);
+                    $("#alertTypeSource").html(alertTypeIDtoSourceMap[alertTypeLookup.alertTypeId]);
+                    showOrHideConditions();
                 });
 
                 alertTypeLookupTable.on("click", "#deleteButton" + alertTypeLookup.id, function () {
@@ -108,10 +111,30 @@ jQuery(document).ready(($) => {
         $("#atlClearFormButton").html("Clear");
         $("#alertTypeLookupIdHidden").val(0);
         alertTypeSelect.val(alertTypeSelect.find("option:first").val());
+        $("#alertTypeSource").html(alertTypeIDtoSourceMap[alertTypeSelect.val()]);
+        showOrHideConditions();
     });
 
     // Reload when selected device type changes.
     $("#alertTypeLookupDeviceTypeIdHidden").change(function() {
         getAllAlertTypeLookups();
+    });
+
+    // Show or hide condition sections depending on type source.
+    function showOrHideConditions() {
+        let alertConditionContent = $("#alertConditionContent");
+        let source = alertTypeIDtoSourceMap[$("#alertTypeSelect").val()];
+        if(source == "Device") {
+            alertConditionContent.show();
+        } else {
+            alertConditionContent.hide();
+        }
+    }
+
+    // When the alert type changes, update source and condition visibility.
+    $("#alertTypeSelect").change(function () {
+        let source = alertTypeIDtoSourceMap[$("#alertTypeSelect").val()];
+        $("#alertTypeSource").html(source);
+        showOrHideConditions();
     });
 });
