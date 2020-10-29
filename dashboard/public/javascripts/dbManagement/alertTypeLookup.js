@@ -72,6 +72,7 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + alertTypeLookup.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
+                    "    <td id='alertType" + alertTypeLookup.id + "'>" + alertTypeLookup.id + "</td>\n" +
                     "    <td id='alertType" + alertTypeLookup.id + "'>" + alertTypeIDtoNameMap[alertTypeLookup.alertTypeId] + "</td>\n" +
                     "</tr>"
                 alertTypeLookupTable.row.add($(newRow)).draw();
@@ -79,12 +80,13 @@ jQuery(document).ready(($) => {
                 alertTypeLookupTable.on("click", "#editButton" + alertTypeLookup.id, function () {
                     $('html, body').animate({scrollTop: 0}, 'fast', function () {});
                     $("#alertTypeLookupContent #atlSubmitFormButton").html("Update");
-                    $("#alertTypeLookupContent #atlClearAtlFormButton").html("Cancel Edit");
-                    $("#alertTypeLookupContent #alertTypeSelect").val(alertTypeLookup.id);
+                    $("#alertTypeLookupContent #atlClearFormButton").html("Cancel Edit");
+                    $("#alertTypeLookupIdHidden").val(alertTypeLookup.id);
+                    $("#alertTypeLookupContent #alertTypeSelect").val(alertTypeLookup.alertTypeId);
                 });
 
                 alertTypeLookupTable.on("click", "#deleteButton" + alertTypeLookup.id, function () {
-                    if(confirm("Are you sure you want to delete the Alert Type Association " + alertTypeLookup.name + "?") === true) {
+                    if(confirm("Are you sure you want to delete the Alert Type Association for " + alertTypeIDtoNameMap[alertTypeLookup.alertTypeId] + "?") === true) {
                         $.post("/delete-alert-type-lookup", {id: alertTypeLookup.id}, function (isSuccess) {
                             if (isSuccess == "true") {
                                 alertTypeLookupTable.row("#tableRow" + alertTypeLookup.id).remove().draw();
@@ -99,11 +101,12 @@ jQuery(document).ready(($) => {
         });
     }
 
-    $("#alertTypeLookupContent #clearAtlFormButton").click(function () {
+    $("#atlClearFormButton").click(function () {
         let alertTypeSelect = $("#alertTypeSelect");
 
         $("#atlSubmitFormButton").html("Add");
-        $("#atlClearAtlFormButton").html("Clear");
+        $("#atlClearFormButton").html("Clear");
+        $("#alertTypeLookupIdHidden").val(0);
         alertTypeSelect.val(alertTypeSelect.find("option:first").val());
     });
 
