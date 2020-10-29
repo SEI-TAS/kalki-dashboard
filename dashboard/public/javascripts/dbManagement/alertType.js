@@ -46,10 +46,6 @@ jQuery(document).ready(($) => {
 
         $.get("/alert-types", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (index, alertType) => {
-                // Ignore Device-alerts.
-                if(alertType.source == "Device") {
-                    return;
-                }
                 let newRow = "<tr id='tableRow" + alertType.id + "'>\n" +
                     "    <td class='fit'>" +
                     "        <div class='editDeleteContainer' >" +
@@ -69,7 +65,7 @@ jQuery(document).ready(($) => {
                     $("#alertTypeContent #submitFormButton").html("Update");
                     $("#alertTypeContent #clearFormButton").html("Cancel Edit");
                     $("#alertTypeIdHidden").val(alertType.id);
-                    $("#alertTypeName").val(alertType.name).html());
+                    $("#alertTypeName").val(alertType.name);
                     $("#alertTypeContent .form-group #description").val($("#alertTypeTableBody #description" + alertType.id).html());
                     $("#alertTypeContent .form-control#source").val($("#alertTypeTableBody #source" + alertType.id).html()).change();
                 });

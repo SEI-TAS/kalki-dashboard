@@ -33,10 +33,10 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="alertTypeContent">
     @helper.form(action = routes.AlertTypeController.addOrUpdateAlertType()) {
-        <h4>General Alert Type</h4>
+        <h4>Alert Type</h4>
         <div class="form-group row">
             <div class="col-7">
-                Alert types of Network or Dashboard sources.
+                Alert types that can be processed by the system.
             </div>
         </div>
         @* AlertTypeLookupId *@
@@ -65,6 +65,7 @@
             <div class="col-4">
                 <select class="form-control" id="source" name="source" required>
                     <option value="Network">Network</option>
+                    <option value="Device">Device</option>
                     <option value="Dashboard">Dashboard</option>
                 </select>
             </div>

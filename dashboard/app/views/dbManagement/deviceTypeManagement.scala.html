@@ -58,10 +58,7 @@
             <a class="nav-link" data-toggle="tab" href="#DeviceSensorContent">Sensors</a>
         </li>
         <li class="nav-item tab">
-            <a class="nav-link" data-toggle="tab" href="#AlertTypeLookupContent">General Alert Types</a>
-        </li>
-        <li class="nav-item tab">
-            <a class="nav-link" data-toggle="tab" href="#AlertTypeSensorContent">Sensor Alert Types</a>
+            <a class="nav-link" data-toggle="tab" href="#AlertTypeLookupContent">Alert Types</a>
         </li>
         <li class="nav-item tab">
             <a class="nav-link" data-toggle="tab" href="#UmboxLookupContent">Umbox Actions</a>
@@ -84,9 +81,6 @@
             @dbManagement.deviceType.deviceSensorContent()
         </div>
         <div id="AlertTypeLookupContent" class="tab-pane fade">
-            @dbManagement.deviceType.alertTypeLookupContent()
-        </div>
-        <div id="AlertTypeSensorContent" class="tab-pane fade">
             @dbManagement.deviceType.alertTypeLookupContent()
         </div>
         <div id="UmboxLookupContent" class="tab-pane fade">
