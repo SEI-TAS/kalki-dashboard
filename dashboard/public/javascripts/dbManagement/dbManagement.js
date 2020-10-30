@@ -55,6 +55,7 @@ function setupFormAndTable(itemTypeName, itemTable) {
 }
 
 function setupFormAndTableWithDeviceType(itemTypeName, itemTable, deviceType) {
+    itemTable.off("click");
     itemTable.clear();
 
     let getURL = "/" + camelToHyphen(itemTypeName) + "s";

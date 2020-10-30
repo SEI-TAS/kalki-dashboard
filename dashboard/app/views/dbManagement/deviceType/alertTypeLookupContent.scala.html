@@ -45,14 +45,14 @@
         @* Alert Type *@
         <div class="form-group row">
             <label for="alertTypeSelect" class="col-2 col-form-label">Alert Type<span>*</span></label>
-            <div class="col-4">
+            <div class="col-6">
                 <select class="form-control" id="alertTypeSelect" name="alertTypeId" required></select>
             </div>
             @* Source *@
             <div class="col-1">
                 <label>Source: </label>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <label id="alertTypeSource"></label>
             </div>
         </div>
@@ -60,22 +60,22 @@
         <div id="alertConditionContent">
             @* AlertContextId *@
             <div class="form-group row" hidden>
-                <input type="hidden" class="form-control" id="alertContextIdHidden" name="id" value="0" required>
+                <input type="hidden" class="form-control" id="alertContextIdHidden" name="idContext" value="0" required>
             </div>
             @* AlertContext *@
             <div class="form-group row">
                 <label class="col-12 col-form-label"><strong><u>Alert Conditions</u></strong></label>
                 <label for="threshold" class="col-2 col-form-label">Logical Operator<span>*</span></label>
-                <div class="col-4">
+                <div class="col-2">
                     <select class="form-control" id="alertContextLogicalOperator">
+                        <option value="NONE">NONE</option>
                         <option value="AND">AND</option>
                         <option value="OR">OR</option>
-                        <option value="NONE">NONE</option>
                     </select>
                 </div>
             </div>
 
-            <table id="alertConditionsTable" class="table col-6" style="width: 50%;">
+            <table id="alertConditionsTable" class="table col-6 text-center" style="width: 50%;">
                 <thead>
                     <th>@* For remove buttons *@</th>
                     <th>Sensor</th>
@@ -84,7 +84,7 @@
                     <th>Comparison</th>
                     <th>Threshold</th>
                 </thead>
-                <tbody id="alertTypeOrderTableBody">
+                <tbody id="alertConditionsTableBody">
                     @*Populated by policyRule.js*@
                     <tr id="defaultAlertRow">
                         <td></td>

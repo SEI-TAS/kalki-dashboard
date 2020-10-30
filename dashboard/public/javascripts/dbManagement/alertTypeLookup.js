@@ -62,6 +62,8 @@ jQuery(document).ready(($) => {
         //must wait for these functions to complete to ensure the mappings are present
         await getAllAlertTypes();
 
+        $("#alertConditionsTableBody").html("");
+        alertTypeLookupTable.off("click");
         alertTypeLookupTable.clear();
 
         $.get("/alert-type-lookups-by-device-type?id="+$("#alertTypeLookupDeviceTypeIdHidden").val(), (alertTypeLookups) => {
@@ -85,6 +87,7 @@ jQuery(document).ready(($) => {
                     $("#alertTypeLookupIdHidden").val(alertTypeLookup.id);
                     $("#alertTypeLookupContent #alertTypeSelect").val(alertTypeLookup.alertTypeId);
                     $("#alertTypeSource").html(alertTypeIDtoSourceMap[alertTypeLookup.alertTypeId]);
+                    getAlertConditionsForLookup(alertTypeLookup.id);
                     showOrHideConditions();
                 });
 
@@ -104,6 +107,42 @@ jQuery(document).ready(($) => {
         });
     }
 
+    function getAlertConditionsForLookup(alertTypeLookupId) {
+        let alertConditionsTableBody = $("#alertConditionsTableBody");
+        alertConditionsTableBody.html("");
+
+        $.get("/alert-context-by-lookup?id="+alertTypeLookupId, (alertContexts) => {
+            // NOTE: The underlying assumption is that this list will only contain 1 item.
+            let alertContextArray = JSON.parse(alertContexts);
+            if(alertContextArray.length == 1) {
+                let alertContext = alertContextArray[0];
+                $("#alertContextIdHidden").val(alertContext.id);
+                $("#alertContextLogicalOperator").val(alertContext.logicalOperator);
+            }
+            else if(alertContextArray.length > 1) {
+                console.log("NOTE: More than one context found for alertTypeLookup.");
+            }
+
+            let alertContextId = $("#alertContextIdHidden").val();
+            if(alertContextId == 0) {
+                return;
+            }
+            $.get("/alert-conditions-by-context?id="+alertContextId, (alertConditions) => {
+                $.each(JSON.parse(alertConditions), (index, alertCondition) => {
+                    let newRow = "<tr id='tableRow" + alertCondition.id + "'>\n" +
+                        "    <td></td>\n" +
+                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.attributeName + "</td>\n" +
+                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.numStatues + "</td>\n" +
+                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.calculation + "</td>\n" +
+                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.compOperator + "</td>\n" +
+                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.thresholdValue + "</td>\n" +
+                        "</tr>"
+                    alertConditionsTableBody.append($(newRow));
+                });
+            });
+        });
+    }
+
     $("#atlClearFormButton").click(function () {
         let alertTypeSelect = $("#alertTypeSelect");
 
@@ -112,6 +151,9 @@ jQuery(document).ready(($) => {
         $("#alertTypeLookupIdHidden").val(0);
         alertTypeSelect.val(alertTypeSelect.find("option:first").val());
         $("#alertTypeSource").html(alertTypeIDtoSourceMap[alertTypeSelect.val()]);
+        $("#alertContextIdHidden").val(0);
+        $("#alertContextLogicalOperator").val($("#alertContextLogicalOperator").find("option:first").val());
+        $("#alertConditionsTableBody").html("");
         showOrHideConditions();
     });
 
@@ -135,6 +177,7 @@ jQuery(document).ready(($) => {
     $("#alertTypeSelect").change(function () {
         let source = alertTypeIDtoSourceMap[$("#alertTypeSelect").val()];
         $("#alertTypeSource").html(source);
+        $("#alertConditionsTableBody").html("");
         showOrHideConditions();
     });
 });

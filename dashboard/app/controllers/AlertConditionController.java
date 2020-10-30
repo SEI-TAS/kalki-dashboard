@@ -86,6 +86,28 @@ public class AlertConditionController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
+    public CompletionStage<Result> getAlertConditionsByContext(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<AlertCondition> alertConditions = AlertConditionDAO.findAlertConditionsForContext(id);
+            try {
+                return ok(ow.writeValueAsString(alertConditions));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
+    public CompletionStage<Result> getAlertContextByAlertTypeLookupId(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<AlertContext> alertContexts = AlertContextDAO.findAlertContextsForAlertTypeLookup(id);
+            try {
+                return ok(ow.writeValueAsString(alertContexts));
+            } catch (JsonProcessingException e) {
+            }
+            return ok();
+        }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
+    }
+
     public CompletionStage<Result> addAlertCondition() {
         return CompletableFuture.supplyAsync(() -> {
             Form<AlertCondition> alertTypeForm = formFactory.form(AlertCondition.class);

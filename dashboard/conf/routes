@@ -93,6 +93,8 @@ GET     /state-transitions              controllers.SecurityStateController.getS
 
 GET     /alert-conditions                controllers.AlertConditionController.getAlertConditions()
 GET     /get-alert-conditions-by-device  controllers.AlertConditionController.getAlertConditionsByDevice(id: Int ?= -1)
+GET     /alert-context-by-lookup         controllers.AlertConditionController.getAlertContextByAlertTypeLookupId(id: Int ?= -1)
+GET     /alert-conditions-by-context     controllers.AlertConditionController.getAlertConditionsByContext(id: Int ?= -1)
 POST    /add-alert-condition             controllers.AlertConditionController.addAlertCondition()
 POST    /delete-alert-condition          controllers.AlertConditionController.deleteAlertCondition()
 
