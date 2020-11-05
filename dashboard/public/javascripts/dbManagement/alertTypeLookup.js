@@ -72,6 +72,7 @@ jQuery(document).ready(($) => {
         });
     }
 
+    let alertTypeLookupsByAlertType = {};
     async function getAllAlertTypeLookups() {
         //must wait for these functions to complete to ensure the mappings are present
         await getAllAlertTypes();
@@ -80,8 +81,12 @@ jQuery(document).ready(($) => {
         alertTypeLookupTable.off("click");
         alertTypeLookupTable.clear();
 
+        alertTypeLookupsByAlertType = {};
         $.get("/alert-type-lookups-by-device-type?id="+$("#alertTypeLookupDeviceTypeIdHidden").val(), (alertTypeLookups) => {
             $.each(JSON.parse(alertTypeLookups), (index, alertTypeLookup) => {
+                // Keep track of alert types that already have a lookup for this device type.
+                alertTypeLookupsByAlertType[alertTypeLookup.alertTypeId] = alertTypeLookups.id;
+
                 let newRow = "<tr id='tableRow" + alertTypeLookup.id + "'>\n" +
                     "    <td class='fit'>" +
                     "        <div class='editDeleteContainer' >" +
@@ -272,5 +277,17 @@ jQuery(document).ready(($) => {
         $("#alertTypeSource").html(source);
         $("#alertConditionsTableBody").html("");
         showOrHideConditions();
+    });
+
+    // Form validation before sending.
+    $("#alertTypeLookupForm").bind("submit", function() {
+        let isValid = true;
+
+        // Checks that the currently selected alert type has not already been assigned to this device type.
+        if($("#alertTypeLookupIdHidden").val() == "0" && $("#alertTypeSelect").val() in alertTypeLookupsByAlertType) {
+            isValid = false;
+            alert("Please select another alert type, as this one has already been assigned to this device type.");
+        }
+        return isValid;
     });
 });

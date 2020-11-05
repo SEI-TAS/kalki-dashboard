@@ -32,7 +32,7 @@
 @()
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="alertTypeLookupContent">
-    @helper.form(action = routes.AlertTypeLookupController.addOrUpdateAlertTypeLookup()) {
+    @helper.form(action = routes.AlertTypeLookupController.addOrUpdateAlertTypeLookup(), Symbol("id") -> "alertTypeLookupForm") {
         <h4>Alert Type Association</h4>
         @* DeviceType *@
         <div class="form-group row" hidden>
@@ -77,12 +77,12 @@
 
             @* Adding Conditions *@
             @* Hidden Inputs For Conditions *@
-            <select id="alertConditionIdsHidden" name="alertConditionIds[]" multiple hidden required></select>
-            <select id="alertConditionSensorsHidden" name="alertConditionSensors[]" multiple hidden required></select>
-            <select id="alertConditionStatusesHidden" name="alertConditionStatuses[]" multiple hidden required></select>
-            <select id="alertConditionCalculationsHidden" name="alertConditionCalculations[]" multiple hidden required></select>
-            <select id="alertConditionComparisonsHidden" name="alertConditionComparisons[]" multiple hidden required></select>
-            <select id="alertConditionThresholdsHidden" name="alertConditionThesholds[]" multiple hidden required></select>
+            <select id="alertConditionIdsHidden" name="alertConditionIds[]" multiple hidden></select>
+            <select id="alertConditionSensorsHidden" name="alertConditionSensors[]" multiple hidden></select>
+            <select id="alertConditionStatusesHidden" name="alertConditionStatuses[]" multiple hidden></select>
+            <select id="alertConditionCalculationsHidden" name="alertConditionCalculations[]" multiple hidden></select>
+            <select id="alertConditionComparisonsHidden" name="alertConditionComparisons[]" multiple hidden></select>
+            <select id="alertConditionThresholdsHidden" name="alertConditionThesholds[]" multiple hidden></select>
 
             <div class="form-group row">
                 <div class="col-2">

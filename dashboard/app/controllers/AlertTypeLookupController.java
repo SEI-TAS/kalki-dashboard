@@ -87,14 +87,28 @@ public class AlertTypeLookupController extends Controller {
 
     public CompletionStage<Result> addOrUpdateAlertTypeLookup() {
         return CompletableFuture.supplyAsync(() -> {
-            Form<AlertTypeLookup> alertTypeLookupForm = formFactory.form(AlertTypeLookup.class);
-            Form<AlertTypeLookup> filledForm = alertTypeLookupForm.bindFromRequest();
+            Form<AlertTypeLookup> filledForm = formFactory.form(AlertTypeLookup.class).bindFromRequest();
+            Form<AlertContext> alertContextFormData = formFactory.form(AlertContext.class).bindFromRequest();
+            DynamicForm generalForm = formFactory.form().bindFromRequest();
 
             if (filledForm.hasErrors()) {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 AlertTypeLookup atl = filledForm.get();
                 atl.insertOrUpdate();
+
+                // LogicalOperator is automatically set, but we must manually set alid since 1) it may be a new insert,
+                // and 2) it will simply come as "id" as AlertTypeLookup is the main form.
+                AlertContext alertContext = alertContextFormData.get();
+                alertContext.setAlertTypeLookupId(atl.getId());
+
+                // We must manually get the alertContext id since by default we have set the AlertTypeLookup as our id.
+                alertContext.setId(Integer.parseInt(generalForm.get("idContext")));
+
+                alertContext.insertOrUpdate();
+
+                // TODO: Retrieve conditions, update/add/delete as needed.
+
                 return redirect(routes.DBManagementController.dbManagementDeviceTypeView(atl.getDeviceTypeId()));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
