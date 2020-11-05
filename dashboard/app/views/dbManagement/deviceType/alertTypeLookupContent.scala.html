@@ -67,7 +67,7 @@
                 <label class="col-12 col-form-label"><strong><u>Alert Conditions</u></strong></label>
                 <label for="threshold" class="col-2 col-form-label">Logical Operator<span>*</span></label>
                 <div class="col-2">
-                    <select class="form-control" id="alertContextLogicalOperator">
+                    <select class="form-control" id="alertContextLogicalOperator" name="logicalOperator">
                         <option value="NONE">NONE</option>
                         <option value="AND">AND</option>
                         <option value="OR">OR</option>
@@ -75,9 +75,57 @@
                 </div>
             </div>
 
+            @* Adding Conditions *@
+            @* Hidden Inputs For Conditions *@
+            <select id="alertConditionIdsHidden" name="alertConditionIds[]" multiple hidden required></select>
+            <select id="alertConditionSensorsHidden" name="alertConditionSensors[]" multiple hidden required></select>
+            <select id="alertConditionStatusesHidden" name="alertConditionStatuses[]" multiple hidden required></select>
+            <select id="alertConditionCalculationsHidden" name="alertConditionCalculations[]" multiple hidden required></select>
+            <select id="alertConditionComparisonsHidden" name="alertConditionComparisons[]" multiple hidden required></select>
+            <select id="alertConditionThresholdsHidden" name="alertConditionThesholds[]" multiple hidden required></select>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label>&nbsp;</label>
+                    <button type="button" class="btn btn-sm btn-primary" id="alertConditionAddButton">Add Condition</button>
+                </div>
+                <div class="col-3">
+                    <label for="attribute" class="col-form-label">Sensor</label>
+                    <select class="form-control" id="alertConditionSensorSelect" name="attribute">
+                        @*Populated by alertTypeLookup.js*@
+                    </select>
+                </div>
+                <div class="col-1">
+                    <label for="numStatuses" class="col-form-label">Statuses</label>
+                    <input type="number" value="1" min="1" max="2147483647" style="width: 3em" class="form-control" id="alertConditionNumStatusFormInput" name="numStatuses">
+                </div>
+                <div class="col-2">
+                    <label for="calculation" class="col-form-label">Calculation</label>
+                    <select class="form-control" id="alertConditionCalculationSelect" name="calculation">
+                        <option value="NONE">None</option>
+                        <option value="AVERAGE">Average</option>
+                        <option value="SUM">Sum</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <label for="comparison" class="col-form-label">Comparison</label>
+                    <select class="form-control" id="alertConditionComparisonSelect" name="comparison">
+                        <option value="EQUAL">=</option>
+                        <option value="GREATER">&gt;</option>
+                        <option value="GREATER_OR_EQUAL">&ge;</option>
+                        <option value="LESS">&lt;</option>
+                        <option value="LESS_OR_EQUAL">&le;</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <label for="threshold" class="col-form-label">Threshold</label>
+                    <input type="number" min="1" max="2147483647" class="form-control" id="alertConditionThresholdFormInput" name="threshold">
+                </div>
+            </div>
+
             <table id="alertConditionsTable" class="table col-6 text-center" style="width: 50%;">
                 <thead>
-                    <th>@* For remove buttons *@</th>
+                    <th></th>
                     <th>Sensor</th>
                     <th>Num Statuses</th>
                     <th>Calculation</th>

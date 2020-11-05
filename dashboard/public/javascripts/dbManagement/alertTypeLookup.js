@@ -58,6 +58,20 @@ jQuery(document).ready(($) => {
         });
     }
 
+    let sensorNames = {};
+    async function getDeviceSensors() {
+        $("#alertConditionSensorSelect").empty();
+
+        return $.get("/device-sensors-device-type?id="+$("#alertTypeLookupDeviceTypeIdHidden").val(), (sensors) => {
+            $.each(JSON.parse(sensors), (id, sensor) => {
+                sensorNames[sensor.id] = sensor.name;
+                $("#alertConditionSensorSelect").append("<option id='sensorOption" + sensor.id + "' value='" + sensor.id + "'>"
+                    + sensor.name +
+                    "</option>")
+            });
+        });
+    }
+
     async function getAllAlertTypeLookups() {
         //must wait for these functions to complete to ensure the mappings are present
         await getAllAlertTypes();
@@ -110,6 +124,7 @@ jQuery(document).ready(($) => {
     function getAlertConditionsForLookup(alertTypeLookupId) {
         let alertConditionsTableBody = $("#alertConditionsTableBody");
         alertConditionsTableBody.html("");
+        clearHiddenConditionMaps();
 
         $.get("/alert-context-by-lookup?id="+alertTypeLookupId, (alertContexts) => {
             // NOTE: The underlying assumption is that this list will only contain 1 item.
@@ -129,19 +144,96 @@ jQuery(document).ready(($) => {
             }
             $.get("/alert-conditions-by-context?id="+alertContextId, (alertConditions) => {
                 $.each(JSON.parse(alertConditions), (index, alertCondition) => {
-                    let newRow = "<tr id='tableRow" + alertCondition.id + "'>\n" +
-                        "    <td></td>\n" +
-                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.attributeName + "</td>\n" +
-                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.numStatues + "</td>\n" +
-                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.calculation + "</td>\n" +
-                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.compOperator + "</td>\n" +
-                        "    <td id='alertCondition" + alertCondition.id + "'>" + alertCondition.thresholdValue + "</td>\n" +
-                        "</tr>"
-                    alertConditionsTableBody.append($(newRow));
+                    addConditionRow(alertCondition);
                 });
             });
         });
     }
+
+    // Add a condition row to the conditions table.
+    let newConditionCounter = 0;
+    function addConditionRow(alertCondition) {
+        let alertConditionsTableBody = $("#alertConditionsTableBody");
+
+        // For existing conditions displayed, the id is enough, but we need new ids to identify new rows we are adding.
+        let suffix = alertCondition.id;
+        if(alertCondition.id == 0) {
+            newConditionCounter++;
+            suffix = "-n-" + newConditionCounter;
+        }
+
+        let conditionRowId = "conditionTableRow" + suffix;
+        let deleteButtonId = "conditionDeleteButton" + suffix;
+
+        let newRow = "<tr id='" + conditionRowId + "'>\n" +
+            "    <td><button type='button' class='btn btn-sm btn-secondary' id='" + deleteButtonId + "'>Delete</button></td>\n" +
+            "    <td>" + alertCondition.attributeName + "</td>\n" +
+            "    <td>" + alertCondition.numStatues + "</td>\n" +
+            "    <td>" + alertCondition.calculation + "</td>\n" +
+            "    <td>" + alertCondition.compOperator + "</td>\n" +
+            "    <td>" + alertCondition.thresholdValue + "</td>\n" +
+            "</tr>"
+        alertConditionsTableBody.append($(newRow));
+
+        // Add row info to hidden map (needed to pass form data to controller)
+        addHiddenSelectOption("alertConditionIdsHidden", "alertConditionIdsHidden" + suffix, alertCondition.id);
+        addHiddenSelectOption("alertConditionSensorsHidden", "alertConditionSensorsHidden" + suffix, alertCondition.attributeId);
+        addHiddenSelectOption("alertConditionStatusesHidden", "alertConditionStatusesHidden" + suffix, alertCondition.numStatues);
+        addHiddenSelectOption("alertConditionCalculationsHidden", "alertConditionCalculationsHidden" + suffix, alertCondition.calculation);
+        addHiddenSelectOption("alertConditionComparisonsHidden", "alertConditionComparisonsHidden" + suffix, alertCondition.compOperator);
+        addHiddenSelectOption("alertConditionThresholdsHidden", "alertConditionThresholdsHidden" + suffix, alertCondition.thresholdValue);
+
+        $("#" + deleteButtonId).click(function () {
+            // Remove visible row.
+            alertConditionsTableBody.find("#" + conditionRowId).remove();
+
+            // Remove from hidden maps.
+            $("#alertConditionIdsHidden" + suffix).remove();
+            $("#alertConditionSensorsHidden" + suffix).remove();
+            $("#alertConditionStatusesHidden" + suffix).remove();
+            $("#alertConditionCalculationsHidden" + suffix).remove();
+            $("#alertConditionComparisonsHidden" + suffix).remove();
+            $("#alertConditionThresholdsHidden" + suffix).remove();
+        });
+    }
+
+    // Adds a row to a hidden map to be able to pass multiple conditions back to controller.
+    function addHiddenSelectOption(selectId, optionId, alertConditionValue) {
+        $("#" + selectId).append("<option id='" + optionId + "' value='" + alertConditionValue + "' selected></option>");
+    }
+
+    // Clears the input fields to add a new condition.
+    function clearNewConditionFields() {
+        $("#alertConditionSensorSelect").val($("#alertConditionSensorSelect").find("option:first").val());
+        $("#alertConditionNumStatusFormInput").val("1");
+        $("#alertConditionCalculationSelect").val($("#alertConditionCalculationSelect").find("option:first").val());
+        $("#alertConditionComparisonSelect").val($("#alertConditionComparisonSelect").find("option:first").val());
+        $("#alertConditionThresholdFormInput").val("");
+    }
+
+    function clearHiddenConditionMaps() {
+        // Remove from hidden maps.
+        $("#alertConditionIdsHidden").empty();
+        $("#alertConditionSensorsHidden").empty();
+        $("#alertConditionStatusesHidden").empty();
+        $("#alertConditionCalculationsHidden").empty();
+        $("#alertConditionComparisonsHidden").empty();
+        $("#alertConditionThresholdsHidden").empty();
+    }
+
+    // Add the condition to the table when the add button is clicked.
+    $("#alertConditionAddButton").click(function () {
+        let newAlertCondition = {};
+        newAlertCondition.id = 0;
+        newAlertCondition.attributeId = $("#alertConditionSensorSelect").val();
+        newAlertCondition.attributeName = sensorNames[newAlertCondition.attributeId];
+        newAlertCondition.numStatues = $("#alertConditionNumStatusFormInput").val();
+        newAlertCondition.calculation = $("#alertConditionCalculationSelect option:selected").text();
+        newAlertCondition.compOperator = $("#alertConditionComparisonSelect option:selected").text();
+        newAlertCondition.thresholdValue = $("#alertConditionThresholdFormInput").val();
+        addConditionRow(newAlertCondition);
+        clearNewConditionFields();
+    });
 
     $("#atlClearFormButton").click(function () {
         let alertTypeSelect = $("#alertTypeSelect");
@@ -160,6 +252,7 @@ jQuery(document).ready(($) => {
     // Reload when selected device type changes.
     $("#alertTypeLookupDeviceTypeIdHidden").change(function() {
         getAllAlertTypeLookups();
+        getDeviceSensors();
     });
 
     // Show or hide condition sections depending on type source.
