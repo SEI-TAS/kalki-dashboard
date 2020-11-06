@@ -180,7 +180,7 @@ jQuery(document).ready(($) => {
             "</tr>"
         alertConditionsTableBody.append($(newRow));
 
-        // Add row info to hidden map (needed to pass form data to controller)
+        // Add row info to hidden maps (needed to pass form data to controller).
         addHiddenSelectOption("alertConditionIdsHidden", "alertConditionIdsHidden" + suffix, alertCondition.id);
         addHiddenSelectOption("alertConditionSensorsHidden", "alertConditionSensorsHidden" + suffix, alertCondition.attributeId);
         addHiddenSelectOption("alertConditionStatusesHidden", "alertConditionStatusesHidden" + suffix, alertCondition.numStatues);
@@ -228,6 +228,12 @@ jQuery(document).ready(($) => {
 
     // Add the condition to the table when the add button is clicked.
     $("#alertConditionAddButton").click(function () {
+        // Threshold cannot be empty.
+        if($("#alertConditionThresholdFormInput").val() == "") {
+            alert("Please input a value for threshold.");
+            return;
+        }
+
         let newAlertCondition = {};
         newAlertCondition.id = 0;
         newAlertCondition.attributeId = $("#alertConditionSensorSelect").val();
