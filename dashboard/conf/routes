@@ -9,13 +9,6 @@ GET     /db-management/device-type  controllers.DBManagementController.dbManagem
 GET     /db-management/other        controllers.DBManagementController.dbManagementOtherView(id: Int ?= 1)
 GET     /info                       controllers.DeviceController.deviceInfo(id: String ?= "")
 
-POST    /funcy-monitoring-values    controllers.FuncyController.selectMonitoringValues()
-POST    /funcy-close-stream         controllers.FuncyController.closeInputStream()
-
-GET     /funcy-baud-rates           controllers.FuncyController.getBaudRates()
-GET     /funcy-monitoring-values    controllers.FuncyController.getMonitoringValues()
-GET     /funcy-serial-ports         controllers.FuncyController.getAvailableSerialPorts()
-GET     /funcy-output               controllers.FuncyController.socket()
 GET     /device-security-state      controllers.DeviceController.getDeviceSecurityState(id: Int ?= -1)
 GET     /device-status-history      controllers.DeviceController.getDeviceStatusHistory(id: Int ?= -1)
 GET     /next-statuses              controllers.DeviceController.getNextDeviceStatusHistory(id: Int ?= -1, lowestId: Int ?= 0)
