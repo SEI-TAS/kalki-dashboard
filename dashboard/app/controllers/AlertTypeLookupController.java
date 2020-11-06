@@ -32,6 +32,7 @@
 
 package controllers;
 
+import edu.cmu.sei.kalki.db.daos.AlertConditionDAO;
 import edu.cmu.sei.kalki.db.models.*;
 import edu.cmu.sei.kalki.db.daos.AlertTypeLookupDAO;
 
@@ -43,6 +44,7 @@ import play.mvc.Result;
 import play.data.*;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.List;
@@ -55,6 +57,65 @@ public class AlertTypeLookupController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
+
+    // Intermediate class used to automatically bind multiple conditions to list from the form, since complex objects
+    // can't be automatically mapped by the Play framework.
+    public static class TempConditionListClass {
+        private List<Integer> alertConditionIds = new ArrayList<>();
+        private List<Integer> alertConditionSensors = new ArrayList<>();
+        private List<Integer> alertConditionStatuses = new ArrayList<>();
+        private List<String> alertConditionCalculations = new ArrayList<>();
+        private List<String> alertConditionComparisons = new ArrayList<>();
+        private List<String> alertConditionThesholds = new ArrayList<String>();
+
+        public List<Integer> getAlertConditionIds() {
+            return alertConditionIds;
+        }
+
+        public void setAlertConditionIds(List<Integer> alertConditionIds) {
+            this.alertConditionIds = alertConditionIds;
+        }
+
+        public List<Integer> getAlertConditionSensors() {
+            return alertConditionSensors;
+        }
+
+        public void setAlertConditionSensors(List<Integer> alertConditionSensors) {
+            this.alertConditionSensors = alertConditionSensors;
+        }
+
+        public List<Integer> getAlertConditionStatuses() {
+            return alertConditionStatuses;
+        }
+
+        public void setAlertConditionStatuses(List<Integer> alertConditionStatuses) {
+            this.alertConditionStatuses = alertConditionStatuses;
+        }
+
+        public List<String> getAlertConditionCalculations() {
+            return alertConditionCalculations;
+        }
+
+        public void setAlertConditionCalculations(List<String> alertConditionCalculations) {
+            this.alertConditionCalculations = alertConditionCalculations;
+        }
+
+        public List<String> getAlertConditionComparisons() {
+            return alertConditionComparisons;
+        }
+
+        public void setAlertConditionComparisons(List<String> alertConditionComparisons) {
+            this.alertConditionComparisons = alertConditionComparisons;
+        }
+
+        public List<String> getAlertConditionThesholds() {
+            return alertConditionThesholds;
+        }
+
+        public void setAlertConditionThesholds(List<String> alertConditionThesholds) {
+            this.alertConditionThesholds = alertConditionThesholds;
+        }
+    }
 
     @Inject
     public AlertTypeLookupController(FormFactory formFactory, DatabaseExecutionContext ec) {
@@ -89,6 +150,7 @@ public class AlertTypeLookupController extends Controller {
         return CompletableFuture.supplyAsync(() -> {
             Form<AlertTypeLookup> filledForm = formFactory.form(AlertTypeLookup.class).bindFromRequest();
             Form<AlertContext> alertContextFormData = formFactory.form(AlertContext.class).bindFromRequest();
+            Form<TempConditionListClass> conditionsFormData = formFactory.form(TempConditionListClass.class).bindFromRequest();
             DynamicForm generalForm = formFactory.form().bindFromRequest();
 
             if (filledForm.hasErrors()) {
@@ -105,9 +167,37 @@ public class AlertTypeLookupController extends Controller {
                 // We must manually get the alertContext id since by default we have set the AlertTypeLookup as our id.
                 alertContext.setId(Integer.parseInt(generalForm.get("idContext")));
 
+                // Insert or update and get conditions, if any.
                 alertContext.insertOrUpdate();
+                List<AlertCondition> storedConditions = AlertConditionDAO.findAlertConditionsForContext(alertContext.getId());
+                alertContext.setConditions(storedConditions);
 
-                // TODO: Retrieve conditions, update/add/delete as needed.
+                // Get condition structures.
+                TempConditionListClass formConditions = conditionsFormData.get();
+
+                // Check that every condition that was already in the DB came back in the form. If one condition was not
+                // found, that means it was removed and we have to delete it from the DB.
+                for(AlertCondition storedCondition : alertContext.getConditions()) {
+                    if(!formConditions.getAlertConditionIds().contains(storedCondition.getId())) {
+                        AlertConditionDAO.deleteAlertCondition(storedCondition.getId());
+                    }
+                }
+
+                // Now add new conditions. Only those with an id of 0 are new.
+                for(int i=0; i<formConditions.getAlertConditionIds().size(); i++) {
+                    int formConditionId = formConditions.getAlertConditionIds().get(i);
+                    if(formConditionId == 0) {
+                        AlertCondition newCondition = new AlertCondition();
+                        newCondition.setId(formConditionId);
+                        newCondition.setContextId(alertContext.getId());
+                        newCondition.setAttributeId(formConditions.getAlertConditionSensors().get(i));
+                        newCondition.setNumStatues(formConditions.getAlertConditionStatuses().get(i));
+                        newCondition.setCalculation(formConditions.getAlertConditionCalculations().get(i));
+                        newCondition.setCompOperator(formConditions.getAlertConditionComparisons().get(i));
+                        newCondition.setThresholdValue(formConditions.getAlertConditionThesholds().get(i));
+                        newCondition.insert();
+                    }
+                }
 
                 return redirect(routes.DBManagementController.dbManagementDeviceTypeView(atl.getDeviceTypeId()));
             }
