@@ -103,7 +103,7 @@ jQuery(document).ready(($) => {
             totalAlertsAdded++;
             let currentCount = ++alertTypeRowCounter;
             let newRow = "<tr id='alertTypeOrderTableRow" + currentCount + "'>\n" +
-                "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
+                "    <td class='fit'><button type='button' class='btn btn-secondary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
                 "    <td id='alertType" + currentCount + "'>" + alertTypeIdToNameMap[alertTypeId] + "</td>\n" +
                 "</tr>"
             $("#alertTypeOrderTable").find("tbody").append($(newRow));
@@ -252,8 +252,6 @@ jQuery(document).ready(($) => {
     }
 
     async function getAlertTypes() {
-        $("#policyRuleContent #policyRuleAlertTypeSelect").empty();
-
         return $.get("/alert-types", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
                 alertTypeIdToNameMap[alertType.id] = alertType.name;
@@ -363,7 +361,7 @@ jQuery(document).ready(($) => {
                     $('html, body').animate({scrollTop: 0}, 'fast', function () {});
 
                     // Update the alert types
-                    clearAlertTypes();
+                    clearAlertTypesTable();
                     $.each(policyConditionIdToAlertTypeIdsMap[policyRule.policyConditionId], (index, alertTypeId) => {
                         addAlertTypeRow(alertTypeIdToAlertTypeLookupIdMap[alertTypeId]);
                     });
@@ -408,11 +406,10 @@ jQuery(document).ready(($) => {
     /**
      * Removes all items in the alert types table
      */
-    function clearAlertTypes() {
+    function clearAlertTypesTable() {
         $("#policyRuleContent #alertTypeOrderTable").find("tr:gt(0)").remove();
         $("#policyRuleContent #alertTypeOrderFormInput").find("option").remove();
         currentAlertTypeIds = [];
-
     }
 
     /**
@@ -432,7 +429,7 @@ jQuery(document).ready(($) => {
         let samplingRateFactor = $("#policyRuleContent .form-control#policyRuleSamplingRateFactorFormInput");
 
         // Reset alert types and commands
-        clearAlertTypes();
+        clearAlertTypesTable();
         clearCommands()
 
         // Reset other fields
@@ -450,7 +447,7 @@ jQuery(document).ready(($) => {
      * Add the alert to the table when the add button is clicked.
      */
     $("#policyRuleContent #policyRuleAddAlertButton").click(function () {
-        let policyRuleAlertSelect = $(".form-control#policyRuleAlertTypeSelect");
+        let policyRuleAlertSelect = $("#policyRuleContent #policyRuleAlertTypeSelect");
 
         if (addAlertTypeRow(policyRuleAlertSelect.val())) { //if the add was successful
             policyRuleAlertSelect.val(policyRuleAlertSelect.find("option:first").val());
@@ -472,7 +469,7 @@ jQuery(document).ready(($) => {
 
     // Reload when selected device type changes.
     $("#policyRuleDeviceTypeIdHidden").change(function() {
-        clearAlertTypes()
+        clearAlertTypesTable()
         getDevicePolicies();
     });
 

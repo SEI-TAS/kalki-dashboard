@@ -272,8 +272,6 @@ jQuery(document).ready(($) => {
      * @returns {Promise<*>} Return nothing when done
      */
     async function getAlertTypes() {
-        $("#policyRuleContent #policyRuleAlertTypeSelect").empty();
-
         return $.get("/alert-types", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
                 alertTypeIdToNameMap[alertType.id] = alertType.name;
@@ -449,13 +447,11 @@ jQuery(document).ready(($) => {
         getPolicyRuleView();
     });
 
-    $("#type").change(function() {
-        if($('a[href="#PolicyRuleViewContent"]').hasClass("active")) {
-            $("#selectedElement").html("");
-            stateNameToUmboxes = {};
-            getPolicyRuleView();
-        }
-        
+    // Reload when selected device type changes.
+    $("#policyRuleViewDeviceTypeIdHidden").change(function() {
+        $("#selectedElement").html("");
+        stateNameToUmboxes = {};
+        getPolicyRuleView();
     });
 
 });

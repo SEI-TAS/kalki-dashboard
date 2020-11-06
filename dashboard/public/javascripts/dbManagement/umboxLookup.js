@@ -95,7 +95,7 @@ jQuery(document).ready(($) => {
             let currentCount = ++rowCounter;
 
             let newRow = "<tr id='umboxImageOrderTableRow" + currentCount + "'>\n" +
-                "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
+                "    <td class='fit'><button type='button' class='btn btn-secondary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
                 "    <td id='umboxImage" + currentCount + "'>" + umboxImageIDtoNameMap[umboxImageId] + "</td>\n" +
                 "    <td id='order" + currentCount + "'>" + order + "</td>\n" +
                 "</tr>"
