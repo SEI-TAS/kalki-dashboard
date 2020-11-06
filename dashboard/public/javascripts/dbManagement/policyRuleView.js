@@ -439,14 +439,6 @@ jQuery(document).ready(($) => {
         legend(links, deviceColors, deviceTypes, nodeColors);
     }
 
-    /**
-     * Only load data when tab is active
-     */
-    $('a[href="#PolicyRuleViewContent"]').on('shown.bs.tab', function (e) {
-        $("#selectedElement").html("");
-        getPolicyRuleView();
-    });
-
     // Reload when selected device type changes.
     $("#policyRuleViewDeviceTypeIdHidden").change(function() {
         $("#selectedElement").html("");
