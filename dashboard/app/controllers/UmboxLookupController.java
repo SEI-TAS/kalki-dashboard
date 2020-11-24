@@ -62,14 +62,12 @@ public class UmboxLookupController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
-    private int updatingId;
 
     @Inject
     public UmboxLookupController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
     public CompletionStage<Result> getUmboxLookups() {
@@ -105,22 +103,6 @@ public class UmboxLookupController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result editUmboxLookup() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-        this.updatingId = idToInt;
-        return ok();
-    }
-
-    /**
-     * THIS FUNCTION NEEDS FIXED FOR NEW POLICY RULE IMPLEMENTATION
-     * @return
-     */
     public CompletionStage<Result> addOrUpdateUmboxLookup() {
         return CompletableFuture.supplyAsync(() -> {
             Form<UmboxLookup> umboxLookupForm = formFactory.form(UmboxLookup.class);
@@ -132,8 +114,8 @@ public class UmboxLookupController extends Controller {
             } else {
                 UmboxLookup ul = filledForm.get();
                 // Editing
-                if(this.updatingId > -1) {
-                    UmboxLookup editLookup = new UmboxLookup(this.updatingId, ul.getSecurityStateId(),ul.getDeviceTypeId(), ul.getUmboxImageId(), ul.getDagOrder());
+                if(ul.getId() > 0) {
+                    UmboxLookup editLookup = new UmboxLookup(ul.getId(), ul.getSecurityStateId(),ul.getDeviceTypeId(), ul.getUmboxImageId(), ul.getDagOrder());
                     insertId = editLookup.insertOrUpdate();
                 }
                 else {
@@ -153,11 +135,9 @@ public class UmboxLookupController extends Controller {
                         insertId = newLookup.insertOrUpdate();
                     }
                 }
-            }
-            
-            this.updatingId = -1;
 
-            return redirect(routes.DBManagementController.dbManagementDeviceTypeView(insertId));
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(ul.getDeviceTypeId()));
+            }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
@@ -173,10 +153,5 @@ public class UmboxLookupController extends Controller {
             Boolean isSuccess = UmboxLookupDAO.deleteUmboxLookup(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result clearUmboxLookupForm() {
-        this.updatingId = -1;
-        return ok();
     }
 }

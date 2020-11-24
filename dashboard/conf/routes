@@ -4,18 +4,10 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.devices()
-GET     /funcy-view                 controllers.FuncyController.funcyView()
 GET     /db-management/device-type  controllers.DBManagementController.dbManagementDeviceTypeView(id: Int ?= 1)
 GET     /db-management/other        controllers.DBManagementController.dbManagementOtherView(id: Int ?= 1)
 GET     /info                       controllers.DeviceController.deviceInfo(id: String ?= "")
 
-POST    /funcy-monitoring-values    controllers.FuncyController.selectMonitoringValues()
-POST    /funcy-close-stream         controllers.FuncyController.closeInputStream()
-
-GET     /funcy-baud-rates           controllers.FuncyController.getBaudRates()
-GET     /funcy-monitoring-values    controllers.FuncyController.getMonitoringValues()
-GET     /funcy-serial-ports         controllers.FuncyController.getAvailableSerialPorts()
-GET     /funcy-output               controllers.FuncyController.socket()
 GET     /device-security-state      controllers.DeviceController.getDeviceSecurityState(id: Int ?= -1)
 GET     /device-status-history      controllers.DeviceController.getDeviceStatusHistory(id: Int ?= -1)
 GET     /next-statuses              controllers.DeviceController.getNextDeviceStatusHistory(id: Int ?= -1, lowestId: Int ?= 0)
@@ -34,36 +26,26 @@ POST    /stop-listener              controllers.NotificationController.stopListe
 
 GET     /alert-type                 controllers.AlertTypeController.getAlertType(id: Int ?= -1)
 GET     /alert-types                controllers.AlertTypeController.getAlertTypes()
-POST    /edit-alert-type            controllers.AlertTypeController.editAlertType()
 POST    /add-or-update-alert-type   controllers.AlertTypeController.addOrUpdateAlertType()
 POST    /delete-alert-type          controllers.AlertTypeController.deleteAlertType()
-POST    /clear-alert-type-form      controllers.AlertTypeController.clearAlertTypeForm()
 
 GET     /alert-type-lookups                	controllers.AlertTypeLookupController.getAlertTypeLookups()
-GET     /alert-type-lookups-by-device-type/	controllers.AlertTypeLookupController.getAlertTypeLookupsByDeviceType(id: Int ?= -1)
-POST    /edit-alert-type-lookup            	controllers.AlertTypeLookupController.editAlertTypeLookup()
+GET     /alert-type-lookups-by-device-type	controllers.AlertTypeLookupController.getAlertTypeLookupsByDeviceType(id: Int ?= -1)
 POST    /add-or-update-alert-type-lookup   	controllers.AlertTypeLookupController.addOrUpdateAlertTypeLookup()
 POST    /delete-alert-type-lookup          	controllers.AlertTypeLookupController.deleteAlertTypeLookup()
-POST    /clear-alert-type-lookup-form      	controllers.AlertTypeLookupController.clearAlertTypeLookupForm()
 
 GET     /device-types               controllers.DeviceTypeController.getDeviceTypes()
-POST    /edit-device-type           controllers.DeviceTypeController.editDeviceType()
 POST    /add-or-update-device-type  controllers.DeviceTypeController.addOrUpdateDeviceType()
 POST    /delete-device-type         controllers.DeviceTypeController.deleteDeviceType()
-POST    /clear-device-type-form     controllers.DeviceTypeController.clearDeviceTypeForm()
 
 GET     /groups                     controllers.GroupController.getGroups()
-POST    /edit-group                 controllers.GroupController.editGroup()
 POST    /add-or-update-group        controllers.GroupController.addOrUpdateGroup()
 POST    /delete-group               controllers.GroupController.deleteGroup()
-POST    /clear-group-form           controllers.GroupController.clearGroupForm()
 
 GET     /security-state                 controllers.SecurityStateController.getSecurityState(id: Int ?= -1)
 GET     /security-states                controllers.SecurityStateController.getSecurityStates()
-POST    /edit-security-state            controllers.SecurityStateController.editSecurityState()
 POST    /add-or-update-security-state   controllers.SecurityStateController.addOrUpdateSecurityState()
 POST    /delete-security-state          controllers.SecurityStateController.deleteSecurityState()
-POST    /clear-security-state-form      controllers.SecurityStateController.clearSecurityStateForm()
 
 GET     /data-node                  controllers.DataNodeController.getDataNode(id: Int ?= -1)
 GET     /data-nodes                 controllers.DataNodeController.getDataNodes()
@@ -74,17 +56,13 @@ POST    /clear-data-node-form       controllers.DataNodeController.clearDataNode
 
 GET     /tags                       controllers.TagController.getTags()
 GET     /get-tags-by-device         controllers.TagController.getTagsByDevice(id: Int ?= -1)
-POST    /edit-tag                   controllers.TagController.editTag()
 POST    /add-or-update-tag          controllers.TagController.addOrUpdateTag()
 POST    /delete-tag                 controllers.TagController.deleteTag()
-POST    /clear-tag-form             controllers.TagController.clearTagForm()
 
 GET     /umbox-image                controllers.UmboxImageController.getUmboxImage(id: Int ?= -1)
 GET     /umbox-images               controllers.UmboxImageController.getUmboxImages()
-POST    /edit-umbox-image           controllers.UmboxImageController.editUmboxImage()
 POST    /add-or-update-umbox-image  controllers.UmboxImageController.addOrUpdateUmboxImage()
 POST    /delete-umbox-image         controllers.UmboxImageController.deleteUmboxImage()
-POST    /clear-umbox-image-form     controllers.UmboxImageController.clearUmboxImageForm()
 
 GET     /device                     controllers.DeviceController.getDevice(id: String ?= "")
 GET     /devices                    controllers.DeviceController.getDevices()
@@ -100,41 +78,38 @@ POST    /add-or-update-policy-condition     controllers.PolicyConditionControlle
 GET     /policy-rule                        controllers.PolicyRuleController.getPolicyRule(id: Int ?= -1)
 GET     /policy-rules-by-id                 controllers.PolicyRuleController.getPolicyRulesByDeviceId(id: Int ?= -1)
 GET     /policy-rules                       controllers.PolicyRuleController.getPolicyRules()
-POST    /edit-policy-rule                   controllers.PolicyRuleController.editPolicyRule()
 POST    /add-or-update-policy-rule          controllers.PolicyRuleController.addOrUpdatePolicyRule()
 POST    /delete-policy-rule                 controllers.PolicyRuleController.deletePolicyRule()
-POST    /clear-policy-rule-form             controllers.PolicyRuleController.clearPolicyRuleForm()
 
 GET     /state-transitions              controllers.SecurityStateController.getSecurityStateTransitions()
 
 GET     /alert-conditions                controllers.AlertConditionController.getAlertConditions()
 GET     /get-alert-conditions-by-device  controllers.AlertConditionController.getAlertConditionsByDevice(id: Int ?= -1)
+GET     /alert-context-by-lookup         controllers.AlertConditionController.getAlertContextByAlertTypeLookupId(id: Int ?= -1)
+GET     /alert-conditions-by-context     controllers.AlertConditionController.getAlertConditionsByContext(id: Int ?= -1)
 POST    /add-alert-condition             controllers.AlertConditionController.addAlertCondition()
 POST    /delete-alert-condition          controllers.AlertConditionController.deleteAlertCondition()
 
 GET     /command-lookups                controllers.CommandLookupController.getCommandLookups()
 GET     /get-command-lookups-by-device  controllers.CommandLookupController.getCommandLookupsByDevice(id: Int ?= -1)
-POST    /edit-command-lookup            controllers.CommandLookupController.editCommandLookup()
-POST    /add-or-update-command-lookup   controllers.CommandLookupController.addOrUpdateCommandLookup()
-POST    /delete-command-lookup          controllers.CommandLookupController.deleteCommandLookup()
-POST    /clear-command-lookup-form      controllers.CommandLookupController.clearCommandLookupForm()
 
 GET     /umbox-lookups               controllers.UmboxLookupController.getUmboxLookups()
 GET     /get-umbox-lookups-by-device controllers.UmboxLookupController.getUmboxLookupsByDevice(id: Int ?= -1)
 GET     /get-umbox-lookups-by-device-type controllers.UmboxLookupController.getUmboxLookupsByDeviceType(id: Int ?= -1)
-POST    /edit-umbox-lookup           controllers.UmboxLookupController.editUmboxLookup()
 POST    /add-or-update-umbox-lookup  controllers.UmboxLookupController.addOrUpdateUmboxLookup()
 POST    /delete-umbox-lookup         controllers.UmboxLookupController.deleteUmboxLookup()
-POST    /clear-umbox-lookup-form     controllers.UmboxLookupController.clearUmboxLookupForm()
 
 GET     /command                    controllers.CommandController.getCommand(id: Int ?= -1)
 GET     /commands                   controllers.CommandController.getCommands()
-GET     /commands-device-type/      controllers.CommandController.getCommandsByDeviceType(id: Int ?= -1)
+GET     /commands-device-type      controllers.CommandController.getCommandsByDeviceType(id: Int ?= -1)
 GET     /get-commands-by-device/    controllers.CommandController.getCommandsByDevice(id: Int ?= -1)
-POST    /edit-command               controllers.CommandController.editCommand()
 POST    /add-or-update-command      controllers.CommandController.addOrUpdateCommand()
 POST    /delete-command             controllers.CommandController.deleteCommand()
-POST    /clear-command-form         controllers.CommandController.clearCommandForm()
+
+GET     /device-sensor                    controllers.DeviceSensorController.getDeviceSensor(id: Int ?= -1)
+GET     /device-sensors-device-type       controllers.DeviceSensorController.getDeviceSensorsByDeviceType(id: Int ?= -1)
+POST    /add-or-update-device-sensor      controllers.DeviceSensorController.addOrUpdateDeviceSensor()
+POST    /delete-device-sensor             controllers.DeviceSensorController.deleteDeviceSensor()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

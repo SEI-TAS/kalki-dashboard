@@ -40,131 +40,53 @@ jQuery(document).ready(($) => {
         }
     );
 
-    //map of characters we wish to escape before placing directly into HTML
-    let entityMap = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-        '/': '&#x2F;',
-        '`': '&#x60;',
-        '=': '&#x3D;'
-    };
-
-    //id to name mappings to easily fill form and table names and ids without querying the DB again
-    let alertTypeIDtoNameMap = {};
-    let alertTypeNameToIDMap = {};
-    let deviceTypeIDtoNameMap = {};
-    let deviceTypeNameToIDMap = {};
-
-    //a counter that will give each new variable a unique id
-    let variableCounter = 0;
-
-    function escapeHtml (string) {
-        return String(string).replace(/[&<>"'`=\/]/g, function (s) {
-            return entityMap[s];
-        });
-    }
-
-    //create a string from a variable mapping to be placed into the table
-    function makeVariablesString(variables) {
-        let resultString = "";
-        if (variables != null) {
-            Object.keys(variables).forEach(key => {
-                resultString = resultString + key + ": " + variables[key] + "<br>";
-            });
-
-            resultString = resultString.substring(0, resultString.length - 4); //remove the last <br>
-        }
-
-        return resultString;
-    }
-
-    //add a variable row to the form for editing or creating new alertTypes
-    function addVariableRow(key, value) {
-        variableCounter++;
-        let currentCount = variableCounter;
-
-        console.log(typeof key);
-
-        let newRow = "<tr id='variableTableRow" + currentCount + "'>\n" +
-            "    <td class='fit'><button type='button' class='btn btn-primary btn-sm' id='removeButton" + currentCount + "'>Remove</button></td>" +
-            "    <td id='key" + currentCount + "'>" + key + "</td>\n" +
-            "    <td id='value" + currentCount + "'>" + value + "</td>\n" +
-            "</tr>"
-
-        $("#variableTable").find("tbody").append($(newRow));
-
-        //add pairing to form data
-        $("#variableFormInput").append("<input type='text' id='variableInput" + currentCount + "' " +
-            "name='variables[" + escapeHtml(key) + "]' value='" + escapeHtml(value) + "' hidden>");
-
-        $("#variableTableBody #removeButton" + currentCount).click(function () {
-            $("#variableTableBody #variableTableRow" + currentCount).remove();
-
-            //remove pairing from form data
-            $("#variableFormInput #variableInput" + currentCount).remove()
-        });
-    }
-
-    //given variable mappings from an alertType, populate the top form with rows for each
-    function populateVariablesTableFromString(variablesString) {
-        if (variablesString != "") {
-            let variablesArray = variablesString.split("<br>");
-
-            variablesArray.forEach(variableString => {
-                let colonIndex = variableString.indexOf(":");
-                let key = variableString.substring(0, colonIndex);
-                let value = variableString.substring(colonIndex + 2, variableString.length);
-
-                addVariableRow(key, value);
-            });
-        }
-    }
-
     //query the database for all alert types
+    let alertTypeIDtoNameMap = {};
+    let alertTypeIDtoSourceMap = {};
     async function getAllAlertTypes() {
-        $("#alertTypeLookupContent .form-control#alertType").empty();
+        $("#alertTypeSelect").empty();
 
         return $.get("/alert-types", (alertTypes) => {
             $.each(JSON.parse(alertTypes), (id, alertType) => {
-                $("#alertTypeLookupContent .form-control#alertTypeSelect").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
+                $("#alertTypeSelect").append("<option id='alertTypeOption" + alertType.id + "' value='" + alertType.id + "'>"
                     + alertType.name +
                     "</option>")
                 alertTypeIDtoNameMap[alertType.id] = alertType.name;
-                alertTypeNameToIDMap[alertType.name] = alertType.id;
+                alertTypeIDtoSourceMap[alertType.id] = alertType.source;
             });
+            $("#alertTypeSource").html(alertTypeIDtoSourceMap[$("#alertTypeSelect").find("option:first").val()]);
         });
     }
 
-    //query the database for all device types
-    async function getAllDeviceTypes() {
-        $("#AlertTypeLookupContent #deviceTypeSelect").empty();
+    let sensorNames = {};
+    async function getDeviceSensors() {
+        $("#alertConditionSensorSelect").empty();
 
-        return $.get("/device-types", (deviceTypes) => {
-            $.each(JSON.parse(deviceTypes), (id, deviceType) => {
-                $("#AlertTypeLookupContent #deviceTypeSelect").append("<option id='typeOption" + deviceType.id + "' value='" + deviceType.id + "'>"
-                    + deviceType.name +
+        return $.get("/device-sensors-device-type?id="+$("#alertTypeLookupDeviceTypeIdHidden").val(), (sensors) => {
+            $.each(JSON.parse(sensors), (id, sensor) => {
+                sensorNames[sensor.id] = sensor.name;
+                $("#alertConditionSensorSelect").append("<option id='sensorOption" + sensor.id + "' value='" + sensor.id + "'>"
+                    + sensor.name +
                     "</option>")
-                deviceTypeIDtoNameMap[deviceType.id] = deviceType.name;
-                deviceTypeNameToIDMap[deviceType.name] = deviceType.id;
             });
-            let type = $("#type").val(); 
-            $("#AlertTypeLookupContent #deviceTypeSelect").val(type);
         });
     }
 
+    let alertTypeLookupsByAlertType = {};
     async function getAllAlertTypeLookups() {
         //must wait for these functions to complete to ensure the mappings are present
         await getAllAlertTypes();
-        await getAllDeviceTypes();
 
+        $("#alertConditionsTableBody").html("");
+        alertTypeLookupTable.off("click");
         alertTypeLookupTable.clear();
-        alertTypeLookupTable.draw();
-        
-        $.get("/alert-type-lookups-by-device-type/?id="+$("#type").val(), (alertTypeLookups) => {
+
+        alertTypeLookupsByAlertType = {};
+        $.get("/alert-type-lookups-by-device-type?id="+$("#alertTypeLookupDeviceTypeIdHidden").val(), (alertTypeLookups) => {
             $.each(JSON.parse(alertTypeLookups), (index, alertTypeLookup) => {
+                // Keep track of alert types that already have a lookup for this device type.
+                alertTypeLookupsByAlertType[alertTypeLookup.alertTypeId] = alertTypeLookups.id;
+
                 let newRow = "<tr id='tableRow" + alertTypeLookup.id + "'>\n" +
                     "    <td class='fit'>" +
                     "        <div class='editDeleteContainer' >" +
@@ -172,72 +94,206 @@ jQuery(document).ready(($) => {
                     "           <button type='button' class='btn btn-secondary btn-sm' id='deleteButton" + alertTypeLookup.id + "'>Delete</button>" +
                     "        </div>" +
                     "    </td>\n" +
-                    "    <td id='deviceType" + alertTypeLookup.id + "'>" + deviceTypeIDtoNameMap[alertTypeLookup.deviceTypeId] + "</td>\n" +
+                    "    <td id='alertType" + alertTypeLookup.id + "'>" + alertTypeLookup.id + "</td>\n" +
                     "    <td id='alertType" + alertTypeLookup.id + "'>" + alertTypeIDtoNameMap[alertTypeLookup.alertTypeId] + "</td>\n" +
-                    "    <td class='fit' id='variables" + alertTypeLookup.id + "'>" + makeVariablesString(alertTypeLookup.variables) + "</td>\n" +
                     "</tr>"
                 alertTypeLookupTable.row.add($(newRow)).draw();
 
                 alertTypeLookupTable.on("click", "#editButton" + alertTypeLookup.id, function () {
-                    $.post("/edit-alert-type-lookup", {id: alertTypeLookup.id}, function() {
-                        let alertTypeName = $("#alertTypeLookupTableBody #alertType" + alertTypeLookup.id).html();
-                        let deviceTypeName = $("#alertTypeLookupTableBody #deviceType" + alertTypeLookup.id).html();
-
-                        $('html, body').animate({scrollTop: 0}, 'fast', function () {});
-                        $("#alertTypeLookupContent #submitFormButton").html("Update");
-                        $("#alertTypeLookupContent #clearAtlFormButton").html("Cancel Edit");
-                        $("#alertTypeLookupContent .form-control#alertTypeSelect").val(alertTypeNameToIDMap[alertTypeName]).change();
-                        $("#alertTypeLookupContent .form-control#deviceTypeSelect").val(deviceTypeNameToIDMap[deviceTypeName]).change();
-                        $("#alertTypeLookupContent #variableTableBody").empty();
-                        populateVariablesTableFromString($("#alertTypeLookupTableBody #variables" + alertTypeLookup.id).html());
-                    });
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {});
+                    $("#alertTypeLookupContent #atlSubmitFormButton").html("Update");
+                    $("#alertTypeLookupContent #atlClearFormButton").html("Cancel Edit");
+                    $("#alertTypeLookupIdHidden").val(alertTypeLookup.id);
+                    $("#alertTypeLookupContent #alertTypeSelect").val(alertTypeLookup.alertTypeId);
+                    $("#alertTypeSource").html(alertTypeIDtoSourceMap[alertTypeLookup.alertTypeId]);
+                    getAlertConditionsForLookup(alertTypeLookup.id);
+                    showOrHideConditions();
                 });
 
                 alertTypeLookupTable.on("click", "#deleteButton" + alertTypeLookup.id, function () {
-                    $.post("/delete-alert-type-lookup", {id: alertTypeLookup.id}, function (isSuccess) {
-                        if (isSuccess == "true") {
-                            alertTypeLookupTable.row("#tableRow" + alertTypeLookup.id).remove().draw();
-                        } else {
-                            alert("Delete was unsuccessful.  Please check that another table entry " +
-                                "does not rely on this Alert Type Lookup");
-                        }
-                    });
+                    if(confirm("Are you sure you want to delete the Alert Type Association for " + alertTypeIDtoNameMap[alertTypeLookup.alertTypeId] + "?") === true) {
+                        $.post("/delete-alert-type-lookup", {id: alertTypeLookup.id}, function (isSuccess) {
+                            if (isSuccess == "true") {
+                                alertTypeLookupTable.row("#tableRow" + alertTypeLookup.id).remove().draw();
+                            } else {
+                                alert("Delete was unsuccessful.  Please check that another table entry " +
+                                    "does not rely on this Alert Type Association.");
+                            }
+                        });
+                    }
                 });
             });
         });
     }
 
-    $("#alertTypeLookupContent #addVariableButton").click(function () {
-        let keyInput = $(".form-control#variableKey");
-        let valueInput = $(".form-control#variableValue");
+    function getAlertConditionsForLookup(alertTypeLookupId) {
+        let alertConditionsTableBody = $("#alertConditionsTableBody");
+        alertConditionsTableBody.html("");
+        clearHiddenConditionMaps();
 
-        console.log(keyInput.val());
+        $.get("/alert-context-by-lookup?id="+alertTypeLookupId, (alertContexts) => {
+            // NOTE: The underlying assumption is that this list will only contain 1 item.
+            let alertContextArray = JSON.parse(alertContexts);
+            if(alertContextArray.length == 1) {
+                let alertContext = alertContextArray[0];
+                $("#alertContextIdHidden").val(alertContext.id);
+                $("#alertContextLogicalOperator").val(alertContext.logicalOperator);
+            }
+            else if(alertContextArray.length > 1) {
+                console.log("NOTE: More than one context found for alertTypeLookup.");
+            }
 
-        addVariableRow(keyInput.val(), valueInput.val());
+            let alertContextId = $("#alertContextIdHidden").val();
+            if(alertContextId == 0) {
+                return;
+            }
+            $.get("/alert-conditions-by-context?id="+alertContextId, (alertConditions) => {
+                $.each(JSON.parse(alertConditions), (index, alertCondition) => {
+                    addConditionRow(alertCondition);
+                });
+            });
+        });
+    }
 
-        keyInput.val("");
-        valueInput.val("");
+    // Add a condition row to the conditions table.
+    let newConditionCounter = 0;
+    function addConditionRow(alertCondition) {
+        let alertConditionsTableBody = $("#alertConditionsTableBody");
+
+        // For existing conditions displayed, the id is enough, but we need new ids to identify new rows we are adding.
+        let suffix = alertCondition.id;
+        if(alertCondition.id == 0) {
+            newConditionCounter++;
+            suffix = "-n-" + newConditionCounter;
+        }
+
+        let conditionRowId = "conditionTableRow" + suffix;
+        let deleteButtonId = "conditionDeleteButton" + suffix;
+
+        let newRow = "<tr id='" + conditionRowId + "'>\n" +
+            "    <td><button type='button' class='btn btn-sm btn-secondary' id='" + deleteButtonId + "'>Delete</button></td>\n" +
+            "    <td>" + alertCondition.attributeName + "</td>\n" +
+            "    <td>" + alertCondition.numStatues + "</td>\n" +
+            "    <td>" + alertCondition.calculation + "</td>\n" +
+            "    <td>" + alertCondition.compOperator + "</td>\n" +
+            "    <td>" + alertCondition.thresholdValue + "</td>\n" +
+            "</tr>"
+        alertConditionsTableBody.append($(newRow));
+
+        // Add row info to hidden maps (needed to pass form data to controller).
+        addHiddenSelectOption("alertConditionIdsHidden", "alertConditionIdsHidden" + suffix, alertCondition.id);
+        addHiddenSelectOption("alertConditionSensorsHidden", "alertConditionSensorsHidden" + suffix, alertCondition.attributeId);
+        addHiddenSelectOption("alertConditionStatusesHidden", "alertConditionStatusesHidden" + suffix, alertCondition.numStatues);
+        addHiddenSelectOption("alertConditionCalculationsHidden", "alertConditionCalculationsHidden" + suffix, alertCondition.calculation);
+        addHiddenSelectOption("alertConditionComparisonsHidden", "alertConditionComparisonsHidden" + suffix, alertCondition.compOperator);
+        addHiddenSelectOption("alertConditionThresholdsHidden", "alertConditionThresholdsHidden" + suffix, alertCondition.thresholdValue);
+
+        $("#" + deleteButtonId).click(function () {
+            // Remove visible row.
+            alertConditionsTableBody.find("#" + conditionRowId).remove();
+
+            // Remove from hidden maps.
+            $("#alertConditionIdsHidden" + suffix).remove();
+            $("#alertConditionSensorsHidden" + suffix).remove();
+            $("#alertConditionStatusesHidden" + suffix).remove();
+            $("#alertConditionCalculationsHidden" + suffix).remove();
+            $("#alertConditionComparisonsHidden" + suffix).remove();
+            $("#alertConditionThresholdsHidden" + suffix).remove();
+        });
+    }
+
+    // Adds a row to a hidden map to be able to pass multiple conditions back to controller.
+    function addHiddenSelectOption(selectId, optionId, alertConditionValue) {
+        $("#" + selectId).append("<option id='" + optionId + "' value='" + alertConditionValue + "' selected></option>");
+    }
+
+    // Clears the input fields to add a new condition.
+    function clearNewConditionFields() {
+        $("#alertConditionSensorSelect").val($("#alertConditionSensorSelect").find("option:first").val());
+        $("#alertConditionNumStatusFormInput").val("1");
+        $("#alertConditionCalculationSelect").val($("#alertConditionCalculationSelect").find("option:first").val());
+        $("#alertConditionComparisonSelect").val($("#alertConditionComparisonSelect").find("option:first").val());
+        $("#alertConditionThresholdFormInput").val("");
+    }
+
+    function clearHiddenConditionMaps() {
+        // Remove from hidden maps.
+        $("#alertConditionIdsHidden").empty();
+        $("#alertConditionSensorsHidden").empty();
+        $("#alertConditionStatusesHidden").empty();
+        $("#alertConditionCalculationsHidden").empty();
+        $("#alertConditionComparisonsHidden").empty();
+        $("#alertConditionThresholdsHidden").empty();
+    }
+
+    // Add the condition to the table when the add button is clicked.
+    $("#alertConditionAddButton").click(function () {
+        // Threshold cannot be empty.
+        if($("#alertConditionThresholdFormInput").val() == "") {
+            alert("Please input a value for threshold.");
+            return;
+        }
+
+        let newAlertCondition = {};
+        newAlertCondition.id = 0;
+        newAlertCondition.attributeId = $("#alertConditionSensorSelect").val();
+        newAlertCondition.attributeName = sensorNames[newAlertCondition.attributeId];
+        newAlertCondition.numStatues = $("#alertConditionNumStatusFormInput").val();
+        newAlertCondition.calculation = $("#alertConditionCalculationSelect option:selected").text();
+        newAlertCondition.compOperator = $("#alertConditionComparisonSelect option:selected").text();
+        newAlertCondition.thresholdValue = $("#alertConditionThresholdFormInput").val();
+        addConditionRow(newAlertCondition);
+        clearNewConditionFields();
     });
 
-    $("#alertTypeLookupContent #clearAtlFormButton").click(function () {
-        let alertTypeSelect = $("#alertTypeLookupContent .form-control#alertType");
-        let typeSelect = $("#alertTypeLookupContent .form-control#deviceTypeSelect");
+    $("#atlClearFormButton").click(function () {
+        let alertTypeSelect = $("#alertTypeSelect");
 
-        $("#alertTypeLookupContent #submitFormButton").html("Add");
-        $("#alertTypeLookupContent #clearAtlFormButton").html("Clear");
+        $("#atlSubmitFormButton").html("Add");
+        $("#atlClearFormButton").html("Clear");
+        $("#alertTypeLookupIdHidden").val(0);
         alertTypeSelect.val(alertTypeSelect.find("option:first").val());
-        //typeSelect.val(typeSelect.find("option:first").val());
-        $("#alertTypeLookupContent .form-control#variableKey").val("");
-        $("#alertTypeLookupContent .form-control#variableValue").val("");
-        $("#alertTypeLookupContent #variableTable").find("tr:gt(0)").remove();   //remove all rows except header
+        $("#alertTypeSource").html(alertTypeIDtoSourceMap[alertTypeSelect.val()]);
+        $("#alertContextIdHidden").val(0);
+        $("#alertContextLogicalOperator").val($("#alertContextLogicalOperator").find("option:first").val());
+        $("#alertConditionsTableBody").html("");
+        showOrHideConditions();
     });
 
-    //only load content if the tab is active
-    $('a[href="#AlertTypeLookupContent"]').on('shown.bs.tab', function (e) {
+    // Reload when selected device type changes.
+    $("#alertTypeLookupDeviceTypeIdHidden").change(function() {
         getAllAlertTypeLookups();
+        getDeviceSensors();
     });
 
-    $("#type").change(function() {
-        getAllAlertTypeLookups();
+    // Show or hide condition sections depending on type source.
+    function showOrHideConditions() {
+        let alertConditionContent = $("#alertConditionContent");
+        let source = alertTypeIDtoSourceMap[$("#alertTypeSelect").val()];
+        if(source == "Device") {
+            alertConditionContent.show();
+        } else {
+            alertConditionContent.hide();
+        }
+    }
+
+    // When the alert type changes, update source and condition visibility.
+    $("#alertTypeSelect").change(function () {
+        let source = alertTypeIDtoSourceMap[$("#alertTypeSelect").val()];
+        $("#alertTypeSource").html(source);
+        $("#alertConditionsTableBody").html("");
+        showOrHideConditions();
+    });
+
+    // Form validation before sending.
+    $("#alertTypeLookupForm").bind("submit", function() {
+        let isValid = true;
+
+        // Checks that the currently selected alert type has not already been assigned to this device type.
+        if($("#alertTypeLookupIdHidden").val() == "0" && $("#alertTypeSelect").val() in alertTypeLookupsByAlertType) {
+            isValid = false;
+            alert("Please select another alert type, as this one has already been assigned to this device type.");
+        }
+        return isValid;
     });
 });

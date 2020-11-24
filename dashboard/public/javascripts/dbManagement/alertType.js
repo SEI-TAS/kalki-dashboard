@@ -61,41 +61,40 @@ jQuery(document).ready(($) => {
                 alertTypeTable.row.add($(newRow)).draw();
 
                 alertTypeTable.on("click", "#editButton" + alertType.id, function () {
-                    $.post("/edit-alert-type", {id: alertType.id}, function () {
-                        $('html, body').animate({scrollTop: 0}, 'fast', function () {
-                        });
-                        $("#alertTypeContent #submitFormButton").html("Update");
-                        $("#alertTypeContent #clearFormButton").html("Cancel Edit");
-                        $("#alertTypeContent .form-group #name").val($("#alertTypeTableBody #name" + alertType.id).html());
-                        $("#alertTypeContent .form-group #description").val($("#alertTypeTableBody #description" + alertType.id).html());
-                        $("#alertTypeContent .form-control#source").val($("#alertTypeTableBody #source" + alertType.id).html()).change();
-                    });
+                    $('html, body').animate({scrollTop: 0}, 'fast', function () {});
+                    $("#alertTypeContent #submitFormButton").html("Update");
+                    $("#alertTypeContent #clearFormButton").html("Cancel Edit");
+                    $("#alertTypeIdHidden").val(alertType.id);
+                    $("#alertTypeName").val(alertType.name);
+                    $("#alertTypeContent .form-group #description").val($("#alertTypeTableBody #description" + alertType.id).html());
+                    $("#alertTypeContent .form-control#source").val($("#alertTypeTableBody #source" + alertType.id).html()).change();
                 });
 
                 alertTypeTable.on("click", "#deleteButton" + alertType.id, function () {
-                    $.post("/delete-alert-type", {id: alertType.id}, function (isSuccess) {
-                        if (isSuccess == "true") {
-                            alertTypeTable.row("#tableRow" + alertType.id).remove().draw();
-                        } else {
-                            alert("Delete was unsuccessful.  Please check that another table entry " +
-                                "does not rely on this Alert Type");
-                        }
+                    if(confirm("Are you sure you want to delete the Alert Type  " + alertType.name + "?") === true) {
+                        $.post("/delete-alert-type", {id: alertType.id}, function (isSuccess) {
+                            if (isSuccess == "true") {
+                                alertTypeTable.row("#tableRow" + alertType.id).remove().draw();
+                            } else {
+                                alert("Delete was unsuccessful.  Please check that another table entry " +
+                                    "does not rely on this Alert Type");
+                            }
 
-                    });
+                        });
+                    }
                 });
             });
         });
     }
 
     $("#alertTypeContent #clearFormButton").click(function () {
-        $.post("/clear-alert-type-form", {}, function () {
-            $("#alertTypeContent #submitFormButton").html("Add");
-            $("#alertTypeContent #clearFormButton").html("Clear");
-            $("#alertTypeContent .form-group #name").val("");
-            $("#alertTypeContent .form-group #description").val("");
-            $("#alertTypeContent .form-control#source").val(
-                $("#alertTypeContent .form-control#source option:first").val());
-        });
+        $("#alertTypeContent #submitFormButton").html("Add");
+        $("#alertTypeContent #clearFormButton").html("Clear");
+        $("#alertTypeIdHidden").val(0);
+        $("#alertTypeContent .form-group #alertTypeName").val("");
+        $("#alertTypeContent .form-group #description").val("");
+        $("#alertTypeContent .form-control#source").val(
+        $("#alertTypeContent .form-control#source option:first").val());
     });
 
     //only load data when tab is active

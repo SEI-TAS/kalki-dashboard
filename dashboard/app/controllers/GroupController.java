@@ -59,14 +59,12 @@ public class GroupController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
-    private int updatingId;
 
     @Inject
     public GroupController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
     public CompletionStage<Result> getGroups() {
@@ -80,18 +78,6 @@ public class GroupController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result editGroup() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-        this.updatingId = idToInt;
-        return ok();
-    }
-
     public CompletionStage<Result> addOrUpdateGroup() {
         return CompletableFuture.supplyAsync(() -> {
             Form<Group> deviceGroupForm = formFactory.form(Group.class);
@@ -100,9 +86,6 @@ public class GroupController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 Group dg = filledForm.get();
-                dg.setId(this.updatingId);
-                this.updatingId = -1;
-
                 int n = dg.insertOrUpdate();
                 return redirect(routes.DBManagementController.dbManagementOtherView(n));
             }
@@ -121,10 +104,5 @@ public class GroupController extends Controller {
             Boolean isSuccess = GroupDAO.deleteGroup(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result clearGroupForm() {
-        this.updatingId = -1;
-        return ok();
     }
 }

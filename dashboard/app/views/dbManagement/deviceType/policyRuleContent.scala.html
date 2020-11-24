@@ -33,17 +33,19 @@
 @*Column holds the form and table displayed vertically*@
 <div class="col" id="policyRuleContent">
     @helper.form(action = routes.PolicyRuleController.addOrUpdatePolicyRule(), 'enctype -> "multipart/form-data") {
-        <h4>Policy Rule</h4>
-        @* DeviceType select*@
+        @* DeviceType *@
         <div class="form-group row" hidden>
-            <label for="policyRuleDeviceTypeSelect" class="col-2 col-form-label" >Device Type<span hidden>*</span></label>
-            <div class="col-4">
-                <select class="form-control" id="policyRuleDeviceTypeSelect" name="deviceTypeId" required>
-                    @*Populated by policyRule.js*@
-                </select>
-            </div>
+            <input type="hidden" class="form-control hiddenDeviceTypeId" id="policyRuleDeviceTypeIdHidden" name="deviceTypeId" required>
         </div>
 
+        @* PolicyRuleId, PolicyConditionId *@
+        <div class="form-group row" hidden>
+            <input type="hidden" class="form-control" id="policyRuleIdHidden" name="id" value="0" required>
+            <input type="hidden" class="form-control" id="policyRuleConditionIdHidden" name="id" value="0" required>
+        </div>
+
+
+        <h4>Policy Rule</h4>
         @* State Transition select*@
         <div class="form-group row">
             <label for="policyRuleStateTransitionSelect" class="col-2 col-form-label" >State Transition<span hidden>*</span></label>
@@ -112,7 +114,7 @@
             <div class="col-2">
                 <button type="button" class="btn btn-sm btn-primary" id="policyRuleAddCommandButton">Add Command</button>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <select class="form-control" id="policyRuleCommands">
                     @*Populated by policyRule.js*@
                 </select>
@@ -150,14 +152,13 @@
 <table id="policyRuleTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
     <thead>
         <tr>
-            <th>actions</th>
-            <th>device type</th>
-            <th>policy condition</th>
-            <th>device command(s)</th>
-            <th>start state</th>
-            <th>end state</th>
-            <th>sampling rate</th>
-            <th>threshold</th>
+            <th>Actions</th>
+            <th>Policy condition</th>
+            <th>Device command(s)</th>
+            <th>Start state</th>
+            <th>End state</th>
+            <th>Sampling rate</th>
+            <th>Threshold</th>
         </tr>
     </thead>
     <tbody id="policyRuleTableBody"></tbody>

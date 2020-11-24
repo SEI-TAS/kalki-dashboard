@@ -1,7 +1,7 @@
 name := """kalki-dashboard"""
 organization := "edu.cmu.sei.ttg"
 
-version := "1.7.0"
+version := "1.8.0"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 enablePlugins(DockerPlugin)
@@ -17,5 +17,5 @@ libraryDependencies += guice
 libraryDependencies += filters
 libraryDependencies += "javax.xml.bind" % "jaxb-api" % "2.3.0"
 libraryDependencies += "org.postgresql" % "postgresql" % "42.2.2"
-libraryDependencies += "edu.cmu.sei.ttg" % "kalki-db" % "1.7.0" exclude("commons-logging", "commons-logging")
+libraryDependencies += "edu.cmu.sei.ttg" % "kalki-db" % "1.8.0" exclude("commons-logging", "commons-logging")
 libraryDependencies += "com.neuronrobotics" % "nrjavaserial" % "3.14.0"

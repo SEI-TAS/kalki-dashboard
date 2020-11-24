@@ -32,6 +32,7 @@
 
 package controllers;
 
+import edu.cmu.sei.kalki.db.daos.AlertConditionDAO;
 import edu.cmu.sei.kalki.db.models.*;
 import edu.cmu.sei.kalki.db.daos.AlertTypeLookupDAO;
 
@@ -41,13 +42,11 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.data.*;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,14 +57,71 @@ public class AlertTypeLookupController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
-    private int updatingId;
+
+    // Intermediate class used to automatically bind multiple conditions to list from the form, since complex objects
+    // can't be automatically mapped by the Play framework.
+    public static class TempConditionListClass {
+        private List<Integer> alertConditionIds = new ArrayList<>();
+        private List<Integer> alertConditionSensors = new ArrayList<>();
+        private List<Integer> alertConditionStatuses = new ArrayList<>();
+        private List<String> alertConditionCalculations = new ArrayList<>();
+        private List<String> alertConditionComparisons = new ArrayList<>();
+        private List<String> alertConditionThesholds = new ArrayList<String>();
+
+        public List<Integer> getAlertConditionIds() {
+            return alertConditionIds;
+        }
+
+        public void setAlertConditionIds(List<Integer> alertConditionIds) {
+            this.alertConditionIds = alertConditionIds;
+        }
+
+        public List<Integer> getAlertConditionSensors() {
+            return alertConditionSensors;
+        }
+
+        public void setAlertConditionSensors(List<Integer> alertConditionSensors) {
+            this.alertConditionSensors = alertConditionSensors;
+        }
+
+        public List<Integer> getAlertConditionStatuses() {
+            return alertConditionStatuses;
+        }
+
+        public void setAlertConditionStatuses(List<Integer> alertConditionStatuses) {
+            this.alertConditionStatuses = alertConditionStatuses;
+        }
+
+        public List<String> getAlertConditionCalculations() {
+            return alertConditionCalculations;
+        }
+
+        public void setAlertConditionCalculations(List<String> alertConditionCalculations) {
+            this.alertConditionCalculations = alertConditionCalculations;
+        }
+
+        public List<String> getAlertConditionComparisons() {
+            return alertConditionComparisons;
+        }
+
+        public void setAlertConditionComparisons(List<String> alertConditionComparisons) {
+            this.alertConditionComparisons = alertConditionComparisons;
+        }
+
+        public List<String> getAlertConditionThesholds() {
+            return alertConditionThesholds;
+        }
+
+        public void setAlertConditionThesholds(List<String> alertConditionThesholds) {
+            this.alertConditionThesholds = alertConditionThesholds;
+        }
+    }
 
     @Inject
     public AlertTypeLookupController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.updatingId = -1;
     }
 
     public CompletionStage<Result> getAlertTypeLookups() {
@@ -92,31 +148,60 @@ public class AlertTypeLookupController extends Controller {
 
     public CompletionStage<Result> addOrUpdateAlertTypeLookup() {
         return CompletableFuture.supplyAsync(() -> {
-            Form<AlertTypeLookup> alertTypeLookupForm = formFactory.form(AlertTypeLookup.class);
-            Form<AlertTypeLookup> filledForm = alertTypeLookupForm.bindFromRequest();
+            Form<AlertTypeLookup> filledForm = formFactory.form(AlertTypeLookup.class).bindFromRequest();
+            Form<AlertContext> alertContextFormData = formFactory.form(AlertContext.class).bindFromRequest();
+            Form<TempConditionListClass> conditionsFormData = formFactory.form(TempConditionListClass.class).bindFromRequest();
+            DynamicForm generalForm = formFactory.form().bindFromRequest();
 
             if (filledForm.hasErrors()) {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 AlertTypeLookup atl = filledForm.get();
-                atl.setId(this.updatingId);
+                atl.insertOrUpdate();
 
-                int n = atl.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(n));
+                // LogicalOperator is automatically set, but we must manually set alid since 1) it may be a new insert,
+                // and 2) it will simply come as "id" as AlertTypeLookup is the main form.
+                AlertContext alertContext = alertContextFormData.get();
+                alertContext.setAlertTypeLookupId(atl.getId());
+
+                // We must manually get the alertContext id since by default we have set the AlertTypeLookup as our id.
+                alertContext.setId(Integer.parseInt(generalForm.get("idContext")));
+
+                // Insert or update and get conditions, if any.
+                alertContext.insertOrUpdate();
+                List<AlertCondition> storedConditions = AlertConditionDAO.findAlertConditionsForContext(alertContext.getId());
+                alertContext.setConditions(storedConditions);
+
+                // Get condition structures.
+                TempConditionListClass formConditions = conditionsFormData.get();
+
+                // Check that every condition that was already in the DB came back in the form. If one condition was not
+                // found, that means it was removed and we have to delete it from the DB.
+                for(AlertCondition storedCondition : alertContext.getConditions()) {
+                    if(!formConditions.getAlertConditionIds().contains(storedCondition.getId())) {
+                        AlertConditionDAO.deleteAlertCondition(storedCondition.getId());
+                    }
+                }
+
+                // Now add new conditions. Only those with an id of 0 are new.
+                for(int i=0; i<formConditions.getAlertConditionIds().size(); i++) {
+                    int formConditionId = formConditions.getAlertConditionIds().get(i);
+                    if(formConditionId == 0) {
+                        AlertCondition newCondition = new AlertCondition();
+                        newCondition.setId(formConditionId);
+                        newCondition.setContextId(alertContext.getId());
+                        newCondition.setAttributeId(formConditions.getAlertConditionSensors().get(i));
+                        newCondition.setNumStatues(formConditions.getAlertConditionStatuses().get(i));
+                        newCondition.setCalculation(formConditions.getAlertConditionCalculations().get(i));
+                        newCondition.setCompOperator(formConditions.getAlertConditionComparisons().get(i));
+                        newCondition.setThresholdValue(formConditions.getAlertConditionThesholds().get(i));
+                        newCondition.insert();
+                    }
+                }
+
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(atl.getDeviceTypeId()));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result editAlertTypeLookup() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-        this.updatingId = idToInt;
-        return ok();
     }
 
     public CompletionStage<Result> deleteAlertTypeLookup() {
@@ -131,10 +216,5 @@ public class AlertTypeLookupController extends Controller {
             Boolean isSuccess = AlertTypeLookupDAO.deleteAlertTypeLookup(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result clearAlertTypeLookupForm() {
-        this.updatingId = -1;
-        return ok();
     }
 }
