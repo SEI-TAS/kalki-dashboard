@@ -10,7 +10,7 @@ RUN apk --no-cache add bash wget
 
 # Installing SBT
 ENV SBT_VERSION 1.3.8
-RUN wget -O sbt.tgz https://piccolo.link/sbt-$SBT_VERSION.tgz
+RUN wget -O sbt.tgz https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz
 RUN tar -zxvf sbt.tgz
 RUN /sbt/bin/sbt sbtVersion
 
@@ -35,7 +35,7 @@ RUN apk --no-cache add bash
 EXPOSE 9000
 
 ARG PROJECT_NAME=kalki-dashboard
-ARG PROJECT_VERSION=1.7.0
+ARG PROJECT_VERSION=1.8.0
 
 COPY --from=build_env /dashboard/target/universal/$PROJECT_NAME-$PROJECT_VERSION.zip /$PROJECT_NAME.zip
 RUN unzip $PROJECT_NAME.zip && \

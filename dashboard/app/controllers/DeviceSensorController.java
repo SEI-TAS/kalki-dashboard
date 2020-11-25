@@ -33,7 +33,7 @@
 package controllers;
 
 import edu.cmu.sei.kalki.db.models.*;
-import edu.cmu.sei.kalki.db.daos.AlertTypeDAO;
+import edu.cmu.sei.kalki.db.daos.DeviceSensorDAO;
 
 import models.DatabaseExecutionContext;
 import play.libs.concurrent.HttpExecution;
@@ -45,65 +45,68 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
+
 import java.util.concurrent.TimeUnit;
 import java.util.List;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public class AlertTypeController extends Controller {
+public class DeviceSensorController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
 
     @Inject
-    public AlertTypeController(FormFactory formFactory, DatabaseExecutionContext ec) {
+    public DeviceSensorController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     }
 
-    public CompletionStage<Result> getAlertType(int id) {
+    public CompletionStage<Result> getDeviceSensor(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            AlertType alertType = AlertTypeDAO.findAlertType(id);
+            DeviceSensor sensor = DeviceSensorDAO.findDeviceSensor(id);
             try {
-                return ok(ow.writeValueAsString(alertType));
+                return ok(ow.writeValueAsString(sensor));
             } catch (JsonProcessingException e) {
+                return ok();
             }
-            return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public CompletionStage<Result> getAlertTypes() {
+    public CompletionStage<Result> getDeviceSensorsByDeviceType(int id) {
         return CompletableFuture.supplyAsync(() -> {
-            List<AlertType> alertTypes = AlertTypeDAO.findAllAlertTypes();
+            List<DeviceSensor> sensors = DeviceSensorDAO.findSensorsForDeviceType(id);
             try {
-                return ok(ow.writeValueAsString(alertTypes));
+                return ok(ow.writeValueAsString(sensors));
             } catch (JsonProcessingException e) {
+                return ok();
             }
-            return ok();
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public CompletionStage<Result> addOrUpdateAlertType() {
-        return CompletableFuture.supplyAsync(() -> {
-            Form<AlertType> alertTypeForm = formFactory.form(AlertType.class);
-            Form<AlertType> filledForm = alertTypeForm.bindFromRequest();
+    public CompletionStage<Result> addOrUpdateDeviceSensor() {
+        return  CompletableFuture.supplyAsync(() -> {
+            Form<DeviceSensor> deviseSensorForm = formFactory.form(DeviceSensor.class);
+            Form<DeviceSensor> filledForm = deviseSensorForm.bindFromRequest();
+
             if (filledForm.hasErrors()) {
                 return badRequest(views.html.form.render(filledForm));
             } else {
-                AlertType at = filledForm.get();
-                int n = at.insertOrUpdate();
-                return redirect(routes.DBManagementController.dbManagementOtherView(n));
+                DeviceSensor deviceSensor = filledForm.get();
+                deviceSensor.insertOrUpdate();
+                return redirect(routes.DBManagementController.dbManagementDeviceTypeView(deviceSensor.getTypeId()));
             }
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public CompletionStage<Result> deleteAlertType() {
-        return CompletableFuture.supplyAsync(() -> {
+    public CompletionStage<Result> deleteDeviceSensor() {
+        return  CompletableFuture.supplyAsync(() -> {
             String id = formFactory.form().bindFromRequest().get("id");
             int idToInt;
             try {
@@ -111,7 +114,8 @@ public class AlertTypeController extends Controller {
             } catch (NumberFormatException e) {
                 idToInt = -1;
             }
-            Boolean isSuccess = AlertTypeDAO.deleteAlertType(idToInt);
+
+            Boolean isSuccess = DeviceSensorDAO.deleteDeviceSensor(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }

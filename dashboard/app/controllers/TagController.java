@@ -59,14 +59,12 @@ public class TagController extends Controller {
     private final FormFactory formFactory;
     private final DatabaseExecutionContext ec;
     private final ObjectWriter ow;
-    private int updatingId;
 
     @Inject
     public TagController(FormFactory formFactory, DatabaseExecutionContext ec) {
         this.formFactory = formFactory;
         this.ec = ec;
         this.ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.updatingId = -1; //if the value is -1, it means there should be a new alertType
     }
 
     public CompletionStage<Result> getTags() {
@@ -91,18 +89,6 @@ public class TagController extends Controller {
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
     }
 
-    public Result editTag() {
-        String id = formFactory.form().bindFromRequest().get("id");
-        int idToInt;
-        try {
-            idToInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idToInt = -1;
-        }
-        this.updatingId = idToInt;
-        return ok();
-    }
-
     public CompletionStage<Result> addOrUpdateTag() {
         return CompletableFuture.supplyAsync(() -> {
             Form<Tag> tagForm = formFactory.form(Tag.class);
@@ -111,9 +97,6 @@ public class TagController extends Controller {
                 return badRequest(views.html.form.render(filledForm));
             } else {
                 Tag dt = filledForm.get();
-                dt.setId(this.updatingId);
-                this.updatingId = -1;
-
                 int n = dt.insertOrUpdate();
                 return redirect(routes.DBManagementController.dbManagementOtherView(n));
             }
@@ -132,10 +115,5 @@ public class TagController extends Controller {
             Boolean isSuccess = TagDAO.deleteTag(idToInt);
             return ok(isSuccess.toString());
         }, HttpExecution.fromThread((java.util.concurrent.Executor) ec));
-    }
-
-    public Result clearTagForm() {
-        this.updatingId = -1;
-        return ok();
     }
 }

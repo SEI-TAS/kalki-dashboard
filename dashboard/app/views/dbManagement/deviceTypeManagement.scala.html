@@ -38,8 +38,8 @@
     <h4>Device Type Configuration</h4>
     <div class="form-group row">
         <label for="type" class="col-2 col-form-label">Device Type</label>
-        <div class="col-4">
-            <select class="form-control" id="type" name="deviceTypeId" required  onchange="changeDevice(this)">
+        <div class="col-6">
+            <select class="form-control" id="type" name="deviceTypeId" required  onchange="changeDeviceType(this.value)">
                 @*Populated by dbManagement.js*@
             </select>
         </div>
@@ -53,14 +53,17 @@
         </li>
         <li class="nav-item tab">
         	<a class="nav-link" data-toggle="tab" href="#CommandContent">Commands</a>
-		</li>
+        </li>
+        <li class="nav-item tab">
+            <a class="nav-link" data-toggle="tab" href="#DeviceSensorContent">Sensors</a>
+        </li>
         <li class="nav-item tab">
             <a class="nav-link" data-toggle="tab" href="#AlertTypeLookupContent">Alert Types</a>
         </li>
         <li class="nav-item tab">
             <a class="nav-link" data-toggle="tab" href="#UmboxLookupContent">Umbox Actions</a>
         </li>
-        
+
     </ul>
 
     @*The content in the db management tabs*@
@@ -74,6 +77,9 @@
         <div id="CommandContent" class="tab-pane fade" >
         	@dbManagement.deviceType.commandContent()
 		</div>
+        <div id="DeviceSensorContent" class="tab-pane fade" >
+            @dbManagement.deviceType.deviceSensorContent()
+        </div>
         <div id="AlertTypeLookupContent" class="tab-pane fade">
             @dbManagement.deviceType.alertTypeLookupContent()
         </div>
@@ -84,12 +90,13 @@
 </div>
 } {
 <script>if(@insertId == -1) alert("insert was unsuccessful")</script>
+<script src="@routes.Assets.versioned("javascripts/dbManagement/dbManagement.js")" type="text/javascript"></script>
+<script src="@routes.Assets.versioned("javascripts/dbManagement/deviceTypeTabs.js")" type="text/javascript"></script>
 <script src="@routes.Assets.versioned("javascripts/dbManagement/alertTypeLookup.js")" type="text/javascript"></script>
-<script src="@routes.Assets.versioned("javascripts/dbManagement/commandLookup.js")" type="text/javascript"></script>
 <script src="@routes.Assets.versioned("javascripts/dbManagement/umboxLookup.js")" type="text/javascript"></script>
 <script src="@routes.Assets.versioned("javascripts/dbManagement/policyRule.js")" type="text/javascript"></script>
 <script src="@routes.Assets.versioned("javascripts/libraries/d3.v5.min.js")"></script> @* only want to load for viewer*@
 <script src="@routes.Assets.versioned("javascripts/dbManagement/policyRuleView.js")" type="text/javascript"></script>
 <script src="@routes.Assets.versioned("javascripts/dbManagement/command.js")" type="text/javascript"></script>
-<script src="@routes.Assets.versioned("javascripts/dbManagement/dbManagement.js")" type="text/javascript"></script>
+<script src="@routes.Assets.versioned("javascripts/dbManagement/deviceSensor.js")" type="text/javascript"></script>
 }

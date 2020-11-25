@@ -34,6 +34,12 @@
 <div class="col" id="dataNodeContent">
     @helper.form(action = routes.DataNodeController.addOrUpdateDataNode()) {
         <h4>Data Node</h4>
+        <div class="form-group row">
+            <div class="col-7">
+                Data nodes connected to this control node.
+            </div>
+        </div>
+
         @* Name *@
         <div class="form-group row">
             <label for="name" class="col-2 col-form-label">Name<span>*</span></label>
@@ -68,7 +74,7 @@
     <thead>
         <tr>
             <th>Actions</th>
-            <th>ID</th>
+            <th>Id</th>
             <th>Name</th>
             <th>IP Address</th>
         </tr>

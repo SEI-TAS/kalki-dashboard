@@ -34,14 +34,13 @@
 <div class="col" id="umboxLookupContent">
     @helper.form(action = routes.UmboxLookupController.addOrUpdateUmboxLookup(), 'enctype -> "multipart/form-data") {
         <h4>Umbox Actions</h4>
-        @* Type *@
+        @* DeviceType *@
         <div class="form-group row" hidden>
-            <label for="type" class="col-2 col-form-label">Device Type<span>*</span></label>
-            <div class="col-4">
-                <select class="form-control" id="type" name="deviceTypeId" required>
-                    @*Populated by umboxLookup.js*@
-                </select>
-            </div>
+            <input type="hidden" class="form-control hiddenDeviceTypeId" id="umboxDeviceTypeIdHidden" name="deviceTypeId" required>
+        </div>
+        @* UmboxLookupId *@
+        <div class="form-group row" hidden>
+            <input type="hidden" class="form-control" id="umboxLookupIdHidden" name="id" value="0" required>
         </div>
         @* SecurityState *@
         <div class="form-group row">
@@ -54,6 +53,10 @@
         </div>
 
         <div class="form-group row">
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addOrderButton">Add Image</button>
+            </div>
+
             @* UmboxImage *@
             <label for="type" class="col-2 col-form-label">Umbox Image</label>
             <div class="col-3">
@@ -65,11 +68,7 @@
             @* Order *@
             <label for="order" class="col-1 col-form-label">Order</label>
             <div class="col-1">
-                <input type="number" min="0" max="2147483647" class="form-control" id="order" name="dagOrder" value="1">
-            </div>
-
-            <div class="col-4">
-                <button type="button" class="btn btn-sm btn-pill btn-primary" id="addOrderButton">+</button>
+                <input type="number" min="0" max="2147483647" class="form-control" id="order" name="dagOrder" style="width: 3em" value="1">
             </div>
         </div>
 
@@ -89,10 +88,10 @@
         @* Submit *@
         <div class="row justify-content-end">
             <div class="col-2">
-                <button type="submit" id="submitFormButton" class="btn btn-primary btn-block">Add</button>
+                <button type="submit" id="ulSubmitFormButton" class="btn btn-primary btn-block">Add</button>
             </div>
             <div class="col-2">
-                <button type="button" id="clearFormButton" class="btn btn-secondary btn-block">Clear</button>
+                <button type="button" id="ulClearFormButton" class="btn btn-secondary btn-block">Clear</button>
             </div>
         </div>
     }
@@ -101,7 +100,6 @@
     <thead>
         <tr>
             <th>actions</th>
-            <th>device type</th>
             <th>security state</th>
             <th>umbox image</th>
             <th>order</th>
